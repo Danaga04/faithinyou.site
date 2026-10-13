@@ -6,15 +6,15 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purchase Under Review</title>
+
+    <title>Important - Watch the Video</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         body {
             margin: 0;
-            padding: 0;
-            padding-bottom: 150px;
+            padding: 0 0 100px;
             font-family: "Poppins", sans-serif;
             background: #000000;
             color: #ffffff;
@@ -22,55 +22,31 @@
             text-align: center;
         }
 
-        .step {
-            font-size: 18px;
-            font-weight: 700;
-            margin: 25px 0 10px;
-            color: #ffffff;
-        }
-
-        .progress {
+        .warning-box {
             width: 90%;
-            margin: 0 auto;
-            height: 30px;
-            border-radius: 5px;
-            overflow: hidden;
-            background: #333333;
-            position: relative;
-        }
-
-        .progress-bar {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #16a34a, #0d6b3a);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
+            max-width: 800px;
+            margin: 25px auto;
+            padding: 18px;
+            box-sizing: border-box;
+            background: #b90000;
             color: #ffffff;
-            animation: loadProgress 2.8s ease-in-out forwards;
-            position: relative;
+            border: 2px solid #ff3333;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 800;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.25);
         }
 
-        .progress-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255,255,255,0.35),
-                transparent
-            );
-            animation: shimmer 1.8s infinite;
+        .warning-box .warning-title {
+            display: block;
+            font-size: 21px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
         }
 
-        .warning {
-            font-size: 15px;
-            margin: 15px 10px;
+        .warning-box p {
+            margin: 0;
             color: #ffffff;
         }
 
@@ -124,6 +100,7 @@
             font-size: 17px;
             line-height: 1.6;
             color: #ffffff;
+            box-sizing: border-box;
         }
 
         #esconder-texto h2 {
@@ -139,40 +116,27 @@
         }
 
         @keyframes pulse-green {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.04); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes loadProgress {
-            from { width: 0%; }
-            to { width: 98%; }
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(400%); }
-        }
-
-        .sticky-warning-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #000000;
-            color: #ffffff;
-            text-align: center;
-            padding: 12px 10px;
-            font-size: 14px;
-            font-weight: 800;
-            text-transform: uppercase;
-            z-index: 9999;
-            border-top: 1px solid #333333;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
-            box-sizing: border-box;
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.04);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         @media (max-width: 480px) {
+            .warning-box {
+                font-size: 15px;
+                padding: 15px;
+            }
+
+            .warning-box .warning-title {
+                font-size: 18px;
+            }
+
             .btn-yes {
                 font-size: 18px;
                 padding: 16px;
@@ -195,14 +159,15 @@
 
 <body>
 
-    <div class="step">STEP 4 OF 4</div>
+    <!-- RED WARNING MESSAGE -->
 
-    <div class="progress">
-        <div class="progress-bar">98%</div>
-    </div>
-
-    <div class="warning">
-        ⚠ To access the app and verify your access, watch the video below.
+    <div class="warning-box">
+        <span class="warning-title">⚠️ IMPORTANT: DO NOT LEAVE THIS PAGE</span>
+        <p>
+            Please do not click the back button or leave this page.
+            Watch the video below until the end to learn how to access your app
+            and complete the process.
+        </p>
     </div>
 
     <!-- VIDEO -->
@@ -227,19 +192,21 @@
 
     <br><br>
 
-    <!-- BUTTONS -->
+    <!-- BUTTONS BELOW THE VIDEO -->
 
     <div class="decision-container">
 
         <a
             href="https://www.checkout-ds24.com/answer/yes?template=light"
-            class="btn-yes">
+            class="btn-yes"
+            id="esconder">
             BUY NOW AND ACCESS APP!
         </a>
 
         <a
             href="https://www.checkout-ds24.com/answer/no"
-            class="btn-no">
+            class="btn-no"
+            id="esconder">
             DECLINE THE OFFER AND PAY THE FULL AMOUNT LATER (+$299)
         </a>
 
@@ -247,31 +214,40 @@
 
     <!-- PRAYER TEXT -->
 
-    <div id="esconder">
-        <div id="esconder-texto">
+    <div id="esconder-texto">
 
-            <h2>The Miraculous Prayer of Saint Michael the Archangel</h2>
+        <h2>The Miraculous Prayer of Saint Michael the Archangel</h2>
 
-            <p>
-                For centuries, the Prayer of Saint Michael the Archangel has been a divine shield against darkness. Now, for a limited time, you can unlock its full power to heal physical, emotional, and spiritual diseases that modern medicine cannot touch.
-            </p>
+        <p>
+            For centuries, the Prayer of Saint Michael the Archangel has been
+            a divine shield against darkness. Now, for a limited time, you can
+            explore this prayer as part of a spiritual practice focused on
+            faith, reflection, and devotion.
+        </p>
 
-            <p>
-                This is not just a prayer – it is a sacred weapon. Countless believers have experienced immediate protection, deliverance from evil attacks, and the breaking of generational curses. Whether you face anxiety, unexplainable fatigue, or spiritual oppression, Saint Michael’s intercession brings heavenly defense directly into your life.
-            </p>
+        <p>
+            This is not just a prayer – it is a sacred expression of faith.
+            Many believers turn to Saint Michael for spiritual encouragement,
+            protection, and strength during difficult moments. Whether you are
+            facing uncertainty or seeking inner peace, prayer can be a meaningful
+            part of your spiritual journey.
+        </p>
 
-            <p>
-                Imagine waking up tomorrow feeling completely renewed – free from the weight that has been crushing your spirit. This prayer has the authority to cast out demonic influences, shield your home, and restore peace to your heart. The Archangel stands ready to fight for you.
-            </p>
+        <p>
+            Take a moment to reflect, reconnect with your faith, and make space
+            for prayer in your daily routine. The Prayer of Saint Michael offers
+            a traditional way to seek spiritual guidance and reassurance.
+        </p>
 
-            <p>
-                By claiming this offer today for just <strong>$79</strong>, you receive the complete guided prayer and protection protocol. Do not let another night pass under attack. Your breakthrough is one prayer away.
-            </p>
+        <p>
+            By claiming this offer today for just <strong>$79</strong>, you
+            receive the complete guided prayer and protection protocol.
+            Take the next step in your spiritual practice today.
+        </p>
 
-        </div>
     </div>
 
-    <div style="height: 300px; width: 100%; background: #000000;"></div>
+    <div style="height: 100px; width: 100%; background: #000000;"></div>
 
     <!-- BACK REDIRECT -->
 
@@ -308,12 +284,6 @@
         async
         defer>
     </script>
-
-    <!-- FIXED WARNING -->
-
-    <div class="sticky-warning-bar">
-        ⚠️ It is mandatory to watch the video until the end to avoid errors.
-    </div>
 
 </body>
 </html>
