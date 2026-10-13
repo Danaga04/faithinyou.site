@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://www.digistore24-scripts.com/service/digistore.js"></script>
+    <script>digistoreUpsell()</script>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>purchase under review</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            padding-bottom: 150px;
+            font-family: "Poppins", sans-serif;
+            background: #ffffff;
+            color: #000000;
+            line-height: 1.5;
+            text-align: center;
+        }
+        .step {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 25px 0 10px;
+        }
+        .progress {
+            width: 90%;
+            margin: 0 auto;
+            height: 30px;
+            border-radius: 5px;
+            overflow: hidden;
+            background: #ddd;
+            position: relative;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #16a34a, #0d6b3a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            animation: loadProgress 2.8s ease-in-out forwards;
+            position: relative;
+        }
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+            animation: shimmer 1.8s infinite;
+        }
+        .warning {
+            font-size: 15px;
+            margin: 15px 0;
+            color: #d80000;
+        }
+        vturb-smartplayer {
+            display: block;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        .decision-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            width: 100%;
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .btn-yes {
+            width: 100%;
+            background: #25D366;
+            color: #fff;
+            padding: 18px 20px;
+            font-size: 22px;
+            font-weight: 800;
+            text-transform: uppercase;
+            border-radius: 8px;
+            text-decoration: none;
+            box-sizing: border-box;
+            animation: pulse-green 1.5s infinite;
+            display: inline-block;
+        }
+        .btn-no {
+            color: #d80000;
+            font-size: 17px;
+            font-weight: 700;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        #esconder-texto {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+            text-align: left;
+            font-size: 17px;
+            line-height: 1.6;
+            color: #000;
+        }
+        #esconder-texto h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        @keyframes pulse-green {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+            100% { transform: scale(1); }
+        }
+        @keyframes loadProgress {
+            from { width: 0%; }
+            to { width: 95%; }
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(400%); }
+        }
+        .sticky-warning-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffcc00;
+            color: #000000;
+            text-align: center;
+            padding: 12px 10px;
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            z-index: 9999;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+        }
+        @media (max-width: 480px) {
+            .btn-yes { font-size: 18px; padding: 16px; }
+            .btn-no { font-size: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="step">STEP 4 OF 4</div>
+    <div class="progress">
+        <div class="progress-bar">95%</div>
+    </div>
+    <div class="warning">
+        ⚠ To access the app and verify your access, watch the video below.
+    </div>
+    
+    <!-- VÍDEO -->
+  
+<vturb-smartplayer id="vid-6a6cd694b6e0b7d03f66dcfe" style="display: block; margin: 0 auto; width: 100%; "><div class="vturb-player-placeholder" style="position: relative; width: 100%; padding: 56.25% 0 0; z-index: 0; background-color: black;"></div></vturb-smartplayer> <script type="text/javascript"> var s=document.createElement("script"); s.src="https://scripts.converteai.net/80d0b89d-7901-4c62-bf15-807e2dab2483/players/6a6cd694b6e0b7d03f66dcfe/v4/player.js", s.async=!0,document.head.appendChild(s); </script>
+    
+
+    
+    
+    <br><br>
+
+    <!-- BOTÕES -->
+    <div class="decision-container">
+        <a href="https://www.checkout-ds24.com/answer/yes?template=light" class="btn-yes" id="esconder">
+            BUY NOW AND ACCESS APP!
+        </a>
+        <a href="https://www.checkout-ds24.com/answer/no" class="btn-no" id="esconder">
+            DECLINE THE OFFER AND PAY THE FULL AMOUNT LATER (+$299)
+        </a>
+    </div>
+
+    <!-- TEXTO DA ORAÇÃO COM ID ESCONDER -->
+    <div id="esconder">
+        <div id="esconder-texto">
+            <h2>The Miraculous Prayer of Saint Michael the Archangel</h2>
+            <p>For centuries, the Prayer of Saint Michael the Archangel has been a divine shield against darkness. Now, for a limited time, you can unlock its full power to heal physical, emotional, and spiritual diseases that modern medicine cannot touch.</p>
+            <p>This is not just a prayer – it is a sacred weapon. Countless believers have experienced immediate protection, deliverance from evil attacks, and the breaking of generational curses. Whether you face anxiety, unexplainable fatigue, or spiritual oppression, Saint Michael’s intercession brings heavenly defense directly into your life.</p>
+            <p>Imagine waking up tomorrow feeling completely renewed – free from the weight that has been crushing your spirit. This prayer has the authority to cast out demonic influences, shield your home, and restore peace to your heart. The Archangel stands ready to fight for you.</p>
+            <p>By claiming this offer today for just <strong>$79</strong>, you receive the complete guided prayer and protection protocol. Do not let another night pass under attack. Your breakthrough is one prayer away.</p>
+        </div>
+    </div>
+
+   
+
+    <div style="height: 300px; width: 100%; background: #ffffff;"></div>
+
+    <script>
+        const link = 'https://www.checkout-ds24.com/answer/yes?template=light';
+        function setBackRedirect(url) {
+            let urlBackRedirect = url;
+            urlBackRedirect = urlBackRedirect.trim() +
+                (urlBackRedirect.indexOf('?') > 0 ? '&' : '?') +
+                document.location.search.replace('?', '').toString();
+            history.pushState({}, '', location.href);
+            history.pushState({}, '', location.href);
+            history.pushState({}, '', location.href);
+            window.addEventListener('popstate', () => {
+                setTimeout(() => {
+                    location.href = urlBackRedirect;
+                }, 1);
+            });
+        }
+        setBackRedirect(link);
+    </script>
+    <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck data-utmify-prevent-subids async defer></script>
+    
+    <div class="sticky-warning-bar">
+        ⚠️ It is mandatory to watch the video until the end to avoid errors.
+    </div>
+</body>
+</html>
