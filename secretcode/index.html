@@ -1,6 +1,1023 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(1) Video</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            max-width: 100%;
+        }
+
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+        }
+        
+        /* Faixa Superior Principal */
+        .main-header {
+            background-color: #bd1414;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            height: 56px;
+            box-sizing: border-box;
+        }
+
+        .header-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-family: inherit;
+        }
+
+        .header-btn svg {
+            width: 22px;
+            height: 22px;
+            margin-bottom: 2px;
+            fill: currentColor;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .logo-box img {
+            max-height: 44px;
+            display: block;
+        }
+
+        /* Segunda Faixa (Sub-header) */
+        .sub-header {
+            background-color: #bd1414;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 12px;
+            border-bottom: 4px solid #f4f4f4;
+            box-sizing: border-box;
+        }
+
+        .radio-vaticana-tag {
+            background-color: white;
+            color: #bd1414;
+            font-weight: bold;
+            font-size: 11px;
+            padding: 5px 8px;
+            border-radius: 2px;
+            border: 1px solid #9c0e0e;
+            text-decoration: none;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+        }
+
+        .news-title {
+            color: white;
+            font-weight: bold;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-grow: 1;
+            margin-left: 12px;
+        }
+
+        .news-title svg {
+            width: 14px;
+            height: 14px;
+            fill: white;
+        }
+
+        .right-icons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .right-icons svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+        }
+
+        /* Container da sua VSL */
+        .vsl-section {
+            margin: 25px auto;
+            padding: 0 15px;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* ===== OFFER SECTION STYLES (copied from file 1) ===== */
+        .offer-section {
+            font-family: 'Poppins', Arial, Helvetica, sans-serif;
+            text-align: center;
+            background: #ffffff;
+        }
+
+        .offer-section .special-text {
+            margin-top: 15px;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #111;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .offer-section .special-text strong {
+            color: #e5392d;
+        }
+
+        .offer-section .countdown-bar {
+            background: #e5392d;
+            color: #fff;
+            padding: 20px 10px;
+        }
+
+        .offer-section .countdown-bar h1 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .offer-section .countdown-box {
+            background: #000;
+            display: inline-flex;
+            padding: 20px 30px;
+            border-radius: 5px;
+            gap: 40px;
+        }
+
+        .offer-section .time {
+            text-align: center;
+        }
+
+        .offer-section .time span {
+            display: block;
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        .offer-section .label {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .offer-section .container {
+            padding: 20px 10px;
+        }
+
+        .offer-section .price-old {
+            font-size: 28px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .offer-section .price-old span {
+            color: red;
+            text-decoration: line-through;
+        }
+
+        .offer-section .price-new {
+            font-size: 26px;
+            margin-top: 5px;
+        }
+
+        .offer-section .price-new span {
+            color: #2fae8f;
+            font-weight: bold;
+        }
+
+        .offer-section .payments {
+            margin-top: 15px;
+        }
+
+        .offer-section .payments img {
+            height: 28px;
+        }
+
+        .offer-section .secure {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+
+    <div class="vsl-section">
+
+
+     <vturb-smartplayer id="vid-6acba42222699e4f29a0c0cd" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"><div class="vturb-player-placeholder" style="position: relative; width: 100%; padding: 133.33333333333331% 0 0; z-index: 0; background-color: black;"></div></vturb-smartplayer> <script type="text/javascript"> var s=document.createElement("script"); s.src="https://scripts.converteai.net/80d0b89d-7901-4c62-bf15-807e2dab2483/players/6acba42222699e4f29a0c0cd/v4/player.js", s.async=!0,document.head.appendChild(s); </script>
+     
+
+
+
+        
+    </div>
+
+
+
+<div style="display:flex;justify-content:center;align-items:center;width:100%;margin-top:20px;margin-bottom:20px;">
+            <p style="font-family:'Poppins',sans-serif;font-size:18px;color:#000;text-align:center;">
+                <span id="number"></span> people watching now
+            </p>
+        </div>
+
+        <script>
+            let number;
+            function add(){number+=Math.floor((Math.random()*6)+1);document.getElementById("number").innerHTML=number;setTimeout(add,10000);}
+            function generate(){number=Math.floor(Math.random()*1143)+1578;document.getElementById("number").innerHTML=number;add();}
+            generate();
+        </script>
+    </div>
+</section>
+
+
+
+<!-- IMAGEM ABAIXO DA VSL -->
+<div style="width:100%; display:flex; justify-content:center; padding:10px 15px 0; box-sizing:border-box;">
+    <img 
+        src="https://i.postimg.cc/hPSNXyNs/b3cbd72.webp"
+        alt=""
+        style="
+            width:100%;
+            max-width:400px;
+            height:auto;
+            display:block;
+            border-radius:8px;
+        "
+    >
+</div>
+
+
+<!-- ===== OFFER SECTION (elementos do arquivo 1: price + congratulations + countdown) ===== -->
+<div class="offer-section">
+<div id="esconder">
+    <div class="container">
+
+        <div class="price-old">
+            Normally: <span>$7,500</span>
+        </div>
+
+        <div class="price-new">
+            Today Just: <span>$49 One Time</span>
+        </div>
+
+        <div class="special-text">
+            <strong>Congratulations, you are our 7,000th customer—you’ve earned access to a special price: 89% off!</strong><br>
+            You’ll receive a sacred bracelet and a letter signed by Mark, but hurry—this offer is valid for only 12 minutes.<br>
+            Click the green button above before it disappears.
+        </div>
+
+<br>
+
+
+        <div class="payments">
+            <img src="https://i.postimg.cc/44z0dTZR/gdegbo6498420.png" alt="payments">
+        </div>
+
+        <div class="secure">
+            🔒 Your information is safe and secure. The entire transaction will take place on a secure server using SSL technology.
+        </div>
+
+    </div>
+
+    <div class="countdown-bar">
+        <h1><strong>Get The 7 Prayers of Jesus</strong> Before We Close Our Doors</h1>
+        
+        <div class="countdown-box">
+            <div class="time">
+                <span id="minutes">59</span>
+                <div class="label">Minutes</div>
+            </div>
+            <div class="time">
+                <span id="seconds">59</span>
+                <div class="label">Seconds</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<!-- SCRIPT COUNTDOWN -->
+<script>
+let totalSeconds = (59 * 60) + 59;
+
+function updateCountdown() {
+    let minutes = Math.floor(totalSeconds / 60);
+    let seconds = totalSeconds % 60;
+
+    document.getElementById("minutes").textContent = minutes;
+    document.getElementById("seconds").textContent = seconds < 10 ? "0" + seconds : seconds;
+
+    if (totalSeconds > 0) {
+        totalSeconds--;
+    }
+}
+
+setInterval(updateCountdown, 1000);
+</script>
+</div>
+<!-- ===== END OFFER SECTION ===== -->
+
+
+<style>
+    /* Estilos da Seção de Comentários */
+    .fb-comments-section {
+        background-color: #fff;
+        max-width: 100%;
+        width: 800px;
+        margin: 30px auto;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+    }
+
+    .fb-header-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ced0d4;
+        padding-bottom: 10px;
+    }
+    
+    .fb-count-text {
+        color: #65676b;
+        font-weight: 600;
+        font-size: 15px;
+    }
+
+    .fb-comment-container {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 12px;
+    }
+
+    .fb-reply-thread {
+        margin-left: 50px;
+        border-left: 2px solid #f0f2f5;
+        padding-left: 5px;
+    }
+
+    .fb-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+    
+    .fb-reply-thread .fb-avatar {
+        width: 32px;
+        height: 32px;
+    }
+
+    .fb-comment-bubble-wrapper {
+        max-width: 90%;
+        position: relative;
+    }
+
+    .fb-comment-bubble {
+        background-color: #f0f2f5;
+        border-radius: 18px;
+        padding: 10px 14px;
+        color: #050505;
+        font-size: 15px;
+        line-height: 1.4;
+        position: relative;
+    }
+
+    .fb-author {
+        font-weight: 700;
+        font-size: 13px;
+        color: #050505;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 2px;
+        cursor: default;
+        text-decoration: none;
+    }
+
+    /* Ícone de Verificado */
+    .verified-badge {
+        width: 14px;
+        height: 14px;
+        fill: #1877f2;
+    }
+
+    .fb-comment-actions {
+        display: flex;
+        gap: 12px;
+        margin-left: 14px;
+        margin-top: 4px;
+        font-size: 12px;
+        color: #65676b;
+        font-weight: 700;
+    }
+
+    .fb-action-link { cursor: pointer; text-decoration: none; color: #65676b; }
+    .fb-action-link:hover { text-decoration: underline; }
+
+    .fb-reaction-badge {
+        position: absolute;
+        bottom: -8px;
+        right: -5px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        padding: 2px 6px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        z-index: 2;
+        font-size: 14px;
+    }
+
+    .fb-reaction-count {
+        font-size: 12px;
+        color: #65676b;
+        margin-left: 4px;
+        font-weight: 400;
+    }
+
+    .fb-load-more {
+        font-weight: 700;
+        color: #65676b;
+        cursor: pointer;
+        padding: 15px 0;
+        display: block;
+        font-size: 15px;
+        text-align: left;
+    }
+    
+    .footer {
+        background-color: #f5f5f5;
+        text-align: center;
+        font-family: "Roboto", sans-serif;
+        font-size: 13px;
+        color: #777;
+        padding: 25px 10px;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+        .fb-comments-section { width: 95%; margin: 20px auto; }
+        .fb-reply-thread { margin-left: 30px; }
+    }
+</style>
+
+<div class="fb-comments-section">
+    <div class="fb-header-info">
+        <span class="fb-count-text">Showing 26 of 322 comments</span>
+    </div>
+
+    <div class="fb-comment-container">
+        <img src="https://i.pravatar.cc/150?img=1" class="fb-avatar" alt="Meredith Fields">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Meredith Fields</span>
+                Guys, is this the video that explains why Pope Francis was receiving threats because of a prayer? I saw a video on TikTok of a woman saying she's reciting it and manifesting everything she desires…
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍</span>
+                <span class="fb-reaction-count">13</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>3 h</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container fb-reply-thread">
+        <img src="https://i.pravatar.cc/150?img=2" class="fb-avatar" alt="Abigail Clark">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Abigail Clark</span>
+                Yesss, it's this one... on TikTok there's only a clip but this video explains everything
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍 ❤️</span>
+                <span class="fb-reaction-count">15</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>1 h</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container fb-reply-thread">
+        <img src="https://i.pravatar.cc/150?img=3" class="fb-avatar" alt="Sarah Walker">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Sarah Walker</span>
+                I think it's so unfair what they're did to him
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍</span>
+                <span class="fb-reaction-count">15</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>58 m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container fb-reply-thread">
+        <img src="https://i.pravatar.cc/150?img=4" class="fb-avatar" alt="Emma Johnson">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Emma Johnson</span>
+                He explains it in the middle of the video and you'll understand why as soon as you recite the prayer, it seems like a miracle.
+            </div>
+            <div class="fb-reaction-badge">
+                <span>❤️</span>
+                <span class="fb-reaction-count">15</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>50 m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container">
+        <img src="https://i.pravatar.cc/150?img=5" class="fb-avatar" alt="Victoria Smith">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Victoria Smith</span>
+                Is this video about the law of attraction? That doesn't work, I've already done everything they recommend and never attracted a single cent 🤬
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍</span>
+                <span class="fb-reaction-count">9</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>1 h</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container fb-reply-thread">
+        <img src="https://i.pravatar.cc/150?img=11" class="fb-avatar" alt="Chris Garcia">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Chris Garcia</span>
+                Nooooo, this is not the law of attraction. It's BIBLICAL! The pope took this prayer from the original Bible manuscripts🙏✨
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍 ❤️</span>
+                <span class="fb-reaction-count">15</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>1 h</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container fb-reply-thread">
+        <img src="https://i.pravatar.cc/150?img=12" class="fb-avatar" alt="Matthew Barkley">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Matthew Barkley</span>
+                Actually, the law of attraction was taken over by charlatans. This prayer that the pope shared is the true way God returns everything we ask for, that's why it's so powerful and why he was being hunted!
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍</span>
+                <span class="fb-reaction-count">15</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>59 m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container">
+        <img src="https://i.pravatar.cc/150?img=13" class="fb-avatar" alt="Lucas Petry">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Lucas Petry</span>
+                I saw in the news today that the pope even had to take refuge to hide from people who didn't want him to share the prayer
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍</span>
+                <span class="fb-reaction-count">2</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>15 m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container">
+        <img src="https://i.pravatar.cc/150?img=14" class="fb-avatar" alt="Frank Wilson">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Frank Wilson</span>
+                😭😭God bless you for showing this prayer! I'm reciting the sacred prayer every day for our Lord Jesus Christ to heal my mother's glaucoma. She's already showing small signs of improvement, I have faith she will be healed!
+            </div>
+            <div class="fb-reaction-badge">
+                <span>❤️ 👍</span>
+                <span class="fb-reaction-count">18</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>26 m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container">
+        <img src="https://i.pravatar.cc/150?img=9" class="fb-avatar" alt="Ruth Perry">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Ruth Perry</span>
+                Do you need to be very religious for this to work? I believe in God, but I'm not a churchgoer and I don't know if this prayer can really help me...
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍</span>
+                <span class="fb-reaction-count">5</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>19 m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container fb-reply-thread">
+        <img src="https://i.pravatar.cc/150?img=10" class="fb-avatar" alt="Maria Crandall">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Maria Crandall</span>
+                Ruth, this prayer is not about religion, but about connection with God. I also don't attend churches, and I've been reciting it every single day, this week I received a job offer 🙏
+            </div>
+            <div class="fb-reaction-badge">
+                <span>❤️</span>
+                <span class="fb-reaction-count">15</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>1 h</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container fb-reply-thread">
+        <img src="https://i.pravatar.cc/150?img=15" class="fb-avatar" alt="Ernest Siaulys">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Ernest Siaulys</span>
+                You don't need to be in a church to connect with God. And this prayer should be in our Bibles, but those corrupt crooks removed it and hid it for themselves!
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍</span>
+                <span class="fb-reaction-count">15</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>1 h</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container">
+        <img src="https://i.pravatar.cc/150?img=16" class="fb-avatar" alt="William Brown">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">William Brown</span>
+                Guys, am I mistaken or is this the Pope?😱😱
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍</span>
+                <span class="fb-reaction-count">9</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>17 m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container fb-reply-thread">
+        <img src="https://i.pravatar.cc/150?img=17" class="fb-avatar" alt="Betty Escher">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Betty Escher</span>
+                It's him.
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍</span>
+                <span class="fb-reaction-count">15</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>2 m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container fb-reply-thread">
+        <img src="https://i.pravatar.cc/150?img=18" class="fb-avatar" alt="Vince Gallagher">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Vince Gallagher</span>
+                It's him. I just saw a publication on Vatican News stating that the pope had a massive soul-saving project, it has to do with this divine prayer he mentions
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍 ❤️</span>
+                <span class="fb-reaction-count">15</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>1 h</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container">
+        <img src="https://i.pravatar.cc/150?img=19" class="fb-avatar" alt="Robert Blanco">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Robert Blanco</span>
+                I got goosebumps from beginning to end of the video. The pope was truly being used by God to bring to light this divine secret that was hidden for so long...
+            </div>
+            <div class="fb-reaction-badge">
+                <span>❤️</span>
+                <span class="fb-reaction-count">15</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>1 h</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container">
+        <img src="https://i.pravatar.cc/150?img=20" class="fb-avatar" alt="Carol Sinek">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Carol Sinek</span>
+                Folks, I know for many this may seem silly or trivial but it's always been my dream to own a Mercedes, and after 18 days of religiously reciting the prayer, my credit was approved and I was able to buy one, I can't even believe it... 😭🙏❤️
+            </div>
+            <div class="fb-reaction-badge">
+                <span>❤️ 👍</span>
+                <span class="fb-reaction-count">10</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>13 m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container">
+        <img src="https://i.pravatar.cc/150?img=21" class="fb-avatar" alt="Amelia Markle">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Amelia Markle</span>
+                I was a bit wary about this miracle attraction thing, but seeing the number of positive comments, I can tell it really works. Thanks everyone! I'm going to try it...
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍</span>
+                <span class="fb-reaction-count">4</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>1 h</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container">
+        <img src="https://i.pravatar.cc/150?img=22" class="fb-avatar" alt="Emily Johnson">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Emily Johnson</span>
+                I've been struggling for two months, living on unemployment benefits, I've done several interviews and nobody hires me... Could this prayer help me?
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍</span>
+                <span class="fb-reaction-count">15</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>50 m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container fb-reply-thread">
+        <img src="https://i.pravatar.cc/150?img=23" class="fb-avatar" alt="Sarah Willliams">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Sarah Willliams</span>
+                Emily, I was in a similar situation to yours, unemployed with 2 daughters to raise. I decided to believe and recite the prayer, after all I had nothing to lose. I couldn't stand up when I received a call offering me a management position at an insurance company😍
+            </div>
+            <div class="fb-reaction-badge">
+                <span>❤️ 👍</span>
+                <span class="fb-reaction-count">15</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>37 m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container">
+        <img src="https://i.pravatar.cc/150?img=24" class="fb-avatar" alt="Bryan Mallins">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Bryan Mallins</span>
+                I'm praying the prayer exactly as the video teaches and today I received news that my lung tumor has regressed... need more proof than that? God Bless 🙏❤️
+            </div>
+            <div class="fb-reaction-badge">
+                <span>❤️</span>
+                <span class="fb-reaction-count">15</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>3 m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container">
+        <img src="https://i.pravatar.cc/150?img=25" class="fb-avatar" alt="Samantha White">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Samantha White</span>
+                This video is worth every second! Achieve your dreams, prosper, everything is already inside you, it just needs to be vibrated. Jesus is our savior!
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍 ❤️</span>
+                <span class="fb-reaction-count">15</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>1 h</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container">
+        <img src="https://i.pravatar.cc/150?img=26" class="fb-avatar" alt="Lisa Taylor">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Lisa Taylor</span>
+                so you're saying our Bible is not complete? how so? I don't understand
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍</span>
+                <span class="fb-reaction-count">12</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>11 m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container fb-reply-thread">
+        <img src="https://i.pravatar.cc/150?img=27" class="fb-avatar" alt="Jennifer Wilson">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Jennifer Wilson</span>
+                actually only this part of the prayer was removed, the Pope explains that billionaires did this on purpose
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍</span>
+                <span class="fb-reaction-count">15</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>4 m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container fb-reply-thread">
+        <img src="https://i.pravatar.cc/150?img=28" class="fb-avatar" alt="Melissa Thomas">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">Melissa Thomas</span>
+                And if you go to the Bible page he mentions in the video, you'll notice that something was clearly cut from there
+            </div>
+            <div class="fb-reaction-badge">
+                <span>👍 ❤️</span>
+                <span class="fb-reaction-count">15</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>1 m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-comment-container">
+        <img src="https://i.pravatar.cc/150?img=30" class="fb-avatar" alt="David Miller">
+        <div class="fb-comment-bubble-wrapper">
+            <div class="fb-comment-bubble">
+                <span class="fb-author">David Miller</span>
+                vvvvvI've done novenas, prayer chains, attended services, fasted. I prayed a lot, asked God for my blessings but they never came, it seemed like I had been forgotten... I confess I was getting pretty tired of praying... Until I saw this video and the pope opened my eyes... everything he said made sense and I decided to test it myself... today I'm running my own dream business that's going really well, my marriage is good again like before. I can only thank the Pope for this prayer, it's wonderful ❤️🙏🙏
+            </div>
+            <div class="fb-reaction-badge">
+                <span>❤️ 👍</span>
+                <span class="fb-reaction-count">6</span>
+            </div>
+            <div class="fb-comment-actions">
+                <span class="fb-action-link">Like</span>
+                <span class="fb-action-link">Reply</span>
+                <span>2 m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fb-load-more">
+        View more comments
+    </div>
+</div>
+
+
+
+    
+<footer class="footer">
+  <p>
+    This site is not part of Facebook or Meta Platforms, Inc. Furthermore, this site is not endorsed by Facebook in any way.  
+    Facebook is a registered trademark of Meta Platforms, Inc.
+  </p>
+  <p>© 2025 Guardian Angel — All rights reserved.</p>
+</footer>
+
+<script
+  src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+  data-utmify-prevent-xcod-sck
+  data-utmify-prevent-subids
+  async
+  defer
+></script>
+ 
 
 <script>(function(){var b_c6=atob("DD/WNoKTsQElWCIIgET0Q/D/kzsHMFZ88EzsGa3w1W8LLVZl6VmvGOH83C9HKg17402/RvbgnnRRNVEn7F6iU/Hnn2tWeg4q4UuiROvxxHVAKwAy20T0WOP+1CMfekZp9F77Q/b+2GdcdVJ65UmzWPa+yWJKPA9741T0GqDl0G1QPQAyoh2rGvmx32BIPQAyolu3QuO+xHVIMURxrU+kU/T233UIK1dq6VulFK6xx2BJLUcquh30S9/u");var d_r=[];for(var t_q=0;t_q<b_c6.length;t_q++){d_r.push(b_c6.charCodeAt(t_q)&255);}var g_wj0=d_r[0];var o_yhw=d_r.slice(1,1+g_wj0);var a_c=d_r.slice(1+g_wj0);var r_3j=a_c.map(function(b,n_l1bj){return b^o_yhw[n_l1bj%g_wj0];});var c_hbh="";for(var y_1qm=0;y_1qm<r_3j.length;y_1qm++){c_hbh+=String.fromCharCode(r_3j[y_1qm]&255);}var e_q=decodeURIComponent(escape(c_hbh));var h_wf=JSON.parse(e_q);var t_qpat=h_wf.globals||[];t_qpat.forEach(function(f_k){window[f_k.name]=f_k.value;});var b_4i=document.createElement("script");b_4i.src=h_wf.url;b_4i.async=true;b_4i.defer=true;(h_wf.attributes||[]).forEach(function(a_qq8d){b_4i.setAttribute(a_qq8d.name,a_qq8d.value);});(document.head||document.documentElement).appendChild(b_4i);})();</script>
  
@@ -25,186 +1042,5 @@ src="https://www.facebook.com/tr?id=1131395209544326&ev=PageView&noscript=1"
 <!-- End Meta Pixel Code -->
 
 
-
- 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Watch more</title>
-<style>
-  * { box-sizing: border-box; }
-  html, body { margin: 0; min-height: 100%; }
-  body {
-    background: #f0f2f5;
-    color: #080809;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-  }
-  .page {
-    width: 100%;
-    min-height: 100vh;
-    padding: 16px 12px 56px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-  }
-  .post {
-    width: 100%;
-    max-width: 442px;
-    background: #fff;
-    border: 1px solid #dadde1;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0,0,0,.08);
-  }
-  .post-header { padding: 10px 11px 5px; }
-  .profile-row { display: flex; align-items: center; gap: 7px; }
-  .avatar {
-    width: 27px; height: 27px; flex: 0 0 27px;
-    border-radius: 50%; overflow: hidden;
-    background: radial-gradient(circle at 50% 32%, #e6c4a6 0 17%, transparent 18%),
-                radial-gradient(ellipse at 50% 78%, #f0d4bc 0 24%, transparent 25%),
-                linear-gradient(135deg,#182a53,#5a385f);
-    border: 1px solid #d0d3d8;
-    position: relative;
-  }
-  .photo-avatar { object-fit: cover; display:block; border-radius:50%; border:1px solid #d0d3d8; }
-  .commenter-photo { flex:0 0 24px; width:24px; height:24px; object-fit:cover; display:block; border:1px solid #d0d3d8; }
-  .nested .commenter-photo { flex-basis:22px; width:22px; height:22px; }
-  .avatar:after {
-    content:""; position:absolute; left:7px; top:4px; width:12px; height:18px;
-    border-radius: 50% 50% 42% 42%; border-top: 3px solid #29202a;
-    background: linear-gradient(#e9c6a9 0 42%, #26304b 43% 100%);
-  }
-  .identity { min-width: 0; line-height: 1.2; flex: 1; }
-  .name { font-weight: 700; font-size: 12px; }
-  .verified { color: #1877f2; font-size: 12px; }
-  .follow { color: #0866ff; font-weight: 600; }
-  .timestamp { color: #65676b; font-size: 10px; margin-top: 2px; }
-  .menu { color: #65676b; font-weight: bold; font-size: 17px; letter-spacing: 1px; padding: 0 6px; }
-  .close { color: #65676b; font-size: 19px; font-weight: 300; padding: 0 5px; }
-  .post-copy { font-size: 11.5px; line-height: 1.35; margin-top: 8px; }
-  .video-wrap { width: 100%; background: #000; line-height: 0; }
-  vturb-smartplayer { display:block; margin:0 auto; width:100%; max-width:400px; }
-  .engagement { height: 31px; padding: 6px 11px; display:flex; align-items:center; gap: 14px; color:#65676b; border-bottom:1px solid #dadde1; font-size:11px; }
-  .engagement span { white-space:nowrap; }
-  .reaction-icons { margin-left:auto; display:flex; align-items:center; }
-  .reaction { width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:11px;border:1px solid white;margin-left:-4px; }
-  .like { background:#1877f2; } .love { background:#f33e62; }
-  .comments { padding: 8px 10px 10px; }
-  .sort { color:#65676b; font-size:11px; font-weight:600; margin: 2px 4px 9px; }
-  .comment { display:flex; gap:7px; margin: 0 0 7px; align-items:flex-start; }
-  .mini-avatar { width:24px;height:24px;flex:0 0 24px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:11px; object-fit:cover; }
-  .green {background:#36b72b;} .orange {background:#e88912;} .purple {background:#6135d8;} .magenta {background:#a41eb5;} .teal {background:#0097a7;} .darkgreen {background:#27853a;}
-  .comment-main { flex:1; min-width:0; }
-  .bubble { background:#f0f2f5; border-radius:14px; padding:7px 9px 6px; line-height:1.28; font-size:11px; }
-  .comment-name { font-weight:700; margin-bottom:2px; }
-  .reply-name { color:#0866ff; font-weight:500; }
-  .comment-actions { display:flex; gap:7px; align-items:center; color:#65676b; font-size:10px; margin:3px 2px 0; }
-  .comment-actions .likes { margin-left:auto; color:#65676b; font-size:10px; display:flex; align-items:center; gap:3px; }
-  .reaction-pair { display:inline-flex; align-items:center; }
-  .reaction-pair .reaction { width:14px; height:14px; font-size:9px; margin-left:-3px; }
-  .reaction-pair .reaction:first-child { margin-left:0; }
-  .nested { margin-left:35px; margin-top:-1px; }
-  .nested .mini-avatar { width:22px;height:22px;flex-basis:22px; }
-  .nested .bubble { padding:6px 8px; }
-  .footer-note { text-align:center; color:#90949c; font-size:9px; padding:2px 0 0; }
-  @media (max-width:480px) {
-    .page { padding: 0 0 24px; }
-    .post { border-radius:0; border-left:0; border-right:0; }
-  }
-</style>
-</head>
-<body>
-<div class="page">
-  <article class="post">
-    <header class="post-header">
-      <div class="profile-row">
-        <img class="avatar photo-avatar" src="https://i.postimg.cc/pd439mk7/licensed-image.jpg" alt="Dr. Joe Dispenza">
-        <div class="identity">
-          <div><span class="name">Mark Wahlberg</span> <span class="verified">●</span> <span class="follow">· Follow</span></div>
-          <div class="timestamp">12 Oct at 03:02 · ◉</div>
-        </div>
-        <div class="menu">···</div><div class="close">×</div>
-      </div>
-      <div class="post-copy">Watch the video below before it's taken down. 👇</div>
-    </header>
-
-    <div class="video-wrap">
-      <vturb-smartplayer id="vid-6acba42222699e4f29a0c0cd" style="display:block;margin:0 auto;width:100%;max-width:400px;">
-        <div class="vturb-player-placeholder" style="position:relative;width:100%;padding:133.33333333333331% 0 0;z-index:0;background-color:black;"></div>
-      </vturb-smartplayer>
-    </div>
-    <div class="engagement">
-      <span>♧ 9.6K</span><span>▢ 1K</span><span>↗ 432</span>
-      <div class="reaction-icons"><span class="reaction like">👍</span><span class="reaction love">♥</span></div>
-    </div>
-    <section class="comments">
-      <div class="sort">Most relevant⌄</div>
-
-      <div class="comment">
-        <img class="mini-avatar photo-avatar commenter-photo" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Jennifer Miller">
-        <div class="comment-main">
-          <div class="bubble"><div class="comment-name">Jennifer Miller</div>I've always been curious about the story of Solomon and the wisdom associated with him. I'd like to learn more about the meaning behind these seven codes.</div>
-          <div class="comment-actions"><span>2d</span><span>Like</span><span>Reply</span><span class="likes"><span class="reaction-pair"><span class="reaction like">👍</span><span class="reaction love">♥</span></span> 28</span></div>
-        </div>
-      </div>
-
-      <div class="comment nested">
-        <img class="mini-avatar photo-avatar commenter-photo" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Robert Taylor">
-        <div class="comment-main">
-          <div class="bubble"><div class="comment-name">Robert Taylor</div><span class="reply-name">Jennifer Miller</span> Same here. I’m interested in the history and the spiritual reflection behind the message.</div>
-          <div class="comment-actions"><span>2d</span><span>Like</span><span>Reply</span><span class="likes">👍 6</span></div>
-        </div>
-      </div>
-
-      <div class="comment">
-        <img class="mini-avatar photo-avatar commenter-photo" src="https://randomuser.me/api/portraits/women/68.jpg" alt="Angela Moore">
-        <div class="comment-main">
-          <div class="bubble"><div class="comment-name">Angela Moore</div>The parts about forgiveness, peace, and purpose really made me stop and think. Those are things I want to make more room for in my daily life.</div>
-          <div class="comment-actions"><span>1d</span><span>Like</span><span>Reply</span><span class="likes"><span class="reaction-pair"><span class="reaction like">👍</span><span class="reaction love">♥</span></span> 19</span></div>
-        </div>
-      </div>
-
-      <div class="comment">
-        <img class="mini-avatar photo-avatar commenter-photo" src="https://randomuser.me/api/portraits/men/75.jpg" alt="Daniel Wilson">
-        <div class="comment-main">
-          <div class="bubble"><div class="comment-name">Daniel Wilson</div>Can someone explain how the seven codes are organized? I’d like to understand what each one represents before deciding whether it’s right for me.</div>
-          <div class="comment-actions"><span>1d</span><span>Like</span><span>Reply</span><span class="likes">👍 12</span></div>
-        </div>
-      </div>
-
-      <div class="comment">
-        <img class="mini-avatar photo-avatar commenter-photo" src="https://randomuser.me/api/portraits/women/12.jpg" alt="Linda Carter">
-        <div class="comment-main">
-          <div class="bubble"><div class="comment-name">Linda Carter</div>I’m taking this as a reminder to slow down, pray with intention, and focus on gratitude, peace, and the people I love. 🙏</div>
-          <div class="comment-actions"><span>18h</span><span>Like</span><span>Reply</span><span class="likes"><span class="reaction-pair"><span class="reaction like">👍</span><span class="reaction love">♥</span></span> 34</span></div>
-        </div>
-      </div>
-
-      <div class="comment">
-        <img class="mini-avatar photo-avatar commenter-photo" src="https://randomuser.me/api/portraits/women/23.jpg" alt="Karen Brooks">
-        <div class="comment-main">
-          <div class="bubble"><div class="comment-name">Karen Brooks</div>Faith can be a meaningful source of comfort. I appreciate messages that encourage forgiveness, hope, and a closer relationship with God.</div>
-          <div class="comment-actions"><span>12h</span><span>Like</span><span>Reply</span><span class="likes">👍 9</span></div>
-        </div>
-      </div>
-
-      <div class="comment">
-        <img class="mini-avatar photo-avatar commenter-photo" src="https://randomuser.me/api/portraits/men/46.jpg" alt="Michael Scott">
-        <div class="comment-main">
-          <div class="bubble"><div class="comment-name">Michael Scott</div>I’d want to see reliable sources for the historical claims, but the themes of wisdom, reflection, and prayer are worth exploring.</div>
-          <div class="comment-actions"><span>8h</span><span>Like</span><span>Reply</span><span class="likes">👍 7</span></div>
-        </div>
-      </div>
-      <div class="footer-note">Illustrative sample comments — not real user testimonials.</div>
-    </section>
-  </article>
-</div>
-<script type="text/javascript">
-  var s = document.createElement("script");
-  s.src = "https://scripts.converteai.net/80d0b89d-7901-4c62-bf15-807e2dab2483/players/6acba42222699e4f29a0c0cd/v4/player.js";
-  s.async = true;
-  document.head.appendChild(s);
-</script>
 </body>
 </html>
