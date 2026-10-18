@@ -4,8 +4,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<title>The Prayer of King Solomon — A Daily Devotional Companion</title>
-<meta name="description" content="A restored Hebrew prayer devotional inspired by the wisdom of King Solomon. For personal reflection and daily prayer practice." />
+<title>The Prayer of King Solomon — A Digital Devotional Reading Collection</title>
+<meta name="description" content="A digital collection of historical prayers, manuscript notes, and short readings, compiled for personal study and quiet reflection. Fully digital. One-time payment." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
@@ -45,7 +45,7 @@ section{padding:110px 0}
 .hero h1 em{font-style:normal;color:var(--gold);font-weight:400}
 .hero-sub{grid-area:sub;font-size:1.08rem;max-width:620px;margin:0 0 24px;color:#c4ccda}
 .verse{grid-area:verse;font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:1.15rem;line-height:1.5;color:var(--white);max-width:640px;margin:0 0 28px;padding:20px 24px;background:rgba(255,255,255,.045);border-left:3px solid var(--gold);border-radius:0}
-.verse-ref{display:block;margin-top:12px;font:700 .72rem Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.verse-ref{display:block;margin-top:12px;font:700 .72rem Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-style:normal}
 .hero .btn{grid-area:cta;justify-self:start}
 .btn{display:inline-block;background:var(--gold);color:#11172a;font-family:Arial,sans-serif;font-size:.9rem;font-weight:800;letter-spacing:.045em;text-transform:uppercase;padding:18px 26px;border-radius:2px;border:1px solid var(--gold);cursor:pointer;transition:transform .2s,background .2s;box-shadow:none}
 .btn:hover{background:#ffe4a3;color:#11172a;transform:translateY(-2px)}
@@ -57,7 +57,7 @@ section.fade-in{background:#0b1020}
 section.fade-in .container{text-align:center}
 section.fade-in h2{text-align:center;max-width:800px;margin:0 auto 22px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;margin-top:52px;background:var(--line);border:1px solid var(--line)}
-.card{background:var(--night2);border:0;border-radius:0;padding:34px 30px;transition:background .2s}
+.card{background:var(--night2);border:0;border-radius:0;padding:34px 30px;transition:background .2s;text-align:left}
 .card:hover{background:#1b2945;transform:none;box-shadow:none}
 .card-icon{font-size:1.7rem;margin-bottom:22px;display:block;color:var(--gold)}
 .card h3{margin-bottom:12px;color:var(--white)}
@@ -66,7 +66,7 @@ section.fade-in h2{text-align:center;max-width:800px;margin:0 auto 22px}
 .list-section .eyebrow{text-align:center}
 .list-section h2{text-align:center}
 .item-list{list-style:none;margin:48px auto 0;max-width:850px;padding:0}
-.item{display:flex;gap:22px;align-items:flex-start;padding:28px 0;border-bottom:1px solid var(--line)}
+.item{display:flex;gap:22px;align-items:flex-start;padding:28px 0;border-bottom:1px solid var(--line);text-align:left}
 .item:last-child{border-bottom:0}
 .item-icon{flex-shrink:0;width:48px;height:48px;background:var(--gold);color:var(--night);border:0;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
 .item-body h3{margin:0 0 7px;color:var(--white)}
@@ -102,6 +102,8 @@ section.fade-in h2{text-align:center;max-width:800px;margin:0 auto 22px}
 .faq-item summary::after{content:'+';font:300 1.5rem Arial,sans-serif;color:var(--gold);line-height:1}
 .faq-item[open] summary::after{content:'−'}
 .faq-item p{padding:0 24px 24px;font-size:.94rem;color:var(--muted)}
+.notice{max-width:760px;margin:44px auto 0;padding:24px 26px;background:rgba(255,255,255,.035);border:1px solid var(--line-soft);border-left:3px solid var(--gold);text-align:left}
+.notice p{font-size:.85rem;color:#9ba8bf;margin:0}
 footer{background:#070b15;border-top:1px solid var(--line);padding:54px 24px 36px;text-align:center}
 .footer-brand{margin-bottom:22px}
 .footer-links{display:flex;flex-wrap:wrap;justify-content:center;gap:26px;margin-bottom:28px}
@@ -120,6 +122,7 @@ footer{background:#070b15;border-top:1px solid var(--line);padding:54px 24px 36p
  .process,.guarantee,.pricing{padding:32px 24px}.price-display{font-size:3.2rem}.grid{grid-template-columns:1fr}
  .card{padding:27px 24px}.item{gap:15px;padding:22px 0}.faq-item summary{padding:19px 18px;font-size:1rem}.faq-item p{padding:0 18px 20px}
  .btn{padding:17px 20px;font-size:.82rem}.topbar-cta{padding:10px 12px;font-size:.72rem}.brand{font-size:1rem}
+ .notice{padding:20px 18px}
 }
 @media(max-width:420px){.topbar-cta{font-size:.66rem;padding:9px}.footer-links{flex-direction:column;gap:12px}.guarantee,.pricing{padding:28px 18px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
@@ -132,7 +135,7 @@ footer{background:#070b15;border-top:1px solid var(--line);padding:54px 24px 36p
 <div class="topbar">
   <div class="topbar-inner">
     <div class="brand">The Prayer <span>of Solomon</span></div>
-    <a href="https://www.checkout-ds24.com/" class="topbar-cta">Get Access — $39</a>
+    <a href="https://www.checkout-ds24.com/" class="topbar-cta">View Details — $39</a>
   </div>
 </div>
 
@@ -144,34 +147,34 @@ footer{background:#070b15;border-top:1px solid var(--line);padding:54px 24px 36p
 
     <img
       src="https://cdn.blobline.com/u/cmtn21n3u0000kz04abz0pi5d/60/60057bb01d9a4cddca5a5fed7592fef0a1d1e4a0caf3f28ef55c941441da6fbb.png"
-      alt="The Prayer of Solomon"
+      alt="The Prayer of Solomon — digital devotional reading collection"
       class="hero-logo"
     />
 
-    <p class="eyebrow">A Daily Devotional Companion</p>
+    <p class="eyebrow">A Digital Devotional Reading Collection</p>
 
     <h1>The Prayer of <em>King Solomon</em></h1>
 
     <p class="hero-sub">
-      A restored Hebrew prayer, presented for personal reflection and daily prayer practice.
-      Rooted in the oldest preserved manuscripts of the Hebrew Bible.
+      A digital collection of historical prayers, manuscript reference notes,
+      and short readings — compiled for personal study and quiet reflection.
     </p>
 
     <div class="verse">
-      "The Lord is near to all who call on him, to all who call on him in truth."
-      <span class="verse-ref">Psalm 145:18</span>
+      &ldquo;The Lord is near to all who call on him, to all who call on him in truth.&rdquo;
+      <span class="verse-ref">Psalm 145:18 — quoted from the Hebrew Scriptures</span>
     </div>
 
     <a href="https://www.checkout-ds24.com/" class="btn">
-      Begin Your Prayer Practice — $39
+      View the Collection — $39
     </a>
 
     <p class="price-line">
-      One-time payment · <strong>$39</strong> · Instant digital access
+      One-time payment · <strong>$39</strong> · Access details sent by email
     </p>
 
     <p class="trust-line">
-      Secure checkout · 60-day money-back guarantee
+      Secure checkout · 60-day refund policy
     </p>
 
   </div>
@@ -183,39 +186,40 @@ footer{background:#070b15;border-top:1px solid var(--line);padding:54px 24px 36p
 <section class="fade-in">
   <div class="container">
 
-    <p class="eyebrow">What's Included</p>
-    <h2 style="text-align:center; margin-bottom: 22px;">A Complete Devotional Library</h2>
+    <p class="eyebrow">What's Inside</p>
+    <h2 style="text-align:center; margin-bottom: 22px;">A Digital Reading Collection</h2>
     <div class="divider"></div>
 
     <p class="lead">
-      The Prayer of Solomon is a digital devotional app that gathers prayers, reflections,
-      and historical notes in one quiet place — designed to support your personal prayer life.
+      The Prayer of Solomon is a digital reading resource that gathers historical prayers,
+      reference notes, and short readings in one place. It is offered for personal study,
+      reading, and quiet reflection.
     </p>
 
     <div class="grid">
 
       <div class="card">
         <span class="card-icon">📜</span>
-        <h3>The Restored Prayer</h3>
-        <p>The Hebrew prayer of King Solomon, presented in a clear, readable form alongside its English translation.</p>
+        <h3>The Prayer Text</h3>
+        <p>The Hebrew prayer attributed to King Solomon, presented in Hebrew alongside an English translation, with brief explanatory notes.</p>
       </div>
 
       <div class="card">
         <span class="card-icon">📖</span>
-        <h3>Historical Manuscript Notes</h3>
-        <p>Background on the Aleppo Codex and the Leningrad Codex — two of the oldest preserved Hebrew manuscripts.</p>
+        <h3>Manuscript Reference Notes</h3>
+        <p>Background information on historical Hebrew manuscripts, including the Aleppo Codex and the Leningrad Codex, for readers who wish to learn more.</p>
       </div>
 
       <div class="card">
         <span class="card-icon">🕯️</span>
-        <h3>7 Days of Reflections</h3>
-        <p>Seven short daily readings, each paired with a Scripture passage and a moment of quiet reflection.</p>
+        <h3>Seven Short Readings</h3>
+        <p>Seven brief readings, each paired with a Scripture reference and a short question for personal reflection.</p>
       </div>
 
       <div class="card">
         <span class="card-icon">🎧</span>
-        <h3>Audio Prayer Guide</h3>
-        <p>A gentle audio companion for those who prefer to listen and pray along in the morning or evening.</p>
+        <h3>Audio Recording</h3>
+        <p>An audio recording of the prayer text, for readers who prefer to listen while they follow along.</p>
       </div>
 
     </div>
@@ -228,12 +232,13 @@ footer{background:#070b15;border-top:1px solid var(--line);padding:54px 24px 36p
 <section class="list-section fade-in">
   <div class="container">
 
-    <p class="eyebrow">Inside the App</p>
-    <h2 style="text-align:center; margin-bottom: 22px;">Everything in Your Access</h2>
+    <p class="eyebrow">Inside the Collection</p>
+    <h2 style="text-align:center; margin-bottom: 22px;">What Your Access Includes</h2>
     <div class="divider"></div>
 
     <p class="lead">
-      A quiet, organized library — created for daily use, on any device you already use.
+      A small, organized digital library. It can be opened in a web browser
+      on a phone, tablet, or computer.
     </p>
 
     <ul class="item-list">
@@ -242,39 +247,39 @@ footer{background:#070b15;border-top:1px solid var(--line);padding:54px 24px 36p
         <div class="item-icon">📜</div>
         <div class="item-body">
           <h3>The Prayer of King Solomon</h3>
-          <p>The central devotional prayer, presented in Hebrew with a faithful English rendering and short explanatory notes.</p>
+          <p>The central prayer text, presented in Hebrew with an English rendering and short explanatory notes.</p>
         </div>
       </li>
 
       <li class="item">
         <div class="item-icon">📖</div>
         <div class="item-body">
-          <h3>Solomon's Manuscript Notes</h3>
-          <p>Historical commentary on the wisdom attributed to King Solomon and its place in the Hebrew Scriptures.</p>
+          <h3>Manuscript Notes</h3>
+          <p>Reference notes on the historical background of the Hebrew Scriptures and the wisdom literature traditionally attributed to King Solomon.</p>
         </div>
       </li>
 
       <li class="item">
         <div class="item-icon">🕊️</div>
         <div class="item-body">
-          <h3>Prayers for Reflection</h3>
-          <p>A collection of short prayers for personal devotion — for quiet moments, for gratitude, and for the evening hours.</p>
+          <h3>Additional Prayers</h3>
+          <p>A small selection of short historical prayers, included as reading material for quiet moments.</p>
         </div>
       </li>
 
       <li class="item">
         <div class="item-icon">🕯️</div>
         <div class="item-body">
-          <h3>Daily Reflections</h3>
-          <p>Seven short readings designed to accompany your first week of practice, each anchored in Scripture.</p>
+          <h3>Seven Short Readings</h3>
+          <p>Seven brief readings intended to accompany a first week of reading, each with a Scripture reference.</p>
         </div>
       </li>
 
       <li class="item">
         <div class="item-icon">🎧</div>
         <div class="item-body">
-          <h3>Audio Companion</h3>
-          <p>A soft, guided audio recording of the prayer for those who prefer to listen and follow along.</p>
+          <h3>Audio Recording</h3>
+          <p>An audio recording of the prayer text, for listening while reading.</p>
         </div>
       </li>
 
@@ -282,7 +287,7 @@ footer{background:#070b15;border-top:1px solid var(--line);padding:54px 24px 36p
         <div class="item-icon">🎁</div>
         <div class="item-body">
           <h3>Bonus: The Padre Pio Prayer</h3>
-          <p>An additional prayer attributed to Padre Pio, included as a devotional bonus for quiet reflection.</p>
+          <p>An additional historical prayer text included as a bonus reading item.</p>
         </div>
       </li>
 
@@ -296,28 +301,30 @@ footer{background:#070b15;border-top:1px solid var(--line);padding:54px 24px 36p
 <section class="fade-in">
   <div class="container">
 
-    <p class="eyebrow">How It Works</p>
-    <h2 style="text-align:center; margin-bottom: 22px;">Simple, Quiet, Digital</h2>
+    <p class="eyebrow">How Access Works</p>
+    <h2 style="text-align:center; margin-bottom: 22px;">Simple and Fully Digital</h2>
     <div class="divider"></div>
 
     <p class="lead">
       The Prayer of Solomon is delivered <strong>100% digitally</strong> through a secure
-      online app — no physical product, no downloads, no waiting.
+      online platform. There is no physical product, nothing is shipped, and no software
+      download is required.
     </p>
 
     <div class="process">
       <span class="process-icon">📲</span>
       <h3>How You Receive Access</h3>
       <p>
-        After your purchase is confirmed, you will receive your login details by email.
-        Simply sign in from any browser or device and begin whenever you are ready.
+        After your purchase is confirmed, access details are sent to the email address
+        you provide at checkout. You can then sign in from any browser on your phone,
+        tablet, or computer.
       </p>
 
       <ul class="steps">
-        <li><span class="step-num">1</span> Complete your secure checkout</li>
+        <li><span class="step-num">1</span> Complete the secure checkout</li>
         <li><span class="step-num">2</span> Receive your access details by email</li>
         <li><span class="step-num">3</span> Sign in from any device</li>
-        <li><span class="step-num">4</span> Begin your first daily reflection</li>
+        <li><span class="step-num">4</span> Open the first reading</li>
       </ul>
     </div>
 
@@ -325,32 +332,33 @@ footer{background:#070b15;border-top:1px solid var(--line);padding:54px 24px 36p
 </section>
 
 <!-- ══════════════════════════════════════════
-     GUARANTEE
+     REFUND POLICY
 ══════════════════════════════════════════ -->
 <section class="guarantee-section fade-in">
   <div class="container">
 
-    <p class="eyebrow">Our Promise to You</p>
-    <h2 style="text-align:center; margin-bottom: 22px;">60-Day Money-Back Guarantee</h2>
+    <p class="eyebrow">Refund Policy</p>
+    <h2 style="text-align:center; margin-bottom: 22px;">60-Day Refund Window</h2>
     <div class="divider"></div>
 
     <div class="guarantee">
 
       <div class="guarantee-badge">
         <span class="num">60</span>
-        <span class="label">Day Guarantee</span>
+        <span class="label">Day Refund</span>
       </div>
 
-      <h3>Try It Without Risk</h3>
+      <h3>How the Policy Works</h3>
 
       <p>
-        We want you to feel completely at ease. If, within 60 days of your purchase,
-        you feel that The Prayer of Solomon is not a good fit for your devotional practice,
-        simply contact our support team and we will issue a full refund.
+        If you decide the collection is not what you were looking for, you may request
+        a refund within 60 days of your purchase by contacting our support team.
+        Refunds are issued to the original payment method.
       </p>
 
       <p class="fine">
-        No questions asked. Your purchase is fully protected for 60 days.
+        Full details are set out in the Terms of Service. This policy is a refund
+        arrangement only — it does not constitute a promise about results or outcomes.
       </p>
 
     </div>
@@ -363,12 +371,12 @@ footer{background:#070b15;border-top:1px solid var(--line);padding:54px 24px 36p
 <section class="fade-in">
   <div class="container">
 
-    <p class="eyebrow">Get Started</p>
+    <p class="eyebrow">Pricing</p>
     <h2 style="text-align:center; margin-bottom: 22px;">One Simple Price</h2>
     <div class="divider"></div>
 
     <p class="lead">
-      Everything included. No subscription. No hidden fees.
+      One payment. No subscription. No recurring fees.
     </p>
 
     <div class="pricing">
@@ -378,23 +386,33 @@ footer{background:#070b15;border-top:1px solid var(--line);padding:54px 24px 36p
 
       <ul class="perks">
         <li><span class="check">✓</span> The Prayer of King Solomon (Hebrew + English)</li>
-        <li><span class="check">✓</span> Solomon's Manuscript Notes</li>
-        <li><span class="check">✓</span> 7 Days of Reflections</li>
-        <li><span class="check">✓</span> Audio Prayer Companion</li>
+        <li><span class="check">✓</span> Manuscript Reference Notes</li>
+        <li><span class="check">✓</span> Seven Short Readings</li>
+        <li><span class="check">✓</span> Audio Recording of the Prayer Text</li>
         <li><span class="check">✓</span> Bonus: The Padre Pio Prayer</li>
-        <li><span class="check">✓</span> Access from any device</li>
-        <li><span class="check">✓</span> 60-Day Money-Back Guarantee</li>
+        <li><span class="check">✓</span> Access from any browser or device</li>
+        <li><span class="check">✓</span> 60-Day Refund Window</li>
       </ul>
 
       <a href="https://www.checkout-ds24.com/" class="btn btn-block">
-        Get Instant Access — $39
+        Get Access — $39
       </a>
 
       <p class="trust-line">
-        Secure checkout · Instant digital delivery
+        Secure checkout · Access details sent by email
       </p>
 
     </div>
+
+    <div class="notice">
+      <p>
+        <strong>Please note:</strong> This is a digital reading resource offered for general
+        informational and educational purposes. It is not medical, psychological, financial,
+        or legal advice, and it is not a substitute for care from a qualified professional.
+        No particular outcome, experience, or result is promised or implied.
+      </p>
+    </div>
+
   </div>
 </section>
 
@@ -413,54 +431,71 @@ footer{background:#070b15;border-top:1px solid var(--line);padding:54px 24px 36p
       <details class="faq-item">
         <summary>What exactly is The Prayer of Solomon?</summary>
         <p>
-          It is a digital devotional resource centered on a Hebrew prayer attributed to
-          King Solomon. It includes the prayer in Hebrew and English, historical notes on
-          the manuscripts, short daily reflections, and an audio companion — all designed
-          for personal prayer and quiet reflection.
+          It is a digital reading resource. It contains a Hebrew prayer text with an English
+          translation, reference notes on historical manuscripts, seven short readings, and
+          an audio recording. It is offered for personal study and quiet reflection.
         </p>
       </details>
 
       <details class="faq-item">
         <summary>How do I receive access?</summary>
         <p>
-          After completing your purchase, you will receive login details by email.
-          You can then sign in from any browser on your phone, tablet, or computer.
-          Nothing is shipped to your home — everything is digital.
+          After your purchase is confirmed, access details are sent to the email address you
+          provide at checkout. You can then sign in from any browser on your phone, tablet,
+          or computer. Nothing is shipped to your home — the collection is fully digital.
         </p>
       </details>
 
       <details class="faq-item">
         <summary>Is this a physical book or a printed product?</summary>
         <p>
-          No. The Prayer of Solomon is a digital product. All content is accessed through
-          the online app. You will not receive anything by mail.
+          No. The Prayer of Solomon is a digital product. All content is accessed through an
+          online platform. You will not receive anything by mail.
         </p>
       </details>
 
       <details class="faq-item">
         <summary>Is this affiliated with a specific church or denomination?</summary>
         <p>
-          No. The Prayer of Solomon is an independent devotional resource. It is not
-          affiliated with, endorsed by, or representing any church, denomination, or
-          religious institution. It is offered for personal spiritual reflection.
+          No. The Prayer of Solomon is an independent reading resource. It is not affiliated
+          with, endorsed by, or representing any church, denomination, or religious
+          institution.
         </p>
       </details>
 
       <details class="faq-item">
-        <summary>What if it isn't right for me?</summary>
+        <summary>What is the refund policy?</summary>
         <p>
-          You are covered by a 60-day money-back guarantee. If the devotional does not
-          feel like a good fit for your practice, simply contact support within 60 days
-          of purchase for a full refund.
+          You may request a refund within 60 days of purchase by contacting our support team.
+          Refunds are issued to the original payment method. Full details are set out in the
+          Terms of Service.
         </p>
       </details>
 
       <details class="faq-item">
         <summary>Do I need any special knowledge to use it?</summary>
         <p>
-          Not at all. Everything is presented in a simple, readable format. If you are
-          comfortable using a basic website or app, you will have no difficulty using
-          The Prayer of Solomon.
+          Not at all. All material is presented in plain, readable language. If you are
+          comfortable opening a basic website in a browser, you will have no difficulty
+          using the collection.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Does this replace professional or medical advice?</summary>
+        <p>
+          No. The content is offered for general reading and reflection only. It is not
+          medical, psychological, financial, or legal advice, and it is not a substitute for
+          care from a qualified professional.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Are any results or outcomes promised?</summary>
+        <p>
+          No. The collection is a reading resource. No particular outcome, experience, or
+          result is promised or implied. Experiences of reading and reflection vary from
+          person to person.
         </p>
       </details>
 
@@ -482,10 +517,13 @@ footer{background:#070b15;border-top:1px solid var(--line);padding:54px 24px 36p
   </div>
 
   <p class="footer-note">
-    The Prayer of Solomon is an independent digital devotional resource offered for personal
-    spiritual reflection. It is not affiliated with, endorsed by, or representing any church,
-    denomination, or religious institution. Nothing on this page should be understood as a
-    promise of any particular outcome. Individual experiences of prayer and reflection vary.
+    The Prayer of Solomon is an independent digital reading resource offered for general
+    informational and educational purposes only. It is not affiliated with, endorsed by, or
+    representing any church, denomination, or religious institution. It is not medical,
+    psychological, financial, or legal advice, and it is not a substitute for care from a
+    qualified professional. Nothing on this page should be understood as a promise,
+    warranty, or guarantee of any particular outcome. Reading and reflection experiences
+    vary from person to person.
   </p>
 
   <p class="footer-copy">© 2026 The Prayer of Solomon. All rights reserved.</p>
