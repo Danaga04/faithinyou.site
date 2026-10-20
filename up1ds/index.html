@@ -3,7 +3,7 @@
 <head>
     <script src="https://www.digistore24-scripts.com/service/digistore.js"></script>
     <script>digistoreUpsell()</script>
-    <meta charset="UTF-8"> 
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>purchase under review</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -11,17 +11,62 @@
         body {
             margin: 0;
             padding: 0;
-            padding-bottom: 150px;
+            padding-bottom: 120px;
             font-family: "Poppins", sans-serif;
-            background: #ffffff;
-            color: #000000;
-            line-height: 1.5;
+            background: #000;
+            color: #fff;
+            line-height: 1.4;
             text-align: center;
         }
+        /* HEADER */
+        .header {
+            background: linear-gradient(90deg, #d80000, #7a0000);
+            padding: 20px 10px;
+        }
+        .title-tag {
+            background: #fff;
+            color: #d80000;
+            font-weight: 800;
+            font-size: 22px;
+            padding: 5px 10px;
+            display: inline-block;
+        }
+        /* EMAIL */
+        .header-msg {
+            margin-top: 15px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        .email-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+            flex-wrap: wrap;
+        }
+        .email-text {
+            font-weight: 700;
+            text-decoration: underline;
+        }
+        .copy-btn {
+            background: #fff;
+            color: #d80000;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+        /* PROGRESS */
         .step {
             font-size: 18px;
             font-weight: 700;
-            margin: 25px 0 10px;
+            margin: 20px 0 10px;
         }
         .progress {
             width: 90%;
@@ -29,50 +74,41 @@
             height: 30px;
             border-radius: 5px;
             overflow: hidden;
-            background: #ddd;
-            position: relative;
         }
         .progress-bar {
-            width: 0%;
+            width: 75%;
             height: 100%;
             background: linear-gradient(90deg, #16a34a, #0d6b3a);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            color: white;
-            animation: loadProgress 2.8s ease-in-out forwards;
-            position: relative;
         }
-        .progress-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
-            animation: shimmer 1.8s infinite;
-        }
+        /* WARNING */
         .warning {
-            font-size: 15px;
-            margin: 15px 0;
-            color: #d80000;
+            font-size: 14px;
+            margin: 10px 0;
         }
+        .warning span {
+            color: #ffcc00;
+            font-size: 18px;
+        }
+        /* PLAYER */
         vturb-smartplayer {
             display: block;
             width: 100%;
             max-width: 800px;
-            margin: 20px auto;
+            margin: 0 auto;
         }
+        /* BUTTONS */
         .decision-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 25px;
+            gap: 20px;
             width: 100%;
             max-width: 500px;
-            margin: 30px auto;
+            margin: 0 auto;
             padding: 20px;
             box-sizing: border-box;
         }
@@ -91,39 +127,18 @@
             display: inline-block;
         }
         .btn-no {
-            color: #d80000;
-            font-size: 17px;
+            color: #ffffff;
+            font-size: 18px;
             font-weight: 700;
             text-decoration: underline;
-            cursor: pointer;
         }
-        #esconder-texto {
-            max-width: 700px;
-            margin: 40px auto;
-            padding: 20px;
-            text-align: left;
-            font-size: 17px;
-            line-height: 1.6;
-            color: #000;
-        }
-        #esconder-texto h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
+        /* ANIMAÇÃO */
         @keyframes pulse-green {
             0% { transform: scale(1); }
             50% { transform: scale(1.04); }
             100% { transform: scale(1); }
         }
-        @keyframes loadProgress {
-            from { width: 0%; }
-            to { width: 95%; }
-        }
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(400%); }
-        }
+        /* STICKY FOOTER WARNING */
         .sticky-warning-bar {
             position: fixed;
             bottom: 0;
@@ -136,46 +151,124 @@
             font-size: 14px;
             font-weight: 800;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
             z-index: 9999;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+            box-sizing: border-box;
         }
+
+        /* COUNTDOWN */
+        .countdown-box {
+            margin: 25px auto 10px;
+            max-width: 500px;
+            padding: 0 15px;
+        }
+        .countdown-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ff3333;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .countdown-timer {
+            font-size: 42px;
+            font-weight: 800;
+            color: #ff0000;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+        }
+
+        /* IMAGEM */
+        .upsell-image {
+            display: block;
+            max-width: 100%;
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            border-radius: 8px;
+        }
+
+        /* MOBILE */
         @media (max-width: 480px) {
-            .btn-yes { font-size: 18px; padding: 16px; }
-            .btn-no { font-size: 15px; }
+            .btn-yes {
+                font-size: 18px;
+                padding: 15px;
+            }
+            .btn-no {
+                font-size: 15px;
+            }
+            .title-tag {
+                font-size: 18px;
+            }
+            .header-msg {
+                font-size: 14px;
+            }
+            .sticky-warning-bar {
+                font-size: 12px;
+                padding: 10px 5px;
+            }
+            .countdown-timer {
+                font-size: 36px;
+            }
+            .countdown-text {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="step">STEP 3 OF 5</div>
+    <div class="header">
+        <span class="title-tag">CONGRATULATIONS! DON'T LEAVE THIS PAGE...</span>
+        <div class="header-msg">
+            WATCH THE VIDEO BELOW SO YOU DON'T MISS IT:
+        </div>
+    </div>
+    <div class="step">STEP 3 OF 4</div>
     <div class="progress">
-        <div class="progress-bar">95%</div>
+        <div class="progress-bar">75%</div>
     </div>
     <div class="warning">
-        ⚠ To access the app and verify your access, watch the video below.
+        <span>⚠</span> Watch the video below 👇 Do not click “Back” or leave this page before watching...
     </div>
     
-    <!-- VÍDEO -->
 
 <vturb-smartplayer id="vid-6a665ea93eea6cc7eb4aa313" style="display: block; margin: 0 auto; width: 100%; "><div class="vturb-player-placeholder" style="position: relative; width: 100%; padding: 56.25% 0 0; z-index: 0; background-color: black;"></div></vturb-smartplayer> <script type="text/javascript"> var s=document.createElement("script"); s.src="https://scripts.converteai.net/80d0b89d-7901-4c62-bf15-807e2dab2483/players/6a665ea93eea6cc7eb4aa313/v4/player.js", s.async=!0,document.head.appendChild(s); </script>
-    
-    
-    <br><br>
 
-    <!-- BOTÕES -->
+    <script>!function(i,n){i._plt=i._plt||(n&&n.timeOrigin?n.timeOrigin+n.now():Date.now())}(window,performance);</script>
+<link rel="preload" href="https://scripts.converteai.net/80d0b89d-7901-4c62-bf15-807e2dab2483/players/6a665ea93eea6cc7eb4aa313/v4/player.js" as="script">
+<link rel="preload" href="https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js" as="script">
+<link rel="preload" href="https://cdn.converteai.net/80d0b89d-7901-4c62-bf15-807e2dab2483/6a665e0ac6b7a3061d970a62/main.m3u8" as="fetch">
+<link rel="dns-prefetch" href="https://cdn.converteai.net">
+<link rel="dns-prefetch" href="https://scripts.converteai.net">
+<link rel="dns-prefetch" href="https://images.converteai.net">
+<link rel="dns-prefetch" href="https://license.vturb.com">
+    
+    
+   
+   
+    <br>
+
     <div class="decision-container">
         <a href="https://www.checkout-ds24.com/answer/yes?template=light" class="btn-yes" id="esconder">
-            CLICK HERE TO ACCESS NOW!
+            CLICK HERE TO ACCESS THE APP AND CONTINUE 
         </a>
         <a href="https://www.checkout-ds24.com/answer/no" class="btn-no" id="esconder">
-            DECLINE THE OFFER AND PAY THE FULL AMOUNT LATER (+$299)
+            No, I'd rather miss out on that opportunity forever and pay $99 later
         </a>
     </div>
 
+    <!-- COUNTDOWN VERMELHO (abaixo dos botões) -->
+    <div class="countdown-box" id="esconder">
+        <div class="countdown-text">Click the green button before time runs out</div>
+        <div class="countdown-timer" id="countdown">10:00</div>
+    </div>
 
-
-    <div style="height: 300px; width: 100%; background: #ffffff;"></div>
-
+  
+    <!-- Grande margem no final da página -->
+    <div style="height: 150px; width: 100%;"></div>
     <script>
+        // ALTERE O LINK PARA A PÁGINA QUE QUISER MOSTRAR QUANDO O USUÁRIO TENTAR SAIR
         const link = 'https://www.checkout-ds24.com/answer/yes?template=light';
         function setBackRedirect(url) {
             let urlBackRedirect = url;
@@ -186,15 +279,33 @@
             history.pushState({}, '', location.href);
             history.pushState({}, '', location.href);
             window.addEventListener('popstate', () => {
+                console.log('onpopstate', urlBackRedirect);
                 setTimeout(() => {
                     location.href = urlBackRedirect;
                 }, 1);
             });
         }
         setBackRedirect(link);
+
+        // COUNTDOWN 10 MINUTOS
+        let totalSeconds = 10 * 60;
+        const countdownEl = document.getElementById('countdown');
+
+        const timer = setInterval(() => {
+            totalSeconds--;
+            if (totalSeconds < 0) {
+                clearInterval(timer);
+                countdownEl.textContent = "00:00";
+                return;
+            }
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            countdownEl.textContent = 
+                String(minutes).padStart(2, '0') + ':' + 
+                String(seconds).padStart(2, '0');
+        }, 1000);
     </script>
     <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck data-utmify-prevent-subids async defer></script>
-    
     <div class="sticky-warning-bar">
         ⚠️ It is mandatory to watch the video until the end to avoid errors.
     </div>
