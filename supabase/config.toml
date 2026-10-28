@@ -1,0 +1,2 @@
+[functions.digistore24-ipn]
+verify_jwt = false
