@@ -251,8 +251,11 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 <form id="aForm" novalidate>
 <div id="aNameW" hidden><label for="aName">Name</label><input type="text" id="aName" maxlength="60" autocomplete="name" placeholder="Your name"></div>
 <label for="aMail">Email</label><input type="text" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
+<div id="aCodeW" hidden style="margin-top:12px"><label for="aCode">6-digit email code</label><input type="text" id="aCode" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Enter the code"></div>
 <p class="err" id="aErr" role="alert"></p>
-<button type="submit" class="btn" id="aGo" style="width:100%">Log in</button></form></div></section>
+<button type="submit" class="btn" id="aGo" style="width:100%">Log in</button>
+<button type="button" class="ghost" id="aResend" hidden style="width:100%;margin-top:10px">Send a new code</button>
+</form></div></section>
 <div class="cert" id="inst"><div><p style="font-size:30px">📲</p><h2>Add to home screen</h2><p id="iT" style="margin-top:6px"></p><div class="low-actions"><button class="btn" id="iOk">Got it</button></div></div></div>
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
 <div class="buy" id="buy" hidden role="dialog" aria-modal="true" aria-labelledby="buyT"><div class="buy__box" id="buyBox" tabindex="-1">
@@ -618,13 +621,29 @@ async function claimPendingDigistoreOrders() {
   }
 }
 
+let otpPendingEmail = '';
+let otpPendingName = '';
+function showCodeStep(show) {
+  $('#aCodeW').hidden = !show;
+  $('#aResend').hidden = !show;
+  $('#aMail').readOnly = show;
+  $('#aTabs').hidden = show;
+  $('#aNameW').hidden = show || amode === 'login';
+  $('#aGo').textContent = show ? 'Verify code & enter' : (amode === 'login' ? 'Send login code' : 'Create account');
+}
 function setAuth(m) {
   amode = m;
+  otpPendingEmail = '';
+  otpPendingName = '';
+  $('#aCode').value = '';
+  $('#aMail').readOnly = false;
+  $('#aTabs').hidden = false;
+  showCodeStep(false);
   $('#aNameW').hidden = m === 'login';
-  $$('#aTabs button').forEach(b =>
+  $('#aTabs button').forEach(b =>
     b.classList.toggle('on', b.dataset.m === m)
   );
-  $('#aGo').textContent = m === 'login' ? 'Log in' : 'Create account';
+  $('#aGo').textContent = m === 'login' ? 'Send login code' : 'Create account';
   $('#aErr').textContent = '';
 }
 
@@ -701,51 +720,80 @@ setTimeout(async () => {
 
 $('#aForm').onsubmit = async e => {
   e.preventDefault();
-
-  const email = $('#aMail').value.trim().toLowerCase();
-  const name = $('#aName').value.trim();
   const button = $('#aGo');
   const error = $('#aErr');
-
-  if (!EM.test(email)) {
-    error.textContent = 'Enter a valid email address.';
-    return;
-  }
-
-  if (amode === 'signup' && !name) {
-    error.textContent = 'Please enter your name.';
-    return;
-  }
-
   button.disabled = true;
-  button.textContent = 'Please wait...';
   error.textContent = '';
 
   try {
     const client = await getSupabase();
 
-    const result = await client.auth.signInWithOtp({
-      email: email,
-      options: {
-        emailRedirectTo: window.location.origin + '/sacredchant/',
-        shouldCreateUser: true,
-        data: name ? { full_name: name } : undefined
+    if ($('#aCodeW').hidden) {
+      const email = $('#aMail').value.trim().toLowerCase();
+      const name = $('#aName').value.trim();
+
+      if (!EM.test(email)) throw new Error('Enter a valid email address.');
+      if (amode === 'signup' && !name) throw new Error('Please enter your name.');
+
+      const { error: sendError } = await client.auth.signInWithOtp({
+        email,
+        options: {
+          shouldCreateUser: true,
+          data: name ? { full_name: name } : undefined
+        }
+      });
+      if (sendError) throw sendError;
+
+      otpPendingEmail = email;
+      otpPendingName = name;
+      $('#aMail').value = email;
+      $('#aCode').value = '';
+      showCodeStep(true);
+      error.textContent = 'Enter the 6-digit code sent to your email. No link is needed.';
+      $('#aCode').focus();
+    } else {
+      const token = $('#aCode').value.trim().replace(/\\s/g, '');
+      if (!otpPendingEmail || !/^\\d{6,8}$/.test(token)) {
+        throw new Error('Enter the 6-digit code from your email.');
       }
-    });
-
-    if (result.error) throw result.error;
-
-    error.textContent =
-      'Check your email for your secure sign-in link.';
-
+      const { data, error: verifyError } = await client.auth.verifyOtp({
+        email: otpPendingEmail,
+        token,
+        type: 'email'
+      });
+      if (verifyError) throw verifyError;
+      if (!data?.session) throw new Error('The code was accepted, but no session was created. Please try again.');
+    }
   } catch (err) {
     console.error('Authentication error:', err);
-    error.textContent =
-      err.message || 'Could not send the email. Please try again.';
+    error.textContent = err.message || 'Could not sign in. Please try again.';
   } finally {
     button.disabled = false;
-    button.textContent =
-      amode === 'login' ? 'Log in' : 'Create account';
+    button.textContent = $('#aCodeW').hidden
+      ? (amode === 'login' ? 'Send login code' : 'Create account')
+      : 'Verify code & enter';
+  }
+};
+
+$('#aResend').onclick = async () => {
+  if (!otpPendingEmail) return;
+  const button = $('#aResend');
+  button.disabled = true;
+  try {
+    const client = await getSupabase();
+    const { error } = await client.auth.signInWithOtp({
+      email: otpPendingEmail,
+      options: {
+        shouldCreateUser: true,
+        data: otpPendingName ? { full_name: otpPendingName } : undefined
+      }
+    });
+    if (error) throw error;
+    $('#aErr').textContent = 'A new code has been sent to your email.';
+  } catch (err) {
+    $('#aErr').textContent = err.message || 'Could not send a new code.';
+  } finally {
+    button.disabled = false;
   }
 };
 
