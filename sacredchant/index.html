@@ -8,7 +8,10 @@
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#7aa6f5">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-180.png">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--b1:#dcecff;--b2:#fff6e3;--ink:#1c2a4a;--mute:#5a6c91;--card:rgba(255,255,255,.8);--line:rgba(110,145,215,.3);--acc:#4378de;--acc2:#7aa6f5;--gold:#e0ad3e;--gold2:#f7dc92;--on:#fff;--halo:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
@@ -107,6 +110,15 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .spin{width:54px;height:54px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--gold);margin:30px auto 14px;animation:rot 1s linear infinite}@keyframes rot{to{transform:rotate(360deg)}}
 .vidb{border-radius:20px;overflow:hidden;background:#000;margin:10px 0 16px}.vidb:empty{display:none}
 .faq h3{font-size:16px;margin-top:14px;font-weight:700}.faq p{color:var(--mute);font-size:15px;margin-top:2px}.faq a.btn{color:#fff;text-decoration:none}
+.hp{display:flex;gap:12px;align-items:center;background:linear-gradient(135deg,#fff7dc,#e6f0ff);border:1.5px solid var(--gold);border-radius:18px;padding:14px 16px;margin:4px 0 14px;color:#1c2a4a}
+.hp .e{font-size:30px;line-height:1}.hp b{display:block;font-size:16px}.hp span{font-size:14px;color:#42537a}
+.ios h3{display:flex;gap:8px;align-items:center}
+.ios ol{list-style:none;counter-reset:s;padding:0;margin:12px 0 0;display:grid;gap:10px}
+.ios li{counter-increment:s;display:flex;gap:12px;align-items:flex-start;color:var(--ink);font-size:15px}
+.ios li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3b2a05;font-weight:800;font-size:14px}
+.ios li b{color:var(--acc)}
+.ios .warn{background:rgba(224,173,62,.18);border-radius:10px;padding:2px 8px;font-weight:700}
+.ios .nt{margin-top:12px;font-size:13px;color:var(--mute)}
 /* popup de compra */
 .buy{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,20,50,.62)}
 .buy[hidden]{display:none}
@@ -165,7 +177,19 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
    <p class="lab">Chant of the day</p><p class="m" id="dM"></p><p class="lab" id="dX" style="font-weight:500"></p>
    <p style="margin-top:12px"><button class="btn" id="dPlay">▶ Chant with me</button></p>
   </div>
-  <div class="card" id="iCard" style="display:flex;gap:12px;align-items:center;justify-content:space-between"><div><h3>Keep it on your home screen</h3><p class="lab" style="font-weight:500">One tap and Sacred Chant opens like an app.</p></div><button class="btn" id="iBtn">Install</button></div>
+  <div class="card ios" id="iosCard">
+   <h3>📲 Add Sacred Chant to your iPhone home screen</h3>
+   <p class="lab" style="font-weight:500">Open this page in Safari, then follow these steps:</p>
+   <ol>
+    <li><span>Tap the <b>three dots ( ••• )</b> at the bottom of the screen.</span></li>
+    <li><span>Tap <b>Share</b>.</span></li>
+    <li><span>Tap <b>View more</b>.</span></li>
+    <li><span>Tap <b>Add to Home Screen</b>.</span></li>
+    <li><span>Turn <b>off</b> the option <span class="warn">Open as Web App</span>.</span></li>
+    <li><span>Tap <b>Add</b> (top right). Done!</span></li>
+   </ol>
+   <p class="nt">The app icon will appear on your home screen, one tap away.</p>
+  </div>
  </section>
 
  <section class="screen" id="s-vid"><button class="back" id="vBack">← Back</button><h2 class="h" id="vT"></h2><div id="vTop"></div><div class="vidb" id="vBox"></div><div class="faq" id="vTx"></div></section>
@@ -174,7 +198,8 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
  
 <section class="screen" id="s-chants">
   <h2 class="h">Chants &amp; sounds</h2>
-  <p class="intro">Choose a recording, settle into your breath and let it accompany your prayer. Headphones help.</p>
+  <div class="hp" role="note"><span class="e" aria-hidden="true">🎧</span><div><b>Headphones required</b><span>These sounds are made to be heard with headphones. You will get much better results, so please put them on before you press play.</span></div></div>
+  <p class="intro">Choose a recording, settle into your breath and let it accompany your prayer.</p>
   <p class="sec">Sacred mantras</p><div id="lM"></div>
   <p class="sec">Deep relaxation</p><div id="lD"></div>
   <p class="sec">Nature sounds</p><div id="lN"></div>
@@ -253,7 +278,6 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 <label for="aMail">Email</label><input type="text" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
 <p class="err" id="aErr" role="alert"></p>
 <button type="submit" class="btn" id="aGo" style="width:100%">Log in</button></form></div></section>
-<div class="cert" id="inst"><div><p style="font-size:30px">📲</p><h2>Add to home screen</h2><p id="iT" style="margin-top:6px"></p><div class="low-actions"><button class="btn" id="iOk">Got it</button></div></div></div>
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
 <div class="buy" id="buy" hidden role="dialog" aria-modal="true" aria-labelledby="buyT"><div class="buy__box" id="buyBox" tabindex="-1">
  <button type="button" class="buy__x" id="buyX" aria-label="Close">✕</button>
@@ -517,9 +541,7 @@ function nUpd(){const e=$('#nSt'),b=$('#nBtn');if(!('Notification' in window)){e
 $('#nBtn').onclick=()=>{try{Notification.requestPermission().then(()=>{nUpd();scheduleNotif()})}catch(e){}};
 /* instalar */
 let dip=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e});
-if(matchMedia('(display-mode: standalone)').matches||navigator.standalone)$('#iCard').style.display='none';
-$('#iBtn').onclick=()=>{if(dip){dip.prompt();dip.userChoice.finally(()=>{dip=null})}else{const u=navigator.userAgent,ios=/iPhone|iPad|iPod/.test(u);$('#iT').textContent=ios?'Tap the Share button in Safari, then choose Add to Home Screen.':/Android/.test(u)?'Open the browser menu and choose Install app or Add to Home screen.':'Open this page on your phone to add it to your home screen.';$('#inst').classList.add('on')}};
-$('#iOk').onclick=()=>$('#inst').classList.remove('on');
+if(matchMedia('(display-mode: standalone)').matches||navigator.standalone){const c=$('#iosCard');if(c)c.style.display='none'}
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 /* ===== modulos oficiais ===== */
 const ACC='80d0b89d-7901-4c62-bf15-807e2dab2483',P='https://i.postimg.cc/';
@@ -528,7 +550,7 @@ const SUPPORT='https://support-sacred-chant.base44.app/';
 const VID={start:'6ac4e8b1111dec1f3bc89f5a',pray:'6ada1db657b486888a640681'};
 const DAYS=[['zBp4cXg1/bubblesg4gowuzqmc','6ac5727dd17532a40e2f8c05'],['DZCYcjtt/bubblef3feeu7ypnm','6ac571cf19321ad59e33ac4c'],['zGm2pRcm/bubblecop2igvp4m5','6ac572ca8f7efc03346ac441'],['nL36dhm0/bubblekn1hjz3b02n','6ac572a519321ad59e33accd'],['Pr19g4Zf/bubblecgfpducwm9','6ac5721f89a7c3c050dfb7ab'],['DzwNb3Nr/bubble1s1ommpd05l','6ac572467c5ee2efdfa9070c'],['GhnSxyNH/bubble8x4o2q28ts8','6ac571f770f85db8dfe0eb3e']];
 const FAQ=`<h2 class="h" style="font-size:20px">Good to know</h2>
-<h3>1. How do I add the app to my phone?</h3><p>Go back to the home screen and tap Install. On iPhone, tap Share in Safari and choose Add to Home Screen. On Android, open the browser menu and choose Install app.</p>
+<h3>1. How do I add the app to my phone?</h3><p>Go back to the home screen and follow the step-by-step guide for iPhone. On Android, open the browser menu and choose Install app or Add to Home screen.</p>
 <h3>2. How long does my money-back guarantee last?</h3><p>You have 60 days to ask for a full refund. Contact our support team and we will take care of it. Contacting support is usually the fastest way to get your money back.</p>
 <h3>3. How do I start listening to the prayers?</h3><p>We suggest one guided prayer a day, ideally first thing in the morning. Follow each prayer at your own pace.</p>
 <h3>4. Is this a subscription?</h3><p>No. The app is a one-time payment, with no monthly charges.</p>
