@@ -17,13 +17,17 @@
 *{box-sizing:border-box;margin:0}
 html,body{min-height:100%}
 body{background:linear-gradient(180deg,var(--b1) 0,var(--b2) 100%) fixed;color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:16px;line-height:1.55}
+body.nos{overflow:hidden}
 button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
 :focus-visible{outline:3px solid var(--acc);outline-offset:3px}
 #app{max-width:520px;margin:0 auto;padding:16px 16px calc(96px + env(safe-area-inset-bottom,0px))}
 .top{display:flex;justify-content:space-between;align-items:center}
 .brand{display:flex;gap:10px;align-items:center;font-weight:800;font-size:18px}
 .brand small{display:block;font-weight:500;color:var(--mute);font-size:12px;margin-top:-3px}
-.pill{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-weight:700;color:var(--gold);display:flex;gap:6px;align-items:center;cursor:pointer;transition:transform .18s,border-color .18s,box-shadow .18s}.pill:hover{transform:translateY(-1px);border-color:var(--gold);box-shadow:0 4px 14px rgba(224,173,62,.2)}
+.pill{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-weight:700;color:var(--gold);display:flex;gap:6px;align-items:center;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
+.pill:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(224,173,62,.3);border-color:var(--gold)}
+.pill .pl{opacity:.65;font-weight:800}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .screen{display:none}.screen.on{display:block}
 .hero{position:relative;text-align:center;padding:6px 0 4px}
 .angel{width:230px;height:190px;display:block;margin:0 auto;animation:float 6s ease-in-out infinite;filter:drop-shadow(0 10px 24px rgba(120,160,240,.45))}
@@ -77,7 +81,7 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 @keyframes br{0%,100%{transform:scale(.72)}50%{transform:scale(1.08)}}
 .im.calm .orb{animation:none;transform:scale(.9)}
 .mantra{font-size:23px;font-weight:700;max-width:400px;margin-top:16px}
-.toast{position:fixed;left:50%;bottom:calc(98px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--acc);color:#fff;border-radius:99px;padding:9px 20px;font-weight:700;z-index:30;opacity:0;pointer-events:none;transition:opacity .3s}.toast.on{opacity:1}
+.toast{position:fixed;left:50%;bottom:calc(98px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--acc);color:#fff;border-radius:99px;padding:9px 20px;font-weight:700;z-index:70;opacity:0;pointer-events:none;transition:opacity .3s}.toast.on{opacity:1}
 .wl{transform-origin:112px 100px}.wr{transform-origin:118px 100px}
 .angel.flap{filter:drop-shadow(0 0 30px rgba(255,214,110,.95))}
 .angel.flap .wl{animation:fl .5s ease-in-out 4}.angel.flap .wr{animation:fr .5s ease-in-out 4}
@@ -86,7 +90,6 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .auth{position:fixed;inset:0;z-index:50;display:none;overflow:auto;padding:calc(28px + env(safe-area-inset-top,0px)) 20px calc(28px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,var(--b1),var(--b2))}.auth.on{display:block}.auth>div{max-width:420px;margin:0 auto;text-align:center}.auth form{text-align:left;margin-top:14px}.auth label{font-size:13px;font-weight:600;color:var(--mute)}.auth .err{color:#d24b4b;min-height:22px;font-size:14px;margin:4px 0 8px}
 .cert{display:none;position:fixed;inset:0;z-index:25;background:rgba(10,20,50,.6);place-items:center;padding:20px}.cert.on{display:grid}
 .cert>div{background:linear-gradient(160deg,#fffdf5,#e9f2ff);color:#1c2a4a;border:3px double #e0ad3e;border-radius:20px;padding:28px 22px;text-align:center;max-width:400px;width:100%}
-#low{z-index:60;overflow-y:auto;align-items:center}#low>div{position:relative;max-width:1000px;width:100%;max-height:calc(100dvh - 40px);overflow-y:auto;text-align:left;padding:26px;background:linear-gradient(160deg,#fffdf5,#e9f2ff);border:1px solid rgba(224,173,62,.8);box-shadow:0 24px 80px rgba(5,15,45,.35)}#low .buy-head{text-align:center;padding:0 34px 18px}#low .buy-close{position:absolute;right:12px;top:12px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.8);font-size:22px;display:grid;place-items:center}#low .buy-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}#low .buy-plan{position:relative;display:flex;flex-direction:column;align-items:stretch;text-align:left;min-width:0;padding:20px 16px;border:1px solid rgba(110,145,215,.4);border-radius:18px;background:rgba(255,255,255,.78);box-shadow:0 8px 22px rgba(80,120,200,.1)}#low .buy-plan.premium{border:2px solid #d6a332;background:linear-gradient(160deg,#fff9e6,#fff);box-shadow:0 10px 28px rgba(224,173,62,.22)}#low .buy-plan h3{font-size:16px;font-weight:800;letter-spacing:.02em}#low .buy-price{font-size:30px;line-height:1.25;font-weight:800;color:#1c2a4a;margin:8px 0 2px}#low .buy-tokens{font-size:14px;font-weight:800;color:#4378de}#low .buy-desc{font-size:13px;line-height:1.5;color:#5a6c91;margin:10px 0 16px;flex:1}#low .buy-badge{align-self:flex-start;background:#e0ad3e;color:#3b2a05;font-size:11px;font-weight:800;letter-spacing:.06em;border-radius:99px;padding:4px 9px;margin-bottom:10px}#low .buy-plan .btn{width:100%;padding:11px 10px;font-size:13px;white-space:normal}#low .buy-footer{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}#low .buy-footer button{font-size:13px}#low .buy-note{text-align:center;color:#5a6c91;font-size:12px;margin-top:12px}@media(max-width:680px){#low{padding:12px;align-items:flex-start}#low>div{max-height:calc(100dvh - 24px);padding:20px 14px}#low .buy-head{padding:8px 30px 16px}#low .buy-grid{grid-template-columns:1fr;gap:10px}#low .buy-plan{padding:16px}#low .buy-price{font-size:26px}#low .buy-desc{margin:6px 0 12px}#low .buy-plan .btn{font-size:14px}}
 .cert h2{font-size:22px}.cert .nm{font-size:26px;font-weight:800;color:#4378de;margin:8px 0}
 @media print{body *{visibility:hidden}.cert,.cert *{visibility:visible}.cert{position:absolute;background:#fff}}
 @media(prefers-reduced-motion:reduce){.angel,.orb,.angel.flap .wl,.angel.flap .wr{animation:none}}
@@ -104,6 +107,26 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .spin{width:54px;height:54px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--gold);margin:30px auto 14px;animation:rot 1s linear infinite}@keyframes rot{to{transform:rotate(360deg)}}
 .vidb{border-radius:20px;overflow:hidden;background:#000;margin:10px 0 16px}.vidb:empty{display:none}
 .faq h3{font-size:16px;margin-top:14px;font-weight:700}.faq p{color:var(--mute);font-size:15px;margin-top:2px}.faq a.btn{color:#fff;text-decoration:none}
+/* popup de compra */
+.buy{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,20,50,.62)}
+.buy[hidden]{display:none}
+.buy__box{position:relative;width:100%;max-width:880px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;background:linear-gradient(160deg,#fffdf5,#e9f2ff);color:#1c2a4a;border-radius:26px;padding:30px 18px 20px;box-shadow:0 30px 80px rgba(0,0,0,.4);outline:0}
+.buy__x{position:absolute;top:12px;right:12px;width:42px;height:42px;border-radius:50%;background:rgba(28,42,74,.09);color:#1c2a4a;font-size:18px;line-height:1}
+.buy__x:hover{background:rgba(28,42,74,.18)}
+.buy h2{font-size:24px;font-weight:800;text-align:center;padding:0 38px}
+.buy__msg{text-align:center;color:#42537a;margin:6px auto 22px;max-width:560px}
+.plans{display:grid;gap:18px;padding-top:6px}
+@media(min-width:720px){.plans{grid-template-columns:repeat(3,1fr);align-items:stretch}.buy__box{padding:34px 28px 24px}.plan.best{transform:scale(1.04)}}
+.plan{position:relative;display:flex;flex-direction:column;gap:6px;background:#fff;border:1.5px solid rgba(110,145,215,.4);border-radius:20px;padding:22px 16px 18px;text-align:center}
+.plan.best{border:2.5px solid #e0ad3e;background:linear-gradient(180deg,#fffaf0,#fff);box-shadow:0 14px 36px rgba(224,173,62,.38);padding-top:30px}
+.plan .tag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f7dc92,#e0ad3e);color:#3b2a05;font-weight:800;font-size:12px;letter-spacing:.06em;padding:4px 14px;border-radius:99px;white-space:nowrap}
+.plan h3{font-size:13px;font-weight:800;letter-spacing:.1em;color:#2f5fc4}
+.plan .pr{font-size:36px;font-weight:800;line-height:1.1}
+.plan .tk{font-weight:700;color:#7a560b}
+.plan p{color:#42537a;font-size:14px;flex:1;margin:4px 0 10px}
+.plan .btn{width:100%;padding:13px 12px}
+.buy__offer{display:block;margin:16px auto 0}
+.buy__note{text-align:center;color:#5a6c91;font-size:12.5px;margin-top:14px}
 </style>
 
 </head>
@@ -111,7 +134,7 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 <div id="app">
  <div class="top">
   <div class="brand"><svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="8" rx="9" ry="3.2" fill="none" stroke="#e0ad3e" stroke-width="2"/><circle cx="20" cy="19" r="6" fill="#4378de"/><path d="M6 36c1-9 7-12 14-12s13 3 14 12z" fill="#7aa6f5"/></svg><div>Sacred Chant<small>Sound for the inner life</small></div></div>
-  <button type="button" class="pill" id="lightBalance" aria-label="Light Tokens balance. Click to view plans" aria-haspopup="dialog"><span>✦</span><span id="lightN">0</span></button>
+  <button type="button" class="pill" id="lightBtn" aria-haspopup="dialog" title="Get more Light Tokens"><span class="sr">Light Tokens:</span><span aria-hidden="true">✦</span><span id="lightN">0</span><span class="pl" aria-hidden="true">+</span></button>
  </div>
 
  <section class="screen on" id="s-home">
@@ -232,45 +255,14 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 <button type="submit" class="btn" id="aGo" style="width:100%">Log in</button></form></div></section>
 <div class="cert" id="inst"><div><p style="font-size:30px">📲</p><h2>Add to home screen</h2><p id="iT" style="margin-top:6px"></p><div class="low-actions"><button class="btn" id="iOk">Got it</button></div></div></div>
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
-<div class="cert" id="low" role="dialog" aria-modal="true" aria-labelledby="buyTitle" aria-describedby="lowT">
-  <div>
-    <button type="button" class="buy-close" id="lowClose" aria-label="Close purchase plans">×</button>
-    <div class="buy-head">
-      <p style="font-size:30px" aria-hidden="true"></p>
-      <h2 id="buyTitle">Choose Your Light</h2>
-      <p id="lowT" style="margin-top:6px">Choose a plan to add Light Tokens to your Sacred Chant experience.</p>
-    </div>
-    <div class="buy-grid">
-      <article class="buy-plan premium">
-        <span class="buy-badge">BEST VALUE</span>
-        <h3>SACRED PREMIUM</h3>
-        <p class="buy-price">$39.99</p>
-        <p class="buy-tokens">1,000 Light Tokens</p>
-        <p class="buy-desc">Get 1,000 Light Tokens and unlock the full potential of your Sacred Chant experience.</p>
-        <button type="button" class="btn gold checkout-btn" data-checkout="premium">Get 1,000 Light Tokens</button>
-      </article>
-      <article class="buy-plan">
-        <h3>DEVOTIONAL</h3>
-        <p class="buy-price">$29.99</p>
-        <p class="buy-tokens">500 Light Tokens</p>
-        <p class="buy-desc">More Light Tokens to support your regular prayer and devotional practice.</p>
-        <button type="button" class="btn checkout-btn" data-checkout="devotional">Get 500 Light Tokens</button>
-      </article>
-      <article class="buy-plan">
-        <h3>ESSENTIAL</h3>
-        <p class="buy-price">$9.99</p>
-        <p class="buy-tokens">100 Light Tokens</p>
-        <p class="buy-desc">A simple way to experience Sacred Chant and get started with Light Tokens.</p>
-        <button type="button" class="btn checkout-btn" data-checkout="essential">Get 100 Light Tokens</button>
-      </article>
-    </div>
-    <p class="buy-note">One-time purchase. Tokens are added after your payment is verified.</p>
-    <div class="buy-footer">
-      <button type="button" class="ghost" id="lowOffer">Offer today’s intention (+10 ✦)</button>
-      <button type="button" class="ghost" id="lowWait">Maybe later</button>
-    </div>
-  </div>
-</div>
+<div class="buy" id="buy" hidden role="dialog" aria-modal="true" aria-labelledby="buyT"><div class="buy__box" id="buyBox" tabindex="-1">
+ <button type="button" class="buy__x" id="buyX" aria-label="Close">✕</button>
+ <h2 id="buyT">Get more Light Tokens</h2>
+ <p class="buy__msg" id="buyMsg"></p>
+ <div class="plans" id="plans"></div>
+ <button type="button" class="ghost buy__offer" id="buyOffer" hidden>Or claim today's free +10 ✦</button>
+ <p class="buy__note">Secure checkout by Digistore24. Light Tokens are added to your account after your payment is confirmed.</p>
+</div></div>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
@@ -363,12 +355,6 @@ $('#vChk').onclick=()=>{const d=+$('#vChk').dataset.day;if(!S.vow.done.includes(
 $('#vEnd').onclick=()=>{if(confirm('End this vow?')){S.vow=null;save();render()}};
 $('#cOpen').onclick=()=>{$('#cN').textContent=S.name||'Guest';$('#cS').textContent=streak();$('#cM').textContent=Math.round(S.min);$('#cD').textContent=new Date().toLocaleDateString('en',{dateStyle:'long'});$('#cert').classList.add('on')};
 $('#cX').onclick=()=>$('#cert').classList.remove('on');
-/* luz como moeda: coloque aqui o link do seu checkout */
-const CHECKOUT_URLS={
-  premium:'https://www.checkout-ds24.com/product/734743',
-  devotional:'https://www.checkout-ds24.com/product/734742',
-  essential:'https://www.checkout-ds24.com/product/734741'
-};
 const COST={chants:2,sanct:2,vow:2},PLAY_COST=3;
 async function spend(n,cb){
   if(!Number.isInteger(n)||n<1)return;
@@ -438,34 +424,66 @@ async function access(t){
   }
 }
 function play(c){spend(PLAY_COST,()=>open(c))}
-function openPurchasePopup(message){
-  $('#lowT').textContent=message||'Choose a plan to add Light Tokens to your Sacred Chant experience.';
-  $('#lowOffer').hidden=!canOffer();
-  $('#low').classList.add('on');
-  document.body.style.overflow='hidden';
-  $('#lowClose').focus();
+/* ===== popup de compra (3 planos, Digistore24) ===== */
+const PLANS=[
+ {id:'734743',name:'SACRED PREMIUM',price:'$39.99',tokens:1000,best:true,cta:'Get 1,000 Light Tokens',url:'https://www.checkout-ds24.com/product/734743',desc:'Get 1,000 Light Tokens and unlock the full potential of your Sacred Chant experience.'},
+ {id:'734742',name:'DEVOTIONAL',price:'$29.99',tokens:500,best:false,cta:'Get 500 Light Tokens',url:'https://www.checkout-ds24.com/product/734742',desc:'More Light Tokens to support your regular prayer and devotional practice.'},
+ {id:'734741',name:'ESSENTIAL',price:'$9.99',tokens:100,best:false,cta:'Get 100 Light Tokens',url:'https://www.checkout-ds24.com/product/734741',desc:'A simple way to experience Sacred Chant and get started with Light Tokens.'}
+];
+const BUY_DEFAULT='Choose a plan to add Light Tokens to your account.';
+let buyFocus=null,buyBusy=false,purchaseStarted=false;
+$('#plans').innerHTML=PLANS.map(p=>`<article class="plan${p.best?' best':''}">${p.best?'<span class="tag">BEST VALUE</span>':''}<h3>${p.name}</h3><div class="pr">${p.price}</div><div class="tk">${p.tokens.toLocaleString('en-US')} Light Tokens</div><p>${p.desc}</p><button type="button" class="btn${p.best?' gold':''}" data-plan="${p.id}">${p.cta}</button></article>`).join('');
+function openBuy(msg){
+  const b=$('#buy');
+  $('#buyMsg').textContent=msg||BUY_DEFAULT;
+  $('#buyOffer').hidden=!canOffer();
+  if(!b.hidden)return;
+  buyFocus=document.activeElement;buyBusy=false;
+  $$('#plans button').forEach(x=>x.disabled=false);
+  b.hidden=false;document.body.classList.add('nos');
+  $('#buyBox').scrollTop=0;$('#buyBox').focus();
 }
-function closePurchasePopup(){
-  $('#low').classList.remove('on');
-  document.body.style.overflow='';
+function closeBuy(){
+  const b=$('#buy');if(b.hidden)return;
+  b.hidden=true;document.body.classList.remove('nos');
+  if(buyFocus&&buyFocus.focus)buyFocus.focus();
 }
 function noLight(n){
-  openPurchasePopup("You need "+n+" ✦ to complete this action, but your current balance is "+S.light+" ✦. Choose a plan to continue your Sacred Chant journey.");
+  const have=Number(S.light)||0;
+  openBuy(have<n
+    ?"You're running low on Light Tokens. This needs "+n+" ✦ and you have "+have+" ✦. Choose a plan to continue your Sacred Chant journey."
+    :"You're running low on Light Tokens. Choose a plan to continue your Sacred Chant journey.");
 }
-$('#lightBalance').addEventListener('click',()=>openPurchasePopup('Choose a plan to add Light Tokens to your Sacred Chant experience.'));
-$('#lowClose').onclick=closePurchasePopup;
-$('#lowWait').onclick=()=>{closePurchasePopup();toast('You can get more light whenever you are ready')};
-$('#low').addEventListener('click',e=>{if(e.target===$('#low'))closePurchasePopup()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#low').classList.contains('on'))closePurchasePopup()});
-$$('[data-checkout]').forEach(button=>button.addEventListener('click',()=>{
-  const url=CHECKOUT_URLS[button.dataset.checkout];
-  if(!url)return;
-  button.disabled=true;
-  const checkoutWindow=window.open(url,'_blank','noopener,noreferrer');
-  if(!checkoutWindow)window.location.href=url;
-  setTimeout(()=>{button.disabled=false},1500);
-}));
-$('#lowOffer').onclick=()=>{closePurchasePopup();go('home');setTimeout(()=>$('#offer').click(),300)};
+$('#lightBtn').onclick=()=>openBuy();
+$('#buyX').onclick=closeBuy;
+$('#buy').addEventListener('click',e=>{if(e.target===$('#buy'))closeBuy()});
+$('#buyOffer').onclick=()=>{closeBuy();go('home');setTimeout(()=>$('#offer').click(),300)};
+$('#plans').addEventListener('click',e=>{
+  const b=e.target.closest('[data-plan]');if(!b||buyBusy)return;
+  const p=PLANS.find(x=>x.id===b.dataset.plan);if(!p)return;
+  buyBusy=true;purchaseStarted=true;
+  $$('#plans button').forEach(x=>x.disabled=true);
+  const a=document.createElement('a');a.href=p.url;a.target='_blank';a.rel='noopener noreferrer';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>{buyBusy=false;$$('#plans button').forEach(x=>x.disabled=false)},2500);
+});
+document.addEventListener('keydown',e=>{
+  const b=$('#buy');if(b.hidden)return;
+  if(e.key==='Escape'){e.preventDefault();closeBuy();return}
+  if(e.key==='Tab'){
+    const f=$$('#buy button:not([disabled]):not([hidden])');if(!f.length)return;
+    const first=f[0],last=f[f.length-1],cur=document.activeElement;
+    if(e.shiftKey&&(cur===first||cur===$('#buyBox'))){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&cur===last){e.preventDefault();first.focus()}
+  }
+});
+/* ao voltar do checkout, usa o fluxo ja existente para buscar tokens confirmados */
+document.addEventListener('visibilitychange',async()=>{
+  if(document.hidden||!purchaseStarted)return;
+  purchaseStarted=false;
+  await claimPendingDigistoreOrders();
+  await syncLightBalance();
+});
 function flap(){const g=$('.angel');g.classList.remove('flap');void g.getBoundingClientRect();g.classList.add('flap');setTimeout(()=>g.classList.remove('flap'),2200)}
 function flyCrown(cb){const b=$('#offer').getBoundingClientRect(),a=$('.angel').getBoundingClientRect(),c=document.createElement('div');c.innerHTML='<svg width="44" height="20" viewBox="0 0 44 20" aria-hidden="true"><ellipse cx="22" cy="10" rx="19" ry="6" fill="none" stroke="#e0ad3e" stroke-width="4"/></svg>';c.style.cssText='position:fixed;z-index:40;width:44px;height:20px;line-height:0;pointer-events:none;filter:drop-shadow(0 0 8px rgba(255,214,110,.95));left:'+(b.left+b.width/2-22)+'px;top:'+(b.top+b.height/2-10)+'px';document.body.appendChild(c);const dx=a.left+a.width/2-(b.left+b.width/2),dy=a.top+a.height*.2-(b.top+b.height/2);const an=c.animate([{transform:'translate(0,0) scale(.5) rotate(0deg)',opacity:0},{opacity:1,offset:.15},{transform:'translate('+dx*.45+'px,'+(dy*.5-80)+'px) scale(1.3) rotate(-14deg)',offset:.55},{transform:'translate('+dx+'px,'+dy+'px) scale(1) rotate(0deg)',opacity:1,offset:.93},{transform:'translate('+dx+'px,'+dy+'px) scale(1) rotate(0deg)',opacity:0}],{duration:1500,easing:'ease-in-out'});an.onfinish=()=>{c.remove();flap();cb()}}
 /* audio */
@@ -487,7 +505,7 @@ $('#imX').onclick=()=>close(0);
 $('#imP').onclick=()=>{paused=!paused;$('#imP').textContent=paused?'Resume':'Pause';$('#orb').style.animationPlayState=paused?'paused':'running';try{if(au)paused?au.pause():au.play();else paused?ac.suspend():ac.resume()}catch(e){}};
 $('#imB').onclick=()=>{guide=!guide;$('#imB').setAttribute('aria-pressed',guide);$('#imB').textContent='Breath guide '+(guide?'on':'off');$('#im').classList.toggle('calm',!guide)};
 $$('#imLen button').forEach(b=>b.onclick=()=>{limit=+b.dataset.m*60;$$('#imLen button').forEach(x=>x.classList.toggle('on',x===b))});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#im').classList.contains('on'))close(0)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#im').classList.contains('on')&&$('#buy').hidden)close(0)});
 /* 24h: a oferta volta 24 horas depois da ultima */
 const DAY=864e5,pad=n=>String(n).padStart(2,'0');
 const canOffer=()=>Date.now()-(S.lastTs||0)>=DAY;
