@@ -385,6 +385,31 @@ let sbPromise = null;
 
 const SUPABASE_URL = 'https://yspbhzwpcvjaeolvrptk.supabase.co';
 const SUPABASE_KEY = 'sb_publishable__VAenN-0WEd16wkzF6uUMw_PSvCyFNp';
+ async function syncLightBalance() {
+  try {
+    const client = await getSupabase();
+
+    const { data, error } = await client
+      .from('token_balances')
+      .select('balance')
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (!data) {
+      console.error('Token balance not found for this user.');
+      return;
+    }
+
+    S.light = Number(data.balance);
+    save();
+    render();
+
+  } catch (err) {
+    console.error('Could not sync token balance:', err);
+    toast('Could not load your token balance');
+  }
+}
 
 function setAuth(m) {
   amode = m;
@@ -420,16 +445,20 @@ function getSupabase() {
           ) {
             const user = session.user;
 
-            loadUser(user.email);
+            loadUser(user.id);
 
-            if (user.user_metadata?.full_name) {
-              S.name = user.user_metadata.full_name;
-            }
+if (user.user_metadata?.full_name) {
+  S.name = user.user_metadata.full_name;
+}
 
-            save();
-            $('#auth').classList.remove('on');
-            go('home');
-            render();
+save();
+$('#auth').classList.remove('on');
+go('home');
+render();
+
+setTimeout(() => {
+  syncLightBalance();
+}, 0);
             scheduleNotif();
             nUpd();
             toast('Welcome' + (S.name ? ', ' + S.name : ''));
