@@ -351,7 +351,49 @@ async function spend(n,cb){
     toast('Could not update light. Please try again.');
   }
 }
-function access(t){if(!COST[t])return go(t);if(!S.unl||S.unl.d!==today())S.unl={d:today(),ids:[]};if(S.unl.ids.includes(t))return go(t);spend(COST[t],()=>{S.unl.ids.push(t);save();go(t)})}
+async function access(t){
+  if(!COST[t])return go(t);
+
+  try{
+    const client=await getSupabase();
+    const {data,error}=await client.rpc('unlock_paid_content',{p_item_id:t});
+
+    if(error){
+      if(error.message?.includes('insufficient_balance')){
+        await syncLightBalance();
+        noLight(COST[t]);
+        return;
+      }
+      if(error.message?.includes('not_authenticated')){
+        toast('Please log in to unlock this content.');
+        return;
+      }
+      throw error;
+    }
+
+    const result=Array.isArray(data)?data[0]:data;
+    if(!result)throw new Error('Empty unlock response');
+
+    S.light=Number(result.balance);
+
+    if(!S.unl||S.unl.d!==today())S.unl={d:today(),ids:[]};
+    if(!S.unl.ids.includes(t))S.unl.ids.push(t);
+
+    save();
+    render();
+
+    if(result.already_unlocked){
+      go(t);
+    }else{
+      toast('-'+COST[t]+' light');
+      go(t);
+    }
+  }catch(err){
+    console.error('Unlock content error:',err);
+    await syncLightBalance();
+    toast('Could not unlock content. Please try again.');
+  }
+}
 function play(c){spend(PLAY_COST,()=>open(c))}
 function noLight(n){const can=canOffer();$('#lowOffer').hidden=!can;$('#lowT').textContent=can?'You need '+n+' ✦ to open this. Offer today\'s intention for +10 ✦, get more light, or come back tomorrow.':'You need '+n+' ✦ to open this. Your daily +10 ✦ returns tomorrow, or you can get more light now.';$('#low').classList.add('on')}
 $('#lowWait').onclick=()=>{$('#low').classList.remove('on');toast('Your +10 ✦ is waiting tomorrow')};
