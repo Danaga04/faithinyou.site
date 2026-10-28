@@ -328,42 +328,82 @@ function render(){
  $('#vChk').disabled=v.done.includes(day);$('#vChk').dataset.day=day;
 }
 $('#dPlay').onclick=()=>play(DC);
+/* ===== Offer your intention: clique suave, auréola voando até o anjo, sino na chegada ===== */
+let offerBusy=false,offerAu=null;
+function offerSound(){
+ if(offerAu)return offerAu;
+ const sr=22050,L=Math.floor(sr*3.9),d=new Float32Array(L),TP=2*Math.PI;
+ const add=(t0,f,g,len,dec)=>{const s=Math.floor(t0*sr);for(let i=0;i<sr*len;i++){const j=s+i;if(j>=L)break;const t=i/sr;d[j]+=g*Math.sin(TP*f*t)*Math.min(1,t*180)*Math.exp(-t/dec)}};
+ add(0,1046.5,.30,.5,.09);add(.07,1568,.22,.6,.12);add(.07,3136,.04,.3,.05);
+ [[1,.30,.9],[2,.12,.6],[2.76,.07,.4],[4.07,.03,.25]].forEach(([m,g,dec])=>add(1.4,659.25*m,g,2.4,dec));
+ for(let i=0;i<sr*.2;i++)d[L-1-i]*=i/(sr*.2);
+ const buf=new ArrayBuffer(44+L*2),v=new DataView(buf),w=(o,s)=>[...s].forEach((ch,i)=>v.setUint8(o+i,ch.charCodeAt(0)));
+ w(0,'RIFF');v.setUint32(4,36+L*2,true);w(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,L*2,true);
+ for(let i=0;i<L;i++)v.setInt16(44+i*2,Math.max(-1,Math.min(1,d[i]))*32767,true);
+ offerAu=new Audio(URL.createObjectURL(new Blob([buf],{type:'audio/wav'})));offerAu.setAttribute('playsinline','');
+ return offerAu;
+}
+function playOffer(){try{const a=offerSound();a.currentTime=0;const p=a.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}}
+function stopOffer(){try{if(offerAu)offerAu.pause()}catch(e){}}
+function flyHalo(){
+ const b=$('#offer').getBoundingClientRect(),a=$('.angel').getBoundingClientRect(),c=document.createElement('div');
+ c.innerHTML='<svg width="52" height="24" viewBox="0 0 44 20" aria-hidden="true"><ellipse cx="22" cy="10" rx="19" ry="6" fill="none" stroke="#e0ad3e" stroke-width="4"/></svg>';
+ c.style.cssText='position:fixed;z-index:40;width:52px;height:24px;line-height:0;pointer-events:none;filter:drop-shadow(0 0 10px rgba(255,214,110,.95));left:'+(b.left+b.width/2-26)+'px;top:'+(b.top+b.height/2-12)+'px';
+ document.body.appendChild(c);
+ const dx=a.left+a.width/2-(b.left+b.width/2),dy=a.top+a.height*.18-(b.top+b.height/2);
+ const an=c.animate([
+  {transform:'translate(0,0) scale(.5) rotate(0deg)',opacity:0},
+  {opacity:1,offset:.12},
+  {transform:'translate('+dx*.4+'px,'+(dy*.5-70)+'px) scale(1.3) rotate(-14deg)',offset:.55},
+  {transform:'translate('+dx+'px,'+dy+'px) scale(.85) rotate(0deg)',opacity:1,offset:.95},
+  {transform:'translate('+dx+'px,'+dy+'px) scale(.85) rotate(0deg)',opacity:0}
+ ],{duration:1450,easing:'ease-in-out'});
+ const tr=setInterval(()=>{const r=c.getBoundingClientRect(),s=document.createElement('i');
+  s.style.cssText='position:fixed;z-index:39;pointer-events:none;width:7px;height:7px;border-radius:50%;background:#ffe9a8;box-shadow:0 0 8px #f7c75a;left:'+(r.left+r.width/2-3)+'px;top:'+(r.top+r.height/2-3)+'px';
+  document.body.appendChild(s);s.animate([{opacity:.9,transform:'scale(1)'},{opacity:0,transform:'translateY(14px) scale(.2)'}],{duration:650}).onfinish=()=>s.remove()},110);
+ an.onfinish=()=>{clearInterval(tr);c.remove()};
+}
+function plusFloat(){
+ const r=$('#lightBtn').getBoundingClientRect(),e=document.createElement('div');e.textContent='+10 ✦';
+ e.style.cssText='position:fixed;z-index:70;pointer-events:none;font-weight:800;font-size:18px;color:#e0ad3e;text-shadow:0 2px 8px rgba(0,0,0,.25);left:'+(r.left+r.width/2-22)+'px;top:'+(r.bottom+4)+'px';
+ document.body.appendChild(e);e.animate([{transform:'translateY(0)',opacity:0},{opacity:1,offset:.2},{transform:'translateY(-16px)',opacity:0}],{duration:1500}).onfinish=()=>e.remove();
+}
 $('#offer').onclick = async () => {
   const button = $('#offer');
-
-  if (button.disabled || !canOffer()) return;
-
+  if (offerBusy || button.disabled || !canOffer()) return;
+  offerBusy = true;
   button.disabled = true;
-  button.textContent = 'Adding your light...';
-
-  try {
+  button.textContent = 'Sending your light...';
+  playOffer();
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const rpc = (async () => {
     const client = await getSupabase();
-
     const { data, error } = await client.rpc('claim_daily_light');
-
     if (error) throw error;
-
-    S.light = Number(data);
-
+    return Number(data);
+  })();
+  rpc.catch(() => {});
+  if (!reduced) flyHalo();
+  await new Promise(r => setTimeout(r, 1400));
+  try {
+    const balance = await rpc;
+    S.light = balance;
     S.last = today();
     S.lastTs = Date.now();
-
-    if (!S.days.includes(today())) {
-      S.days.push(today());
-    }
-
+    if (!S.days.includes(today())) S.days.push(today());
     save();
+    flap();
+    offerBusy = false;
     render();
     scheduleNotif();
-
+    plusFloat();
     toast('+10 light added!');
-
   } catch (err) {
     console.error('Daily reward error:', err);
-
+    stopOffer();
+    offerBusy = false;
     button.disabled = false;
     tickOffer();
-
     if (err.message?.includes('daily_reward_already_claimed')) {
       toast('Daily reward already claimed');
     } else {
@@ -509,7 +549,6 @@ document.addEventListener('visibilitychange',async()=>{
   await syncLightBalance();
 });
 function flap(){const g=$('.angel');g.classList.remove('flap');void g.getBoundingClientRect();g.classList.add('flap');setTimeout(()=>g.classList.remove('flap'),2200)}
-function flyCrown(cb){const b=$('#offer').getBoundingClientRect(),a=$('.angel').getBoundingClientRect(),c=document.createElement('div');c.innerHTML='<svg width="44" height="20" viewBox="0 0 44 20" aria-hidden="true"><ellipse cx="22" cy="10" rx="19" ry="6" fill="none" stroke="#e0ad3e" stroke-width="4"/></svg>';c.style.cssText='position:fixed;z-index:40;width:44px;height:20px;line-height:0;pointer-events:none;filter:drop-shadow(0 0 8px rgba(255,214,110,.95));left:'+(b.left+b.width/2-22)+'px;top:'+(b.top+b.height/2-10)+'px';document.body.appendChild(c);const dx=a.left+a.width/2-(b.left+b.width/2),dy=a.top+a.height*.2-(b.top+b.height/2);const an=c.animate([{transform:'translate(0,0) scale(.5) rotate(0deg)',opacity:0},{opacity:1,offset:.15},{transform:'translate('+dx*.45+'px,'+(dy*.5-80)+'px) scale(1.3) rotate(-14deg)',offset:.55},{transform:'translate('+dx+'px,'+dy+'px) scale(1) rotate(0deg)',opacity:1,offset:.93},{transform:'translate('+dx+'px,'+dy+'px) scale(1) rotate(0deg)',opacity:0}],{duration:1500,easing:'ease-in-out'});an.onfinish=()=>{c.remove();flap();cb()}}
 /* audio */
 let cur,ac,nodes=[],au,tick,chirp,bell,secs=0,limit=180,paused=false,guide=true;
 function ctx(){ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();return ac}
@@ -533,7 +572,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#im').classList.
 /* 24h: a oferta volta 24 horas depois da ultima */
 const DAY=864e5,pad=n=>String(n).padStart(2,'0');
 const canOffer=()=>Date.now()-(S.lastTs||0)>=DAY;
-function tickOffer(){const b=$('#offer');if(canOffer()){if(b.dataset.w){b.disabled=false;b.dataset.w=''}b.textContent='✦ Offer your intention'}else{const r=DAY-(Date.now()-S.lastTs),h=Math.floor(r/36e5),m=Math.floor(r%36e5/6e4),s=Math.floor(r%6e4/1e3);b.disabled=true;b.dataset.w=1;b.textContent='Next offer in '+pad(h)+':'+pad(m)+':'+pad(s)}}
+function tickOffer(){const b=$('#offer');if(offerBusy)return;if(canOffer()){if(b.dataset.w){b.disabled=false;b.dataset.w=''}b.textContent='✦ Offer your intention'}else{const r=DAY-(Date.now()-S.lastTs),h=Math.floor(r/36e5),m=Math.floor(r%36e5/6e4),s=Math.floor(r%6e4/1e3);b.disabled=true;b.dataset.w=1;b.textContent='Next offer in '+pad(h)+':'+pad(m)+':'+pad(s)}}
 /* notificacoes */
 function notifyReady(){try{if(Notification.permission!=='granted')return;const o={body:'Your light is ready. Come back and claim +10 ✦.',icon:'icon-192.png'};if(navigator.serviceWorker&&navigator.serviceWorker.controller)navigator.serviceWorker.ready.then(r=>r.showNotification('Sacred Chant',o));else new Notification('Sacred Chant',o)}catch(e){}}
 let nt;function scheduleNotif(){clearTimeout(nt);const w=DAY-(Date.now()-(S.lastTs||0));if(w>0)nt=setTimeout(()=>{notifyReady();toast('Your +10 ✦ is ready')},w)}
