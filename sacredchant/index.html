@@ -492,6 +492,21 @@ let sbPromise = null;
 
 const SUPABASE_URL = 'https://yspbhzwpcvjaeolvrptk.supabase.co';
 const SUPABASE_KEY = 'sb_publishable__VAenN-0WEd16wkzF6uUMw_PSvCyFNp';
+async function claimPendingDigistoreOrders() {
+  try {
+    const client = await getSupabase();
+    const { data, error } = await client.rpc('claim_pending_digistore24_orders');
+    if (error) throw error;
+    const count = Number(data || 0);
+    if (count > 0) toast('Purchase tokens added: ' + count + ' order(s)');
+    return count;
+  } catch (err) {
+    // Safe to ignore until the Digistore24 fulfillment migration is installed.
+    console.warn('Pending Digistore24 orders were not claimed:', err?.message || err);
+    return 0;
+  }
+}
+
  async function syncLightBalance() {
   try {
     const client = await getSupabase();
@@ -563,8 +578,9 @@ $('#auth').classList.remove('on');
 go('home');
 render();
 
-setTimeout(() => {
-  syncLightBalance();
+setTimeout(async () => {
+  await claimPendingDigistoreOrders();
+  await syncLightBalance();
 }, 0);
             scheduleNotif();
             nUpd();
