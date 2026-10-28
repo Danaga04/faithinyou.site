@@ -273,7 +273,49 @@ function render(){
  $('#vChk').disabled=v.done.includes(day);$('#vChk').dataset.day=day;
 }
 $('#dPlay').onclick=()=>play(DC);
-$('#offer').onclick=()=>{if(!canOffer())return;S.last=today();S.lastTs=Date.now();S.light+=10;scheduleNotif();if(!S.days.includes(today()))S.days.push(today());save();$('#offer').disabled=true;const done=()=>{render();toast('+10 light added')};matchMedia('(prefers-reduced-motion:reduce)').matches?(flap(),done()):flyCrown(done)};
+$('#offer').onclick = async () => {
+  const button = $('#offer');
+
+  if (button.disabled || !canOffer()) return;
+
+  button.disabled = true;
+  button.textContent = 'Adding your light...';
+
+  try {
+    const client = await getSupabase();
+
+    const { data, error } = await client.rpc('claim_daily_light');
+
+    if (error) throw error;
+
+    S.light = Number(data);
+
+    S.last = today();
+    S.lastTs = Date.now();
+
+    if (!S.days.includes(today())) {
+      S.days.push(today());
+    }
+
+    save();
+    render();
+    scheduleNotif();
+
+    toast('+10 light added!');
+
+  } catch (err) {
+    console.error('Daily reward error:', err);
+
+    button.disabled = false;
+    tickOffer();
+
+    if (err.message?.includes('daily_reward_already_claimed')) {
+      toast('Daily reward already claimed');
+    } else {
+      toast('Could not add light. Please try again.');
+    }
+  }
+};
 $('#nSave').onclick=()=>{S.name=$('#nIn').value.trim();save();render();toast('Saved')};
 $('#reset').onclick=()=>{if(confirm('Reset all progress on this device?')){S={name:S.name,light:10,min:0,days:[],last:'',lastTs:0,vow:null,unl:null};save();render()}};
 let vl=7;$$('#vLen button').forEach(b=>b.onclick=()=>{vl=+b.dataset.d;$$('#vLen button').forEach(x=>x.classList.toggle('on',x===b))});
