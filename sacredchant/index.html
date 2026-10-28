@@ -391,11 +391,20 @@ $('#offer').onclick = async () => {
     S.light = balance;
     S.last = today();
     S.lastTs = Date.now();
+    S.srvBlock = '';
     if (!S.days.includes(today())) S.days.push(today());
     save();
+    const stage = $('#angelStage');
+    if (stage) {
+      stage.classList.remove('reward-glow');
+      void stage.offsetWidth;
+      stage.classList.add('reward-glow');
+      setTimeout(() => stage.classList.remove('reward-glow'), 4200);
+    }
     flap();
     offerBusy = false;
     render();
+    await syncLightBalance();
     scheduleNotif();
     plusFloat();
     toast('+10 light added!');
@@ -549,6 +558,7 @@ document.addEventListener('visibilitychange',async()=>{
   purchaseStarted=false;
   await claimPendingDigistoreOrders();
   await syncLightBalance();
+  await syncDailyLightStatus();
 });
 function flap(){
  const g=$('.angel');if(!g)return;
@@ -585,7 +595,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#im').classList.
 /* 24h: a oferta volta 24 horas depois da ultima */
 const DAY=864e5,pad=n=>String(n).padStart(2,'0');
 const canOffer=()=>S.srvBlock!==today()&&Date.now()-(S.lastTs||0)>=DAY;
-function tickOffer(){const b=$('#offer');if(offerBusy)return;if(canOffer()){if(b.dataset.w){b.disabled=false;b.removeAttribute('aria-disabled');b.dataset.w=''}b.textContent='✦ Offer your intention'}else{const r=DAY-(Date.now()-(S.lastTs||0)),h=Math.floor(r/36e5),m=Math.floor(r%36e5/6e4),s=Math.floor(r%6e4/1e3);b.disabled=true;b.setAttribute('aria-disabled','true');b.dataset.w=1;b.textContent=r>0?'Next offer in '+pad(h)+':'+pad(m)+':'+pad(s):'Already claimed. Come back tomorrow'}}
+function tickOffer(){const b=$('#offer');if(offerBusy)return;if(canOffer()){b.disabled=false;b.removeAttribute('aria-disabled');b.dataset.w='';b.classList.add('reward-ready');b.textContent='✦ Offer your intention'}else{b.classList.remove('reward-ready');const r=Math.max(0,DAY-(Date.now()-(S.lastTs||0))),h=Math.floor(r/36e5),m=Math.floor(r%36e5/6e4),s=Math.floor(r%6e4/1e3);b.disabled=true;b.setAttribute('aria-disabled','true');b.dataset.w=1;b.textContent=r>0?'Next offer in '+pad(h)+':'+pad(m)+':'+pad(s):'Already claimed. Come back tomorrow'}}
 /* notificacoes */
 function notifyReady(){try{if(Notification.permission!=='granted')return;const o={body:'Your light is ready. Come back and claim +10 ✦.',icon:'icon-192.png'};if(navigator.serviceWorker&&navigator.serviceWorker.controller)navigator.serviceWorker.ready.then(r=>r.showNotification('Sacred Chant',o));else new Notification('Sacred Chant',o)}catch(e){}}
 let nt;function scheduleNotif(){clearTimeout(nt);const w=DAY-(Date.now()-(S.lastTs||0));if(w>0)nt=setTimeout(()=>{notifyReady();toast('Your +10 ✦ is ready')},w)}
@@ -674,6 +684,26 @@ async function claimPendingDigistoreOrders() {
   }
 }
 
+ async function syncDailyLightStatus() {
+   try {
+     const client = await getSupabase();
+     const { data, error } = await client.rpc('get_daily_light_status');
+     if (error) throw error;
+     if (data) {
+       const serverTs = Date.parse(data);
+       if (Number.isFinite(serverTs)) {
+         S.lastTs = serverTs;
+         S.srvBlock = '';
+         save();
+         render();
+         scheduleNotif();
+       }
+     }
+   } catch (err) {
+     console.warn('Could not sync daily reward timer:', err?.message || err);
+   }
+ }
+
  async function syncLightBalance() {
   try {
     const client = await getSupabase();
@@ -748,6 +778,7 @@ render();
 setTimeout(async () => {
   await claimPendingDigistoreOrders();
   await syncLightBalance();
+  await syncDailyLightStatus();
 }, 0);
             scheduleNotif();
             nUpd();
