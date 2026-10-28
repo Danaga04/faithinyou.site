@@ -457,13 +457,11 @@ $('#lowClose').onclick=closePurchasePopup;
 $('#lowWait').onclick=()=>{closePurchasePopup();toast('You can get more light whenever you are ready')};
 $('#low').addEventListener('click',e=>{if(e.target===$('#low'))closePurchasePopup()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#low').classList.contains('on'))closePurchasePopup()});
-$$('[data-checkout]').forEach(button=>button.addEventListener('click',()=>{
+$('[data-checkout]').forEach(button=>button.addEventListener('click',()=>{
   const url=CHECKOUT_URLS[button.dataset.checkout];
   if(!url)return;
   button.disabled=true;
-  const checkoutWindow=window.open(url,'_blank','noopener,noreferrer');
-  if(!checkoutWindow)window.location.href=url;
-  setTimeout(()=>{button.disabled=false},1500);
+  window.location.assign(url);
 }));
 $('#lowOffer').onclick=()=>{closePurchasePopup();go('home');setTimeout(()=>$('#offer').click(),300)};
 function flap(){const g=$('.angel');g.classList.remove('flap');void g.getBoundingClientRect();g.classList.add('flap');setTimeout(()=>g.classList.remove('flap'),2200)}
