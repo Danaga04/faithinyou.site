@@ -556,14 +556,22 @@ const FAQ=`<h2 class="h" style="font-size:20px">Good to know</h2>
 <h3>4. Is this a subscription?</h3><p>No. The app is a one-time payment, with no monthly charges.</p>
 <p style="margin:16px 0 8px">Need help? Our support team is here for you.</p><p><a class="btn" href="${SUPPORT}" target="_blank" rel="noopener">Contact support</a></p>`;
 const tile=(attr,src,label,cost,lock,dim)=>`<button class="tile${dim?' dim':''}" ${attr} aria-label="${label}">${cost?'<span class="cs">'+cost+' ✦</span>':''}<img src="${src}" alt="${label}" loading="lazy" decoding="async" width="400" height="400" onload="this.parentNode.classList.add('ld')" onerror="this.parentNode.classList.add('ld')">${lock||''}</button>`;
+const prayOK=()=>!!(S.prayUnlocked||S.prayDone);
+function prayOpen(){
+ if(prayOK())return S.prayDone?reading():quiz();
+ lkAct=()=>{S.prayUnlocked=1;save();homeTiles();quiz()};
+ $('#lkH').textContent='Unlock "I want to pray for you"';
+ $('#lkT').textContent='Unlock this module once for 10 ✦. After that, it stays open for you.';
+ $('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Not now';
+ $('#lk').classList.add('on')}
 function homeTiles(){
- $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',2)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',2,S.prayDone?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')+tile('data-mod="support"',IMG.support,'Support',0);
+ $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',2)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',prayOK()?0:10,prayOK()?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')+tile('data-mod="support"',IMG.support,'Support',0);
  $('#tPrd').innerHTML=tile('data-mod="solomon"',IMG.solomon,'7 Prayers of Solomon',2)}
 function openPaid(id,cb){if(!S.unl||S.unl.d!==today())S.unl={d:today(),ids:[]};if(S.unl.ids.includes(id))return cb();spend(2,()=>{S.unl.ids.push(id);save();cb()})}
 function mod(id){
  if(id==='support'){const a=document.createElement('a');a.href=SUPPORT;a.target='_blank';a.rel='noopener';a.click();return}
  if(id==='start')return openPaid('start',()=>showVid(VID.start,'Start here','',FAQ,'home'));
- if(id==='pray')return openPaid('pray',()=>S.prayDone?reading():quiz());
+ if(id==='pray')return prayOpen();
  if(id==='solomon')return openPaid('solomon',()=>{if(!S.solStart){S.solStart=Date.now();save()}solPage()})}
 let vBackTo='home',sdkOk=false;
 function showVid(id,title,top,bottom,back){vBackTo=back||'home';$('#vT').textContent=title;$('#vTop').innerHTML=top||'';$('#vTx').innerHTML=bottom||'';
@@ -585,10 +593,10 @@ const solOpen=i=>i<3||(S.solPaid||[]).includes(i)||Date.now()-S.solStart>=DAY;
 function solPage(){$('#sDays').innerHTML=DAYS.map((d,i)=>{const o=solOpen(i);return tile('data-day="'+i+'"',P+d[0]+'.avif','Day '+(i+1),0,o?'':'<span class="lk"><b>🔒</b><span class="cd"></span></span>',!o)}).join('');go('sol');solTick()}
 function solTick(){if(!$('#s-sol').classList.contains('on'))return;const r=DAY-(Date.now()-S.solStart);if(r<=0&&$$('#sDays .lk').length)return solPage();const t=pad(Math.max(0,Math.floor(r/36e5)))+':'+pad(Math.max(0,Math.floor(r%36e5/6e4)))+':'+pad(Math.max(0,Math.floor(r%6e4/1e3)));$$('#sDays .cd').forEach(e=>e.textContent='Opens in '+t)}
 setInterval(solTick,1000);
-let lkDay=0;
-function dayClick(i){if(solOpen(i))return showVid(DAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Solomon','','','sol');lkDay=i;$('#lkH').textContent='Day '+(i+1)+' is resting';$('#lkT').textContent='It opens 24 hours after you began, or you can open it now for 10 ✦.';$('#lk').classList.add('on')}
+let lkDay=0,lkAct=null;
+function dayClick(i){if(solOpen(i))return showVid(DAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Solomon','','','sol');lkDay=i;lkAct=()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()};$('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Wait for it';$('#lkH').textContent='Day '+(i+1)+' is resting';$('#lkT').textContent='It opens 24 hours after you began, or you can open it now for 10 ✦.';$('#lk').classList.add('on')}
 $('#lkX').onclick=()=>$('#lk').classList.remove('on');
-$('#lkU').onclick=()=>{$('#lk').classList.remove('on');spend(10,()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()})};
+$('#lkU').onclick=()=>{const f=lkAct;$('#lk').classList.remove('on');if(f)spend(10,f)};
 document.addEventListener('click',e=>{const m=e.target.closest('[data-mod]');if(m)return mod(m.dataset.mod);const d=e.target.closest('[data-day]');if(d)dayClick(+d.dataset.day)});
 $('#vBack').onclick=()=>go(vBackTo);$$('[data-back]').forEach(b=>b.onclick=()=>go('home'));
 /* login conectado ao Supabase */
