@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://i.postimg.cc" crossorigin>
 <title>Sacred Chant</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#7aa6f5">
@@ -88,7 +89,22 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .cert h2{font-size:22px}.cert .nm{font-size:26px;font-weight:800;color:#4378de;margin:8px 0}
 @media print{body *{visibility:hidden}.cert,.cert *{visibility:visible}.cert{position:absolute;background:#fff}}
 @media(prefers-reduced-motion:reduce){.angel,.orb,.angel.flap .wl,.angel.flap .wr{animation:none}}
+.sh{font-size:16px;font-weight:800;margin:24px 0 2px}.sh+p{color:var(--mute);font-size:14px;margin-bottom:10px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{position:relative;aspect-ratio:1/1;border-radius:22px;overflow:hidden;border:1px solid var(--line);padding:0;display:block;background:linear-gradient(110deg,rgba(120,150,215,.18) 30%,rgba(255,255,255,.4) 50%,rgba(120,150,215,.18) 70%) 0 0/200% 100%;animation:sk 1.4s linear infinite;box-shadow:0 8px 22px rgba(80,120,200,.18)}
+.tile.ld{animation:none;background:var(--card)}@keyframes sk{to{background-position:-200% 0}}
+.tile img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .35s}.tile.ld img{opacity:1}
+.tile.dim img{filter:grayscale(.8) brightness(.7)}
+.tile .lk{position:absolute;inset:0;display:grid;place-content:center;gap:4px;text-align:center;background:rgba(18,30,66,.55);color:#fff;font-weight:700;font-size:14px}.tile .lk b{font-size:28px}
+.tile .cs{position:absolute;right:8px;top:8px;z-index:2;background:rgba(255,255,255,.92);color:#3b2a05;border-radius:99px;padding:2px 9px;font-size:12px;font-weight:800}
+.soon{border:1.5px dashed var(--line);border-radius:22px;padding:22px;text-align:center;color:var(--mute)}
+.back{display:inline-flex;gap:6px;align-items:center;font-weight:700;color:var(--acc);padding:6px 2px;margin-bottom:6px}
+.opt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:10px;font-weight:600;font-size:17px}.opt i{font-style:normal;font-size:24px;width:34px;text-align:center}
+.spin{width:54px;height:54px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--gold);margin:30px auto 14px;animation:rot 1s linear infinite}@keyframes rot{to{transform:rotate(360deg)}}
+.vidb{border-radius:20px;overflow:hidden;background:#000;margin:10px 0 16px}.vidb:empty{display:none}
+.faq h3{font-size:16px;margin-top:14px;font-weight:700}.faq p{color:var(--mute);font-size:15px;margin-top:2px}.faq a.btn{color:#fff;text-decoration:none}
 </style>
+
 </head>
 <body>
 <div id="app">
@@ -114,16 +130,25 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
    <p>A few quiet minutes of chant, prayer and breath.</p>
    <p style="margin-top:16px"><button class="btn gold" id="offer">✦ Offer your intention</button></p>
   </div>
+  <p class="sh">Support &amp; blessings</p><p>Start here, request a prayer, or reach our team.</p>
+  <div class="tiles" id="tSup"></div>
+  <p class="sh">My products</p><p>The programs you have purchased.</p>
+  <div class="tiles" id="tPrd"></div>
+  <p class="sh">Exclusive bonuses</p><p>Extra gifts for members.</p>
+  <div class="soon">New bonuses are on the way ✨</div>
+  <p class="lab" style="text-align:center;margin:18px 0 6px">Each module costs 2 ✦ to open. Offer your intention every 24 hours for +10 ✦.</p>
   <div class="card" style="text-align:center">
    <p class="lab">Chant of the day</p><p class="m" id="dM"></p><p class="lab" id="dX" style="font-weight:500"></p>
    <p style="margin-top:12px"><button class="btn" id="dPlay">▶ Chant with me</button></p>
   </div>
   <div class="card" id="iCard" style="display:flex;gap:12px;align-items:center;justify-content:space-between"><div><h3>Keep it on your home screen</h3><p class="lab" style="font-weight:500">One tap and Sacred Chant opens like an app.</p></div><button class="btn" id="iBtn">Install</button></div>
-  <div class="grid" id="homeGrid"></div>
-  <p class="lab" style="text-align:center;margin-top:14px">Opening a module costs 2 ✦ for the day. Each chant session costs 3 ✦. Offer your intention daily for +10 ✦.</p>
  </section>
 
- <section class="screen" id="s-chants">
+ <section class="screen" id="s-vid"><button class="back" id="vBack">← Back</button><h2 class="h" id="vT"></h2><div id="vTop"></div><div class="vidb" id="vBox"></div><div class="faq" id="vTx"></div></section>
+ <section class="screen" id="s-pray"><button class="back" data-back>← Back</button><div id="pBody"></div></section>
+ <section class="screen" id="s-sol"><button class="back" data-back>← Back</button><h2 class="h">7 Prayers of Solomon</h2><p class="intro">One prayer a day. Tap a day to listen. Days 4 to 7 open 24 hours after you begin.</p><div class="tiles" id="sDays"></div></section>
+ 
+<section class="screen" id="s-chants">
   <h2 class="h">Chants &amp; sounds</h2>
   <p class="intro">Choose a recording, settle into your breath and let it accompany your prayer. Headphones help.</p>
   <p class="sec">Sacred mantras</p><div id="lM"></div>
@@ -205,6 +230,7 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 <p class="err" id="aErr" role="alert"></p>
 <button type="submit" class="btn" id="aGo" style="width:100%">Log in</button></form></div></section>
 <div class="cert" id="inst"><div><p style="font-size:30px">📲</p><h2>Add to home screen</h2><p id="iT" style="margin-top:6px"></p><div class="low-actions"><button class="btn" id="iOk">Got it</button></div></div></div>
+<div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
 <div class="cert" id="low"><div><p style="font-size:30px">✨</p><h2>You're out of light</h2><p id="lowT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lowBuy">Get more light</button><button class="btn" id="lowOffer">Offer today's intention (+10 ✦)</button><button class="ghost" id="lowWait">Wait until tomorrow</button></div></div></div>
 <div class="toast" id="toast" role="status"></div>
 
@@ -232,9 +258,7 @@ function row(c){return `<button class="item" data-id="${c.id}"><span class="ic" 
 $('#lM').innerHTML=CH.filter(c=>c.k=='m').map(row).join('');$('#lD').innerHTML=CH.filter(c=>c.k=='d').map(row).join('');$('#lN').innerHTML=CH.filter(c=>c.k=='n').map(row).join('');
 $$('.item').forEach(b=>b.onclick=()=>play(CH.find(c=>c.id===b.dataset.id)));
 $('#sealAu').src=SEAL_AUDIO;
-$('#homeGrid').innerHTML=[['Sacred mantras','Love, abundance, health','chants','linear-gradient(135deg,#7aa6f5,#4378de)'],['Sanctuary','Prayers and rituals','sanct','linear-gradient(135deg,#c7a2f0,#8b6fe0)'],['Your vow','Walk it day by day','vow','linear-gradient(135deg,#f7c75a,#e58f3a)'],['Deep relaxation','Bells and bowls','med','linear-gradient(135deg,#6fd0f0,#5a5bd6)']].map(([a,b,t,g])=>`<button class="mod" data-go="${t}" style="--g:${g}">${a}<small>${b}</small></button>`).join('');
-$$('[data-go]').forEach(b=>b.onclick=()=>b.dataset.go==='med'?play(CH.find(c=>c.id==='med')):access(b.dataset.go));
-function go(t){$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));scrollTo(0,0)}
+function go(t){if(t!=='vid')$('#vBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));scrollTo(0,0)}
 $$('.tab').forEach(b=>b.onclick=()=>access(b.dataset.t));
 function render(){
  const h=new Date().getHours();$('#greet').textContent=h<12?'This morning':h<18?'This afternoon':'Tonight';
@@ -272,23 +296,16 @@ function flap(){const g=$('.angel');g.classList.remove('flap');void g.getBoundin
 function flyCrown(cb){const b=$('#offer').getBoundingClientRect(),a=$('.angel').getBoundingClientRect(),c=document.createElement('div');c.innerHTML='<svg width="44" height="20" viewBox="0 0 44 20" aria-hidden="true"><ellipse cx="22" cy="10" rx="19" ry="6" fill="none" stroke="#e0ad3e" stroke-width="4"/></svg>';c.style.cssText='position:fixed;z-index:40;width:44px;height:20px;line-height:0;pointer-events:none;filter:drop-shadow(0 0 8px rgba(255,214,110,.95));left:'+(b.left+b.width/2-22)+'px;top:'+(b.top+b.height/2-10)+'px';document.body.appendChild(c);const dx=a.left+a.width/2-(b.left+b.width/2),dy=a.top+a.height*.2-(b.top+b.height/2);const an=c.animate([{transform:'translate(0,0) scale(.5) rotate(0deg)',opacity:0},{opacity:1,offset:.15},{transform:'translate('+dx*.45+'px,'+(dy*.5-80)+'px) scale(1.3) rotate(-14deg)',offset:.55},{transform:'translate('+dx+'px,'+dy+'px) scale(1) rotate(0deg)',opacity:1,offset:.93},{transform:'translate('+dx+'px,'+dy+'px) scale(1) rotate(0deg)',opacity:0}],{duration:1500,easing:'ease-in-out'});an.onfinish=()=>{c.remove();flap();cb()}}
 /* audio */
 let cur,ac,nodes=[],au,tick,chirp,bell,secs=0,limit=180,paused=false,guide=true;
-const WC={};
-function wav(c){const sr=22050,L=sr*16,d=new Float32Array(L),TP=2*Math.PI;
- if(c.noise){const n=c.noise,a=f=>1-Math.exp(-TP*f/sr);let l1=0,l2=0;const a1=a(n.t==='bandpass'?n.f*1.6:n.f),a2=a(n.f*.6);
-  for(let i=0;i<L;i++){const x=Math.random()*2-1;l1+=a1*(x-l1);l2+=a2*(x-l2);let v=n.t==='lowpass'?l1:n.t==='highpass'?x-l1:l1-l2;if(n.lfo)v*=.65+.35*Math.sin(TP*2*i/L);d[i]=v}}
- else{const b=c.f*2;[[1,.5],[1.5,.22],[2,.3],[3,.14]].forEach(([r,g])=>{const f=Math.round(b*r*16)/16;for(let i=0;i<L;i++)d[i]+=g*Math.sin(TP*f*i/sr)});for(let i=0;i<L;i++)d[i]*=.8+.2*Math.sin(TP*2*i/L)}
- let pk=0;for(let i=0;i<L;i++)pk=Math.max(pk,Math.abs(d[i]));const k=(c.noise?.55:.7)/(pk||1);for(let i=0;i<L;i++)d[i]*=k;
- const hit=(t0,f,g,len)=>{for(let i=0;i<sr*len;i++){const j=Math.floor(t0*sr)+i;if(j>=L)break;d[j]+=g*Math.sin(TP*f*i/sr)*Math.exp(-i/sr/(len/4))}};
- if(c.bell){[0,8].forEach(t=>[1,2.76,5.4].forEach((m,q)=>hit(t,392*m,.28/(q+1),6)))}
- if(c.birds){[1.2,3.7,6,9.5,12.3,14.8].forEach(t=>{const f=2800+Math.random()*1400;hit(t,f,.3,.12);hit(t+.15,f*1.2,.25,.1)})}
- const buf=new ArrayBuffer(44+L*2),v=new DataView(buf),w=(o,s)=>[...s].forEach((ch,i)=>v.setUint8(o+i,ch.charCodeAt(0)));
- w(0,'RIFF');v.setUint32(4,36+L*2,true);w(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,L*2,true);
- for(let i=0;i<L;i++)v.setInt16(44+i*2,Math.max(-1,Math.min(1,d[i]))*32767,true);
- return URL.createObjectURL(new Blob([buf],{type:'audio/wav'}))}
-function startAudio(c){const fb=()=>WC[c.id]||(WC[c.id]=wav(c));au=new Audio(c.src||fb());au.loop=true;au.setAttribute('playsinline','');
- const pl=au.play();if(pl&&pl.catch)pl.catch(()=>{if(c.src){au=new Audio(fb());au.loop=true;au.play().catch(nope)}else nope()})}
-function nope(){paused=true;$('#imP').textContent='Play';toast('Tap Play to start the sound')}
-function stopAudio(){clearInterval(chirp);clearInterval(bell);if(au){au.pause();au=null}}
+function ctx(){ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();return ac}
+function synth(c){try{const a=ctx(),m=a.createGain();m.gain.value=0;m.gain.linearRampToValueAtTime(.16,a.currentTime+3);m.connect(a.destination);nodes.m=m;
+ if(c.noise){const b=a.createBuffer(1,a.sampleRate*2,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;const s=a.createBufferSource();s.buffer=b;s.loop=true;const f=a.createBiquadFilter();f.type=c.noise.t;f.frequency.value=c.noise.f;f.Q.value=c.noise.q;const g=a.createGain();g.gain.value=c.noise.v||1.2;s.connect(f);f.connect(g);g.connect(m);s.start();nodes.push(s);
+  if(c.noise.lfo){const l=a.createOscillator(),lg=a.createGain();l.frequency.value=c.noise.lfo;lg.gain.value=c.noise.f*.6;l.connect(lg);lg.connect(f.frequency);l.start();nodes.push(l)}}
+ else[1,1.5,2,3].forEach((r,i)=>{const o=a.createOscillator(),g=a.createGain();o.frequency.value=c.f*r;g.gain.value=[.6,.25,.3,.08][i];const l=a.createOscillator(),lg=a.createGain();l.frequency.value=.07+i*.03;lg.gain.value=g.gain.value*.5;l.connect(lg);lg.connect(g.gain);l.start();o.connect(g);g.connect(m);o.start();nodes.push(o,l)});
+ const tone=(f,t,v)=>{const o=a.createOscillator(),g=a.createGain();o.frequency.value=f;g.gain.setValueAtTime(v,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+t);o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+t)};
+ if(c.birds)chirp=setInterval(()=>{if(!paused){const f=2400+Math.random()*1800;tone(f,.12,.05);setTimeout(()=>tone(f*1.2,.1,.04),140)}},1800);
+ if(c.bell){tone(392,6,.12);bell=setInterval(()=>{if(!paused)tone(392,6,.12)},25000)}}catch(e){}}
+function startAudio(c){if(c.src){au=new Audio(c.src);au.loop=true;au.onerror=()=>synth(c);au.play().catch(()=>synth(c))}else synth(c)}
+function stopAudio(){clearInterval(chirp);clearInterval(bell);if(au){au.pause();au=null}try{nodes.m&&nodes.m.gain.linearRampToValueAtTime(0,ac.currentTime+.6);const n=nodes;nodes=[];setTimeout(()=>n.forEach(o=>{try{o.stop()}catch(e){}}),700)}catch(e){}}
 function open(c){cur=c;secs=0;paused=false;$('#imTag').textContent=c.tag;$('#imName').textContent=c.n;$('#imM').textContent=c.m;$('#imP').textContent='Pause';$('#im').classList.add('on');startAudio(c);clearInterval(tick);tick=setInterval(step,1000);step(1)}
 function step(f){if(!f&&!paused)secs++;$('#imClock').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0')+(limit?' / '+String(limit/60).padStart(2,'0')+':00':'');$('#orbL').textContent=guide?(secs%8<4?'Inhale':'Exhale'):'';if(limit&&secs>=limit)close(1)}
 function close(done){clearInterval(tick);stopAudio();$('#im').classList.remove('on');if(secs>=30){S.min+=secs/60;if(!S.days.includes(today()))S.days.push(today());save();render();if(done)toast('Session complete')}}
@@ -312,16 +329,64 @@ if(matchMedia('(display-mode: standalone)').matches||navigator.standalone)$('#iC
 $('#iBtn').onclick=()=>{if(dip){dip.prompt();dip.userChoice.finally(()=>{dip=null})}else{const u=navigator.userAgent,ios=/iPhone|iPad|iPod/.test(u);$('#iT').textContent=ios?'Tap the Share button in Safari, then choose Add to Home Screen.':/Android/.test(u)?'Open the browser menu and choose Install app or Add to Home screen.':'Open this page on your phone to add it to your home screen.';$('#inst').classList.add('on')}};
 $('#iOk').onclick=()=>$('#inst').classList.remove('on');
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+/* ===== modulos oficiais ===== */
+const ACC='80d0b89d-7901-4c62-bf15-807e2dab2483',P='https://i.postimg.cc/';
+const IMG={start:P+'QdxDS1Tz/bubblec7gbichscy.avif',pray:P+'wTwZqPtH/bubbleh6zrnusxx1k.avif',support:P+'ncKqbjLt/bubbleyp6b74txkh.avif',solomon:P+'d1mJtYZm/bubble9c284nsyya7.avif'};
+const SUPPORT='https://support-sacred-chant.base44.app/';
+const VID={start:'6ac4e8b1111dec1f3bc89f5a',pray:'6ada1db657b486888a640681'};
+const DAYS=[['zBp4cXg1/bubblesg4gowuzqmc','6ac5727dd17532a40e2f8c05'],['DZCYcjtt/bubblef3feeu7ypnm','6ac571cf19321ad59e33ac4c'],['zGm2pRcm/bubblecop2igvp4m5','6ac572ca8f7efc03346ac441'],['nL36dhm0/bubblekn1hjz3b02n','6ac572a519321ad59e33accd'],['Pr19g4Zf/bubblecgfpducwm9','6ac5721f89a7c3c050dfb7ab'],['DzwNb3Nr/bubble1s1ommpd05l','6ac572467c5ee2efdfa9070c'],['GhnSxyNH/bubble8x4o2q28ts8','6ac571f770f85db8dfe0eb3e']];
+const FAQ=`<h2 class="h" style="font-size:20px">Good to know</h2>
+<h3>1. How do I add the app to my phone?</h3><p>Go back to the home screen and tap Install. On iPhone, tap Share in Safari and choose Add to Home Screen. On Android, open the browser menu and choose Install app.</p>
+<h3>2. How long does my money-back guarantee last?</h3><p>You have 60 days to ask for a full refund. Contact our support team and we will take care of it. Contacting support is usually the fastest way to get your money back.</p>
+<h3>3. How do I start listening to the prayers?</h3><p>We suggest one guided prayer a day, ideally first thing in the morning. Follow each prayer at your own pace.</p>
+<h3>4. Is this a subscription?</h3><p>No. The app is a one-time payment, with no monthly charges.</p>
+<p style="margin:16px 0 8px">Need help? Our support team is here for you.</p><p><a class="btn" href="${SUPPORT}" target="_blank" rel="noopener">Contact support</a></p>`;
+const tile=(attr,src,label,cost,lock,dim)=>`<button class="tile${dim?' dim':''}" ${attr} aria-label="${label}">${cost?'<span class="cs">'+cost+' ✦</span>':''}<img src="${src}" alt="${label}" loading="lazy" decoding="async" width="400" height="400" onload="this.parentNode.classList.add('ld')" onerror="this.parentNode.classList.add('ld')">${lock||''}</button>`;
+function homeTiles(){
+ $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',2)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',2,S.prayDone?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')+tile('data-mod="support"',IMG.support,'Support',0);
+ $('#tPrd').innerHTML=tile('data-mod="solomon"',IMG.solomon,'7 Prayers of Solomon',2)}
+function openPaid(id,cb){if(!S.unl||S.unl.d!==today())S.unl={d:today(),ids:[]};if(S.unl.ids.includes(id))return cb();spend(2,()=>{S.unl.ids.push(id);save();cb()})}
+function mod(id){
+ if(id==='support'){const a=document.createElement('a');a.href=SUPPORT;a.target='_blank';a.rel='noopener';a.click();return}
+ if(id==='start')return openPaid('start',()=>showVid(VID.start,'Start here','',FAQ,'home'));
+ if(id==='pray')return openPaid('pray',()=>S.prayDone?reading():quiz());
+ if(id==='solomon')return openPaid('solomon',()=>{if(!S.solStart){S.solStart=Date.now();save()}solPage()})}
+let vBackTo='home',sdkOk=false;
+function showVid(id,title,top,bottom,back){vBackTo=back||'home';$('#vT').textContent=title;$('#vTop').innerHTML=top||'';$('#vTx').innerHTML=bottom||'';
+ if(!sdkOk){sdkOk=true;const s=document.createElement('script');s.src='https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js';s.async=true;document.head.appendChild(s)}
+ $('#vBox').innerHTML='<div style="position:relative;padding:56.25% 0 0 0"><iframe frameborder="0" allowfullscreen allow="autoplay;fullscreen" referrerpolicy="origin" style="position:absolute;inset:0;width:100%;height:100%"></iframe></div>';
+ $('#vBox iframe').src='https://scripts.converteai.net/'+ACC+'/players/'+id+'/v4/embed.html'+(location.search||'?')+'&vl='+encodeURIComponent(location.href);go('vid')}
+/* quiz */
+const QZ=[{q:'What is weighing on you most right now?',h:'Choose the one that feels closest to your heart.',o:[['❤️','Love & relationships'],['✦','Money & career'],['☾','Health & energy'],['⚷','My life purpose']]},
+{q:'Which symbol pulls you in?',h:'Do not overthink it. Trust the first one your eyes land on.',o:[['✝️','The Cross'],['🕊️','The Dove'],['👼','The Angel'],['🕯️','The Candle'],['📿','The Rosary'],['⭐','The Star']]},
+{q:'How long have you felt something blocking your path?',h:'Your timing helps personalize your reading.',o:[['◔','A few weeks'],['◑','Several months'],['◕','A few years'],['●','As long as I can remember']]}];
+let qi=0;
+function quiz(){qi=0;qStep();go('pray')}
+function qStep(){const q=QZ[qi];$('#pBody').innerHTML='<p class="lab">Question '+(qi+1)+' of 3</p><div class="bar" style="margin:8px 0 14px"><i style="width:'+((qi+1)/3*100)+'%"></i></div><h2 class="h">'+q.q+'</h2><p class="intro">'+q.h+'</p>'+q.o.map(o=>'<button class="opt"><i>'+o[0]+'</i>'+o[1]+'</button>').join('');
+ $$('#pBody .opt').forEach(b=>b.onclick=()=>{if(++qi<3)qStep();else calc()})}
+function calc(){$('#pBody').innerHTML='<div style="text-align:center"><div class="spin"></div><h2 class="h">Reading your answers…</h2><p class="intro" id="cT">Listening for what matters most</p></div>';const m=['Listening for what matters most','Gathering your symbols','Preparing your message'];let k=0;const t=setInterval(()=>{const e=$('#cT');if(e)e.textContent=m[++k%3]},900);setTimeout(()=>{clearInterval(t);S.prayDone=1;save();homeTiles();reading()},3200)}
+function reading(){showVid(VID.pray,'Your reading is ready','<h2 class="h" style="font-size:20px">The Message Meant for You</h2><p class="intro">Based on your answers, this short reading offers a message for reflection. Press play — your sound is on.</p>','','home')}
+/* 7 Prayers of Solomon */
+const solOpen=i=>i<3||(S.solPaid||[]).includes(i)||Date.now()-S.solStart>=DAY;
+function solPage(){$('#sDays').innerHTML=DAYS.map((d,i)=>{const o=solOpen(i);return tile('data-day="'+i+'"',P+d[0]+'.avif','Day '+(i+1),0,o?'':'<span class="lk"><b>🔒</b><span class="cd"></span></span>',!o)}).join('');go('sol');solTick()}
+function solTick(){if(!$('#s-sol').classList.contains('on'))return;const r=DAY-(Date.now()-S.solStart);if(r<=0&&$$('#sDays .lk').length)return solPage();const t=pad(Math.max(0,Math.floor(r/36e5)))+':'+pad(Math.max(0,Math.floor(r%36e5/6e4)))+':'+pad(Math.max(0,Math.floor(r%6e4/1e3)));$$('#sDays .cd').forEach(e=>e.textContent='Opens in '+t)}
+setInterval(solTick,1000);
+let lkDay=0;
+function dayClick(i){if(solOpen(i))return showVid(DAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Solomon','','','sol');lkDay=i;$('#lkH').textContent='Day '+(i+1)+' is resting';$('#lkT').textContent='It opens 24 hours after you began, or you can open it now for 10 ✦.';$('#lk').classList.add('on')}
+$('#lkX').onclick=()=>$('#lk').classList.remove('on');
+$('#lkU').onclick=()=>{$('#lk').classList.remove('on');spend(10,()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()})};
+document.addEventListener('click',e=>{const m=e.target.closest('[data-mod]');if(m)return mod(m.dataset.mod);const d=e.target.closest('[data-day]');if(d)dayClick(+d.dataset.day)});
+$('#vBack').onclick=()=>go(vBackTo);$$('[data-back]').forEach(b=>b.onclick=()=>go('home'));
 /* login */
 const EM=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;let amode='login';
 function setAuth(m){amode=m;$('#aNameW').hidden=m==='login';$$('#aTabs button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));$('#aGo').textContent=m==='login'?'Log in':'Create account';$('#aErr').textContent=''}
 $$('#aTabs button').forEach(b=>b.onclick=()=>setAuth(b.dataset.m));
 $('#aForm').onsubmit=e=>{e.preventDefault();const em=$('#aMail').value.trim().toLowerCase(),nm=$('#aName').value.trim();if(!EM.test(em)){$('#aErr').textContent='Enter a valid email, like you@email.com';return}if(amode==='signup'&&!nm){$('#aErr').textContent='Please enter your name';return}enter(em,amode==='signup'?nm:'')};
-function enter(em,nm){try{localStorage.setItem('sc-session',em)}catch(e){}loadUser(em);if(nm)S.name=nm;save();$('#auth').classList.remove('on');go('home');render();scheduleNotif();nUpd();toast('Welcome'+(S.name?', '+S.name:''))}
+function enter(em,nm){setTimeout(homeTiles,0);try{localStorage.setItem('sc-session',em)}catch(e){}loadUser(em);if(nm)S.name=nm;save();$('#auth').classList.remove('on');go('home');render();scheduleNotif();nUpd();toast('Welcome'+(S.name?', '+S.name:''))}
 $('#sOut').onclick=()=>{try{localStorage.removeItem('sc-session')}catch(e){}clearTimeout(nt);$('#aMail').value='';$('#aName').value='';setAuth('login');$('#auth').classList.add('on')};
 let em0=null;try{em0=localStorage.getItem('sc-session')}catch(e){}
 if(em0&&EM.test(em0)){loadUser(em0);render();scheduleNotif()}else{setAuth('login');$('#auth').classList.add('on');render()}
-nUpd();setInterval(tickOffer,1000);
+homeTiles();nUpd();setInterval(tickOffer,1000);
 </script>
 </body>
 </html>
