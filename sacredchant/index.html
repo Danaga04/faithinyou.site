@@ -23,7 +23,7 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
 .top{display:flex;justify-content:space-between;align-items:center}
 .brand{display:flex;gap:10px;align-items:center;font-weight:800;font-size:18px}
 .brand small{display:block;font-weight:500;color:var(--mute);font-size:12px;margin-top:-3px}
-.pill{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-weight:700;color:var(--gold);display:flex;gap:6px;align-items:center;cursor:pointer;transition:transform .18s,border-color .18s,box-shadow .18s}.pill:hover{transform:translateY(-1px);border-color:var(--gold);box-shadow:0 4px 14px rgba(224,173,62,.2)}
+.pill{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-weight:700;color:var(--gold);display:flex;gap:6px}
 .screen{display:none}.screen.on{display:block}
 .hero{position:relative;text-align:center;padding:6px 0 4px}
 .angel{width:230px;height:190px;display:block;margin:0 auto;animation:float 6s ease-in-out infinite;filter:drop-shadow(0 10px 24px rgba(120,160,240,.45))}
@@ -86,7 +86,6 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .auth{position:fixed;inset:0;z-index:50;display:none;overflow:auto;padding:calc(28px + env(safe-area-inset-top,0px)) 20px calc(28px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,var(--b1),var(--b2))}.auth.on{display:block}.auth>div{max-width:420px;margin:0 auto;text-align:center}.auth form{text-align:left;margin-top:14px}.auth label{font-size:13px;font-weight:600;color:var(--mute)}.auth .err{color:#d24b4b;min-height:22px;font-size:14px;margin:4px 0 8px}
 .cert{display:none;position:fixed;inset:0;z-index:25;background:rgba(10,20,50,.6);place-items:center;padding:20px}.cert.on{display:grid}
 .cert>div{background:linear-gradient(160deg,#fffdf5,#e9f2ff);color:#1c2a4a;border:3px double #e0ad3e;border-radius:20px;padding:28px 22px;text-align:center;max-width:400px;width:100%}
-#low{z-index:60;overflow-y:auto;align-items:center}#low>div{position:relative;max-width:1000px;width:100%;max-height:calc(100dvh - 40px);overflow-y:auto;text-align:left;padding:26px;background:linear-gradient(160deg,#fffdf5,#e9f2ff);border:1px solid rgba(224,173,62,.8);box-shadow:0 24px 80px rgba(5,15,45,.35)}#low .buy-head{text-align:center;padding:0 34px 18px}#low .buy-close{position:absolute;right:12px;top:12px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.8);font-size:22px;display:grid;place-items:center}#low .buy-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}#low .buy-plan{position:relative;display:flex;flex-direction:column;align-items:stretch;text-align:left;min-width:0;padding:20px 16px;border:1px solid rgba(110,145,215,.4);border-radius:18px;background:rgba(255,255,255,.78);box-shadow:0 8px 22px rgba(80,120,200,.1)}#low .buy-plan.premium{border:2px solid #d6a332;background:linear-gradient(160deg,#fff9e6,#fff);box-shadow:0 10px 28px rgba(224,173,62,.22)}#low .buy-plan h3{font-size:16px;font-weight:800;letter-spacing:.02em}#low .buy-price{font-size:30px;line-height:1.25;font-weight:800;color:#1c2a4a;margin:8px 0 2px}#low .buy-tokens{font-size:14px;font-weight:800;color:#4378de}#low .buy-desc{font-size:13px;line-height:1.5;color:#5a6c91;margin:10px 0 16px;flex:1}#low .buy-badge{align-self:flex-start;background:#e0ad3e;color:#3b2a05;font-size:11px;font-weight:800;letter-spacing:.06em;border-radius:99px;padding:4px 9px;margin-bottom:10px}#low .buy-plan .btn{width:100%;padding:11px 10px;font-size:13px;white-space:normal}#low .buy-footer{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}#low .buy-footer button{font-size:13px}#low .buy-note{text-align:center;color:#5a6c91;font-size:12px;margin-top:12px}@media(max-width:680px){#low{padding:12px;align-items:flex-start}#low>div{max-height:calc(100dvh - 24px);padding:20px 14px}#low .buy-head{padding:8px 30px 16px}#low .buy-grid{grid-template-columns:1fr;gap:10px}#low .buy-plan{padding:16px}#low .buy-price{font-size:26px}#low .buy-desc{margin:6px 0 12px}#low .buy-plan .btn{font-size:14px}}
 .cert h2{font-size:22px}.cert .nm{font-size:26px;font-weight:800;color:#4378de;margin:8px 0}
 @media print{body *{visibility:hidden}.cert,.cert *{visibility:visible}.cert{position:absolute;background:#fff}}
 @media(prefers-reduced-motion:reduce){.angel,.orb,.angel.flap .wl,.angel.flap .wr{animation:none}}
@@ -104,6 +103,34 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .spin{width:54px;height:54px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--gold);margin:30px auto 14px;animation:rot 1s linear infinite}@keyframes rot{to{transform:rotate(360deg)}}
 .vidb{border-radius:20px;overflow:hidden;background:#000;margin:10px 0 16px}.vidb:empty{display:none}
 .faq h3{font-size:16px;margin-top:14px;font-weight:700}.faq p{color:var(--mute);font-size:15px;margin-top:2px}.faq a.btn{color:#fff;text-decoration:none}
+
+/* Sacred Chant 3-tier Light Token purchase modal — additive styles */
+#purchaseModal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(8,16,40,.68);backdrop-filter:blur(8px)}
+#purchaseModal.on{display:flex}
+#purchaseModal .pm-panel{position:relative;width:min(1080px,100%);max-height: min(92dvh,900px);overflow:auto;background:linear-gradient(180deg,var(--b1),var(--b2));color:var(--ink);border:1px solid var(--line);border-radius:26px;padding:28px;box-shadow:0 24px 80px rgba(0,0,0,.32)}
+#purchaseModal .pm-close{position:absolute;right:16px;top:14px;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-size:23px;line-height:1}
+#purchaseModal .pm-heading{text-align:center;padding:0 44px;margin-bottom:22px}
+#purchaseModal .pm-heading .lab{letter-spacing:.12em;text-transform:uppercase}
+#purchaseModal .pm-heading h2{font-size:clamp(24px,4vw,34px);line-height:1.2;margin:8px 0}
+#purchaseModal .pm-heading p{color:var(--mute)}
+#purchaseModal .pm-plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
+#purchaseModal .pm-plan{position:relative;display:flex;flex-direction:column;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px 18px;box-shadow:0 8px 28px rgba(80,120,200,.1)}
+#purchaseModal .pm-plan.premium{border:2px solid var(--gold);background:linear-gradient(160deg,rgba(247,220,146,.2),var(--card) 55%);box-shadow:0 12px 34px rgba(224,173,62,.2);transform:translateY(-4px)}
+#purchaseModal .pm-badge{align-self:flex-start;border-radius:99px;padding:5px 10px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3b2a05;font-size:11px;font-weight:800;letter-spacing:.06em;margin-bottom:12px}
+#purchaseModal .pm-plan h3{font-size:18px;font-weight:800;line-height:1.25;margin-bottom:8px}
+#purchaseModal .pm-price{font-size:32px;font-weight:800;letter-spacing:-.04em;line-height:1.2;margin:8px 0 4px}
+#purchaseModal .pm-tokens{font-weight:800;color:var(--acc);margin-bottom:12px}
+#purchaseModal .pm-desc{color:var(--mute);font-size:13px;line-height:1.6;margin-bottom:20px;flex:1}
+#purchaseModal .pm-buy{width:100%;border-radius:99px;padding:12px 10px;background:linear-gradient(135deg,var(--acc2),var(--acc));color:#fff;font-weight:800;box-shadow:0 8px 20px rgba(67,120,222,.22)}
+#purchaseModal .premium .pm-buy{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3b2a05;box-shadow:0 8px 22px rgba(224,173,62,.3)}
+#purchaseModal .pm-buy:disabled{opacity:.6;cursor:wait}
+#purchaseModal .pm-note{font-size:12px;color:var(--mute);text-align:center;margin-top:18px}
+#purchaseModal .pm-close:focus-visible,#purchaseModal .pm-buy:focus-visible,#tokenBalanceTrigger:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
+#tokenBalanceTrigger{cursor:pointer;transition:transform .16s ease,background .16s ease}
+#tokenBalanceTrigger:hover{transform:translateY(-1px);background:rgba(224,173,62,.12)}
+@media(max-width:760px){#purchaseModal{padding:10px;align-items:flex-start}#purchaseModal .pm-panel{max-height:calc(100dvh - 20px);padding:22px 14px;border-radius:22px}#purchaseModal .pm-heading{margin-bottom:16px}#purchaseModal .pm-plans{grid-template-columns:1fr;gap:12px}#purchaseModal .pm-plan{padding:18px}#purchaseModal .pm-plan.premium{transform:none;order:0}#purchaseModal .pm-price{font-size:29px}#purchaseModal .pm-desc{margin-bottom:14px}}
+@media(prefers-reduced-motion:reduce){#tokenBalanceTrigger{transition:none}}
+
 </style>
 
 </head>
@@ -111,7 +138,7 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 <div id="app">
  <div class="top">
   <div class="brand"><svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="8" rx="9" ry="3.2" fill="none" stroke="#e0ad3e" stroke-width="2"/><circle cx="20" cy="19" r="6" fill="#4378de"/><path d="M6 36c1-9 7-12 14-12s13 3 14 12z" fill="#7aa6f5"/></svg><div>Sacred Chant<small>Sound for the inner life</small></div></div>
-  <button type="button" class="pill" id="lightBalance" aria-label="Light Tokens balance. Click to view plans" aria-haspopup="dialog"><span>✦</span><span id="lightN">0</span></button>
+  <div class="pill" aria-label="Light offered"><span>✦</span><span id="lightN">0</span></div>
  </div>
 
  <section class="screen on" id="s-home">
@@ -232,45 +259,20 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 <button type="submit" class="btn" id="aGo" style="width:100%">Log in</button></form></div></section>
 <div class="cert" id="inst"><div><p style="font-size:30px">📲</p><h2>Add to home screen</h2><p id="iT" style="margin-top:6px"></p><div class="low-actions"><button class="btn" id="iOk">Got it</button></div></div></div>
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
-<div class="cert" id="low" role="dialog" aria-modal="true" aria-labelledby="buyTitle" aria-describedby="lowT">
-  <div>
-    <button type="button" class="buy-close" id="lowClose" aria-label="Close purchase plans">×</button>
-    <div class="buy-head">
-      <p style="font-size:30px" aria-hidden="true">✨</p>
-      <h2 id="buyTitle">Choose Your Light</h2>
-      <p id="lowT" style="margin-top:6px">Choose a plan to add Light Tokens to your Sacred Chant experience.</p>
-    </div>
-    <div class="buy-grid">
-      <article class="buy-plan premium">
-        <span class="buy-badge">BEST VALUE</span>
-        <h3>SACRED PREMIUM</h3>
-        <p class="buy-price">$39.99</p>
-        <p class="buy-tokens">1,000 Light Tokens</p>
-        <p class="buy-desc">Get 1,000 Light Tokens and unlock the full potential of your Sacred Chant experience.</p>
-        <button type="button" class="btn gold checkout-btn" data-checkout="premium">Get 1,000 Light Tokens</button>
-      </article>
-      <article class="buy-plan">
-        <h3>DEVOTIONAL</h3>
-        <p class="buy-price">$29.99</p>
-        <p class="buy-tokens">500 Light Tokens</p>
-        <p class="buy-desc">More Light Tokens to support your regular prayer and devotional practice.</p>
-        <button type="button" class="btn checkout-btn" data-checkout="devotional">Get 500 Light Tokens</button>
-      </article>
-      <article class="buy-plan">
-        <h3>ESSENTIAL</h3>
-        <p class="buy-price">$9.99</p>
-        <p class="buy-tokens">100 Light Tokens</p>
-        <p class="buy-desc">A simple way to experience Sacred Chant and get started with Light Tokens.</p>
-        <button type="button" class="btn checkout-btn" data-checkout="essential">Get 100 Light Tokens</button>
-      </article>
-    </div>
-    <p class="buy-note">One-time purchase. Tokens are added after your payment is verified.</p>
-    <div class="buy-footer">
-      <button type="button" class="ghost" id="lowOffer">Offer today’s intention (+10 ✦)</button>
-      <button type="button" class="ghost" id="lowWait">Maybe later</button>
-    </div>
-  </div>
+<div class="cert" id="low"><div><p style="font-size:30px">✨</p><h2>You're out of light</h2><p id="lowT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lowBuy">Get more light</button><button class="btn" id="lowOffer">Offer today's intention (+10 ✦)</button><button class="ghost" id="lowWait">Wait until tomorrow</button></div></div></div>
+
+<div id="purchaseModal" aria-hidden="true">
+ <section class="pm-panel" role="dialog" aria-modal="true" aria-labelledby="pmTitle" aria-describedby="pmMessage" tabindex="-1">
+  <button type="button" class="pm-close" id="pmClose" aria-label="Close purchase options">×</button>
+  <header class="pm-heading"><p class="lab">✦ Sacred Chant</p><h2 id="pmTitle">Choose your Light Tokens</h2><p id="pmMessage">Choose a plan to continue your Sacred Chant journey.</p></header>
+  <div class="pm-plans">
+   <article class="pm-plan premium"><span class="pm-badge">BEST VALUE</span><h3>SACRED PREMIUM</h3><p class="pm-price">$39.99</p><p class="pm-tokens">1,000 Light Tokens</p><p class="pm-desc">Get 1,000 Light Tokens and unlock the full potential of your Sacred Chant experience.</p><button class="pm-buy" type="button" data-checkout="https://www.checkout-ds24.com/product/734743">Get 1,000 Light Tokens</button></article>
+   <article class="pm-plan"><h3>DEVOTIONAL</h3><p class="pm-price">$29.99</p><p class="pm-tokens">500 Light Tokens</p><p class="pm-desc">More Light Tokens to support your regular prayer and devotional practice.</p><button class="pm-buy" type="button" data-checkout="https://www.checkout-ds24.com/product/734742">Get 500 Light Tokens</button></article>
+   <article class="pm-plan"><h3>ESSENTIAL</h3><p class="pm-price">$9.99</p><p class="pm-tokens">100 Light Tokens</p><p class="pm-desc">A simple way to experience Sacred Chant and get started with Light Tokens.</p><button class="pm-buy" type="button" data-checkout="https://www.checkout-ds24.com/product/734741">Get 100 Light Tokens</button></article>
+  </div><p class="pm-note">Your Light Tokens are credited after your purchase is verified.</p>
+ </section>
 </div>
+
 <div class="toast" id="toast" role="status"></div>
 
 <script>
@@ -312,49 +314,7 @@ function render(){
  $('#vChk').disabled=v.done.includes(day);$('#vChk').dataset.day=day;
 }
 $('#dPlay').onclick=()=>play(DC);
-$('#offer').onclick = async () => {
-  const button = $('#offer');
-
-  if (button.disabled || !canOffer()) return;
-
-  button.disabled = true;
-  button.textContent = 'Adding your light...';
-
-  try {
-    const client = await getSupabase();
-
-    const { data, error } = await client.rpc('claim_daily_light');
-
-    if (error) throw error;
-
-    S.light = Number(data);
-
-    S.last = today();
-    S.lastTs = Date.now();
-
-    if (!S.days.includes(today())) {
-      S.days.push(today());
-    }
-
-    save();
-    render();
-    scheduleNotif();
-
-    toast('+10 light added!');
-
-  } catch (err) {
-    console.error('Daily reward error:', err);
-
-    button.disabled = false;
-    tickOffer();
-
-    if (err.message?.includes('daily_reward_already_claimed')) {
-      toast('Daily reward already claimed');
-    } else {
-      toast('Could not add light. Please try again.');
-    }
-  }
-};
+$('#offer').onclick=()=>{if(!canOffer())return;S.last=today();S.lastTs=Date.now();S.light+=10;scheduleNotif();if(!S.days.includes(today()))S.days.push(today());save();$('#offer').disabled=true;const done=()=>{render();toast('+10 light added')};matchMedia('(prefers-reduced-motion:reduce)').matches?(flap(),done()):flyCrown(done)};
 $('#nSave').onclick=()=>{S.name=$('#nIn').value.trim();save();render();toast('Saved')};
 $('#reset').onclick=()=>{if(confirm('Reset all progress on this device?')){S={name:S.name,light:10,min:0,days:[],last:'',lastTs:0,vow:null,unl:null};save();render()}};
 let vl=7;$$('#vLen button').forEach(b=>b.onclick=()=>{vl=+b.dataset.d;$$('#vLen button').forEach(x=>x.classList.toggle('on',x===b))});
@@ -364,108 +324,15 @@ $('#vEnd').onclick=()=>{if(confirm('End this vow?')){S.vow=null;save();render()}
 $('#cOpen').onclick=()=>{$('#cN').textContent=S.name||'Guest';$('#cS').textContent=streak();$('#cM').textContent=Math.round(S.min);$('#cD').textContent=new Date().toLocaleDateString('en',{dateStyle:'long'});$('#cert').classList.add('on')};
 $('#cX').onclick=()=>$('#cert').classList.remove('on');
 /* luz como moeda: coloque aqui o link do seu checkout */
-const CHECKOUT_URLS={
-  premium:'https://www.checkout-ds24.com/product/734743',
-  devotional:'https://www.checkout-ds24.com/product/734742',
-  essential:'https://www.checkout-ds24.com/product/734741'
-};
+const BUY_URL='';
 const COST={chants:2,sanct:2,vow:2},PLAY_COST=3;
-async function spend(n,cb){
-  if(!Number.isInteger(n)||n<1)return;
-  try{
-    const client=await getSupabase();
-    const {data,error}=await client.rpc('spend_light',{p_amount:n});
-    if(error){
-      if(error.message?.includes('insufficient_balance')){
-        await syncLightBalance();
-        noLight(n);
-        return;
-      }
-      throw error;
-    }
-    S.light=Number(data);
-    save();
-    render();
-    toast('-'+n+' light');
-    if(typeof cb==='function')cb();
-  }catch(err){
-    console.error('Spend light error:',err);
-    await syncLightBalance();
-    toast('Could not update light. Please try again.');
-  }
-}
-async function access(t){
-  if(!COST[t])return go(t);
-
-  try{
-    const client=await getSupabase();
-    const {data,error}=await client.rpc('unlock_paid_content',{p_item_id:t});
-
-    if(error){
-      if(error.message?.includes('insufficient_balance')){
-        await syncLightBalance();
-        noLight(COST[t]);
-        return;
-      }
-      if(error.message?.includes('not_authenticated')){
-        toast('Please log in to unlock this content.');
-        return;
-      }
-      throw error;
-    }
-
-    const result=Array.isArray(data)?data[0]:data;
-    if(!result)throw new Error('Empty unlock response');
-
-    S.light=Number(result.balance);
-
-    if(!S.unl||S.unl.d!==today())S.unl={d:today(),ids:[]};
-    if(!S.unl.ids.includes(t))S.unl.ids.push(t);
-
-    save();
-    render();
-
-    if(result.already_unlocked){
-      go(t);
-    }else{
-      toast('-'+COST[t]+' light');
-      go(t);
-    }
-  }catch(err){
-    console.error('Unlock content error:',err);
-    await syncLightBalance();
-    toast('Could not unlock content. Please try again.');
-  }
-}
+function spend(n,cb){if(S.light>=n){S.light-=n;save();render();toast('-'+n+' light');cb()}else noLight(n)}
+function access(t){if(!COST[t])return go(t);if(!S.unl||S.unl.d!==today())S.unl={d:today(),ids:[]};if(S.unl.ids.includes(t))return go(t);spend(COST[t],()=>{S.unl.ids.push(t);save();go(t)})}
 function play(c){spend(PLAY_COST,()=>open(c))}
-function openPurchasePopup(message){
-  $('#lowT').textContent=message||'Choose a plan to add Light Tokens to your Sacred Chant experience.';
-  $('#lowOffer').hidden=!canOffer();
-  $('#low').classList.add('on');
-  document.body.style.overflow='hidden';
-  $('#lowClose').focus();
-}
-function closePurchasePopup(){
-  $('#low').classList.remove('on');
-  document.body.style.overflow='';
-}
-function noLight(n){
-  openPurchasePopup("You need "+n+" ✦ to complete this action, but your current balance is "+S.light+" ✦. Choose a plan to continue your Sacred Chant journey.");
-}
-$('#lightBalance').addEventListener('click',()=>openPurchasePopup('Choose a plan to add Light Tokens to your Sacred Chant experience.'));
-$('#lowClose').onclick=closePurchasePopup;
-$('#lowWait').onclick=()=>{closePurchasePopup();toast('You can get more light whenever you are ready')};
-$('#low').addEventListener('click',e=>{if(e.target===$('#low'))closePurchasePopup()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#low').classList.contains('on'))closePurchasePopup()});
-$$('[data-checkout]').forEach(button=>button.addEventListener('click',()=>{
-  const url=CHECKOUT_URLS[button.dataset.checkout];
-  if(!url)return;
-  button.disabled=true;
-  const checkoutWindow=window.open(url,'_blank','noopener,noreferrer');
-  if(!checkoutWindow)window.location.href=url;
-  setTimeout(()=>{button.disabled=false},1500);
-}));
-$('#lowOffer').onclick=()=>{closePurchasePopup();go('home');setTimeout(()=>$('#offer').click(),300)};
+function noLight(n){const can=canOffer();$('#lowOffer').hidden=!can;$('#lowT').textContent=can?'You need '+n+' ✦ to open this. Offer today\'s intention for +10 ✦, get more light, or come back tomorrow.':'You need '+n+' ✦ to open this. Your daily +10 ✦ returns tomorrow, or you can get more light now.';$('#low').classList.add('on')}
+$('#lowWait').onclick=()=>{$('#low').classList.remove('on');toast('Your +10 ✦ is waiting tomorrow')};
+$('#lowBuy').onclick=()=>{if(!BUY_URL){toast('Checkout link not set yet');return}const a=document.createElement('a');a.href=BUY_URL;a.target='_blank';a.rel='noopener';a.click()};
+$('#lowOffer').onclick=()=>{$('#low').classList.remove('on');go('home');setTimeout(()=>$('#offer').click(),300)};
 function flap(){const g=$('.angel');g.classList.remove('flap');void g.getBoundingClientRect();g.classList.add('flap');setTimeout(()=>g.classList.remove('flap'),2200)}
 function flyCrown(cb){const b=$('#offer').getBoundingClientRect(),a=$('.angel').getBoundingClientRect(),c=document.createElement('div');c.innerHTML='<svg width="44" height="20" viewBox="0 0 44 20" aria-hidden="true"><ellipse cx="22" cy="10" rx="19" ry="6" fill="none" stroke="#e0ad3e" stroke-width="4"/></svg>';c.style.cssText='position:fixed;z-index:40;width:44px;height:20px;line-height:0;pointer-events:none;filter:drop-shadow(0 0 8px rgba(255,214,110,.95));left:'+(b.left+b.width/2-22)+'px;top:'+(b.top+b.height/2-10)+'px';document.body.appendChild(c);const dx=a.left+a.width/2-(b.left+b.width/2),dy=a.top+a.height*.2-(b.top+b.height/2);const an=c.animate([{transform:'translate(0,0) scale(.5) rotate(0deg)',opacity:0},{opacity:1,offset:.15},{transform:'translate('+dx*.45+'px,'+(dy*.5-80)+'px) scale(1.3) rotate(-14deg)',offset:.55},{transform:'translate('+dx+'px,'+dy+'px) scale(1) rotate(0deg)',opacity:1,offset:.93},{transform:'translate('+dx+'px,'+dy+'px) scale(1) rotate(0deg)',opacity:0}],{duration:1500,easing:'ease-in-out'});an.onfinish=()=>{c.remove();flap();cb()}}
 /* audio */
@@ -551,217 +418,56 @@ $('#lkX').onclick=()=>$('#lk').classList.remove('on');
 $('#lkU').onclick=()=>{$('#lk').classList.remove('on');spend(10,()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()})};
 document.addEventListener('click',e=>{const m=e.target.closest('[data-mod]');if(m)return mod(m.dataset.mod);const d=e.target.closest('[data-day]');if(d)dayClick(+d.dataset.day)});
 $('#vBack').onclick=()=>go(vBackTo);$$('[data-back]').forEach(b=>b.onclick=()=>go('home'));
-/* login conectado ao Supabase */
-const EM = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-let amode = 'login';
-let sbClient = null;
-let sbPromise = null;
+/* login */
+const EM=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;let amode='login';
+function setAuth(m){amode=m;$('#aNameW').hidden=m==='login';$$('#aTabs button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));$('#aGo').textContent=m==='login'?'Log in':'Create account';$('#aErr').textContent=''}
+$$('#aTabs button').forEach(b=>b.onclick=()=>setAuth(b.dataset.m));
+$('#aForm').onsubmit=e=>{e.preventDefault();const em=$('#aMail').value.trim().toLowerCase(),nm=$('#aName').value.trim();if(!EM.test(em)){$('#aErr').textContent='Enter a valid email, like you@email.com';return}if(amode==='signup'&&!nm){$('#aErr').textContent='Please enter your name';return}enter(em,amode==='signup'?nm:'')};
+function enter(em,nm){setTimeout(homeTiles,0);try{localStorage.setItem('sc-session',em)}catch(e){}loadUser(em);if(nm)S.name=nm;save();$('#auth').classList.remove('on');go('home');render();scheduleNotif();nUpd();toast('Welcome'+(S.name?', '+S.name:''))}
+$('#sOut').onclick=()=>{try{localStorage.removeItem('sc-session')}catch(e){}clearTimeout(nt);$('#aMail').value='';$('#aName').value='';setAuth('login');$('#auth').classList.add('on')};
+let em0=null;try{em0=localStorage.getItem('sc-session')}catch(e){}
+if(em0&&EM.test(em0)){loadUser(em0);render();scheduleNotif()}else{setAuth('login');$('#auth').classList.add('on');render()}
+homeTiles();nUpd();setInterval(tickOffer,1000);
 
-const SUPABASE_URL = 'https://yspbhzwpcvjaeolvrptk.supabase.co';
-const SUPABASE_KEY = 'sb_publishable__VAenN-0WEd16wkzF6uUMw_PSvCyFNp';
-async function claimPendingDigistoreOrders() {
-  try {
-    const client = await getSupabase();
-    const { data, error } = await client.rpc('claim_pending_digistore24_orders');
-    if (error) throw error;
-    const count = Number(data || 0);
-    if (count > 0) toast('Purchase tokens added: ' + count + ' order(s)');
-    return count;
-  } catch (err) {
-    // Safe to ignore until the Digistore24 fulfillment migration is installed.
-    console.warn('Pending Digistore24 orders were not claimed:', err?.message || err);
-    return 0;
-  }
-}
+/* Sacred Chant purchase modal behavior — additive integration */
+(function initSacredPurchaseModal(){
+ const modal=document.getElementById('purchaseModal');
+ if(!modal || modal.dataset.initialized==='1') return;
+ modal.dataset.initialized='1';
+ const panel=modal.querySelector('.pm-panel');
+ const closeBtn=document.getElementById('pmClose');
+ const message=document.getElementById('pmMessage');
+ let lastFocus=null, checkoutStarting=false;
+ function openPurchaseModal(reason){
+  lastFocus=document.activeElement;
+  checkoutStarting=false;
+  modal.querySelectorAll('.pm-buy').forEach(b=>{b.disabled=false;b.textContent=b.dataset.defaultLabel||b.textContent});
+  if(reason && reason.type==='insufficient'){
+   const need=Number(reason.required)||0, balance=Number(reason.balance);
+   message.textContent=Number.isFinite(balance)
+    ? `You have ${balance} Light Tokens and need ${need} to complete this action. Choose a plan to continue your Sacred Chant journey.`
+    : `You're running low on Light Tokens. You need ${need} to continue. Choose a plan to continue your Sacred Chant journey.`;
+  }else{message.textContent='Choose a plan to continue your Sacred Chant journey.';}
+  modal.classList.add('on');modal.setAttribute('aria-hidden','false');document.body.dataset.purchasePreviousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';
+  closeBtn.focus();
+ }
+ function closePurchaseModal(){if(!modal.classList.contains('on'))return;modal.classList.remove('on');modal.setAttribute('aria-hidden','true');document.body.style.overflow=document.body.dataset.purchasePreviousOverflow||'';delete document.body.dataset.purchasePreviousOverflow;if(lastFocus&&typeof lastFocus.focus==='function')lastFocus.focus();}
+ window.openSacredPurchaseModal=openPurchaseModal;
+ window.closeSacredPurchaseModal=closePurchaseModal;
+ modal.querySelectorAll('.pm-buy').forEach(b=>{b.dataset.defaultLabel=b.textContent.trim();b.addEventListener('click',()=>{if(checkoutStarting)return;const url=b.dataset.checkout;if(!url)return;checkoutStarting=true;modal.querySelectorAll('.pm-buy').forEach(x=>x.disabled=true);b.textContent='Opening secure checkout…';try{window.location.assign(url);}catch(err){checkoutStarting=false;modal.querySelectorAll('.pm-buy').forEach(x=>x.disabled=false);b.textContent=b.dataset.defaultLabel;console.error('Checkout navigation failed:',err);}})});
+ closeBtn.addEventListener('click',closePurchaseModal);
+ modal.addEventListener('click',e=>{if(e.target===modal)closePurchaseModal()});
+ panel.addEventListener('click',e=>e.stopPropagation());
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('on'))closePurchaseModal();if(e.key==='Tab'&&modal.classList.contains('on')){const f=[...modal.querySelectorAll('button:not(:disabled)')];if(!f.length)return;const first=f[0],last=f[f.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
+ const pill=document.querySelector('.top .pill');
+ if(pill){pill.id='tokenBalanceTrigger';pill.setAttribute('role','button');pill.setAttribute('tabindex','0');pill.setAttribute('aria-haspopup','dialog');pill.setAttribute('aria-controls','purchaseModal');pill.setAttribute('aria-label','Light Token balance. Click to get more Light Tokens.');pill.addEventListener('click',()=>openPurchaseModal());pill.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPurchaseModal()}})}
+ // Replace the legacy low-balance actions with the same reusable modal.
+ const lowBuy=document.getElementById('lowBuy');if(lowBuy)lowBuy.onclick=()=>{document.getElementById('low').classList.remove('on');openPurchaseModal()};
+ const lowWait=document.getElementById('lowWait');if(lowWait){const old=lowWait.onclick;lowWait.onclick=function(){if(old)old.call(this);else document.getElementById('low').classList.remove('on')}}
+ // The existing spend_light/unlock_paid_content RPCs remain authoritative; this only changes the UI shown on insufficient balance.
+ window.noLight=function(n){const balance=Number((document.getElementById('lightN')||{}).textContent);document.getElementById('low').classList.remove('on');openPurchaseModal({type:'insufficient',required:n,balance:Number.isFinite(balance)?balance:undefined})};
+})();
 
- async function syncLightBalance() {
-  try {
-    const client = await getSupabase();
-
-    const { data, error } = await client
-      .from('token_balances')
-      .select('balance')
-      .maybeSingle();
-
-    if (error) throw error;
-
-    if (!data) {
-      console.error('Token balance not found for this user.');
-      return;
-    }
-
-    S.light = Number(data.balance);
-    save();
-    render();
-
-  } catch (err) {
-    console.error('Could not sync token balance:', err);
-    toast('Could not load your token balance');
-  }
-}
-
-function setAuth(m) {
-  amode = m;
-  $('#aNameW').hidden = m === 'login';
-  $$('#aTabs button').forEach(b =>
-    b.classList.toggle('on', b.dataset.m === m)
-  );
-  $('#aGo').textContent = m === 'login' ? 'Log in' : 'Create account';
-  $('#aErr').textContent = '';
-}
-
-$$('#aTabs button').forEach(b => {
-  b.onclick = () => setAuth(b.dataset.m);
-});
-
-function getSupabase() {
-  if (sbClient) return Promise.resolve(sbClient);
-  if (sbPromise) return sbPromise;
-
-  sbPromise = new Promise((resolve, reject) => {
-    function initialize() {
-      try {
-        sbClient = window.supabase.createClient(
-          SUPABASE_URL,
-          SUPABASE_KEY
-        );
-
-        sbClient.auth.onAuthStateChange((event, session) => {
-          if (
-            session &&
-            session.user &&
-            (event === 'SIGNED_IN' || event === 'INITIAL_SESSION')
-          ) {
-            const user = session.user;
-
-            loadUser(user.id);
-
-if (user.user_metadata?.full_name) {
-  S.name = user.user_metadata.full_name;
-}
-
-save();
-$('#auth').classList.remove('on');
-go('home');
-render();
-
-setTimeout(async () => {
-  await claimPendingDigistoreOrders();
-  await syncLightBalance();
-}, 0);
-            scheduleNotif();
-            nUpd();
-            toast('Welcome' + (S.name ? ', ' + S.name : ''));
-          }
-        });
-
-        resolve(sbClient);
-      } catch (err) {
-        reject(err);
-      }
-    }
-
-    if (window.supabase?.createClient) {
-      initialize();
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src =
-      'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-
-    script.onload = initialize;
-    script.onerror = () => {
-      reject(new Error('Could not load the authentication service.'));
-    };
-
-    document.head.appendChild(script);
-  });
-
-  return sbPromise;
-}
-
-$('#aForm').onsubmit = async e => {
-  e.preventDefault();
-
-  const email = $('#aMail').value.trim().toLowerCase();
-  const name = $('#aName').value.trim();
-  const button = $('#aGo');
-  const error = $('#aErr');
-
-  if (!EM.test(email)) {
-    error.textContent = 'Enter a valid email address.';
-    return;
-  }
-
-  if (amode === 'signup' && !name) {
-    error.textContent = 'Please enter your name.';
-    return;
-  }
-
-  button.disabled = true;
-  button.textContent = 'Please wait...';
-  error.textContent = '';
-
-  try {
-    const client = await getSupabase();
-
-    const result = await client.auth.signInWithOtp({
-      email: email,
-      options: {
-        emailRedirectTo: window.location.origin + '/sacredchant/',
-        shouldCreateUser: true,
-        data: name ? { full_name: name } : undefined
-      }
-    });
-
-    if (result.error) throw result.error;
-
-    error.textContent =
-      'Check your email for your secure sign-in link.';
-
-  } catch (err) {
-    console.error('Authentication error:', err);
-    error.textContent =
-      err.message || 'Could not send the email. Please try again.';
-  } finally {
-    button.disabled = false;
-    button.textContent =
-      amode === 'login' ? 'Log in' : 'Create account';
-  }
-};
-
-$('#sOut').onclick = async () => {
-  try {
-    const client = await getSupabase();
-    await client.auth.signOut();
-  } catch (err) {
-    console.error('Sign-out error:', err);
-  }
-
-  try {
-    localStorage.removeItem('sc-session');
-  } catch (err) {}
-
-  clearTimeout(nt);
-  $('#aMail').value = '';
-  $('#aName').value = '';
-  setAuth('login');
-  $('#auth').classList.add('on');
-};
-
-setAuth('login');
-$('#auth').classList.add('on');
-
-getSupabase().catch(err => {
-  console.error('Supabase initialization error:', err);
-  $('#aErr').textContent =
-    'Authentication could not be initialized. Please refresh the page.';
-});
-
-homeTiles();
-nUpd();
-setInterval(tickOffer, 1000);
 </script>
 </body>
 </html>
