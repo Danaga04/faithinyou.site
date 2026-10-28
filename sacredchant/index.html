@@ -327,7 +327,30 @@ $('#cX').onclick=()=>$('#cert').classList.remove('on');
 /* luz como moeda: coloque aqui o link do seu checkout */
 const BUY_URL='';
 const COST={chants:2,sanct:2,vow:2},PLAY_COST=3;
-function spend(n,cb){if(S.light>=n){S.light-=n;save();render();toast('-'+n+' light');cb()}else noLight(n)}
+async function spend(n,cb){
+  if(!Number.isInteger(n)||n<1)return;
+  try{
+    const client=await getSupabase();
+    const {data,error}=await client.rpc('spend_light',{p_amount:n});
+    if(error){
+      if(error.message?.includes('insufficient_balance')){
+        await syncLightBalance();
+        noLight(n);
+        return;
+      }
+      throw error;
+    }
+    S.light=Number(data);
+    save();
+    render();
+    toast('-'+n+' light');
+    if(typeof cb==='function')cb();
+  }catch(err){
+    console.error('Spend light error:',err);
+    await syncLightBalance();
+    toast('Could not update light. Please try again.');
+  }
+}
 function access(t){if(!COST[t])return go(t);if(!S.unl||S.unl.d!==today())S.unl={d:today(),ids:[]};if(S.unl.ids.includes(t))return go(t);spend(COST[t],()=>{S.unl.ids.push(t);save();go(t)})}
 function play(c){spend(PLAY_COST,()=>open(c))}
 function noLight(n){const can=canOffer();$('#lowOffer').hidden=!can;$('#lowT').textContent=can?'You need '+n+' ✦ to open this. Offer today\'s intention for +10 ✦, get more light, or come back tomorrow.':'You need '+n+' ✦ to open this. Your daily +10 ✦ returns tomorrow, or you can get more light now.';$('#low').classList.add('on')}
@@ -358,7 +381,7 @@ $$('#imLen button').forEach(b=>b.onclick=()=>{limit=+b.dataset.m*60;$$('#imLen b
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#im').classList.contains('on'))close(0)});
 /* 24h: a oferta volta 24 horas depois da ultima */
 const DAY=864e5,pad=n=>String(n).padStart(2,'0');
-const canOffer = () => true;
+const canOffer=()=>Date.now()-(S.lastTs||0)>=DAY;
 function tickOffer(){const b=$('#offer');if(canOffer()){if(b.dataset.w){b.disabled=false;b.dataset.w=''}b.textContent='✦ Offer your intention'}else{const r=DAY-(Date.now()-S.lastTs),h=Math.floor(r/36e5),m=Math.floor(r%36e5/6e4),s=Math.floor(r%6e4/1e3);b.disabled=true;b.dataset.w=1;b.textContent='Next offer in '+pad(h)+':'+pad(m)+':'+pad(s)}}
 /* notificacoes */
 function notifyReady(){try{if(Notification.permission!=='granted')return;const o={body:'Your light is ready. Come back and claim +10 ✦.',icon:'icon-192.png'};if(navigator.serviceWorker&&navigator.serviceWorker.controller)navigator.serviceWorker.ready.then(r=>r.showNotification('Sacred Chant',o));else new Notification('Sacred Chant',o)}catch(e){}}
