@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://i.postimg.cc" crossorigin>
+<title>Sacred Chant</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#7aa6f5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--b1:#dcecff;--b2:#fff6e3;--ink:#1c2a4a;--mute:#5a6c91;--card:rgba(255,255,255,.8);--line:rgba(110,145,215,.3);--acc:#4378de;--acc2:#7aa6f5;--gold:#e0ad3e;--gold2:#f7dc92;--on:#fff;--halo:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--b1:#0c1533;--b2:#1b1f45;--ink:#eaf1ff;--mute:#9fb0d6;--card:rgba(255,255,255,.07);--line:rgba(160,185,245,.25);--acc:#8db2ff;--acc2:#5a86e6;--on:#0c1533}}
+:root[data-theme=dark]{--b1:#0c1533;--b2:#1b1f45;--ink:#eaf1ff;--mute:#9fb0d6;--card:rgba(255,255,255,.07);--line:rgba(160,185,245,.25);--acc:#8db2ff;--acc2:#5a86e6;--on:#0c1533}
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%}
+body{background:linear-gradient(180deg,var(--b1) 0,var(--b2) 100%) fixed;color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:16px;line-height:1.55}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
+:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
+#app{max-width:520px;margin:0 auto;padding:16px 16px calc(96px + env(safe-area-inset-bottom,0px))}
+.top{display:flex;justify-content:space-between;align-items:center}
+.brand{display:flex;gap:10px;align-items:center;font-weight:800;font-size:18px}
+.brand small{display:block;font-weight:500;color:var(--mute);font-size:12px;margin-top:-3px}
+.pill{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-weight:700;color:var(--gold);display:flex;gap:6px}
+.screen{display:none}.screen.on{display:block}
+.hero{position:relative;text-align:center;padding:6px 0 4px}
+.angel{width:230px;height:190px;display:block;margin:0 auto;animation:float 6s ease-in-out infinite;filter:drop-shadow(0 10px 24px rgba(120,160,240,.45))}
+@keyframes float{50%{transform:translateY(-8px)}}
+.hero h1{font-size:27px;line-height:1.2;font-weight:800;margin:8px 0 6px}
+.hero p{color:var(--mute)}
+.btn{display:inline-flex;gap:8px;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--acc2),var(--acc));color:#fff;border-radius:99px;padding:13px 26px;font-weight:700;box-shadow:0 10px 26px rgba(67,120,222,.32)}
+.btn.gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3b2a05;box-shadow:0 10px 26px rgba(224,173,62,.35)}
+.btn[disabled]{opacity:.55;cursor:default}
+.ghost{border:1px solid var(--line);border-radius:99px;padding:8px 18px;font-weight:600;color:var(--acc);background:var(--card)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;margin:14px 0;backdrop-filter:blur(8px);box-shadow:0 8px 28px rgba(80,120,200,.1)}
+.card h3{font-size:18px;font-weight:800;margin-bottom:4px}
+.lab{font-size:13px;color:var(--mute);font-weight:600}
+.m{font-size:21px;font-weight:700;color:var(--acc);margin:6px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mod{aspect-ratio:1.3;border-radius:20px;border:1px solid var(--line);padding:14px;display:flex;flex-direction:column;justify-content:flex-end;text-align:left;background:var(--g);color:#fff;font-weight:700;line-height:1.2;box-shadow:0 8px 22px rgba(80,120,200,.18)}
+.mod small{font-weight:500;opacity:.9;font-size:12px}
+.h{font-size:25px;font-weight:800;margin:10px 0 2px}
+.intro{color:var(--mute);margin-bottom:12px}
+.item{display:flex;gap:14px;align-items:center;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 14px;margin-bottom:10px}
+.ic{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--g);color:#fff;font-size:20px}
+.item b{display:block;font-weight:700}.item span{color:var(--mute);font-size:14px}
+.sec{font-size:13px;font-weight:800;color:var(--acc);margin:20px 0 8px;letter-spacing:.02em}
+.verse{font-size:17px;line-height:1.75;color:var(--ink)}
+audio{width:100%;margin:10px 0}
+details{border-top:1px solid var(--line);padding:12px 0}
+summary{font-weight:700;cursor:pointer}
+details p,details li{color:var(--mute);margin-top:8px;font-size:15px}details ol{padding-left:20px}
+.els{display:grid;grid-template-columns:1fr 1fr;gap:10px}.els div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;font-size:14px;color:var(--mute)}.els b{display:block;color:var(--ink)}
+.dots{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.dot{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-weight:700;color:var(--mute)}
+.dot.done{background:linear-gradient(135deg,var(--gold2),var(--gold));border-color:transparent;color:#3b2a05}
+.dot.now{border-color:var(--acc);color:var(--acc)}
+.bar{height:8px;background:var(--line);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc2),var(--gold));transition:width .4s}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{text-align:center;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px}.stat b{display:block;font-size:26px;font-weight:800;color:var(--acc)}.stat small{color:var(--mute)}
+input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:14px;padding:13px 14px;font:inherit;margin:6px 0 12px}
+.sheet{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.sheet button{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:7px 16px;font-weight:600;color:var(--mute)}.sheet button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:5;background:var(--card);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}
+.tabbar div{display:flex;max-width:520px;margin:0 auto}
+.tab{flex:1;display:grid;justify-items:center;gap:1px;font-size:11px;font-weight:600;color:var(--mute);padding:5px 0}
+.tab svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tab.on{color:var(--acc)}
+.im{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;padding:calc(26px + env(safe-area-inset-top,0px)) 20px calc(28px + env(safe-area-inset-bottom,0px));background:radial-gradient(80% 55% at 50% 40%,#fff7dc,#bcd6ff 55%,#7d9fe8)}
+.im.on{display:flex}.im,.im *{color:#1c2a4a}
+.im .sheet button{color:#1c2a4a;background:rgba(255,255,255,.7);border-color:rgba(28,42,74,.3)}
+.im .sheet button.on{background:#1c2a4a;color:#fff;border-color:#1c2a4a}
+.im .ghost{background:rgba(255,255,255,.7);border-color:rgba(28,42,74,.3)}
+.im .btn{color:#fff}
+.im .x{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:16px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.6)}
+.orb{width:200px;height:200px;border-radius:50%;display:grid;place-items:center;font-weight:700;background:radial-gradient(circle,#fff 0,#fff3c6 38%,rgba(255,236,170,.4) 62%,transparent 72%);animation:br 8s ease-in-out infinite}
+@keyframes br{0%,100%{transform:scale(.72)}50%{transform:scale(1.08)}}
+.im.calm .orb{animation:none;transform:scale(.9)}
+.mantra{font-size:23px;font-weight:700;max-width:400px;margin-top:16px}
+.toast{position:fixed;left:50%;bottom:calc(98px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--acc);color:#fff;border-radius:99px;padding:9px 20px;font-weight:700;z-index:30;opacity:0;pointer-events:none;transition:opacity .3s}.toast.on{opacity:1}
+.wl{transform-origin:112px 100px}.wr{transform-origin:118px 100px}
+.angel.flap{filter:drop-shadow(0 0 30px rgba(255,214,110,.95))}
+.angel.flap .wl{animation:fl .5s ease-in-out 4}.angel.flap .wr{animation:fr .5s ease-in-out 4}
+@keyframes fl{50%{transform:rotate(-26deg) scaleY(.9)}}@keyframes fr{50%{transform:rotate(26deg) scaleY(.9)}}
+.low-actions{display:grid;gap:10px;margin-top:16px}
+.auth{position:fixed;inset:0;z-index:50;display:none;overflow:auto;padding:calc(28px + env(safe-area-inset-top,0px)) 20px calc(28px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,var(--b1),var(--b2))}.auth.on{display:block}.auth>div{max-width:420px;margin:0 auto;text-align:center}.auth form{text-align:left;margin-top:14px}.auth label{font-size:13px;font-weight:600;color:var(--mute)}.auth .err{color:#d24b4b;min-height:22px;font-size:14px;margin:4px 0 8px}
+.cert{display:none;position:fixed;inset:0;z-index:25;background:rgba(10,20,50,.6);place-items:center;padding:20px}.cert.on{display:grid}
+.cert>div{background:linear-gradient(160deg,#fffdf5,#e9f2ff);color:#1c2a4a;border:3px double #e0ad3e;border-radius:20px;padding:28px 22px;text-align:center;max-width:400px;width:100%}
+.cert h2{font-size:22px}.cert .nm{font-size:26px;font-weight:800;color:#4378de;margin:8px 0}
+@media print{body *{visibility:hidden}.cert,.cert *{visibility:visible}.cert{position:absolute;background:#fff}}
+@media(prefers-reduced-motion:reduce){.angel,.orb,.angel.flap .wl,.angel.flap .wr{animation:none}}
+.sh{font-size:16px;font-weight:800;margin:24px 0 2px}.sh+p{color:var(--mute);font-size:14px;margin-bottom:10px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{position:relative;aspect-ratio:1/1;border-radius:22px;overflow:hidden;border:1px solid var(--line);padding:0;display:block;background:linear-gradient(110deg,rgba(120,150,215,.18) 30%,rgba(255,255,255,.4) 50%,rgba(120,150,215,.18) 70%) 0 0/200% 100%;animation:sk 1.4s linear infinite;box-shadow:0 8px 22px rgba(80,120,200,.18)}
+.tile.ld{animation:none;background:var(--card)}@keyframes sk{to{background-position:-200% 0}}
+.tile img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .35s}.tile.ld img{opacity:1}
+.tile.dim img{filter:grayscale(.8) brightness(.7)}
+.tile .lk{position:absolute;inset:0;display:grid;place-content:center;gap:4px;text-align:center;background:rgba(18,30,66,.55);color:#fff;font-weight:700;font-size:14px}.tile .lk b{font-size:28px}
+.tile .cs{position:absolute;right:8px;top:8px;z-index:2;background:rgba(255,255,255,.92);color:#3b2a05;border-radius:99px;padding:2px 9px;font-size:12px;font-weight:800}
+.soon{border:1.5px dashed var(--line);border-radius:22px;padding:22px;text-align:center;color:var(--mute)}
+.back{display:inline-flex;gap:6px;align-items:center;font-weight:700;color:var(--acc);padding:6px 2px;margin-bottom:6px}
+.opt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:10px;font-weight:600;font-size:17px}.opt i{font-style:normal;font-size:24px;width:34px;text-align:center}
+.spin{width:54px;height:54px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--gold);margin:30px auto 14px;animation:rot 1s linear infinite}@keyframes rot{to{transform:rotate(360deg)}}
+.vidb{border-radius:20px;overflow:hidden;background:#000;margin:10px 0 16px}.vidb:empty{display:none}
+.faq h3{font-size:16px;margin-top:14px;font-weight:700}.faq p{color:var(--mute);font-size:15px;margin-top:2px}.faq a.btn{color:#fff;text-decoration:none}
+</style>
+
+</head>
+<body>
+<div id="app">
+ <div class="top">
+  <div class="brand"><svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="8" rx="9" ry="3.2" fill="none" stroke="#e0ad3e" stroke-width="2"/><circle cx="20" cy="19" r="6" fill="#4378de"/><path d="M6 36c1-9 7-12 14-12s13 3 14 12z" fill="#7aa6f5"/></svg><div>Sacred Chant<small>Sound for the inner life</small></div></div>
+  <div class="pill" aria-label="Light offered"><span>✦</span><span id="lightN">0</span></div>
+ </div>
+
+ <section class="screen on" id="s-home">
+  <div class="hero">
+   <svg class="angel" viewBox="0 0 230 190" aria-hidden="true">
+    <defs><linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#bcd4ff"/></linearGradient><radialGradient id="gl"><stop offset="0" stop-color="#fff6cf"/><stop offset="1" stop-color="#fff6cf" stop-opacity="0"/></radialGradient></defs>
+    <circle cx="115" cy="86" r="84" fill="url(#gl)"/>
+    <path class="wl" d="M112 100C80 60 30 54 8 70c18 4 28 14 30 28-12-2-22 2-28 10 20 0 30 8 36 20-8 0-16 4-20 12 28 0 52-8 86-40z" fill="url(#w)" stroke="#9db9f0" stroke-width="1.2"/>
+    <path class="wr" d="M118 100c32-40 82-46 104-30-18 4-28 14-30 28 12-2 22 2 28 10-20 0-30 8-36 20 8 0 16 4 20 12-28 0-52-8-86-40z" fill="url(#w)" stroke="#9db9f0" stroke-width="1.2"/>
+    <ellipse cx="115" cy="34" rx="22" ry="6.5" fill="none" stroke="#e0ad3e" stroke-width="3.5"/>
+    <circle cx="115" cy="62" r="17" fill="#ffe2c4"/>
+    <path d="M91 150c2-30 12-46 24-46s22 16 24 46z" fill="#fff" stroke="#c8d9fb" stroke-width="1.2"/>
+    <path d="M60 164c20-6 36 2 55 0s36-6 56 0c14 4 26-2 34 4H20c6-6 24-2 40-4z" fill="#fff" opacity=".95"/>
+   </svg>
+   <p class="lab"><span id="greet">Tonight</span>, <b id="uname">Guest</b></p>
+   <h1>Let your angel guide your day in sound.</h1>
+   <p>A few quiet minutes of chant, prayer and breath.</p>
+   <p style="margin-top:16px"><button class="btn gold" id="offer">✦ Offer your intention</button></p>
+  </div>
+  <p class="sh">Support &amp; blessings</p><p>Start here, request a prayer, or reach our team.</p>
+  <div class="tiles" id="tSup"></div>
+  <p class="sh">My products</p><p>The programs you have purchased.</p>
+  <div class="tiles" id="tPrd"></div>
+  <p class="sh">Exclusive bonuses</p><p>Extra gifts for members.</p>
+  <div class="soon">New bonuses are on the way ✨</div>
+  <p class="lab" style="text-align:center;margin:18px 0 6px">Each module costs 2 ✦ to open. Offer your intention every 24 hours for +10 ✦.</p>
+  <div class="card" style="text-align:center">
+   <p class="lab">Chant of the day</p><p class="m" id="dM"></p><p class="lab" id="dX" style="font-weight:500"></p>
+   <p style="margin-top:12px"><button class="btn" id="dPlay">▶ Chant with me</button></p>
+  </div>
+  <div class="card" id="iCard" style="display:flex;gap:12px;align-items:center;justify-content:space-between"><div><h3>Keep it on your home screen</h3><p class="lab" style="font-weight:500">One tap and Sacred Chant opens like an app.</p></div><button class="btn" id="iBtn">Install</button></div>
+ </section>
+
+ <section class="screen" id="s-vid"><button class="back" id="vBack">← Back</button><h2 class="h" id="vT"></h2><div id="vTop"></div><div class="vidb" id="vBox"></div><div class="faq" id="vTx"></div></section>
+ <section class="screen" id="s-pray"><button class="back" data-back>← Back</button><div id="pBody"></div></section>
+ <section class="screen" id="s-sol"><button class="back" data-back>← Back</button><h2 class="h">7 Prayers of Solomon</h2><p class="intro">One prayer a day. Tap a day to listen. Days 4 to 7 open 24 hours after you begin.</p><div class="tiles" id="sDays"></div></section>
+ 
+<section class="screen" id="s-chants">
+  <h2 class="h">Chants &amp; sounds</h2>
+  <p class="intro">Choose a recording, settle into your breath and let it accompany your prayer. Headphones help.</p>
+  <p class="sec">Sacred mantras</p><div id="lM"></div>
+  <p class="sec">Deep relaxation</p><div id="lD"></div>
+  <p class="sec">Nature sounds</p><div id="lN"></div>
+ </section>
+
+ <section class="screen" id="s-sanct">
+  <h2 class="h">Sanctuary</h2>
+  <p class="intro">Prayers, a daily rhythm and simple rituals for a quiet space of your own.</p>
+  <div class="card">
+   <p class="lab">The Sealing Prayer</p><h3>Saint Michael, at the door of my house</h3>
+   <p class="lab" style="font-weight:500">Press play, put your hand over your heart and say it with Celestino. One minute, somewhere quiet.</p>
+   <audio controls preload="none" id="sealAu"></audio>
+   <p class="verse">Saint Michael, Archangel of the Lord,<br>you who cast the serpent down —<br>stand now at the door of my house.<br>Seal these walls. Seal those I love.<br>What was handed down to me in sorrow,<br>let it end here, in my hands.<br>I am not what I carried.<br>I am sealed. My house is sealed.<br>In the name of the Father, and of the Son,<br>and of the Holy Spirit. Amen.</p>
+  </div>
+  <div class="card"><p class="lab">Psalm 91</p><p class="verse">He will cover you with his feathers, and under his wings you will find refuge. You will not fear the terror of night… For he will command his angels concerning you, to guard you in all your ways.</p></div>
+  <p class="sec">Four elements, four reminders</p>
+  <div class="els"><div><b>🌱 Earth</b>A stone or plant nearby for grounding.</div><div><b>💧 Water</b>A glass of water for renewal.</div><div><b>🔥 Fire</b>A candle or lamp for warmth.</div><div><b>🌬️ Air</b>An open window for clarity.</div></div>
+  <div class="card" style="margin-top:16px">
+   <details open><summary>📖 Three-minute morning practice</summary><ol><li><b>Arrive.</b> Sit with feet on the floor, shoulders soft, breathe naturally.</li><li><b>Attend.</b> Feel your feet, rest on one quiet point, return to the next breath.</li><li><b>Intend.</b> Name what you want to bring today: patience, gratitude, care. Say a short prayer, then choose a chant.</li></ol></details>
+   <details><summary>🕊️ Natural elements handbook</summary><p>Choose a crystal or smooth stone with meaning for you and place it beside your prayer materials. Set a plant nearby as a reminder of patience. Keep water away from electronics. Pick one intention, say it in a short prayer, listen to a chant, then return to your intention. Incense is optional.</p></details>
+  </div>
+  <p class="intro" style="font-size:13px">Sacred Chant is a practice of sound and reflection. It does not replace medical, financial or professional care.</p>
+ </section>
+
+ <section class="screen" id="s-vow">
+  <h2 class="h">Your vow</h2>
+  <p class="intro">Pick a length and walk it one day at a time. A few minutes is enough.</p>
+  <div class="card" id="vNew">
+   <label for="vN" class="lab">Name your intention</label><input type="text" id="vN" maxlength="60" placeholder="Calm mornings">
+   <div class="sheet" id="vLen"><button data-d="7" class="on">7 days</button><button data-d="14">14</button><button data-d="21">21</button><button data-d="30">30</button></div>
+   <p style="margin-top:16px;text-align:center"><button class="btn" id="vGo">Begin vow</button></p>
+  </div>
+  <div class="card" id="vAct" hidden>
+   <h3 id="vName"></h3><div class="bar" style="margin:10px 0"><i id="vBar"></i></div><p class="lab" id="vTxt"></p>
+   <div class="dots" id="vDots"></div>
+   <p style="text-align:center"><button class="btn gold" id="vChk">Mark today as chanted</button></p>
+   <p style="text-align:center;margin-top:12px"><button class="ghost" id="vEnd">End this vow</button></p>
+  </div>
+ </section>
+
+ <section class="screen" id="s-me">
+  <h2 class="h">Your sanctuary</h2>
+  <div class="stats"><div class="stat"><b id="stS">0</b><small>day streak</small></div><div class="stat"><b id="stM">0</b><small>minutes</small></div><div class="stat"><b id="stL">0</b><small>light</small></div></div>
+  <div class="card" style="margin-top:14px"><label for="nIn" class="lab">Your name</label><input type="text" id="nIn" maxlength="40" placeholder="Your name"><button class="btn" id="nSave">Save name</button></div>
+  <div class="card"><h3>Certificate of practice</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">A keepsake with your name and your days of practice. Print it or save it as a PDF.</p><button class="ghost" id="cOpen">View certificate</button></div>
+  <div class="card"><h3>Reminders</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Get a notification when your next +10 ✦ is ready, 24 hours after you offer your intention.</p><button class="ghost" id="nBtn">Enable notifications</button><p class="lab" id="nSt"></p></div>
+  <button class="ghost" id="reset">Reset my progress</button> <button class="ghost" id="sOut">Sign out</button>
+ </section>
+</div>
+
+<nav class="tabbar" aria-label="Main"><div>
+ <button class="tab on" data-t="home"><svg viewBox="0 0 24 24"><path d="M12 3l1.2 7.8L21 12l-7.8 1.2L12 21l-1.2-7.8L3 12l7.8-1.2z"/></svg>Home</button>
+ <button class="tab" data-t="chants"><svg viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg>Chants</button>
+ <button class="tab" data-t="sanct"><svg viewBox="0 0 24 24"><path d="M12 3c0 3-4 5-4 9a4 4 0 008 0c0-4-4-6-4-9z"/><path d="M5 20h14"/></svg>Sanctuary</button>
+ <button class="tab" data-t="vow"><svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2"/><circle cx="18" cy="6" r="2"/><path d="M8 18h6a3 3 0 000-6h-4a3 3 0 010-6h6"/></svg>Vow</button>
+ <button class="tab" data-t="me"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20.5c0-4.5 3.1-7 7.5-7s7.5 2.5 7.5 7"/></svg>Profile</button>
+</div></nav>
+
+<section class="im" id="im" role="dialog" aria-modal="true" aria-label="Chant session">
+ <button class="x" id="imX" aria-label="Close">✕</button>
+ <div><p style="font-weight:600" id="imTag"></p><h2 id="imName" style="font-size:24px;font-weight:800"></h2><p id="imClock">00:00</p></div>
+ <div><div class="orb" id="orb"><span id="orbL">Inhale</span></div><p class="mantra" id="imM"></p></div>
+ <div style="display:grid;gap:14px;justify-items:center">
+  <div class="sheet" id="imLen"><button data-m="3" class="on">3 min</button><button data-m="5">5</button><button data-m="10">10</button><button data-m="0">Open</button></div>
+  <div style="display:flex;gap:10px"><button class="ghost" id="imB" aria-pressed="true">Breath guide on</button><button class="btn" id="imP">Pause</button></div>
+ </div>
+</section>
+<div class="cert" id="cert"><div><p style="font-size:30px">🕊️</p><h2>Certificate of Practice</h2><p>This certifies that</p><p class="nm" id="cN">Guest</p><p>has kept a daily practice of sacred chant, prayer and reflection with Sacred Chant, with <b id="cS">0</b> days in a row and <b id="cM">0</b> minutes of listening.</p><p class="lab" id="cD" style="margin:10px 0"></p><button class="btn" onclick="print()">Print</button> <button class="ghost" id="cX">Close</button></div></div>
+<section class="auth" id="auth" role="dialog" aria-modal="true" aria-label="Sign in"><div>
+<svg width="120" height="90" viewBox="0 0 120 90" aria-hidden="true"><ellipse cx="60" cy="14" rx="24" ry="7" fill="none" stroke="#e0ad3e" stroke-width="4"/><circle cx="60" cy="44" r="18" fill="#ffe2c4"/><path d="M24 90c3-26 17-34 36-34s33 8 36 34z" fill="#7aa6f5"/></svg>
+<h1 style="font-size:26px;font-weight:800">Welcome to Sacred Chant</h1>
+<p class="intro" style="margin-top:4px">Enter with your name and email. Your light and progress stay saved on this device.</p>
+<div class="sheet" id="aTabs"><button data-m="login" class="on">Log in</button><button data-m="signup">Create account</button></div>
+<form id="aForm" novalidate>
+<div id="aNameW" hidden><label for="aName">Name</label><input type="text" id="aName" maxlength="60" autocomplete="name" placeholder="Your name"></div>
+<label for="aMail">Email</label><input type="text" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
+<p class="err" id="aErr" role="alert"></p>
+<button type="submit" class="btn" id="aGo" style="width:100%">Log in</button></form></div></section>
+<div class="cert" id="inst"><div><p style="font-size:30px">📲</p><h2>Add to home screen</h2><p id="iT" style="margin-top:6px"></p><div class="low-actions"><button class="btn" id="iOk">Got it</button></div></div></div>
+<div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
+<div class="cert" id="low"><div><p style="font-size:30px">✨</p><h2>You're out of light</h2><p id="lowT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lowBuy">Get more light</button><button class="btn" id="lowOffer">Offer today's intention (+10 ✦)</button><button class="ghost" id="lowWait">Wait until tomorrow</button></div></div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* Coloque aqui as URLs dos seus audios. Sem src, toca um tom sintetizado. */
+const SEAL_AUDIO='https://celestino.cloud/seal/audio/sealing-prayer-en.mp3';
+const CH=[
+ {id:'love',k:'m',n:'Love',tag:'Chamber of Love',m:'Lokah Samastah Sukhino Bhavantu',x:'May all beings be happy and free.',f:136.1,g:'linear-gradient(135deg,#f58fb0,#c06ce0)',e:'💗',src:''},
+ {id:'abun',k:'m',n:'Abundance',tag:'Chamber of Provision',m:'Om Gam Ganapataye Namaha',x:'Gratitude for provision and a clear way ahead.',f:144.7,g:'linear-gradient(135deg,#f7c75a,#e58f3a)',e:'✨',src:''},
+ {id:'heal',k:'m',n:'Health',tag:'Chamber of the Body',m:'Om Namah Shivaya',x:'A quiet turn toward rest and renewal.',f:126.2,g:'linear-gradient(135deg,#5fd0b8,#3a8fe0)',e:'🌿',src:''},
+ {id:'morn',k:'m',n:'Morning Chant',tag:'A morning practice',m:'Om',x:'Begin the day with one steady tone.',f:172.1,g:'linear-gradient(135deg,#ffc979,#ff8f7a)',e:'🌅',src:''},
+ {id:'med',k:'d',n:'Deep Relaxation',tag:'Wind, bells and singing bowls',m:'Breathe in. Breathe out.',x:'Play it before or after prayer.',f:98,bell:1,g:'linear-gradient(135deg,#8aa6ff,#5a5bd6)',e:'🔔',src:''},
+ {id:'nw',k:'n',n:'Mountain water',tag:'Field recording',m:'Let the water carry it.',x:'',noise:{t:'bandpass',f:1400,q:.4},g:'linear-gradient(135deg,#6fd0f0,#3a86e8)',e:'💧',src:''},
+ {id:'nb',k:'n',n:'Dawn birdsong',tag:'Field recording',m:'A new day begins.',x:'',noise:{t:'highpass',f:5000,q:.3,v:.25},birds:1,g:'linear-gradient(135deg,#a8e07a,#4cb88a)',e:'🐦',src:''},
+ {id:'nf',k:'n',n:'Forest wind',tag:'Field recording',m:'Be still.',x:'',noise:{t:'lowpass',f:420,q:.7,lfo:.12},g:'linear-gradient(135deg,#7dc79a,#3b8f7a)',e:'🌲',src:''}
+];
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let K='sc-guest';let S={name:'',light:10,min:0,days:[],last:'',vow:null,unl:null};
+function loadUser(e){K='sc-user:'+e;S={name:'',light:10,min:0,days:[],last:'',lastTs:0,vow:null,unl:null};try{const r=localStorage.getItem(K);if(r)S=Object.assign(S,JSON.parse(r))}catch(x){}}
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+const ymd=d=>d.toISOString().slice(0,10),today=()=>ymd(new Date());
+const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),2200)};
+function streak(){let n=0,d=new Date();if(!S.days.includes(ymd(d)))d.setDate(d.getDate()-1);while(S.days.includes(ymd(d))){n++;d.setDate(d.getDate()-1)}return n}
+function row(c){return `<button class="item" data-id="${c.id}"><span class="ic" style="--g:${c.g}">${c.e}</span><span><b>${c.n}</b><span>${c.tag}</span></span><span style="margin-left:auto;color:var(--acc);font-size:22px">▶</span></button>`}
+$('#lM').innerHTML=CH.filter(c=>c.k=='m').map(row).join('');$('#lD').innerHTML=CH.filter(c=>c.k=='d').map(row).join('');$('#lN').innerHTML=CH.filter(c=>c.k=='n').map(row).join('');
+$$('.item').forEach(b=>b.onclick=()=>play(CH.find(c=>c.id===b.dataset.id)));
+$('#sealAu').src=SEAL_AUDIO;
+function go(t){if(t!=='vid')$('#vBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));scrollTo(0,0)}
+$$('.tab').forEach(b=>b.onclick=()=>access(b.dataset.t));
+function render(){
+ const h=new Date().getHours();$('#greet').textContent=h<12?'This morning':h<18?'This afternoon':'Tonight';
+ $('#uname').textContent=S.name||'Guest';$('#nIn').value=S.name;
+ ['#lightN','#stL'].forEach(s=>$(s).textContent=S.light);$('#stM').textContent=Math.round(S.min);$('#stS').textContent=streak();
+ tickOffer();
+ const ms=CH.filter(c=>c.k=='m');window.DC=ms[Math.floor(Date.now()/864e5)%ms.length];$('#dM').textContent=DC.m;$('#dX').textContent=DC.x;
+ const v=S.vow;$('#vNew').hidden=!!v;$('#vAct').hidden=!v;if(!v)return;
+ $('#vName').textContent=v.name;const n=v.done.length;$('#vBar').style.width=(n/v.len*100)+'%';$('#vTxt').textContent=n>=v.len?'Your vow is fulfilled. Well walked.':n+' of '+v.len+' days chanted';
+ const day=Math.min(v.len,Math.floor((new Date(today())-new Date(v.start))/864e5)+1);
+ $('#vDots').innerHTML=Array.from({length:v.len},(_,i)=>{const k=i+1,x=v.done.includes(k);return `<span class="dot ${x?'done':k===day?'now':''}">${x?'✓':k}</span>`}).join('');
+ $('#vChk').disabled=v.done.includes(day);$('#vChk').dataset.day=day;
+}
+$('#dPlay').onclick=()=>play(DC);
+$('#offer').onclick=()=>{if(!canOffer())return;S.last=today();S.lastTs=Date.now();S.light+=10;scheduleNotif();if(!S.days.includes(today()))S.days.push(today());save();$('#offer').disabled=true;const done=()=>{render();toast('+10 light added')};matchMedia('(prefers-reduced-motion:reduce)').matches?(flap(),done()):flyCrown(done)};
+$('#nSave').onclick=()=>{S.name=$('#nIn').value.trim();save();render();toast('Saved')};
+$('#reset').onclick=()=>{if(confirm('Reset all progress on this device?')){S={name:S.name,light:10,min:0,days:[],last:'',lastTs:0,vow:null,unl:null};save();render()}};
+let vl=7;$$('#vLen button').forEach(b=>b.onclick=()=>{vl=+b.dataset.d;$$('#vLen button').forEach(x=>x.classList.toggle('on',x===b))});
+$('#vGo').onclick=()=>{S.vow={name:$('#vN').value.trim()||'My vow',len:vl,start:today(),done:[]};save();render()};
+$('#vChk').onclick=()=>{const d=+$('#vChk').dataset.day;if(!S.vow.done.includes(d))S.vow.done.push(d);if(!S.days.includes(today()))S.days.push(today());save();render();toast('Day '+d+' kept')};
+$('#vEnd').onclick=()=>{if(confirm('End this vow?')){S.vow=null;save();render()}};
+$('#cOpen').onclick=()=>{$('#cN').textContent=S.name||'Guest';$('#cS').textContent=streak();$('#cM').textContent=Math.round(S.min);$('#cD').textContent=new Date().toLocaleDateString('en',{dateStyle:'long'});$('#cert').classList.add('on')};
+$('#cX').onclick=()=>$('#cert').classList.remove('on');
+/* luz como moeda: coloque aqui o link do seu checkout */
+const BUY_URL='';
+const COST={chants:2,sanct:2,vow:2},PLAY_COST=3;
+function spend(n,cb){if(S.light>=n){S.light-=n;save();render();toast('-'+n+' light');cb()}else noLight(n)}
+function access(t){if(!COST[t])return go(t);if(!S.unl||S.unl.d!==today())S.unl={d:today(),ids:[]};if(S.unl.ids.includes(t))return go(t);spend(COST[t],()=>{S.unl.ids.push(t);save();go(t)})}
+function play(c){spend(PLAY_COST,()=>open(c))}
+function noLight(n){const can=canOffer();$('#lowOffer').hidden=!can;$('#lowT').textContent=can?'You need '+n+' ✦ to open this. Offer today\'s intention for +10 ✦, get more light, or come back tomorrow.':'You need '+n+' ✦ to open this. Your daily +10 ✦ returns tomorrow, or you can get more light now.';$('#low').classList.add('on')}
+$('#lowWait').onclick=()=>{$('#low').classList.remove('on');toast('Your +10 ✦ is waiting tomorrow')};
+$('#lowBuy').onclick=()=>{if(!BUY_URL){toast('Checkout link not set yet');return}const a=document.createElement('a');a.href=BUY_URL;a.target='_blank';a.rel='noopener';a.click()};
+$('#lowOffer').onclick=()=>{$('#low').classList.remove('on');go('home');setTimeout(()=>$('#offer').click(),300)};
+function flap(){const g=$('.angel');g.classList.remove('flap');void g.getBoundingClientRect();g.classList.add('flap');setTimeout(()=>g.classList.remove('flap'),2200)}
+function flyCrown(cb){const b=$('#offer').getBoundingClientRect(),a=$('.angel').getBoundingClientRect(),c=document.createElement('div');c.innerHTML='<svg width="44" height="20" viewBox="0 0 44 20" aria-hidden="true"><ellipse cx="22" cy="10" rx="19" ry="6" fill="none" stroke="#e0ad3e" stroke-width="4"/></svg>';c.style.cssText='position:fixed;z-index:40;width:44px;height:20px;line-height:0;pointer-events:none;filter:drop-shadow(0 0 8px rgba(255,214,110,.95));left:'+(b.left+b.width/2-22)+'px;top:'+(b.top+b.height/2-10)+'px';document.body.appendChild(c);const dx=a.left+a.width/2-(b.left+b.width/2),dy=a.top+a.height*.2-(b.top+b.height/2);const an=c.animate([{transform:'translate(0,0) scale(.5) rotate(0deg)',opacity:0},{opacity:1,offset:.15},{transform:'translate('+dx*.45+'px,'+(dy*.5-80)+'px) scale(1.3) rotate(-14deg)',offset:.55},{transform:'translate('+dx+'px,'+dy+'px) scale(1) rotate(0deg)',opacity:1,offset:.93},{transform:'translate('+dx+'px,'+dy+'px) scale(1) rotate(0deg)',opacity:0}],{duration:1500,easing:'ease-in-out'});an.onfinish=()=>{c.remove();flap();cb()}}
+/* audio */
+let cur,ac,nodes=[],au,tick,chirp,bell,secs=0,limit=180,paused=false,guide=true;
+function ctx(){ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();return ac}
+function synth(c){try{const a=ctx(),m=a.createGain();m.gain.value=0;m.gain.linearRampToValueAtTime(.16,a.currentTime+3);m.connect(a.destination);nodes.m=m;
+ if(c.noise){const b=a.createBuffer(1,a.sampleRate*2,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;const s=a.createBufferSource();s.buffer=b;s.loop=true;const f=a.createBiquadFilter();f.type=c.noise.t;f.frequency.value=c.noise.f;f.Q.value=c.noise.q;const g=a.createGain();g.gain.value=c.noise.v||1.2;s.connect(f);f.connect(g);g.connect(m);s.start();nodes.push(s);
+  if(c.noise.lfo){const l=a.createOscillator(),lg=a.createGain();l.frequency.value=c.noise.lfo;lg.gain.value=c.noise.f*.6;l.connect(lg);lg.connect(f.frequency);l.start();nodes.push(l)}}
+ else[1,1.5,2,3].forEach((r,i)=>{const o=a.createOscillator(),g=a.createGain();o.frequency.value=c.f*r;g.gain.value=[.6,.25,.3,.08][i];const l=a.createOscillator(),lg=a.createGain();l.frequency.value=.07+i*.03;lg.gain.value=g.gain.value*.5;l.connect(lg);lg.connect(g.gain);l.start();o.connect(g);g.connect(m);o.start();nodes.push(o,l)});
+ const tone=(f,t,v)=>{const o=a.createOscillator(),g=a.createGain();o.frequency.value=f;g.gain.setValueAtTime(v,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+t);o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+t)};
+ if(c.birds)chirp=setInterval(()=>{if(!paused){const f=2400+Math.random()*1800;tone(f,.12,.05);setTimeout(()=>tone(f*1.2,.1,.04),140)}},1800);
+ if(c.bell){tone(392,6,.12);bell=setInterval(()=>{if(!paused)tone(392,6,.12)},25000)}}catch(e){}}
+function startAudio(c){if(c.src){au=new Audio(c.src);au.loop=true;au.onerror=()=>synth(c);au.play().catch(()=>synth(c))}else synth(c)}
+function stopAudio(){clearInterval(chirp);clearInterval(bell);if(au){au.pause();au=null}try{nodes.m&&nodes.m.gain.linearRampToValueAtTime(0,ac.currentTime+.6);const n=nodes;nodes=[];setTimeout(()=>n.forEach(o=>{try{o.stop()}catch(e){}}),700)}catch(e){}}
+function open(c){cur=c;secs=0;paused=false;$('#imTag').textContent=c.tag;$('#imName').textContent=c.n;$('#imM').textContent=c.m;$('#imP').textContent='Pause';$('#im').classList.add('on');startAudio(c);clearInterval(tick);tick=setInterval(step,1000);step(1)}
+function step(f){if(!f&&!paused)secs++;$('#imClock').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0')+(limit?' / '+String(limit/60).padStart(2,'0')+':00':'');$('#orbL').textContent=guide?(secs%8<4?'Inhale':'Exhale'):'';if(limit&&secs>=limit)close(1)}
+function close(done){clearInterval(tick);stopAudio();$('#im').classList.remove('on');if(secs>=30){S.min+=secs/60;if(!S.days.includes(today()))S.days.push(today());save();render();if(done)toast('Session complete')}}
+$('#imX').onclick=()=>close(0);
+$('#imP').onclick=()=>{paused=!paused;$('#imP').textContent=paused?'Resume':'Pause';$('#orb').style.animationPlayState=paused?'paused':'running';try{if(au)paused?au.pause():au.play();else paused?ac.suspend():ac.resume()}catch(e){}};
+$('#imB').onclick=()=>{guide=!guide;$('#imB').setAttribute('aria-pressed',guide);$('#imB').textContent='Breath guide '+(guide?'on':'off');$('#im').classList.toggle('calm',!guide)};
+$$('#imLen button').forEach(b=>b.onclick=()=>{limit=+b.dataset.m*60;$$('#imLen button').forEach(x=>x.classList.toggle('on',x===b))});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#im').classList.contains('on'))close(0)});
+/* 24h: a oferta volta 24 horas depois da ultima */
+const DAY=864e5,pad=n=>String(n).padStart(2,'0');
+const canOffer=()=>Date.now()-(S.lastTs||0)>=DAY;
+function tickOffer(){const b=$('#offer');if(canOffer()){if(b.dataset.w){b.disabled=false;b.dataset.w=''}b.textContent='✦ Offer your intention'}else{const r=DAY-(Date.now()-S.lastTs),h=Math.floor(r/36e5),m=Math.floor(r%36e5/6e4),s=Math.floor(r%6e4/1e3);b.disabled=true;b.dataset.w=1;b.textContent='Next offer in '+pad(h)+':'+pad(m)+':'+pad(s)}}
+/* notificacoes */
+function notifyReady(){try{if(Notification.permission!=='granted')return;const o={body:'Your light is ready. Come back and claim +10 ✦.',icon:'icon-192.png'};if(navigator.serviceWorker&&navigator.serviceWorker.controller)navigator.serviceWorker.ready.then(r=>r.showNotification('Sacred Chant',o));else new Notification('Sacred Chant',o)}catch(e){}}
+let nt;function scheduleNotif(){clearTimeout(nt);const w=DAY-(Date.now()-(S.lastTs||0));if(w>0)nt=setTimeout(()=>{notifyReady();toast('Your +10 ✦ is ready')},w)}
+function nUpd(){const e=$('#nSt'),b=$('#nBtn');if(!('Notification' in window)){e.textContent='Notifications are not supported on this browser.';b.hidden=true;return}const p=Notification.permission;b.hidden=p!=='default';e.textContent=p==='granted'?'Reminders are on.':p==='denied'?'Blocked. Turn them on in your browser settings.':''}
+$('#nBtn').onclick=()=>{try{Notification.requestPermission().then(()=>{nUpd();scheduleNotif()})}catch(e){}};
+/* instalar */
+let dip=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e});
+if(matchMedia('(display-mode: standalone)').matches||navigator.standalone)$('#iCard').style.display='none';
+$('#iBtn').onclick=()=>{if(dip){dip.prompt();dip.userChoice.finally(()=>{dip=null})}else{const u=navigator.userAgent,ios=/iPhone|iPad|iPod/.test(u);$('#iT').textContent=ios?'Tap the Share button in Safari, then choose Add to Home Screen.':/Android/.test(u)?'Open the browser menu and choose Install app or Add to Home screen.':'Open this page on your phone to add it to your home screen.';$('#inst').classList.add('on')}};
+$('#iOk').onclick=()=>$('#inst').classList.remove('on');
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+/* ===== modulos oficiais ===== */
+const ACC='80d0b89d-7901-4c62-bf15-807e2dab2483',P='https://i.postimg.cc/';
+const IMG={start:P+'QdxDS1Tz/bubblec7gbichscy.avif',pray:P+'wTwZqPtH/bubbleh6zrnusxx1k.avif',support:P+'ncKqbjLt/bubbleyp6b74txkh.avif',solomon:P+'d1mJtYZm/bubble9c284nsyya7.avif'};
+const SUPPORT='https://support-sacred-chant.base44.app/';
+const VID={start:'6ac4e8b1111dec1f3bc89f5a',pray:'6ada1db657b486888a640681'};
+const DAYS=[['zBp4cXg1/bubblesg4gowuzqmc','6ac5727dd17532a40e2f8c05'],['DZCYcjtt/bubblef3feeu7ypnm','6ac571cf19321ad59e33ac4c'],['zGm2pRcm/bubblecop2igvp4m5','6ac572ca8f7efc03346ac441'],['nL36dhm0/bubblekn1hjz3b02n','6ac572a519321ad59e33accd'],['Pr19g4Zf/bubblecgfpducwm9','6ac5721f89a7c3c050dfb7ab'],['DzwNb3Nr/bubble1s1ommpd05l','6ac572467c5ee2efdfa9070c'],['GhnSxyNH/bubble8x4o2q28ts8','6ac571f770f85db8dfe0eb3e']];
+const FAQ=`<h2 class="h" style="font-size:20px">Good to know</h2>
+<h3>1. How do I add the app to my phone?</h3><p>Go back to the home screen and tap Install. On iPhone, tap Share in Safari and choose Add to Home Screen. On Android, open the browser menu and choose Install app.</p>
+<h3>2. How long does my money-back guarantee last?</h3><p>You have 60 days to ask for a full refund. Contact our support team and we will take care of it. Contacting support is usually the fastest way to get your money back.</p>
+<h3>3. How do I start listening to the prayers?</h3><p>We suggest one guided prayer a day, ideally first thing in the morning. Follow each prayer at your own pace.</p>
+<h3>4. Is this a subscription?</h3><p>No. The app is a one-time payment, with no monthly charges.</p>
+<p style="margin:16px 0 8px">Need help? Our support team is here for you.</p><p><a class="btn" href="${SUPPORT}" target="_blank" rel="noopener">Contact support</a></p>`;
+const tile=(attr,src,label,cost,lock,dim)=>`<button class="tile${dim?' dim':''}" ${attr} aria-label="${label}">${cost?'<span class="cs">'+cost+' ✦</span>':''}<img src="${src}" alt="${label}" loading="lazy" decoding="async" width="400" height="400" onload="this.parentNode.classList.add('ld')" onerror="this.parentNode.classList.add('ld')">${lock||''}</button>`;
+function homeTiles(){
+ $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',2)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',2,S.prayDone?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')+tile('data-mod="support"',IMG.support,'Support',0);
+ $('#tPrd').innerHTML=tile('data-mod="solomon"',IMG.solomon,'7 Prayers of Solomon',2)}
+function openPaid(id,cb){if(!S.unl||S.unl.d!==today())S.unl={d:today(),ids:[]};if(S.unl.ids.includes(id))return cb();spend(2,()=>{S.unl.ids.push(id);save();cb()})}
+function mod(id){
+ if(id==='support'){const a=document.createElement('a');a.href=SUPPORT;a.target='_blank';a.rel='noopener';a.click();return}
+ if(id==='start')return openPaid('start',()=>showVid(VID.start,'Start here','',FAQ,'home'));
+ if(id==='pray')return openPaid('pray',()=>S.prayDone?reading():quiz());
+ if(id==='solomon')return openPaid('solomon',()=>{if(!S.solStart){S.solStart=Date.now();save()}solPage()})}
+let vBackTo='home',sdkOk=false;
+function showVid(id,title,top,bottom,back){vBackTo=back||'home';$('#vT').textContent=title;$('#vTop').innerHTML=top||'';$('#vTx').innerHTML=bottom||'';
+ if(!sdkOk){sdkOk=true;const s=document.createElement('script');s.src='https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js';s.async=true;document.head.appendChild(s)}
+ $('#vBox').innerHTML='<div style="position:relative;padding:56.25% 0 0 0"><iframe frameborder="0" allowfullscreen allow="autoplay;fullscreen" referrerpolicy="origin" style="position:absolute;inset:0;width:100%;height:100%"></iframe></div>';
+ $('#vBox iframe').src='https://scripts.converteai.net/'+ACC+'/players/'+id+'/v4/embed.html'+(location.search||'?')+'&vl='+encodeURIComponent(location.href);go('vid')}
+/* quiz */
+const QZ=[{q:'What is weighing on you most right now?',h:'Choose the one that feels closest to your heart.',o:[['❤️','Love & relationships'],['✦','Money & career'],['☾','Health & energy'],['⚷','My life purpose']]},
+{q:'Which symbol pulls you in?',h:'Do not overthink it. Trust the first one your eyes land on.',o:[['✝️','The Cross'],['🕊️','The Dove'],['👼','The Angel'],['🕯️','The Candle'],['📿','The Rosary'],['⭐','The Star']]},
+{q:'How long have you felt something blocking your path?',h:'Your timing helps personalize your reading.',o:[['◔','A few weeks'],['◑','Several months'],['◕','A few years'],['●','As long as I can remember']]}];
+let qi=0;
+function quiz(){qi=0;qStep();go('pray')}
+function qStep(){const q=QZ[qi];$('#pBody').innerHTML='<p class="lab">Question '+(qi+1)+' of 3</p><div class="bar" style="margin:8px 0 14px"><i style="width:'+((qi+1)/3*100)+'%"></i></div><h2 class="h">'+q.q+'</h2><p class="intro">'+q.h+'</p>'+q.o.map(o=>'<button class="opt"><i>'+o[0]+'</i>'+o[1]+'</button>').join('');
+ $$('#pBody .opt').forEach(b=>b.onclick=()=>{if(++qi<3)qStep();else calc()})}
+function calc(){$('#pBody').innerHTML='<div style="text-align:center"><div class="spin"></div><h2 class="h">Reading your answers…</h2><p class="intro" id="cT">Listening for what matters most</p></div>';const m=['Listening for what matters most','Gathering your symbols','Preparing your message'];let k=0;const t=setInterval(()=>{const e=$('#cT');if(e)e.textContent=m[++k%3]},900);setTimeout(()=>{clearInterval(t);S.prayDone=1;save();homeTiles();reading()},3200)}
+function reading(){showVid(VID.pray,'Your reading is ready','<h2 class="h" style="font-size:20px">The Message Meant for You</h2><p class="intro">Based on your answers, this short reading offers a message for reflection. Press play — your sound is on.</p>','','home')}
+/* 7 Prayers of Solomon */
+const solOpen=i=>i<3||(S.solPaid||[]).includes(i)||Date.now()-S.solStart>=DAY;
+function solPage(){$('#sDays').innerHTML=DAYS.map((d,i)=>{const o=solOpen(i);return tile('data-day="'+i+'"',P+d[0]+'.avif','Day '+(i+1),0,o?'':'<span class="lk"><b>🔒</b><span class="cd"></span></span>',!o)}).join('');go('sol');solTick()}
+function solTick(){if(!$('#s-sol').classList.contains('on'))return;const r=DAY-(Date.now()-S.solStart);if(r<=0&&$$('#sDays .lk').length)return solPage();const t=pad(Math.max(0,Math.floor(r/36e5)))+':'+pad(Math.max(0,Math.floor(r%36e5/6e4)))+':'+pad(Math.max(0,Math.floor(r%6e4/1e3)));$$('#sDays .cd').forEach(e=>e.textContent='Opens in '+t)}
+setInterval(solTick,1000);
+let lkDay=0;
+function dayClick(i){if(solOpen(i))return showVid(DAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Solomon','','','sol');lkDay=i;$('#lkH').textContent='Day '+(i+1)+' is resting';$('#lkT').textContent='It opens 24 hours after you began, or you can open it now for 10 ✦.';$('#lk').classList.add('on')}
+$('#lkX').onclick=()=>$('#lk').classList.remove('on');
+$('#lkU').onclick=()=>{$('#lk').classList.remove('on');spend(10,()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()})};
+document.addEventListener('click',e=>{const m=e.target.closest('[data-mod]');if(m)return mod(m.dataset.mod);const d=e.target.closest('[data-day]');if(d)dayClick(+d.dataset.day)});
+$('#vBack').onclick=()=>go(vBackTo);$$('[data-back]').forEach(b=>b.onclick=()=>go('home'));
+/* login */
+const EM=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;let amode='login';
+function setAuth(m){amode=m;$('#aNameW').hidden=m==='login';$$('#aTabs button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));$('#aGo').textContent=m==='login'?'Log in':'Create account';$('#aErr').textContent=''}
+$$('#aTabs button').forEach(b=>b.onclick=()=>setAuth(b.dataset.m));
+$('#aForm').onsubmit=e=>{e.preventDefault();const em=$('#aMail').value.trim().toLowerCase(),nm=$('#aName').value.trim();if(!EM.test(em)){$('#aErr').textContent='Enter a valid email, like you@email.com';return}if(amode==='signup'&&!nm){$('#aErr').textContent='Please enter your name';return}enter(em,amode==='signup'?nm:'')};
+function enter(em,nm){setTimeout(homeTiles,0);try{localStorage.setItem('sc-session',em)}catch(e){}loadUser(em);if(nm)S.name=nm;save();$('#auth').classList.remove('on');go('home');render();scheduleNotif();nUpd();toast('Welcome'+(S.name?', '+S.name:''))}
+$('#sOut').onclick=()=>{try{localStorage.removeItem('sc-session')}catch(e){}clearTimeout(nt);$('#aMail').value='';$('#aName').value='';setAuth('login');$('#auth').classList.add('on')};
+let em0=null;try{em0=localStorage.getItem('sc-session')}catch(e){}
+if(em0&&EM.test(em0)){loadUser(em0);render();scheduleNotif()}else{setAuth('login');$('#auth').classList.add('on');render()}
+homeTiles();nUpd();setInterval(tickOffer,1000);
+</script>
+</body>
+</html>
