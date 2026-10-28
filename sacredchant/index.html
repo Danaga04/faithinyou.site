@@ -377,16 +377,172 @@ $('#lkX').onclick=()=>$('#lk').classList.remove('on');
 $('#lkU').onclick=()=>{$('#lk').classList.remove('on');spend(10,()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()})};
 document.addEventListener('click',e=>{const m=e.target.closest('[data-mod]');if(m)return mod(m.dataset.mod);const d=e.target.closest('[data-day]');if(d)dayClick(+d.dataset.day)});
 $('#vBack').onclick=()=>go(vBackTo);$$('[data-back]').forEach(b=>b.onclick=()=>go('home'));
-/* login */
-const EM=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;let amode='login';
-function setAuth(m){amode=m;$('#aNameW').hidden=m==='login';$$('#aTabs button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));$('#aGo').textContent=m==='login'?'Log in':'Create account';$('#aErr').textContent=''}
-$$('#aTabs button').forEach(b=>b.onclick=()=>setAuth(b.dataset.m));
-$('#aForm').onsubmit=e=>{e.preventDefault();const em=$('#aMail').value.trim().toLowerCase(),nm=$('#aName').value.trim();if(!EM.test(em)){$('#aErr').textContent='Enter a valid email, like you@email.com';return}if(amode==='signup'&&!nm){$('#aErr').textContent='Please enter your name';return}enter(em,amode==='signup'?nm:'')};
-function enter(em,nm){setTimeout(homeTiles,0);try{localStorage.setItem('sc-session',em)}catch(e){}loadUser(em);if(nm)S.name=nm;save();$('#auth').classList.remove('on');go('home');render();scheduleNotif();nUpd();toast('Welcome'+(S.name?', '+S.name:''))}
-$('#sOut').onclick=()=>{try{localStorage.removeItem('sc-session')}catch(e){}clearTimeout(nt);$('#aMail').value='';$('#aName').value='';setAuth('login');$('#auth').classList.add('on')};
-let em0=null;try{em0=localStorage.getItem('sc-session')}catch(e){}
-if(em0&&EM.test(em0)){loadUser(em0);render();scheduleNotif()}else{setAuth('login');$('#auth').classList.add('on');render()}
-homeTiles();nUpd();setInterval(tickOffer,1000);
+/* login conectado ao Supabase */
+const EM = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+let amode = 'login';
+let sbClient = null;
+let sbPromise = null;
+
+const SUPABASE_URL = 'https://yspbhzwpcvjaeolvrptk.supabase.co';
+const SUPABASE_KEY = 'sb_publishable__VAenN-0WEd16wkzF6uUMw_PSvCyFNp';
+
+function setAuth(m) {
+  amode = m;
+  $('#aNameW').hidden = m === 'login';
+  $$('#aTabs button').forEach(b =>
+    b.classList.toggle('on', b.dataset.m === m)
+  );
+  $('#aGo').textContent = m === 'login' ? 'Log in' : 'Create account';
+  $('#aErr').textContent = '';
+}
+
+$$('#aTabs button').forEach(b => {
+  b.onclick = () => setAuth(b.dataset.m);
+});
+
+function getSupabase() {
+  if (sbClient) return Promise.resolve(sbClient);
+  if (sbPromise) return sbPromise;
+
+  sbPromise = new Promise((resolve, reject) => {
+    function initialize() {
+      try {
+        sbClient = window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_KEY
+        );
+
+        sbClient.auth.onAuthStateChange((event, session) => {
+          if (
+            session &&
+            session.user &&
+            (event === 'SIGNED_IN' || event === 'INITIAL_SESSION')
+          ) {
+            const user = session.user;
+
+            loadUser(user.email);
+
+            if (user.user_metadata?.full_name) {
+              S.name = user.user_metadata.full_name;
+            }
+
+            save();
+            $('#auth').classList.remove('on');
+            go('home');
+            render();
+            scheduleNotif();
+            nUpd();
+            toast('Welcome' + (S.name ? ', ' + S.name : ''));
+          }
+        });
+
+        resolve(sbClient);
+      } catch (err) {
+        reject(err);
+      }
+    }
+
+    if (window.supabase?.createClient) {
+      initialize();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src =
+      'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+
+    script.onload = initialize;
+    script.onerror = () => {
+      reject(new Error('Could not load the authentication service.'));
+    };
+
+    document.head.appendChild(script);
+  });
+
+  return sbPromise;
+}
+
+$('#aForm').onsubmit = async e => {
+  e.preventDefault();
+
+  const email = $('#aMail').value.trim().toLowerCase();
+  const name = $('#aName').value.trim();
+  const button = $('#aGo');
+  const error = $('#aErr');
+
+  if (!EM.test(email)) {
+    error.textContent = 'Enter a valid email address.';
+    return;
+  }
+
+  if (amode === 'signup' && !name) {
+    error.textContent = 'Please enter your name.';
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = 'Please wait...';
+  error.textContent = '';
+
+  try {
+    const client = await getSupabase();
+
+    const result = await client.auth.signInWithOtp({
+      email: email,
+      options: {
+        emailRedirectTo: window.location.origin + '/sacredchant/',
+        shouldCreateUser: true,
+        data: name ? { full_name: name } : undefined
+      }
+    });
+
+    if (result.error) throw result.error;
+
+    error.textContent =
+      'Check your email for your secure sign-in link.';
+
+  } catch (err) {
+    console.error('Authentication error:', err);
+    error.textContent =
+      err.message || 'Could not send the email. Please try again.';
+  } finally {
+    button.disabled = false;
+    button.textContent =
+      amode === 'login' ? 'Log in' : 'Create account';
+  }
+};
+
+$('#sOut').onclick = async () => {
+  try {
+    const client = await getSupabase();
+    await client.auth.signOut();
+  } catch (err) {
+    console.error('Sign-out error:', err);
+  }
+
+  try {
+    localStorage.removeItem('sc-session');
+  } catch (err) {}
+
+  clearTimeout(nt);
+  $('#aMail').value = '';
+  $('#aName').value = '';
+  setAuth('login');
+  $('#auth').classList.add('on');
+};
+
+setAuth('login');
+$('#auth').classList.add('on');
+
+getSupabase().catch(err => {
+  console.error('Supabase initialization error:', err);
+  $('#aErr').textContent =
+    'Authentication could not be initialized. Please refresh the page.';
+});
+
+homeTiles();
+nUpd();
+setInterval(tickOffer, 1000);
 </script>
 </body>
 </html>
