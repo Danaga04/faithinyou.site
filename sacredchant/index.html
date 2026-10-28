@@ -250,11 +250,12 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 <div class="sheet" id="aTabs"><button data-m="login" class="on">Log in</button><button data-m="signup">Create account</button></div>
 <form id="aForm" novalidate>
 <div id="aNameW" hidden><label for="aName">Name</label><input type="text" id="aName" maxlength="60" autocomplete="name" placeholder="Your name"></div>
-<label for="aMail">Email</label><input type="text" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
-<div id="aCodeW" hidden style="margin-top:12px"><label for="aCode">6-digit email code</label><input type="text" id="aCode" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Enter the code"></div>
+<label for="aMail">Email</label><input type="email" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com" required>
+<div id="aPassW"><label for="aPass">Password</label><input type="password" id="aPass" autocomplete="current-password" minlength="8" maxlength="128" placeholder="Enter your password" required></div>
+<button type="button" class="ghost" id="aForgot" style="display:block;margin:8px 0 14px auto">Forgot password?</button>
 <p class="err" id="aErr" role="alert"></p>
 <button type="submit" class="btn" id="aGo" style="width:100%">Log in</button>
-<button type="button" class="ghost" id="aResend" hidden style="width:100%;margin-top:10px">Send a new code</button>
+<button type="button" class="ghost" id="aCancelRecovery" hidden style="width:100%;margin-top:8px">Back to log in</button>
 </form></div></section>
 <div class="cert" id="inst"><div><p style="font-size:30px">📲</p><h2>Add to home screen</h2><p id="iT" style="margin-top:6px"></p><div class="low-actions"><button class="btn" id="iOk">Got it</button></div></div></div>
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
@@ -621,29 +622,18 @@ async function claimPendingDigistoreOrders() {
   }
 }
 
-let otpPendingEmail = '';
-let otpPendingName = '';
-function showCodeStep(show) {
-  $('#aCodeW').hidden = !show;
-  $('#aResend').hidden = !show;
-  $('#aMail').readOnly = show;
-  $('#aTabs').hidden = show;
-  $('#aNameW').hidden = show || amode === 'login';
-  $('#aGo').textContent = show ? 'Verify code & enter' : (amode === 'login' ? 'Send login code' : 'Create account');
-}
 function setAuth(m) {
   amode = m;
-  otpPendingEmail = '';
-  otpPendingName = '';
-  $('#aCode').value = '';
-  $('#aMail').readOnly = false;
-  $('#aTabs').hidden = false;
-  showCodeStep(false);
-  $('#aNameW').hidden = m === 'login';
-  $('#aTabs button').forEach(b =>
-    b.classList.toggle('on', b.dataset.m === m)
-  );
-  $('#aGo').textContent = m === 'login' ? 'Send login code' : 'Create account';
+  const recovery = m === 'recovery';
+  $('#aNameW').hidden = m !== 'signup';
+  $('#aTabs').hidden = recovery;
+  $('#aPassW').hidden = false;
+  $('#aForgot').hidden = m !== 'login';
+  $('#aCancelRecovery').hidden = !recovery;
+  $('#aPass').autocomplete = recovery ? 'new-password' : (m === 'signup' ? 'new-password' : 'current-password');
+  $('#aPass').value = '';
+  $('#aPass').required = true;
+  $('#aGo').textContent = recovery ? 'Save new password' : (m === 'login' ? 'Log in' : 'Create account');
   $('#aErr').textContent = '';
 }
 
@@ -664,6 +654,17 @@ function getSupabase() {
         );
 
         sbClient.auth.onAuthStateChange((event, session) => {
+          if (event === 'PASSWORD_RECOVERY') {
+            setAuth('recovery');
+            $('#auth').classList.add('on');
+            return;
+          }
+
+          if (event === 'INITIAL_SESSION' && !session) {
+            $('#auth').classList.add('on');
+            return;
+          }
+
           if (
             session &&
             session.user &&
@@ -720,82 +721,100 @@ setTimeout(async () => {
 
 $('#aForm').onsubmit = async e => {
   e.preventDefault();
+
+  const email = $('#aMail').value.trim().toLowerCase();
+  const password = $('#aPass').value;
+  const name = $('#aName').value.trim();
   const button = $('#aGo');
   const error = $('#aErr');
+
+  if (!EM.test(email)) {
+    error.textContent = 'Enter a valid email address.';
+    return;
+  }
+  if (amode !== 'recovery' && password.length < 8) {
+    error.textContent = 'Your password must be at least 8 characters.';
+    return;
+  }
+  if (amode === 'signup' && !name) {
+    error.textContent = 'Please enter your name.';
+    return;
+  }
+
   button.disabled = true;
+  button.textContent = 'Please wait...';
   error.textContent = '';
 
   try {
     const client = await getSupabase();
+    let result;
 
-    if ($('#aCodeW').hidden) {
-      const email = $('#aMail').value.trim().toLowerCase();
-      const name = $('#aName').value.trim();
-
-      if (!EM.test(email)) throw new Error('Enter a valid email address.');
-      if (amode === 'signup' && !name) throw new Error('Please enter your name.');
-
-      const { error: sendError } = await client.auth.signInWithOtp({
+    if (amode === 'login') {
+      result = await client.auth.signInWithPassword({ email, password });
+      if (result.error) throw result.error;
+    } else if (amode === 'signup') {
+      result = await client.auth.signUp({
         email,
+        password,
         options: {
-          shouldCreateUser: true,
-          data: name ? { full_name: name } : undefined
+          emailRedirectTo: window.location.origin + '/sacredchant/',
+          data: { full_name: name }
         }
       });
-      if (sendError) throw sendError;
-
-      otpPendingEmail = email;
-      otpPendingName = name;
-      $('#aMail').value = email;
-      $('#aCode').value = '';
-      showCodeStep(true);
-      error.textContent = 'Enter the 6-digit code sent to your email. No link is needed.';
-      $('#aCode').focus();
-    } else {
-      const token = $('#aCode').value.trim().replace(/\\s/g, '');
-      if (!otpPendingEmail || !/^\\d{6,8}$/.test(token)) {
-        throw new Error('Enter the 6-digit code from your email.');
+      if (result.error) throw result.error;
+      if (!result.data?.session) {
+        error.textContent = 'Account created. Check your email to confirm your address, then log in with your password.';
       }
-      const { data, error: verifyError } = await client.auth.verifyOtp({
-        email: otpPendingEmail,
-        token,
-        type: 'email'
-      });
-      if (verifyError) throw verifyError;
-      if (!data?.session) throw new Error('The code was accepted, but no session was created. Please try again.');
+    } else if (amode === 'recovery') {
+      result = await client.auth.updateUser({ password });
+      if (result.error) throw result.error;
+      setAuth('login');
+      $('#aErr').textContent = 'Password updated. Please log in.';
+      return;
     }
   } catch (err) {
     console.error('Authentication error:', err);
-    error.textContent = err.message || 'Could not sign in. Please try again.';
+    const message = String(err?.message || '');
+    if (/invalid login credentials/i.test(message)) {
+      error.textContent = 'Incorrect email or password. If this is an older account created with a sign-in link, use “Forgot password?” to set a password first.';
+    } else if (/email not confirmed/i.test(message)) {
+      error.textContent = 'Please confirm your email using the confirmation message before logging in.';
+    } else {
+      error.textContent = err.message || 'Authentication failed. Please try again.';
+    }
   } finally {
     button.disabled = false;
-    button.textContent = $('#aCodeW').hidden
-      ? (amode === 'login' ? 'Send login code' : 'Create account')
-      : 'Verify code & enter';
+    button.textContent = amode === 'recovery' ? 'Save new password' : (amode === 'login' ? 'Log in' : 'Create account');
   }
 };
 
-$('#aResend').onclick = async () => {
-  if (!otpPendingEmail) return;
-  const button = $('#aResend');
+$('#aForgot').onclick = async () => {
+  const email = $('#aMail').value.trim().toLowerCase();
+  const error = $('#aErr');
+  if (!EM.test(email)) {
+    error.textContent = 'Enter your email address first, then click Forgot password.';
+    $('#aMail').focus();
+    return;
+  }
+  const button = $('#aForgot');
   button.disabled = true;
+  error.textContent = '';
   try {
     const client = await getSupabase();
-    const { error } = await client.auth.signInWithOtp({
-      email: otpPendingEmail,
-      options: {
-        shouldCreateUser: true,
-        data: otpPendingName ? { full_name: otpPendingName } : undefined
-      }
+    const { error: resetError } = await client.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/sacredchant/'
     });
-    if (error) throw error;
-    $('#aErr').textContent = 'A new code has been sent to your email.';
+    if (resetError) throw resetError;
+    error.textContent = 'If an account exists for this email, a password reset link has been sent.';
   } catch (err) {
-    $('#aErr').textContent = err.message || 'Could not send a new code.';
+    console.error('Password reset error:', err);
+    error.textContent = err.message || 'Could not send the reset email. Please try again.';
   } finally {
     button.disabled = false;
   }
 };
+
+$('#aCancelRecovery').onclick = () => setAuth('login');
 
 $('#sOut').onclick = async () => {
   try {
@@ -817,10 +836,18 @@ $('#sOut').onclick = async () => {
 };
 
 setAuth('login');
-$('#auth').classList.add('on');
 
-getSupabase().catch(err => {
+getSupabase().then(async client => {
+  const { data, error } = await client.auth.getSession();
+  if (error) throw error;
+  if (data?.session) {
+    $('#auth').classList.remove('on');
+  } else {
+    $('#auth').classList.add('on');
+  }
+}).catch(err => {
   console.error('Supabase initialization error:', err);
+  $('#auth').classList.add('on');
   $('#aErr').textContent =
     'Authentication could not be initialized. Please refresh the page.';
 });
