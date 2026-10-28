@@ -5,6 +5,7 @@ create table if not exists public.digistore24_token_orders (
   transaction_key text primary key,
   order_id text not null,
   order_item_id text,
+  pay_sequence_no integer not null default 0,
   product_id text not null,
   buyer_email text not null,
   user_id uuid references auth.users(id) on delete set null,
@@ -22,6 +23,7 @@ create or replace function public.credit_digistore24_order(
   p_transaction_key text,
   p_order_id text,
   p_order_item_id text,
+  p_pay_sequence_no integer,
   p_product_id text,
   p_buyer_email text,
   p_event text
@@ -45,9 +47,11 @@ begin
     update public.digistore24_token_orders
        set status = case when p_event = 'on_refund' then 'refunded' else 'chargeback' end,
            updated_at = now()
-     where transaction_key = p_transaction_key
+     where order_id = p_order_id
+       and product_id = p_product_id
+       and pay_sequence_no = coalesce(p_pay_sequence_no, 0)
        and status in ('pending','paid');
-    return 'refund_or_chargeback_recorded';
+    return 'refund_or_chargeback_recorded_review_balance';
   end if;
 
   if p_event not in ('on_payment', 'on_payment_subscription_signup') then
@@ -71,9 +75,9 @@ begin
    limit 1;
 
   insert into public.digistore24_token_orders
-    (transaction_key, order_id, order_item_id, product_id, buyer_email, user_id, tokens, status, credited_at)
+    (transaction_key, order_id, order_item_id, pay_sequence_no, product_id, buyer_email, user_id, tokens, status, credited_at)
   values
-    (p_transaction_key, p_order_id, nullif(p_order_item_id, ''), p_product_id,
+    (p_transaction_key, p_order_id, nullif(p_order_item_id, ''), coalesce(p_pay_sequence_no, 0), p_product_id,
      lower(trim(coalesce(p_buyer_email, ''))), v_user_id, v_tokens,
      case when v_user_id is null then 'pending' else 'paid' end,
      case when v_user_id is null then null else now() end)
@@ -101,7 +105,7 @@ begin
 end;
 $$;
 
-revoke all on function public.credit_digistore24_order(text,text,text,text,text,text) from public, anon, authenticated;
+revoke all on function public.credit_digistore24_order(text,text,text,integer,text,text,text) from public, anon, authenticated;
 grant execute on function public.credit_digistore24_order(text,text,text,text,text,text) to service_role;
 
 create or replace function public.claim_pending_digistore24_orders()
