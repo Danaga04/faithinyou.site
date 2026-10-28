@@ -106,7 +106,7 @@ end;
 $$;
 
 revoke all on function public.credit_digistore24_order(text,text,text,integer,text,text,text) from public, anon, authenticated;
-grant execute on function public.credit_digistore24_order(text,text,text,text,text,text) to service_role;
+grant execute on function public.credit_digistore24_order(text,text,text,integer,text,text,text) to service_role;
 
 create or replace function public.claim_pending_digistore24_orders()
 returns integer
