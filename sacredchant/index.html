@@ -250,13 +250,9 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 <div class="sheet" id="aTabs"><button data-m="login" class="on">Log in</button><button data-m="signup">Create account</button></div>
 <form id="aForm" novalidate>
 <div id="aNameW" hidden><label for="aName">Name</label><input type="text" id="aName" maxlength="60" autocomplete="name" placeholder="Your name"></div>
-<label for="aMail">Email</label><input type="email" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com" required>
-<div id="aPassW"><label for="aPass">Password</label><input type="password" id="aPass" autocomplete="current-password" minlength="8" maxlength="128" placeholder="Enter your password" required></div>
-<button type="button" class="ghost" id="aForgot" style="display:block;margin:8px 0 14px auto">Forgot password?</button>
+<label for="aMail">Email</label><input type="text" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
 <p class="err" id="aErr" role="alert"></p>
-<button type="submit" class="btn" id="aGo" style="width:100%">Log in</button>
-<button type="button" class="ghost" id="aCancelRecovery" hidden style="width:100%;margin-top:8px">Back to log in</button>
-</form></div></section>
+<button type="submit" class="btn" id="aGo" style="width:100%">Log in</button></form></div></section>
 <div class="cert" id="inst"><div><p style="font-size:30px">📲</p><h2>Add to home screen</h2><p id="iT" style="margin-top:6px"></p><div class="low-actions"><button class="btn" id="iOk">Got it</button></div></div></div>
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
 <div class="buy" id="buy" hidden role="dialog" aria-modal="true" aria-labelledby="buyT"><div class="buy__box" id="buyBox" tabindex="-1">
@@ -624,16 +620,11 @@ async function claimPendingDigistoreOrders() {
 
 function setAuth(m) {
   amode = m;
-  const recovery = m === 'recovery';
-  $('#aNameW').hidden = m !== 'signup';
-  $('#aTabs').hidden = recovery;
-  $('#aPassW').hidden = false;
-  $('#aForgot').hidden = m !== 'login';
-  $('#aCancelRecovery').hidden = !recovery;
-  $('#aPass').autocomplete = recovery ? 'new-password' : (m === 'signup' ? 'new-password' : 'current-password');
-  $('#aPass').value = '';
-  $('#aPass').required = true;
-  $('#aGo').textContent = recovery ? 'Save new password' : (m === 'login' ? 'Log in' : 'Create account');
+  $('#aNameW').hidden = m === 'login';
+  $$('#aTabs button').forEach(b =>
+    b.classList.toggle('on', b.dataset.m === m)
+  );
+  $('#aGo').textContent = m === 'login' ? 'Log in' : 'Create account';
   $('#aErr').textContent = '';
 }
 
@@ -654,17 +645,6 @@ function getSupabase() {
         );
 
         sbClient.auth.onAuthStateChange((event, session) => {
-          if (event === 'PASSWORD_RECOVERY') {
-            setAuth('recovery');
-            $('#auth').classList.add('on');
-            return;
-          }
-
-          if (event === 'INITIAL_SESSION' && !session) {
-            $('#auth').classList.add('on');
-            return;
-          }
-
           if (
             session &&
             session.user &&
@@ -723,7 +703,6 @@ $('#aForm').onsubmit = async e => {
   e.preventDefault();
 
   const email = $('#aMail').value.trim().toLowerCase();
-  const password = $('#aPass').value;
   const name = $('#aName').value.trim();
   const button = $('#aGo');
   const error = $('#aErr');
@@ -732,10 +711,7 @@ $('#aForm').onsubmit = async e => {
     error.textContent = 'Enter a valid email address.';
     return;
   }
-  if (amode !== 'recovery' && password.length < 8) {
-    error.textContent = 'Your password must be at least 8 characters.';
-    return;
-  }
+
   if (amode === 'signup' && !name) {
     error.textContent = 'Please enter your name.';
     return;
@@ -747,74 +723,31 @@ $('#aForm').onsubmit = async e => {
 
   try {
     const client = await getSupabase();
-    let result;
 
-    if (amode === 'login') {
-      result = await client.auth.signInWithPassword({ email, password });
-      if (result.error) throw result.error;
-    } else if (amode === 'signup') {
-      result = await client.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: window.location.origin + '/sacredchant/',
-          data: { full_name: name }
-        }
-      });
-      if (result.error) throw result.error;
-      if (!result.data?.session) {
-        error.textContent = 'Account created. Check your email to confirm your address, then log in with your password.';
+    const result = await client.auth.signInWithOtp({
+      email: email,
+      options: {
+        emailRedirectTo: window.location.origin + '/sacredchant/',
+        shouldCreateUser: true,
+        data: name ? { full_name: name } : undefined
       }
-    } else if (amode === 'recovery') {
-      result = await client.auth.updateUser({ password });
-      if (result.error) throw result.error;
-      setAuth('login');
-      $('#aErr').textContent = 'Password updated. Please log in.';
-      return;
-    }
+    });
+
+    if (result.error) throw result.error;
+
+    error.textContent =
+      'Check your email for your secure sign-in link.';
+
   } catch (err) {
     console.error('Authentication error:', err);
-    const message = String(err?.message || '');
-    if (/invalid login credentials/i.test(message)) {
-      error.textContent = 'Incorrect email or password. If this is an older account created with a sign-in link, use “Forgot password?” to set a password first.';
-    } else if (/email not confirmed/i.test(message)) {
-      error.textContent = 'Please confirm your email using the confirmation message before logging in.';
-    } else {
-      error.textContent = err.message || 'Authentication failed. Please try again.';
-    }
+    error.textContent =
+      err.message || 'Could not send the email. Please try again.';
   } finally {
     button.disabled = false;
-    button.textContent = amode === 'recovery' ? 'Save new password' : (amode === 'login' ? 'Log in' : 'Create account');
+    button.textContent =
+      amode === 'login' ? 'Log in' : 'Create account';
   }
 };
-
-$('#aForgot').onclick = async () => {
-  const email = $('#aMail').value.trim().toLowerCase();
-  const error = $('#aErr');
-  if (!EM.test(email)) {
-    error.textContent = 'Enter your email address first, then click Forgot password.';
-    $('#aMail').focus();
-    return;
-  }
-  const button = $('#aForgot');
-  button.disabled = true;
-  error.textContent = '';
-  try {
-    const client = await getSupabase();
-    const { error: resetError } = await client.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/sacredchant/'
-    });
-    if (resetError) throw resetError;
-    error.textContent = 'If an account exists for this email, a password reset link has been sent.';
-  } catch (err) {
-    console.error('Password reset error:', err);
-    error.textContent = err.message || 'Could not send the reset email. Please try again.';
-  } finally {
-    button.disabled = false;
-  }
-};
-
-$('#aCancelRecovery').onclick = () => setAuth('login');
 
 $('#sOut').onclick = async () => {
   try {
@@ -836,18 +769,10 @@ $('#sOut').onclick = async () => {
 };
 
 setAuth('login');
+$('#auth').classList.add('on');
 
-getSupabase().then(async client => {
-  const { data, error } = await client.auth.getSession();
-  if (error) throw error;
-  if (data?.session) {
-    $('#auth').classList.remove('on');
-  } else {
-    $('#auth').classList.add('on');
-  }
-}).catch(err => {
+getSupabase().catch(err => {
   console.error('Supabase initialization error:', err);
-  $('#auth').classList.add('on');
   $('#aErr').textContent =
     'Authentication could not be initialized. Please refresh the page.';
 });
