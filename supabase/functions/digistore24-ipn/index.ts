@@ -75,9 +75,11 @@ Deno.serve(async (req) => {
     const orderId = params.order_id || "";
     const orderItemId = params.order_item_id || "";
     const productId = params.product_id || "";
-    const buyerEmail = params.buyer_email || params.email || "";
-    // DS24 can send separate items (main product/upsells) within one order.
-    const transactionKey = orderItemId || (orderId && productId ? orderId + ":" + productId : "");
+    const buyerEmail = params.email || params.buyer_email || "";
+    const paySequenceNo = Number.parseInt(params.pay_sequence_no || "0", 10) || 0;
+    const transactionId = params.transaction_id || "";
+    // Digistore24 documents transaction_id as unique for each payment/refund/chargeback.
+    const transactionKey = transactionId || (orderId && productId ? orderId + ":" + productId + ":" + paySequenceNo : "");
 
     if (!orderId || !productId || !transactionKey) {
       return new Response("Missing order fields", { status: 400 });
@@ -98,6 +100,7 @@ Deno.serve(async (req) => {
       p_transaction_key: transactionKey,
       p_order_id: orderId,
       p_order_item_id: orderItemId,
+      p_pay_sequence_no: paySequenceNo,
       p_product_id: productId,
       p_buyer_email: buyerEmail,
       p_event: event,
