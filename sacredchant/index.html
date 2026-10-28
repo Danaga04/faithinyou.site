@@ -33,8 +33,23 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .screen{display:none}.screen.on{display:block}
 .hero{position:relative;text-align:center;padding:6px 0 4px}
-.angel{width:230px;height:190px;display:block;margin:0 auto;animation:float 6s ease-in-out infinite;filter:drop-shadow(0 10px 24px rgba(120,160,240,.45))}
-@keyframes float{50%{transform:translateY(-8px)}}
+.angel-stage{position:relative;width:250px;height:210px;margin:0 auto;display:grid;place-items:center;isolation:isolate}
+.angel-stage:before,.angel-stage:after{content:"";position:absolute;left:50%;top:44%;border-radius:50%;pointer-events:none;transform:translate(-50%,-50%) rotate(-12deg);z-index:-1}
+.angel-stage:before{width:176px;height:176px;border:3px solid rgba(247,220,146,.88);box-shadow:0 0 12px rgba(224,173,62,.6),0 0 30px rgba(255,232,160,.55),inset 0 0 18px rgba(255,232,160,.35);animation:haloPulse 3.2s ease-in-out infinite}
+.angel-stage:after{width:206px;height:206px;border:1px solid rgba(255,255,255,.75);box-shadow:0 0 24px rgba(122,166,245,.42);animation:haloOrbit 8s linear infinite}
+.angel{position:relative;z-index:1;width:230px;height:190px;display:block;margin:0 auto;animation:float 5s ease-in-out infinite;filter:drop-shadow(0 10px 24px rgba(120,160,240,.55))}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-10px) rotate(1deg)}}
+@keyframes haloPulse{0%,100%{opacity:.65;transform:translate(-50%,-50%) rotate(-12deg) scale(.94)}50%{opacity:1;transform:translate(-50%,-50%) rotate(8deg) scale(1.06)}}
+@keyframes haloOrbit{from{transform:translate(-50%,-50%) rotate(0deg) scaleX(.78)}to{transform:translate(-50%,-50%) rotate(360deg) scaleX(.78)}}
+.angel-stage.reward-glow:before{animation:haloBlessing 1.2s ease-in-out 3}
+.angel-stage.reward-glow:after{animation:haloOrbit 1.8s linear 3}
+@keyframes haloBlessing{0%,100%{opacity:.65;box-shadow:0 0 12px rgba(224,173,62,.6),0 0 30px rgba(255,232,160,.55)}50%{opacity:1;box-shadow:0 0 28px rgba(224,173,62,1),0 0 65px rgba(255,232,160,.95)}}
+#offer{transition:filter .25s,transform .25s}
+#offer:not([disabled]):hover{filter:brightness(1.05);transform:translateY(-2px)}
+#offer[disabled]{opacity:.78;background:linear-gradient(135deg,#b8c5dc,#8d9bb5);box-shadow:none;color:#fff}
+@keyframes rewardButton{0%,100%{box-shadow:0 10px 26px rgba(67,120,222,.32)}50%{box-shadow:0 0 0 7px rgba(247,220,146,.22),0 0 32px rgba(224,173,62,.65)}}
+#offer.reward-ready{animation:rewardButton 2.4s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){.angel-stage:before,.angel-stage:after,#offer.reward-ready{animation:none!important}}
 .hero h1{font-size:27px;line-height:1.2;font-weight:800;margin:8px 0 6px}
 .hero p{color:var(--mute)}
 .btn{display:inline-flex;gap:8px;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--acc2),var(--acc));color:#fff;border-radius:99px;padding:13px 26px;font-weight:700;box-shadow:0 10px 26px rgba(67,120,222,.32)}
@@ -152,6 +167,7 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 
  <section class="screen on" id="s-home">
   <div class="hero">
+   <div class="angel-stage" id="angelStage" aria-label="Animated guardian angel with glowing halo">
    <svg class="angel" viewBox="0 0 230 190" aria-hidden="true">
     <defs><linearGradient id="w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#bcd4ff"/></linearGradient><radialGradient id="gl"><stop offset="0" stop-color="#fff6cf"/><stop offset="1" stop-color="#fff6cf" stop-opacity="0"/></radialGradient></defs>
     <circle cx="115" cy="86" r="84" fill="url(#gl)"/>
@@ -162,6 +178,7 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
     <path d="M91 150c2-30 12-46 24-46s22 16 24 46z" fill="#fff" stroke="#c8d9fb" stroke-width="1.2"/>
     <path d="M60 164c20-6 36 2 55 0s36-6 56 0c14 4 26-2 34 4H20c6-6 24-2 40-4z" fill="#fff" opacity=".95"/>
    </svg>
+   </div>
    <p class="lab"><span id="greet">Tonight</span>, <b id="uname">Guest</b></p>
    <h1>Let your angel guide your day in sound.</h1>
    <p>A few quiet minutes of chant, prayer and breath.</p>
@@ -388,7 +405,7 @@ $('#offer').onclick = async () => {
   await new Promise(r => setTimeout(r, 1400));
   try {
     const balance = await rpc;
-    S.light = balance;
+    // Read the canonical wallet after claiming: RPC data may be only the +10 reward.
     S.last = today();
     S.lastTs = Date.now();
     S.srvBlock = '';
@@ -596,6 +613,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#im').classList.
 const DAY=864e5,pad=n=>String(n).padStart(2,'0');
 const canOffer=()=>S.srvBlock!==today()&&Date.now()-(S.lastTs||0)>=DAY;
 function tickOffer(){const b=$('#offer');if(offerBusy)return;if(canOffer()){b.disabled=false;b.removeAttribute('aria-disabled');b.dataset.w='';b.classList.add('reward-ready');b.textContent='✦ Offer your intention'}else{b.classList.remove('reward-ready');const r=Math.max(0,DAY-(Date.now()-(S.lastTs||0))),h=Math.floor(r/36e5),m=Math.floor(r%36e5/6e4),s=Math.floor(r%6e4/1e3);b.disabled=true;b.setAttribute('aria-disabled','true');b.dataset.w=1;b.textContent=r>0?'Next offer in '+pad(h)+':'+pad(m)+':'+pad(s):'Already claimed. Come back tomorrow'}}
+setInterval(tickOffer,1000);
 /* notificacoes */
 function notifyReady(){try{if(Notification.permission!=='granted')return;const o={body:'Your light is ready. Come back and claim +10 ✦.',icon:'icon-192.png'};if(navigator.serviceWorker&&navigator.serviceWorker.controller)navigator.serviceWorker.ready.then(r=>r.showNotification('Sacred Chant',o));else new Notification('Sacred Chant',o)}catch(e){}}
 let nt;function scheduleNotif(){clearTimeout(nt);const w=DAY-(Date.now()-(S.lastTs||0));if(w>0)nt=setTimeout(()=>{notifyReady();toast('Your +10 ✦ is ready')},w)}
