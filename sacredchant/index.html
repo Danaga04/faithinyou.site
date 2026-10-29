@@ -288,7 +288,7 @@ body.on-mark #supportFab{display:none}
   </div>
   <p class="sh">Support &amp; blessings</p><p>Start here, request a prayer, or reach our team.</p>
   <div class="tiles" id="tSup"></div>
-  <button type="button" class="mark-card" data-mod="mark" aria-label="Open free chat with Mark"><img src="https://i.postimg.cc/8kFQyKv5/bubblen6oy3a5sh6q.avif" alt="Mark" width="88" height="88" loading="lazy"><span class="mark-copy"><strong>Talk with Mark</strong><span>Your free spiritual companion for prayer, reflection, and encouragement.</span><span class="mark-free">FREE CHAT</span></span></button>
+  <button type="button" class="mark-card" data-mod="mark" aria-label="Open chat with Mark"><img src="https://i.postimg.cc/8kFQyKv5/bubblen6oy3a5sh6q.avif" alt="Mark" width="88" height="88" loading="lazy"><span class="mark-copy"><strong>Talk with Mark</strong><span>Your spiritual companion for prayer, reflection, and encouragement.</span><span class="mark-free">3 ✦ / MESSAGE</span></span></button>
   <p class="sh">My products</p><p>The programs you have purchased.</p>
   <div class="tiles" id="tPrd"></div>
   <p class="sh">Exclusive bonuses</p><p>Extra gifts for members.</p>
@@ -328,11 +328,11 @@ body.on-mark #supportFab{display:none}
  <section class="screen" id="s-mark">
   <button class="back" type="button" data-mark-back>← Back</button>
   <h2 class="h">Talk with Mark</h2>
-  <p class="intro">A free space for prayer, reflection, and encouragement.</p>
+  <p class="intro">A space for prayer, reflection, and encouragement. Each message costs 3 ✦.</p>
   <div class="mark-chat" role="region" aria-label="Chat with Mark">
    <div class="mark-chat-head">
     <img src="https://i.postimg.cc/8kFQyKv5/bubblen6oy3a5sh6q.avif" alt="Mark" width="48" height="48">
-    <div><strong>Mark</strong><small><span class="mark-online"></span>Free spiritual companion · No AI API</small></div>
+    <div><strong>Mark</strong><small><span class="mark-online"></span>Spiritual companion · 3 ✦ per message</small></div>
    </div>
    <div class="mark-messages" id="markMessages" aria-live="polite" aria-label="Conversation with Mark"></div>
    <div class="mark-quick" id="markQuick">
@@ -345,7 +345,7 @@ body.on-mark #supportFab{display:none}
     <textarea id="markInput" maxlength="1200" rows="1" placeholder="Tell Mark what is on your heart..." required></textarea>
     <button class="mark-send" id="markSend" type="submit" aria-label="Send message">↑</button>
    </form>
-   <p class="mark-note"></p>
+   <p class="mark-note">Each message to Mark costs 3 Light Tokens (✦).</p>
   </div>
   <button type="button" class="ghost mark-clear" id="markClear">Clear this conversation</button>
  </section>
@@ -1394,7 +1394,7 @@ setInterval(tickOffer, 1000);
    r: [() => "Welcome, I'm really glad you're here. Here's the simplest path: 1) Tap \"Offer your intention\" on Home to receive your free +10 ✦. 2) Open \"Start here\" for a short welcome video and the basics. 3) Begin the 7 Prayers of Solomon or the 7 Prayers of Jesus, one prayer a day, ideally in the morning with headphones. That's it. Small and steady beats long and rare."],
    a: ['offer', 'start', 'jesus'], f: ['How do Light Tokens work?', 'What is free in the app?'] },
   { id: 'free', k: ['what is free', 'free content', 'without tokens', 'for free', 'no tokens', 'do not cost', 'free stuff', 'free prayers', 'free to use', 'what can i use free'],
-   r: [() => "Plenty is free: talking with me, the Support popup, the 7 Prayers of Jesus (days 1 and 2 from the start), the bonuses How to install the app, 15 Words Prayer, Prayer of Saint Benedict and The Book of Hidden Light, plus Sacred Chant, Song of God, The Journey with My Angel and Family Protect in My products. And every 24 hours you get +10 ✦ free by offering your intention."],
+   r: [() => "Plenty is free: the Support popup, the 7 Prayers of Jesus (days 1 and 2 from the start), the bonuses How to install the app, 15 Words Prayer, Prayer of Saint Benedict and The Book of Hidden Light, plus Sacred Chant, Song of God, The Journey with My Angel and Family Protect in My products. And every 24 hours you get +10 ✦ free by offering your intention."],
    a: ['jesus', 'words15', 'benedict'], f: ['How do I get free tokens?', 'What costs tokens?'] },
   { id: 'tokens', k: ['light token', 'token', 'tokens', 'what are tokens', 'how do tokens work', 'what is light', 'my balance', 'how many tokens', 'how much light', 'what are the stars', 'star symbol', 'currency'],
    r: [() => "Light Tokens (✦) are the light you use inside Sacred Chant. Right now you have " + G.light() + " ✦. You earn +10 ✦ free every 24 hours with \"Offer your intention\" on Home, or you can add more with a plan. They open things like Start here and the 7 Prayers of Solomon (2 ✦ a day), a chant session (3 ✦), \"I want to pray for you\" (10 ✦ once), the Carlos Acutis and Archangel Raphael prayers (10 ✦, yours forever) and Store programs (50 ✦, yours forever)."],
@@ -1403,7 +1403,7 @@ setInterval(tickOffer, 1000);
    r: [() => G.canOffer() ? "Your daily light is ready right now! Go to Home and tap \"Offer your intention\". Take one breath, hold your intention in your heart, and +10 ✦ are added. You can do it once every 24 hours." : "You already offered your intention. Your next free +10 ✦ will be ready in about " + fmtLeft(G.offerLeft()) + ". The button on Home shows the countdown, and in Profile you can turn on a reminder so you don't miss it."],
    a: ['offer', 'profile'], f: ['What can I do with tokens?', 'How do I buy more tokens?'] },
   { id: 'costs', k: ['what costs', 'how much does it cost', 'how much is', 'price of', 'cost tokens', 'spend tokens', 'why did i lose tokens', 'tokens disappeared', 'tokens went down', 'charged tokens', 'took my tokens', 'used my tokens'],
-   r: [() => "Here's what uses Light Tokens: Start here and the 7 Prayers of Solomon cost 2 ✦ to open (once per day), the Chants tab 2 ✦, each chant session 3 ✦, opening a resting Solomon day early 10 ✦, a locked day of the 7 Prayers of Jesus 20 ✦, \"I want to pray for you\" 10 ✦ once, Carlos Acutis and Archangel Raphael 10 ✦ each (forever), and each Store program 50 ✦ (forever). Talking to me is always free."],
+   r: [() => "Here's what uses Light Tokens: Start here and the 7 Prayers of Solomon cost 2 ✦ to open (once per day), the Chants tab 2 ✦, each chant session 3 ✦, opening a resting Solomon day early 10 ✦, a locked day of the 7 Prayers of Jesus 20 ✦, \"I want to pray for you\" 10 ✦ once, Carlos Acutis and Archangel Raphael 10 ✦ each (forever), each Store program 50 ✦ (forever), and talking with me 3 ✦ per message. Talking with me costs 3 ✦ per message."],
    a: ['offer', 'buy'], f: ['How do I get free tokens?', 'What is free?'] },
   { id: 'plans', k: ['plan', 'plans', 'buy tokens', 'purchase tokens', 'price', 'prices', 'how much', 'pricing', 'premium', 'devotional plan', 'essential plan', 'sacred premium', 'package', 'pay', 'payment', 'checkout', 'digistore', 'upgrade'],
    r: [() => { const p = G.plans(); return p.length ? "These are the Light Token plans: " + list(p.map(x => x.name.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) + ' — ' + x.tokens.toLocaleString('en-US') + ' ✦ for ' + x.price + (x.monthly ? ' per month (monthly subscription)' : ' (one-time payment)'))) + ". Sacred Premium is the best value and the only one that isn't a subscription. Tap the ✦ counter at the top of the screen anytime to see them." : "Tap the ✦ counter at the top of the screen to see the Light Token plans." }],
@@ -1815,10 +1815,15 @@ setInterval(tickOffer, 1000);
  }
 
  /* ---------- send ---------- */
- function sendMessage(value) {
+ const MARK_COST = 3;
+ async function sendMessage(value) {
   const text = String(value || '').trim().slice(0, 1200);
   if (!text || busy) return;
   busy = true; const send = $m('markSend'); if (send) send.disabled = true;
+  // Mark charges 3 Light Tokens per message. On low balance, spend() opens the buy popup and the message is kept.
+  let paid = false;
+  try { await spend(MARK_COST, () => { paid = true }); } catch (e) { console.warn('Mark spend error', e); }
+  if (!paid) { busy = false; if (send) send.disabled = false; return; }
   history.push({ role: 'user', text, a: [], f: [] });
   const inp = $m('markInput'); if (inp) { inp.value = ''; inp.style.height = 'auto' }
   render(); chips([]); $m('markQuick').innerHTML = '';
