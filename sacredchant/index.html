@@ -238,7 +238,7 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .mark-quick{display:flex;gap:7px;flex-wrap:wrap;padding:0 12px 10px}
 .mark-quick button{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:7px 10px;font-size:12px;font-weight:700;color:var(--acc)}
 .mark-compose{display:flex;gap:8px;align-items:flex-end;padding:10px;border-top:1px solid var(--line);background:var(--card)}
-.mark-compose textarea{resize:none;min-height:44px;max-height:120px;flex:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:11px 12px;color:var(--ink);font:inherit;font-size:14px;line-height:1.4}
+.mark-compose textarea{resize:none;min-height:44px;max-height:120px;flex:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:11px 12px;color:var(--ink);font:inherit;font-size:16px;line-height:1.4;touch-action:manipulation}
 .mark-send{width:44px;height:44px;flex:none;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--acc2),var(--acc));color:#fff;font-size:20px;font-weight:800}
 .mark-send:disabled{opacity:.4}
 .mark-note{font-size:11px;color:var(--mute);text-align:center;padding:0 12px 10px}
@@ -1336,12 +1336,33 @@ setInterval(tickOffer, 1000);
   if(history.length)return;
   history.push({role:'assistant',text:"Hi, I'm Mark. This is a free space to talk about faith, prayer, peace, gratitude, relationships, or worries about the future. What is on your heart today?",topic:'greeting',time:Date.now()});save();
  }
+ function getDestination(text){
+  const n=normalize(text);
+  const asksForPrayer=/(\\b(pray|prayer|prayers|bless|blessing|blessings|healing|heal|prosperity|abundance|wealth|money|financial|debt|health|sick|illness|recovery|love|relationship|family|protection|gratitude|peace|anxiety|fear|miracle|breakthrough|guidance|faith|god|jesus|saint|angel|solomon)\\b)/.test(n);
+  if(asksForPrayer)return 'prayer';
+  const asksForHelp=/(\\b(help|guide|guidance|guide me|where do i start|how do i start|what should i do|i am lost|im lost|i need support|need assistance|how to use|how does this app work|i am new|im new)\\b)/.test(n);
+  if(asksForHelp)return 'start';
+  return '';
+ }
+ function randomFreePrayer(){
+  const options=BONUS.filter(b=>b.vt==='yt'&&b.cost===0&&/prayer/i.test(b.t));
+  if(!options.length){toast('Open Support & blessings to explore available prayers.');go('home');return}
+  const chosen=options[Math.floor(Math.random()*options.length)];
+  openBonus(chosen.id);
+ }
  function sendMessage(value){
   const text=value.trim();if(!text)return;
+  const destination=getDestination(text);
   history.push({role:'user',text,topic:null,time:Date.now()});
-  const answer=respond(text);history[history.length-1].topic=answer.topic==='general'?null:answer.topic;
+  let answer=respond(text);
+  if(destination==='start')answer={topic:'guidance',text:"Of course. I'll take you to Start Here, where you can learn how to begin with Sacred Chant."};
+  if(destination==='prayer')answer={topic:'prayer',text:"I'll choose a prayer for you from Sacred Chant now. It may be a prayer for a different intention, but you can use it for what is on your heart."};
+  history[history.length-1].topic=answer.topic==='general'?null:answer.topic;
   history.push({role:'assistant',text:answer.text,topic:answer.topic,time:Date.now()});
-  save();render();$m('markInput').value='';$m('markInput').focus();
+  save();render();$m('markInput').value='';
+  if(destination){
+   setTimeout(()=>{if(destination==='start')mod('start');else randomFreePrayer()},850);
+  }else if(window.matchMedia('(min-width: 700px)').matches){$m('markInput').focus()}
  }
  function openMark(){
   if(!history.length){try{const saved=localStorage.getItem(historyKey());if(saved)history=JSON.parse(saved).slice(-80)}catch(e){history=[]}}
