@@ -728,7 +728,7 @@ function maybeStartOnboarding(user){
  try {
   const createdAt=Date.parse(user && user.created_at || '');
   const rolloutAt=Date.parse(ONBOARDING_ROLLOUT_AT);
-  if(!Number.isFinite(createdAt)||createdAt<rolloutAt||S.onboardingSeen)return;
+  if(!Number.isFinite(createdAt)||createdAt<rolloutAt||S.onboardingSeen||user.user_metadata?.sacredchant_onboarding_seen)return;
   startOnboarding();
  } catch(e){console.warn('Could not start first-time welcome:',e)}
 }
@@ -789,6 +789,7 @@ function obFinishAndStart(){
  save();
  $('#onboard').classList.remove('on');
  document.body.classList.remove('nos');
+ if(sbClient){sbClient.auth.updateUser({data:{sacredchant_onboarding_seen:true}}).catch(e=>console.warn('Could not sync onboarding status:',e?.message||e));}
  solPage();
  showVid(DAYS[0][1],'Day 1 · 7 Prayers of Solomon','<p class="intro">Your first prayer is ready. Listen at your own pace, and return for one prayer each day.</p>','','sol');
 }
