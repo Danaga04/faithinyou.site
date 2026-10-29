@@ -703,10 +703,11 @@ function qStep(){const q=QZ[qi];$('#pBody').innerHTML='<p class="lab">Question '
  $$('#pBody .opt').forEach(b=>b.onclick=()=>{if(++qi<3)qStep();else calc()})}
 function calc(){$('#pBody').innerHTML='<div style="text-align:center"><div class="spin"></div><h2 class="h">Reading your answers…</h2><p class="intro" id="cT">Listening for what matters most</p></div>';const m=['Listening for what matters most','Gathering your symbols','Preparing your message'];let k=0;const t=setInterval(()=>{const e=$('#cT');if(e)e.textContent=m[++k%3]},900);setTimeout(()=>{clearInterval(t);S.prayDone=1;save();homeTiles();reading()},3200)}
 function reading(){showVid(VID.pray,'Your reading is ready','<h2 class="h" style="font-size:20px">The Message Meant for You</h2><p class="intro">Based on your answers, this short reading offers a message for reflection. Press play — your sound is on.</p>','','home')}
-/* 7 Prayers of Solomon */
-const solOpen=i=>i<3||(S.solPaid||[]).includes(i)||Date.now()-S.solStart>=DAY;
+/* 7 Prayers of Solomon — unlock each day at its exact elapsed-day milestone */
+const solDayMs=i=>(i+1)*DAY;
+const solOpen=i=>i<3||(S.solPaid||[]).includes(i)||(Number.isFinite(Number(S.solStart))&&Date.now()-Number(S.solStart)>=solDayMs(i));
 function solPage(){$('#sDays').innerHTML=DAYS.map((d,i)=>{const o=solOpen(i);return tile('data-day="'+i+'"',P+d[0]+'.avif','Day '+(i+1),0,o?'':'<span class="lk"><b>🔒</b><span class="cd"></span></span>',!o)}).join('');go('sol');solTick()}
-function solTick(){if(!$('#s-sol').classList.contains('on'))return;const r=DAY-(Date.now()-S.solStart);if(r<=0&&$$('#sDays .lk').length)return solPage();const t=pad(Math.max(0,Math.floor(r/36e5)))+':'+pad(Math.max(0,Math.floor(r%36e5/6e4)))+':'+pad(Math.max(0,Math.floor(r%6e4/1e3)));$$('#sDays .cd').forEach(e=>e.textContent='Opens in '+t)}
+function solTick(){if(!$('#s-sol').classList.contains('on'))return;const now=Date.now(),start=Number(S.solStart);if(!Number.isFinite(start))return;let changed=false;DAYS.forEach((d,i)=>{if(i>=3&&!solOpen(i)&&now-start>=solDayMs(i))changed=true});if(changed){solPage();return}$$('#sDays [data-day]').forEach((tile,i)=>{if(solOpen(i))return;const remain=Math.max(0,solDayMs(i)-(now-start));const days=Math.floor(remain/DAY),hours=Math.floor((remain%DAY)/36e5),mins=Math.floor((remain%36e5)/6e4),secs=Math.floor((remain%6e4)/1e3);const cd=tile.querySelector('.cd');if(cd)cd.textContent='Opens in '+(days?days+'d ':'')+pad(hours)+':'+pad(mins)+':'+pad(secs)})}
 setInterval(solTick,1000);
 let lkDay=0,lkAct=null;
 function dayClick(i){if(solOpen(i))return showVid(DAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Solomon','','','sol');lkDay=i;lkAct=()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()};$('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Wait for it';$('#lkH').textContent='Day '+(i+1)+' is resting';$('#lkT').textContent='It opens 24 hours after you began, or you can open it now for 10 ✦.';$('#lk').classList.add('on')}
