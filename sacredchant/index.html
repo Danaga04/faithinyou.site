@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -19,7 +19,7 @@
 :root[data-theme=dark]{--b1:#0c1533;--b2:#1b1f45;--ink:#eaf1ff;--mute:#9fb0d6;--card:rgba(255,255,255,.07);--line:rgba(160,185,245,.25);--acc:#8db2ff;--acc2:#5a86e6;--on:#0c1533}
 *{box-sizing:border-box;margin:0}
 html,body{min-height:100%}
-body{background:linear-gradient(180deg,var(--b1) 0,var(--b2) 100%) fixed;color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:16px;line-height:1.55}
+body{background:#06081d;color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:16px;line-height:1.55}
 body.nos{overflow:hidden}
 button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
 :focus-visible{outline:3px solid var(--acc);outline-offset:3px}
@@ -118,7 +118,7 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .auth-arrow{display:inline-block;font-size:30px;line-height:1;color:#f5c400;vertical-align:middle;animation:authArrow 1.3s ease-in-out infinite}
 @keyframes authArrow{0%,100%{transform:translate(0,0)}50%{transform:translate(6px,6px)}}
 @media(prefers-reduced-motion:reduce){.auth-arrow{animation:none}}
-.auth{position:fixed;inset:0;z-index:50;display:none;overflow:auto;padding:calc(28px + env(safe-area-inset-top,0px)) 20px calc(28px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,var(--b1),var(--b2))}.auth.on{display:block}.auth>div{max-width:420px;margin:0 auto;text-align:center}.auth form{text-align:left;margin-top:14px}.auth label{font-size:13px;font-weight:600;color:var(--mute)}.auth .err{color:#d24b4b;min-height:22px;font-size:14px;margin:4px 0 8px}
+.auth{position:fixed;inset:0;z-index:50;display:none;overflow:auto;padding:calc(28px + env(safe-area-inset-top,0px)) 20px calc(28px + env(safe-area-inset-bottom,0px));background:radial-gradient(130% 80% at 50% -12%, #2c2570 0%, #1a1550 42%, #0a0c2b 78%, #06081d 100%)}.auth::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(2px 2px at 84px 214px,rgba(200,220,255,.75),transparent),radial-gradient(2px 2px at 245px 110px,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 258px 270px,#fff,transparent),radial-gradient(2px 2px at 7px 189px,#fff,transparent),radial-gradient(1px 1px at 74px 118px,#fff,transparent),radial-gradient(2px 2px at 223px 208px,#fff,transparent),radial-gradient(2px 2px at 168px 276px,#fff,transparent),radial-gradient(1px 1px at 188px 11px,#fff,transparent),radial-gradient(2px 2px at 63px 10px,rgba(255,255,255,.8),transparent),radial-gradient(2px 2px at 282px 175px,rgba(247,220,146,.7),transparent),radial-gradient(1px 1px at 77px 95px,rgba(247,220,146,.7),transparent),radial-gradient(1px 1px at 120px 38px,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 297px 36px,rgba(247,220,146,.7),transparent),radial-gradient(1px 1px at 286px 198px,rgba(200,220,255,.75),transparent),radial-gradient(2px 2px at 74px 274px,rgba(200,220,255,.75),transparent),radial-gradient(2px 2px at 186px 231px,rgba(200,220,255,.75),transparent),radial-gradient(1px 1px at 248px 197px,#fff,transparent),radial-gradient(2px 2px at 47px 81px,#fff,transparent),radial-gradient(1px 1px at 251px 35px,rgba(200,220,255,.75),transparent),radial-gradient(1px 1px at 284px 318px,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 87px 178px,rgba(200,220,255,.75),transparent),radial-gradient(1px 1px at 305px 156px,#fff,transparent),radial-gradient(1px 1px at 86px 33px,rgba(247,220,146,.7),transparent),radial-gradient(1px 1px at 191px 81px,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 208px 83px,rgba(200,220,255,.75),transparent),radial-gradient(2px 2px at 251px 259px,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 125px 83px,rgba(247,220,146,.7),transparent),radial-gradient(1px 1px at 208px 247px,rgba(200,220,255,.75),transparent),radial-gradient(1px 1px at 26px 132px,#fff,transparent),radial-gradient(1px 1px at 214px 127px,rgba(247,220,146,.7),transparent),radial-gradient(1px 1px at 35px 173px,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 245px 25px,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 269px 245px,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 187px 78px,rgba(247,220,146,.7),transparent),radial-gradient(2px 2px at 248px 297px,rgba(200,220,255,.75),transparent),radial-gradient(1px 1px at 71px 273px,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 5px 195px,#fff,transparent),radial-gradient(1px 1px at 135px 303px,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 299px 215px,rgba(247,220,146,.7),transparent),radial-gradient(1px 1px at 70px 68px,#fff,transparent),radial-gradient(1px 1px at 203px 48px,#fff,transparent),radial-gradient(1px 1px at 228px 72px,#fff,transparent),radial-gradient(1px 1px at 144px 64px,rgba(200,220,255,.75),transparent),radial-gradient(1px 1px at 202px 252px,rgba(255,255,255,.8),transparent),radial-gradient(2px 2px at 92px 94px,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 281px 23px,#fff,transparent),radial-gradient(1px 1px at 198px 237px,rgba(247,220,146,.7),transparent),radial-gradient(1px 1px at 290px 89px,rgba(200,220,255,.75),transparent),radial-gradient(1px 1px at 309px 160px,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 199px 79px,rgba(200,220,255,.75),transparent),radial-gradient(2px 2px at 257px 281px,#fff,transparent),radial-gradient(1px 1px at 279px 307px,rgba(200,220,255,.75),transparent),radial-gradient(1px 1px at 264px 158px,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 32px 315px,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 181px 33px,rgba(247,220,146,.7),transparent),radial-gradient(1px 1px at 55px 38px,rgba(247,220,146,.7),transparent),radial-gradient(1px 1px at 258px 318px,rgba(247,220,146,.7),transparent),radial-gradient(2px 2px at 241px 264px,rgba(247,220,146,.7),transparent),radial-gradient(1px 1px at 36px 115px,#fff,transparent),radial-gradient(1px 1px at 222px 21px,rgba(200,220,255,.75),transparent),radial-gradient(2px 2px at 301px 207px,rgba(247,220,146,.7),transparent),radial-gradient(2px 2px at 121px 204px,rgba(200,220,255,.75),transparent),radial-gradient(1px 1px at 249px 116px,#fff,transparent),radial-gradient(2px 2px at 245px 88px,rgba(200,220,255,.75),transparent),radial-gradient(2px 2px at 309px 110px,rgba(200,220,255,.75),transparent),radial-gradient(2px 2px at 125px 246px,rgba(247,220,146,.7),transparent),radial-gradient(2px 2px at 156px 314px,#fff,transparent),radial-gradient(1px 1px at 82px 160px,rgba(200,220,255,.75),transparent),radial-gradient(1px 1px at 200px 74px,rgba(255,255,255,.8),transparent),radial-gradient(1px 1px at 40px 267px,rgba(247,220,146,.7),transparent);background-size:320px 320px;background-repeat:repeat;opacity:.9;animation:twinkleA 5.5s ease-in-out infinite}.auth::after{content:"";position:absolute;left:50%;top:-10%;width:130vw;height:60vh;transform:translateX(-50%);pointer-events:none;background:radial-gradient(50% 60% at 50% 0%, rgba(255,241,200,.22), transparent 66%);mix-blend-mode:screen}.auth.on{display:block}.auth>div{position:relative;z-index:1}.auth>div{max-width:420px;margin:0 auto;text-align:center}.auth form{text-align:left;margin-top:14px}.auth label{font-size:13px;font-weight:600;color:var(--mute)}.auth .err{color:#d24b4b;min-height:22px;font-size:14px;margin:4px 0 8px}
 .cert{display:none;position:fixed;inset:0;z-index:25;background:rgba(10,20,50,.6);place-items:center;padding:20px}.cert.on{display:grid}
 .cert>div{background:linear-gradient(160deg,#fffdf5,#e9f2ff);color:#1c2a4a;border:3px double #e0ad3e;border-radius:20px;padding:28px 22px;text-align:center;max-width:400px;width:100%}
 .cert h2{font-size:22px}.cert .nm{font-size:26px;font-weight:800;color:#4378de;margin:8px 0}
@@ -257,10 +257,57 @@ body.on-mark #supportFab{display:none}
 @media(prefers-reduced-motion:reduce){.mark-typing i{animation:none}}
 @media(max-width:380px){.mark-card img{width:74px;height:74px}.mark-chat{min-height:400px;height:calc(100dvh - 280px - env(safe-area-inset-bottom,0px))}.mark-bubble{max-width:94%}}
 
+
+/* ===== cosmic / heavenly background ===== */
+#cosmos{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;background:
+ radial-gradient(130% 90% at 50% -12%, #3a2f7a 0%, #241f63 26%, #12143f 55%, #0a0c2b 78%, #06081d 100%) fixed}
+#cosmos .neb{position:absolute;inset:-20%;background:
+ radial-gradient(38% 30% at 22% 18%, rgba(122,166,245,.22), transparent 70%),
+ radial-gradient(42% 32% at 82% 26%, rgba(170,120,235,.20), transparent 70%),
+ radial-gradient(50% 40% at 50% 92%, rgba(90,120,230,.16), transparent 72%),
+ radial-gradient(36% 28% at 78% 72%, rgba(247,220,146,.10), transparent 70%);
+ filter:blur(6px);animation:nebDrift 46s ease-in-out infinite alternate}
+@keyframes nebDrift{from{transform:translate3d(-1.5%,-1%,0) scale(1.02)}to{transform:translate3d(2%,1.5%,0) scale(1.06)}}
+#cosmos .stars,#cosmos .stars2{position:absolute;inset:-50px;background-repeat:repeat}
+#cosmos .stars{background-image:radial-gradient(2px 2px at 165px 77px,rgba(200,220,255,.8),transparent),radial-gradient(1px 1px at 24px 37px,rgba(255,255,255,.85),transparent),radial-gradient(1px 1px at 298px 29px,#ffffff,transparent),radial-gradient(2px 2px at 44px 222px,#ffffff,transparent),radial-gradient(2px 2px at 123px 46px,#ffffff,transparent),radial-gradient(1px 1px at 289px 63px,rgba(200,220,255,.8),transparent),radial-gradient(2px 2px at 298px 31px,#ffffff,transparent),radial-gradient(1px 1px at 113px 23px,rgba(255,255,255,.85),transparent),radial-gradient(1px 1px at 214px 73px,rgba(200,220,255,.8),transparent),radial-gradient(1px 1px at 157px 286px,#ffffff,transparent),radial-gradient(1px 1px at 297px 292px,rgba(255,255,255,.85),transparent),radial-gradient(1px 1px at 49px 280px,rgba(200,220,255,.8),transparent),radial-gradient(2px 2px at 30px 105px,rgba(200,220,255,.8),transparent),radial-gradient(1px 1px at 272px 218px,rgba(255,255,255,.85),transparent),radial-gradient(1px 1px at 299px 232px,rgba(255,255,255,.85),transparent),radial-gradient(1px 1px at 127px 92px,#ffffff,transparent),radial-gradient(2px 2px at 294px 153px,rgba(255,255,255,.85),transparent),radial-gradient(1px 1px at 229px 147px,#ffffff,transparent),radial-gradient(1px 1px at 262px 214px,rgba(255,255,255,.85),transparent),radial-gradient(2px 2px at 77px 250px,#ffffff,transparent),radial-gradient(1px 1px at 39px 285px,rgba(255,255,255,.85),transparent),radial-gradient(2px 2px at 179px 254px,#ffffff,transparent),radial-gradient(2px 2px at 47px 138px,rgba(200,220,255,.8),transparent),radial-gradient(1px 1px at 33px 31px,rgba(200,220,255,.8),transparent),radial-gradient(1px 1px at 295px 228px,rgba(200,220,255,.8),transparent),radial-gradient(1px 1px at 197px 177px,rgba(255,255,255,.85),transparent),radial-gradient(1px 1px at 181px 86px,rgba(255,255,255,.85),transparent),radial-gradient(1px 1px at 30px 111px,#ffffff,transparent),radial-gradient(2px 2px at 126px 203px,rgba(255,255,255,.85),transparent),radial-gradient(2px 2px at 41px 85px,rgba(255,255,255,.85),transparent),radial-gradient(1px 1px at 281px 142px,rgba(255,255,255,.85),transparent),radial-gradient(2px 2px at 281px 142px,rgba(255,255,255,.85),transparent),radial-gradient(1px 1px at 194px 118px,#ffffff,transparent),radial-gradient(1px 1px at 90px 77px,rgba(200,220,255,.8),transparent),radial-gradient(2px 2px at 119px 6px,rgba(200,220,255,.8),transparent),radial-gradient(1px 1px at 93px 134px,#ffffff,transparent),radial-gradient(1px 1px at 74px 214px,rgba(200,220,255,.8),transparent),radial-gradient(1px 1px at 289px 163px,rgba(200,220,255,.8),transparent),radial-gradient(2px 2px at 263px 27px,rgba(200,220,255,.8),transparent),radial-gradient(2px 2px at 286px 200px,rgba(255,255,255,.85),transparent),radial-gradient(2px 2px at 201px 53px,rgba(200,220,255,.8),transparent),radial-gradient(1px 1px at 205px 31px,#ffffff,transparent),radial-gradient(1px 1px at 106px 225px,#ffffff,transparent),radial-gradient(1px 1px at 174px 26px,#ffffff,transparent),radial-gradient(1px 1px at 290px 77px,rgba(255,255,255,.85),transparent),radial-gradient(1px 1px at 13px 36px,rgba(200,220,255,.8),transparent),radial-gradient(1px 1px at 192px 76px,rgba(255,255,255,.85),transparent),radial-gradient(1px 1px at 186px 242px,#ffffff,transparent),radial-gradient(2px 2px at 249px 238px,rgba(255,255,255,.85),transparent),radial-gradient(1px 1px at 159px 43px,#ffffff,transparent),radial-gradient(2px 2px at 175px 135px,rgba(200,220,255,.8),transparent),radial-gradient(1px 1px at 82px 264px,#ffffff,transparent),radial-gradient(1px 1px at 270px 185px,rgba(200,220,255,.8),transparent),radial-gradient(1px 1px at 278px 13px,rgba(200,220,255,.8),transparent),radial-gradient(1px 1px at 46px 133px,#ffffff,transparent),radial-gradient(1px 1px at 182px 114px,rgba(200,220,255,.8),transparent),radial-gradient(1px 1px at 114px 99px,rgba(255,255,255,.85),transparent),radial-gradient(2px 2px at 116px 102px,rgba(255,255,255,.85),transparent),radial-gradient(1px 1px at 14px 14px,rgba(255,255,255,.85),transparent),radial-gradient(1px 1px at 132px 99px,rgba(255,255,255,.85),transparent);background-size:300px 300px;animation:twinkleA 5.5s ease-in-out infinite, drift 150s linear infinite}
+#cosmos .stars2{background-image:radial-gradient(1px 1px at 178px 186px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 52px 116px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 172px 104px,rgba(247,220,146,.6),transparent),radial-gradient(1px 1px at 0px 245px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 43px 61px,rgba(247,220,146,.6),transparent),radial-gradient(1px 1px at 102px 244px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 170px 44px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 237px 205px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 81px 87px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 77px 238px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 242px 179px,rgba(247,220,146,.6),transparent),radial-gradient(1px 1px at 67px 10px,rgba(247,220,146,.6),transparent),radial-gradient(1px 1px at 52px 71px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 108px 14px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 149px 256px,rgba(247,220,146,.6),transparent),radial-gradient(1px 1px at 166px 132px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 67px 31px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 234px 215px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 77px 9px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 2px 76px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 242px 61px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 166px 247px,rgba(247,220,146,.6),transparent),radial-gradient(1px 1px at 29px 127px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 21px 50px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 14px 32px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 258px 102px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 231px 244px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 132px 103px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 213px 62px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 161px 37px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 219px 37px,rgba(247,220,146,.6),transparent),radial-gradient(1px 1px at 155px 62px,rgba(247,220,146,.6),transparent),radial-gradient(1px 1px at 187px 73px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 239px 112px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 203px 249px,rgba(247,220,146,.6),transparent),radial-gradient(1px 1px at 114px 82px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 206px 173px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 182px 163px,rgba(247,220,146,.6),transparent),radial-gradient(1px 1px at 187px 9px,rgba(247,220,146,.6),transparent),radial-gradient(1px 1px at 234px 225px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 196px 169px,rgba(247,220,146,.6),transparent),radial-gradient(1px 1px at 151px 32px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 53px 43px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 20px 92px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 216px 132px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 253px 167px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 29px 93px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 137px 8px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 133px 42px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 34px 135px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 5px 173px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 137px 66px,rgba(247,220,146,.6),transparent),radial-gradient(1px 1px at 122px 56px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 25px 92px,rgba(180,205,255,.55),transparent),radial-gradient(1px 1px at 156px 105px,rgba(180,205,255,.55),transparent);background-size:260px 260px;opacity:.85;animation:twinkleB 7.5s ease-in-out infinite, drift 230s linear infinite reverse}
+@keyframes twinkleA{0%,100%{opacity:.9}50%{opacity:.55}}
+@keyframes twinkleB{0%,100%{opacity:.85}50%{opacity:.45}}
+@keyframes drift{from{background-position:0 0}to{background-position:0 1200px}}
+/* divine light from above */
+#cosmos .glory{position:absolute;left:50%;top:-16%;width:140vw;height:90vh;transform:translateX(-50%);pointer-events:none;
+ background:radial-gradient(50% 55% at 50% 0%, rgba(255,241,200,.28), rgba(255,226,150,.12) 36%, transparent 66%);
+ mix-blend-mode:screen;animation:gloryPulse 9s ease-in-out infinite}
+#cosmos .rays{position:absolute;left:50%;top:-40vh;width:120vw;height:120vh;transform:translateX(-50%);opacity:.12;mix-blend-mode:screen;
+ background:repeating-conic-gradient(from 90deg at 50% 0%, rgba(255,240,200,.9) 0deg 2deg, transparent 2deg 9deg);
+ -webkit-mask:radial-gradient(60% 70% at 50% 0%, #000 0%, transparent 70%);mask:radial-gradient(60% 70% at 50% 0%, #000 0%, transparent 70%);
+ animation:raySway 24s ease-in-out infinite}
+@keyframes gloryPulse{0%,100%{opacity:.85}50%{opacity:1}}
+@keyframes raySway{0%,100%{transform:translateX(-50%) rotate(-3deg)}50%{transform:translateX(-50%) rotate(3deg)}}
+/* constellations + cross of light */
+#cosmos .constell{position:absolute;inset:0;width:100%;height:100%;opacity:.5}
+/* shooting stars */
+#cosmos .shoot{position:absolute;width:150px;height:2px;border-radius:2px;
+ background:linear-gradient(90deg,#fff,rgba(255,255,255,.5) 30%,transparent);
+ filter:drop-shadow(0 0 6px rgba(255,255,255,.9)) drop-shadow(0 0 12px rgba(200,220,255,.6));
+ opacity:0;transform:rotate(20deg)}
+#cosmos .shoot::after{content:"";position:absolute;right:0;top:-2px;width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 10px 2px rgba(255,255,255,.9)}
+#cosmos .s1{top:12%;left:-20%;animation:shootDiag 9s linear infinite;animation-delay:1s}
+#cosmos .s2{top:30%;left:-20%;animation:shootDiag 11s linear infinite;animation-delay:5.5s}
+#cosmos .s3{top:6%;left:-20%;animation:shootDiag 14s linear infinite;animation-delay:9s}
+@keyframes shootDiag{0%{transform:translate(0,0) rotate(20deg);opacity:0}
+ 4%{opacity:1}22%{opacity:1}30%{transform:translate(130vw,52vh) rotate(20deg);opacity:0}100%{opacity:0}}
+#app{position:relative;z-index:1}
+.tabbar{z-index:6}
+@media(prefers-reduced-motion:reduce){
+ #cosmos .stars,#cosmos .stars2,#cosmos .neb,#cosmos .glory,#cosmos .rays{animation:none}
+ #cosmos .shoot{display:none}
+}
 </style>
 
 </head>
 <body>
+<div id="cosmos" aria-hidden="true"><div class="neb"></div><div class="stars"></div><div class="stars2"></div><div class="rays"></div><div class="glory"></div><svg class="constell" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="cs"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#f7dc92"/></radialGradient></defs><g stroke="rgba(247,220,146,.45)" stroke-width="1" fill="none"><path d="M300 90 L300 210 M258 140 L342 140"/><path d="M48 300 L92 330 L140 312 L176 352 L150 404"/><path d="M250 560 L300 600 L350 585 L330 650 L372 690"/><path d="M60 70 L110 100 L96 150 L150 160"/></g><g fill="url(#cs)"><circle cx="300" cy="90" r="2.1"/><circle cx="300" cy="210" r="2.1"/><circle cx="258" cy="140" r="2.1"/><circle cx="342" cy="140" r="2.1"/><circle cx="48" cy="300" r="2.1"/><circle cx="92" cy="330" r="2.1"/><circle cx="140" cy="312" r="2.1"/><circle cx="176" cy="352" r="2.1"/><circle cx="150" cy="404" r="2.1"/><circle cx="250" cy="560" r="2.1"/><circle cx="300" cy="600" r="2.1"/><circle cx="350" cy="585" r="2.1"/><circle cx="330" cy="650" r="2.1"/><circle cx="372" cy="690" r="2.1"/><circle cx="60" cy="70" r="2.1"/><circle cx="110" cy="100" r="2.1"/><circle cx="96" cy="150" r="2.1"/><circle cx="150" cy="160" r="2.1"/><circle cx="210" cy="120" r="1.6"/><circle cx="80" cy="500" r="1.6"/><circle cx="330" cy="300" r="1.4"/><circle cx="200" cy="700" r="1.6"/><circle cx="140" cy="620" r="1.3"/></g></svg><i class="shoot s1"></i><i class="shoot s2"></i><i class="shoot s3"></i></div>
 <div id="app">
  <div class="top">
   <div class="brand"><svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="8" rx="9" ry="3.2" fill="none" stroke="#e0ad3e" stroke-width="2"/><circle cx="20" cy="19" r="6" fill="#4378de"/><path d="M6 36c1-9 7-12 14-12s13 3 14 12z" fill="#7aa6f5"/></svg><div>Sacred Chant<small>Sound for the inner life</small></div></div>
@@ -390,13 +437,11 @@ body.on-mark #supportFab{display:none}
 <section class="auth" id="auth" role="dialog" aria-modal="true" aria-label="Sign in"><div>
 <svg width="120" height="90" viewBox="0 0 120 90" aria-hidden="true"><ellipse cx="60" cy="14" rx="24" ry="7" fill="none" stroke="#e0ad3e" stroke-width="4"/><circle cx="60" cy="44" r="18" fill="#ffe2c4"/><path d="M24 90c3-26 17-34 36-34s33 8 36 34z" fill="#7aa6f5"/></svg>
 <h1 style="font-size:26px;font-weight:800">Welcome to Sacred Chant</h1>
-<p class="intro" style="margin-top:4px">Sign in or create an account with your email and password. Your light and progress stay saved.</p>
+<p class="intro" style="margin-top:4px">Enter with your name and email. Your light and progress stay saved on this device.</p>
 <div class="sheet" id="aTabs"><button data-m="login" class="on">Log in</button><button data-m="signup">Create account</button></div>
 <form id="aForm" novalidate>
 <div id="aNameW" hidden><label for="aName">Name</label><input type="text" id="aName" maxlength="60" autocomplete="name" placeholder="Your name"></div>
-<label for="aMail">Email</label><input type="email" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
-<label for="aPass">Password</label><input type="password" id="aPass" autocomplete="current-password" minlength="8" maxlength="128" placeholder="Enter your password">
-<button type="button" class="ghost" id="aForgot" style="margin-top:8px">Forgot password?</button>
+<label for="aMail">Email</label><input type="text" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
 <p class="err" id="aErr" role="alert"></p>
 <button type="submit" class="btn" id="aGo" style="width:100%">Log in</button></form>
 <div style="margin-top:22px;padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--card)">
@@ -1068,13 +1113,11 @@ async function claimPendingDigistoreOrders() {
 
 function setAuth(m) {
   amode = m;
-  $('#aNameW').hidden = m !== 'signup';
-  $('#aForgot').hidden = m !== 'login';
-  $('#aTabs').hidden = m === 'recovery';
-  $('#aPass').autocomplete = m === 'signup' || m === 'recovery' ? 'new-password' : 'current-password';
-  $('#aPass').placeholder = m === 'recovery' ? 'Create a new password (8+ characters)' : m === 'signup' ? 'Create a password (8+ characters)' : 'Enter your password';
-  $('#aGo').textContent = m === 'recovery' ? 'Save new password' : m === 'login' ? 'Log in' : 'Create account';
-  $('#aTabs button').forEach(b => b.classList.toggle('on', b.dataset.m === m));
+  $('#aNameW').hidden = m === 'login';
+  $$('#aTabs button').forEach(b =>
+    b.classList.toggle('on', b.dataset.m === m)
+  );
+  $('#aGo').textContent = m === 'login' ? 'Log in' : 'Create account';
   $('#aErr').textContent = '';
 }
 
@@ -1095,12 +1138,6 @@ function getSupabase() {
         );
 
         sbClient.auth.onAuthStateChange((event, session) => {
-          if (event === 'PASSWORD_RECOVERY' && session?.user) {
-            setAuth('recovery');
-            $('#auth').classList.add('on');
-            $('#aErr').textContent = 'Create a new password for your account.';
-            return;
-          }
           if (
             session &&
             session.user &&
@@ -1166,93 +1203,51 @@ setTimeout(async () => {
 
 $('#aForm').onsubmit = async e => {
   e.preventDefault();
+
   const email = $('#aMail').value.trim().toLowerCase();
-  const password = $('#aPass').value;
   const name = $('#aName').value.trim();
   const button = $('#aGo');
   const error = $('#aErr');
 
-  if (amode !== 'recovery' && !EM.test(email)) {
+  if (!EM.test(email)) {
     error.textContent = 'Enter a valid email address.';
     return;
   }
-  if (!password || ((amode === 'signup' || amode === 'recovery') && password.length < 8)) {
-    error.textContent = (amode === 'signup' || amode === 'recovery')
-      ? 'Your password must be at least 8 characters.'
-      : 'Enter your password.';
-    return;
-  }
+
   if (amode === 'signup' && !name) {
     error.textContent = 'Please enter your name.';
     return;
   }
 
-  const modeAtSubmit = amode;
   button.disabled = true;
   button.textContent = 'Please wait...';
   error.textContent = '';
+
   try {
     const client = await getSupabase();
-    let result;
-    if (modeAtSubmit === 'recovery') {
-      result = await client.auth.updateUser({ password });
-    } else if (modeAtSubmit === 'signup') {
-      result = await client.auth.signUp({
-        email, password,
-        options: { data: { full_name: name } }
-      });
-    } else {
-      result = await client.auth.signInWithPassword({ email, password });
-    }
+
+    const result = await client.auth.signInWithOtp({
+      email: email,
+      options: {
+        emailRedirectTo: window.location.origin + '/sacredchant/',
+        shouldCreateUser: true,
+        data: name ? { full_name: name } : undefined
+      }
+    });
+
     if (result.error) throw result.error;
 
-    if (modeAtSubmit === 'recovery') {
-      $('#auth').classList.remove('on');
-      setAuth('login');
-      $('#aPass').value = '';
-      go('home');
-      toast('Password updated successfully.');
-    } else if (modeAtSubmit === 'signup' && !result.data?.session) {
-      error.textContent = 'Account created. Check your email if confirmation is required, then log in with your password.';
-    } else if (modeAtSubmit === 'login' && !result.data?.session) {
-      error.textContent = 'Login was not completed. Please try again.';
-    }
+    error.textContent =
+      'Check your email for your secure sign-in link.';
+
   } catch (err) {
     console.error('Authentication error:', err);
-    const message = String(err?.message || '');
-    if (modeAtSubmit === 'login' && /invalid login credentials/i.test(message)) {
-      error.textContent = 'Email or password is incorrect. If this is an older account created with a sign-in link, use “Forgot password?” to set a password first.';
-    } else {
-      error.textContent = message || 'Could not authenticate. Please try again.';
-    }
+    error.textContent =
+      err.message || 'Could not send the email. Please try again.';
   } finally {
     button.disabled = false;
-    button.textContent = amode === 'recovery' ? 'Save new password' : amode === 'login' ? 'Log in' : 'Create account';
-  }
-};
-
-$('#aForgot').onclick = async () => {
-  const email = $('#aMail').value.trim().toLowerCase();
-  const error = $('#aErr');
-  if (!EM.test(email)) {
-    error.textContent = 'Enter your email address above first.';
-    return;
-  }
-  const button = $('#aForgot');
-  button.disabled = true;
-  error.textContent = '';
-  try {
-    const client = await getSupabase();
-    const { error: resetError } = await client.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/sacredchant/'
-    });
-    if (resetError) throw resetError;
-    error.textContent = 'If an account exists for this email, a password reset email will be sent.';
-  } catch (err) {
-    console.error('Password reset error:', err);
-    error.textContent = err.message || 'Could not request a password reset.';
-  } finally {
-    button.disabled = false;
+    button.textContent =
+      amode === 'login' ? 'Log in' : 'Create account';
   }
 };
 
