@@ -1036,6 +1036,10 @@ $('#sOut').onclick = async () => {
   $('#aMail').value = '';
   $('#aName').value = '';
   
+setAuth('login');
+  $('#auth').classList.add('on');
+};
+
 /* Support chat form */
 (() => {
   const fab = document.getElementById('supportFab');
@@ -1101,10 +1105,6 @@ $('#sOut').onclick = async () => {
     }
   });
 })();
-
-setAuth('login');
-  $('#auth').classList.add('on');
-};
 
 setAuth('login');
 $('#auth').classList.add('on');
