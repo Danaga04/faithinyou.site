@@ -1064,70 +1064,21 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     if (!form.reportValidity()) return;
 
-    send.disabled = true;
-    send.textContent = 'Sending...';
+    const name = document.getElementById('supportName').value.trim();
+    const email = document.getElementById('supportEmail').value.trim();
+    const message = document.getElementById('supportMessage').value.trim();
+    const subject = encodeURIComponent('Sacred Chant Support Request');
+    const body = encodeURIComponent(
+      'Name: ' + name + '\\n' +
+      'Reply email: ' + email + '\\n\\n' +
+      'Question or issue:\\n' + message
+    );
+
+    /* Opens the visitor's email app with the support request already written. */
+    const mailto = 'mailto:danagapreto@gmail.com?subject=' + subject + '&body=' + body;
     status.classList.remove('error');
-    status.textContent = 'Opening secure email submission...';
-
-    /* Use a normal HTML form POST through a hidden iframe to avoid Safari fetch/CORS failures. */
-    let frame = document.getElementById('supportSubmitFrame');
-    if (!frame) {
-      frame = document.createElement('iframe');
-      frame.name = 'supportSubmitFrame';
-      frame.id = 'supportSubmitFrame';
-      frame.title = 'Support message submission';
-      frame.hidden = true;
-      document.body.appendChild(frame);
-    }
-
-    form.method = 'POST';
-    form.action = 'https://formsubmit.co/danagapreto@gmail.com';
-    form.target = 'supportSubmitFrame';
-
-    const addHidden = (name, value) => {
-      let input = form.querySelector('input[type="hidden"][name="' + name + '"]');
-      if (!input) {
-        input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = name;
-        form.appendChild(input);
-      }
-      input.value = value;
-    };
-    addHidden('_subject', 'Sacred Chant — Support request');
-    addHidden('_template', 'table');
-    addHidden('_captcha', 'false');
-
-    let completed = false;
-    const finish = () => {
-      if (completed) return;
-      completed = true;
-      status.classList.remove('error');
-      status.textContent = 'Your message was submitted. If this is the first submission, check the support inbox for a FormSubmit activation email.';
-      form.reset();
-      send.disabled = false;
-      send.textContent = 'Send message';
-    };
-    frame.addEventListener('load', finish, { once: true });
-    try {
-      HTMLFormElement.prototype.submit.call(form);
-      status.textContent = 'Submitting your message...';
-      /* If the remote response is blocked or never loads, restore the button and explain the activation requirement. */
-      setTimeout(() => {
-        if (!completed) {
-          send.disabled = false;
-          send.textContent = 'Try again';
-          status.classList.add('error');
-          status.textContent = 'The email service did not confirm submission. Check the internet connection and whether FormSubmit has been activated for danagapreto@gmail.com.';
-        }
-      }, 12000);
-    } catch (err) {
-      console.error('Support form submission failed:', err);
-      send.disabled = false;
-      send.textContent = 'Try again';
-      status.classList.add('error');
-      status.textContent = 'Could not submit the form. Please try again later.';
-    }
+    status.textContent = 'Opening your email app with the message ready to send. Please tap Send in your email app.';
+    window.location.href = mailto;
   });
 })();
 });
