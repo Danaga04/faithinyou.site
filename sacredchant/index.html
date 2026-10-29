@@ -1040,7 +1040,8 @@ setAuth('login');
   $('#auth').classList.add('on');
 };
 
-/* Support chat form */
+/* Support chat form: widget HTML is placed after this script, so initialize after parsing. */
+document.addEventListener('DOMContentLoaded', () => {
 (() => {
   const fab = document.getElementById('supportFab');
   const panel = document.getElementById('supportPanel');
@@ -1105,6 +1106,7 @@ setAuth('login');
     }
   });
 })();
+});
 
 setAuth('login');
 $('#auth').classList.add('on');
