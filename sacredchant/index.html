@@ -294,41 +294,6 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
   <p class="sec">Nature sounds</p><div id="lN"></div>
  </section>
 
- <section class="screen" id="s-sanct">
-  <h2 class="h">Sanctuary</h2>
-  <p class="intro">Prayers, a daily rhythm and simple rituals for a quiet space of your own.</p>
-  <div class="card">
-   <p class="lab">The Sealing Prayer</p><h3>Saint Michael, at the door of my house</h3>
-   <p class="lab" style="font-weight:500">Press play, put your hand over your heart and say it with Celestino. One minute, somewhere quiet.</p>
-   <audio controls preload="none" id="sealAu"></audio>
-   <p class="verse">Saint Michael, Archangel of the Lord,<br>you who cast the serpent down —<br>stand now at the door of my house.<br>Seal these walls. Seal those I love.<br>What was handed down to me in sorrow,<br>let it end here, in my hands.<br>I am not what I carried.<br>I am sealed. My house is sealed.<br>In the name of the Father, and of the Son,<br>and of the Holy Spirit. Amen.</p>
-  </div>
-  <div class="card"><p class="lab">Psalm 91</p><p class="verse">He will cover you with his feathers, and under his wings you will find refuge. You will not fear the terror of night… For he will command his angels concerning you, to guard you in all your ways.</p></div>
-  <p class="sec">Four elements, four reminders</p>
-  <div class="els"><div><b>🌱 Earth</b>A stone or plant nearby for grounding.</div><div><b>💧 Water</b>A glass of water for renewal.</div><div><b>🔥 Fire</b>A candle or lamp for warmth.</div><div><b>🌬️ Air</b>An open window for clarity.</div></div>
-  <div class="card" style="margin-top:16px">
-   <details open><summary>📖 Three-minute morning practice</summary><ol><li><b>Arrive.</b> Sit with feet on the floor, shoulders soft, breathe naturally.</li><li><b>Attend.</b> Feel your feet, rest on one quiet point, return to the next breath.</li><li><b>Intend.</b> Name what you want to bring today: patience, gratitude, care. Say a short prayer, then choose a chant.</li></ol></details>
-   <details><summary>🕊️ Natural elements handbook</summary><p>Choose a crystal or smooth stone with meaning for you and place it beside your prayer materials. Set a plant nearby as a reminder of patience. Keep water away from electronics. Pick one intention, say it in a short prayer, listen to a chant, then return to your intention. Incense is optional.</p></details>
-  </div>
-  <p class="intro" style="font-size:13px">Sacred Chant is a practice of sound and reflection. It does not replace medical, financial or professional care.</p>
- </section>
-
- <section class="screen" id="s-vow">
-  <h2 class="h">Your vow</h2>
-  <p class="intro">Pick a length and walk it one day at a time. A few minutes is enough.</p>
-  <div class="card" id="vNew">
-   <label for="vN" class="lab">Name your intention</label><input type="text" id="vN" maxlength="60" placeholder="Calm mornings">
-   <div class="sheet" id="vLen"><button data-d="7" class="on">7 days</button><button data-d="14">14</button><button data-d="21">21</button><button data-d="30">30</button></div>
-   <p style="margin-top:16px;text-align:center"><button class="btn" id="vGo">Begin vow</button></p>
-  </div>
-  <div class="card" id="vAct" hidden>
-   <h3 id="vName"></h3><div class="bar" style="margin:10px 0"><i id="vBar"></i></div><p class="lab" id="vTxt"></p>
-   <div class="dots" id="vDots"></div>
-   <p style="text-align:center"><button class="btn gold" id="vChk">Mark today as chanted</button></p>
-   <p style="text-align:center;margin-top:12px"><button class="ghost" id="vEnd">End this vow</button></p>
-  </div>
- </section>
-
  <section class="screen" id="s-me">
   <h2 class="h">Your sanctuary</h2>
   <div class="stats"><div class="stat"><b id="stS">0</b><small>day streak</small></div><div class="stat"><b id="stM">0</b><small>minutes</small></div><div class="stat"><b id="stL">0</b><small>light</small></div></div>
@@ -342,8 +307,6 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 <nav class="tabbar" aria-label="Main"><div>
  <button class="tab on" data-t="home"><svg viewBox="0 0 24 24"><path d="M12 3l1.2 7.8L21 12l-7.8 1.2L12 21l-1.2-7.8L3 12l7.8-1.2z"/></svg>Home</button>
  <button class="tab" data-t="chants"><svg viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg>Chants</button>
- <button class="tab" data-t="sanct"><svg viewBox="0 0 24 24"><path d="M12 3c0 3-4 5-4 9a4 4 0 008 0c0-4-4-6-4-9z"/><path d="M5 20h14"/></svg>Sanctuary</button>
- <button class="tab" data-t="vow"><svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2"/><circle cx="18" cy="6" r="2"/><path d="M8 18h6a3 3 0 000-6h-4a3 3 0 010-6h6"/></svg>Vow</button>
  <button class="tab" data-t="store"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 11.2a1.5 1.5 0 01-1.5 1.3H7.7a1.5 1.5 0 01-1.5-1.3z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg>Store</button>
  <button class="tab" data-t="me"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20.5c0-4.5 3.1-7 7.5-7s7.5 2.5 7.5 7"/></svg>Profile</button>
 </div></nav>
@@ -416,7 +379,6 @@ function streak(){let n=0,d=new Date();if(!S.days.includes(ymd(d)))d.setDate(d.g
 function row(c){return `<button class="item" data-id="${c.id}"><span class="ic" style="--g:${c.g}">${c.e}</span><span><b>${c.n}</b><span>${c.tag}</span></span><span style="margin-left:auto;color:var(--acc);font-size:22px">▶</span></button>`}
 $('#lM').innerHTML=CH.filter(c=>c.k=='m').map(row).join('');$('#lD').innerHTML=CH.filter(c=>c.k=='d').map(row).join('');$('#lN').innerHTML=CH.filter(c=>c.k=='n').map(row).join('');
 $$('.item').forEach(b=>b.onclick=()=>play(CH.find(c=>c.id===b.dataset.id)));
-$('#sealAu').src=SEAL_AUDIO;
 function go(t){if(t!=='vid')$('#vBox').innerHTML='';if(t!=='web'&&$('#wBox'))$('#wBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));scrollTo(0,0)}
 $$('.tab').forEach(b=>b.onclick=()=>access(b.dataset.t));
 function render(){
@@ -425,11 +387,6 @@ function render(){
  ['#lightN','#stL'].forEach(s=>$(s).textContent=S.light);$('#stM').textContent=Math.round(S.min);$('#stS').textContent=streak();
  tickOffer();
  const ms=CH.filter(c=>c.k=='m');window.DC=ms[Math.floor(Date.now()/864e5)%ms.length];$('#dM').textContent=DC.m;$('#dX').textContent=DC.x;
- const v=S.vow;$('#vNew').hidden=!!v;$('#vAct').hidden=!v;if(!v)return;
- $('#vName').textContent=v.name;const n=v.done.length;$('#vBar').style.width=(n/v.len*100)+'%';$('#vTxt').textContent=n>=v.len?'Your vow is fulfilled. Well walked.':n+' of '+v.len+' days chanted';
- const day=Math.min(v.len,Math.floor((new Date(today())-new Date(v.start))/864e5)+1);
- $('#vDots').innerHTML=Array.from({length:v.len},(_,i)=>{const k=i+1,x=v.done.includes(k);return `<span class="dot ${x?'done':k===day?'now':''}">${x?'✓':k}</span>`}).join('');
- $('#vChk').disabled=v.done.includes(day);$('#vChk').dataset.day=day;
 }
 $('#dPlay').onclick=()=>play(DC);
 /* ===== Offer your intention: clique suave, auréola voando até o anjo, sino na chegada ===== */
@@ -527,13 +484,9 @@ $('#offer').onclick = async () => {
 };
 $('#nSave').onclick=()=>{S.name=$('#nIn').value.trim();save();render();toast('Saved')};
 $('#reset').onclick=()=>{if(confirm('Reset all progress on this device?')){S={name:S.name,light:10,min:0,days:[],last:'',lastTs:0,vow:null,unl:null};save();render()}};
-let vl=7;$$('#vLen button').forEach(b=>b.onclick=()=>{vl=+b.dataset.d;$$('#vLen button').forEach(x=>x.classList.toggle('on',x===b))});
-$('#vGo').onclick=()=>{S.vow={name:$('#vN').value.trim()||'My vow',len:vl,start:today(),done:[]};save();render()};
-$('#vChk').onclick=()=>{const d=+$('#vChk').dataset.day;if(!S.vow.done.includes(d))S.vow.done.push(d);if(!S.days.includes(today()))S.days.push(today());save();render();toast('Day '+d+' kept')};
-$('#vEnd').onclick=()=>{if(confirm('End this vow?')){S.vow=null;save();render()}};
 $('#cOpen').onclick=()=>{$('#cN').textContent=S.name||'Guest';$('#cS').textContent=streak();$('#cM').textContent=Math.round(S.min);$('#cD').textContent=new Date().toLocaleDateString('en',{dateStyle:'long'});$('#cert').classList.add('on')};
 $('#cX').onclick=()=>$('#cert').classList.remove('on');
-const COST={chants:2,sanct:2,vow:2},PLAY_COST=3;
+const COST={chants:2},PLAY_COST=3;
 async function spend(n,cb){
   if(!Number.isInteger(n)||n<1)return;
   try{
