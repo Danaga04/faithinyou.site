@@ -135,6 +135,29 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .ios li b{color:var(--acc)}
 .ios .warn{background:rgba(224,173,62,.18);border-radius:10px;padding:2px 8px;font-weight:700}
 .ios .nt{margin-top:12px;font-size:13px;color:var(--mute)}
+
+/* First-time onboarding: large, simple controls for easy reading */
+.onboard{position:fixed;inset:0;z-index:90;display:none;overflow:auto;padding:calc(18px + env(safe-area-inset-top,0px)) 14px calc(18px + env(safe-area-inset-bottom,0px));background:rgba(10,20,50,.78);align-items:center;justify-content:center}
+.onboard.on{display:flex}
+.ob-box{width:100%;max-width:500px;max-height:calc(100dvh - 36px);overflow:auto;background:linear-gradient(160deg,#fffdf5,#e9f2ff);color:#1c2a4a;border:2px solid #e0ad3e;border-radius:24px;padding:24px 20px;box-shadow:0 24px 70px rgba(0,0,0,.35)}
+.ob-top{text-align:center;font-size:13px;font-weight:800;letter-spacing:.04em;color:#365fae;margin-bottom:8px}
+.ob-title{font-size:26px;line-height:1.2;font-weight:800;text-align:center;margin:0 0 10px;color:#1c2a4a}
+.ob-copy{font-size:17px;line-height:1.5;text-align:center;color:#42537a;margin:0 0 18px}
+.ob-choice{display:flex;align-items:center;gap:12px;width:100%;min-height:58px;text-align:left;padding:13px 15px;margin:9px 0;border:2px solid #cbd8f1;border-radius:15px;background:#fff;color:#1c2a4a;font-size:17px;font-weight:700}
+.ob-choice:focus-visible,.ob-choice:hover{border-color:#4378de;background:#f2f6ff}
+.ob-choice i{font-style:normal;font-size:25px;width:32px;text-align:center;flex:none}
+.ob-progress{height:8px;border-radius:20px;background:#dce5f5;overflow:hidden;margin:0 0 18px}
+.ob-progress i{display:block;height:100%;background:linear-gradient(90deg,#7aa6f5,#e0ad3e);transition:width .2s}
+.ob-primary{display:flex;width:100%;min-height:56px;align-items:center;justify-content:center;text-align:center;border-radius:16px;background:linear-gradient(135deg,#7aa6f5,#4378de);color:white;font-size:18px;font-weight:800;padding:14px 16px;margin-top:16px;box-shadow:0 8px 20px rgba(67,120,222,.25)}
+.ob-secondary{display:block;margin:12px auto 0;padding:8px 12px;color:#365fae;font-weight:700;text-decoration:underline}
+.ob-reason{border:1px solid #e0ad3e;border-radius:17px;background:#fffaf0;padding:16px;margin:16px 0;color:#293958;font-size:16px;line-height:1.6}
+.ob-reason b{color:#2f5fc4}
+.ob-step{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-bottom:1px solid #dce5f5;color:#293958;font-size:16px;line-height:1.5}
+.ob-step:last-child{border-bottom:0}
+.ob-number{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#e0ad3e;color:#3b2a05;font-weight:800}
+.ob-note{text-align:center;font-size:14px;color:#5a6c91;margin-top:12px}
+@media(min-width:520px){.ob-box{padding:28px}.ob-title{font-size:29px}}
+
 /* popup de compra */
 .buy{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,20,50,.62)}
 .buy[hidden]{display:none}
@@ -308,6 +331,16 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
  <p class="buy__note">Secure checkout by Digistore24. Light Tokens are added to your account after your payment is confirmed.</p>
 </div></div>
 <div class="toast" id="toast" role="status"></div>
+
+<section class="onboard" id="onboard" role="dialog" aria-modal="true" aria-labelledby="obTitle">
+ <div class="ob-box" id="obBox">
+  <p class="ob-top" id="obTop">YOUR PERSONAL START</p>
+  <h2 class="ob-title" id="obTitle">Let's find a prayer for you</h2>
+  <div class="ob-progress" aria-hidden="true"><i id="obProgress" style="width:25%"></i></div>
+  <div id="obBody"></div>
+ </div>
+</section>
+
 
 <script>
 /* Coloque aqui as URLs dos seus audios. Sem src, toca um tom sintetizado. */
@@ -681,6 +714,85 @@ $('#lkX').onclick=()=>$('#lk').classList.remove('on');
 $('#lkU').onclick=()=>{const f=lkAct;$('#lk').classList.remove('on');if(f)spend(10,f)};
 document.addEventListener('click',e=>{const m=e.target.closest('[data-mod]');if(m)return mod(m.dataset.mod);const d=e.target.closest('[data-day]');if(d)dayClick(+d.dataset.day)});
 $('#vBack').onclick=()=>go(vBackTo);$$('[data-back]').forEach(b=>b.onclick=()=>go('home'));
+
+/* First-time welcome quiz for newly created accounts only */
+const ONBOARDING_ROLLOUT_AT = '2026-10-29T00:29:00Z';
+const OB_QUESTIONS = [
+ {q:'What would you most like to focus on today?',h:'Choose the answer that feels right for you.',o:[['☾','Peace and inner calm'],['🙏','A daily prayer and closeness to God'],['🌱','Spiritual growth'],['✨','Prosperity and abundance']]},
+ {q:'When would you prefer to pray?',h:'There is no wrong answer.',o:[['🌅','In the morning'],['🌙','Before going to sleep'],['🕊️','Either time works for me']]},
+ {q:'How often do you usually pray?',h:'Choose the closest answer.',o:[['🙏','Every day'],['🌿','Sometimes'],['💛','I am just beginning']]},
+ {q:'What would help you most right now?',h:'Pick the one that matters most to you.',o:[['🧘','A calmer mind'],['🧭','Hope and direction'],['🌟','Gratitude and faith'],['🌄','A fresh start']] }
+];
+let obAnswers=[], obQuestion=0, obStage='quiz';
+function maybeStartOnboarding(user){
+ try {
+  const createdAt=Date.parse(user && user.created_at || '');
+  const rolloutAt=Date.parse(ONBOARDING_ROLLOUT_AT);
+  if(!Number.isFinite(createdAt)||createdAt<rolloutAt||S.onboardingSeen)return;
+  startOnboarding();
+ } catch(e){console.warn('Could not start first-time welcome:',e)}
+}
+function startOnboarding(){
+ obAnswers=[];obQuestion=0;obStage='quiz';
+ $('#onboard').classList.add('on');
+ document.body.classList.add('nos');
+ obRenderQuestion();
+}
+function obRenderQuestion(){
+ const q=OB_QUESTIONS[obQuestion];
+ $('#obTop').textContent='QUESTION '+(obQuestion+1)+' OF '+OB_QUESTIONS.length;
+ $('#obTitle').textContent=q.q;
+ $('#obProgress').style.width=((obQuestion+1)/OB_QUESTIONS.length*100)+'%';
+ $('#obBody').innerHTML='<p class="ob-copy">'+q.h+'</p>'+q.o.map((o,i)=>'<button type="button" class="ob-choice" data-ob-answer="'+i+'"><i aria-hidden="true">'+o[0]+'</i><span>'+o[1]+'</span></button>').join('');
+ $('#obBody [data-ob-answer]').forEach(b=>b.addEventListener('click',()=>{
+  obAnswers[obQuestion]=q.o[Number(b.dataset.obAnswer)][1];
+  obQuestion++;
+  if(obQuestion<OB_QUESTIONS.length)obRenderQuestion();else obShowReason();
+ }));
+}
+function obReasonCopy(){
+ const focus=obAnswers[0]||'Daily prayer and closeness to God';
+ const timing=obAnswers[1]||'In the morning';
+ const frequency=obAnswers[2]||'I am just beginning';
+ const need=obAnswers[3]||'Hope and direction';
+ let personal='';
+ if(focus==='Prosperity and abundance') personal='You chose prosperity and abundance. A regular prayer can give you a quiet moment to bring your hopes, worries, and choices before God, without needing to solve everything at once.';
+ else if(focus==='Peace and inner calm') personal='You chose peace and inner calm. A short, steady prayer can become a peaceful pause in your day and help you turn your attention away from distractions.';
+ else if(focus==='Spiritual growth') personal='You chose spiritual growth. Following one prayer each day gives you a simple rhythm for reflection and a way to build consistency over time.';
+ else personal='You chose a daily prayer and closeness to God. A simple daily practice can help you set aside a regular moment for faith and reflection.';
+ let skill=frequency==='I am just beginning'?'Because you are just beginning, the plan starts simply: one prayer, one day at a time.':frequency==='Sometimes'?'Because you pray sometimes, a clear daily rhythm can make it easier to return to your practice.':'Because prayer is already part of your life, this seven-day path can give your routine a clear focus.';
+ let needText=need==='A calmer mind'?'Keep the moment gentle and unhurried.':need==='Gratitude and faith'?'Use the prayer as a moment to express gratitude and renew your faith.':need==='A fresh start'?'Let each day be a small, manageable fresh start.':'Use the prayer as a moment to pause, reflect, and seek direction.';
+ return {focus,timing,personal,skill,needText};
+}
+function obShowReason(){
+ obStage='reason';
+ const r=obReasonCopy();
+ $('#obTop').textContent='YOUR PERSONAL START';
+ $('#obTitle').textContent='Why begin with the 7 Prayers of Solomon?';
+ $('#obProgress').style.width='100%';
+ $('#obBody').innerHTML='<p class="ob-copy">Your answers point toward a simple practice you can return to each day.</p><div class="ob-reason"><b>Why this may suit you:</b><br>'+r.personal+' '+r.skill+' '+r.needText+'<br><br><b>Why these seven prayers?</b> They give you a clear seven-day path instead of asking you to figure out where to begin. Start with Day 1 and take one prayer per day, in the morning or before bed. This is a spiritual practice for reflection and consistency, not a promise of specific financial or life outcomes.</div><button type="button" class="ob-primary" id="obContinue">Show me how it works</button>';
+ $('#obContinue').onclick=obShowTutorial;
+}
+function obShowTutorial(){
+ obStage='tutorial';
+ $('#obTop').textContent='A QUICK, SIMPLE GUIDE';
+ $('#obTitle').textContent='Your first prayer is easy';
+ $('#obProgress').style.width='100%';
+ const timing=obAnswers[1]||'In the morning';
+ $('#obBody').innerHTML='<p class="ob-copy">You do not need to know how to use every part of the app. Just follow these steps.</p><div class="ob-step"><span class="ob-number">1</span><span><b>Tap the blue button below.</b> It opens the first of the 7 Prayers of Solomon.</span></div><div class="ob-step"><span class="ob-number">2</span><span><b>Press play and listen.</b> Turn up your phone volume. Sit comfortably and follow along quietly.</span></div><div class="ob-step"><span class="ob-number">3</span><span><b>Return tomorrow.</b> Try one prayer each day, '+(timing==='Before going to sleep'?'before going to sleep':timing==='Either time works for me'?'in the morning or before bed':'in the morning')+'. You can choose the time that works best for you.</span></div><p class="ob-note">You can take your time. There is no need to buy anything to begin.</p><button type="button" class="ob-primary" id="obStartPrayer">Start Day 1 — 7 Prayers of Solomon</button>';
+ $('#obStartPrayer').onclick=obFinishAndStart;
+}
+function obFinishAndStart(){
+ S.onboardingSeen=true;
+ S.onboardingAnswers={focus:obAnswers[0],time:obAnswers[1],prayerExperience:obAnswers[2],todayNeed:obAnswers[3]};
+ if(!S.solStart){S.solStart=Date.now()}
+ save();
+ $('#onboard').classList.remove('on');
+ document.body.classList.remove('nos');
+ solPage();
+ showVid(DAYS[0][1],'Day 1 · 7 Prayers of Solomon','<p class="intro">Your first prayer is ready. Listen at your own pace, and return for one prayer each day.</p>','','sol');
+}
+
 /* login conectado ao Supabase */
 const EM = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 let amode = 'login';
@@ -803,6 +915,7 @@ setTimeout(async () => {
             scheduleNotif();
             nUpd();
             toast('Welcome' + (S.name ? ', ' + S.name : ''));
+            setTimeout(() => maybeStartOnboarding(user), 300);
           }
         });
 
