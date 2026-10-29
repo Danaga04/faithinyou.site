@@ -744,7 +744,7 @@ function obRenderQuestion(){
  $('#obTitle').textContent=q.q;
  $('#obProgress').style.width=((obQuestion+1)/OB_QUESTIONS.length*100)+'%';
  $('#obBody').innerHTML='<p class="ob-copy">'+q.h+'</p>'+q.o.map((o,i)=>'<button type="button" class="ob-choice" data-ob-answer="'+i+'"><i aria-hidden="true">'+o[0]+'</i><span>'+o[1]+'</span></button>').join('');
- $('#obBody [data-ob-answer]').forEach(b=>b.addEventListener('click',()=>{
+ $('#obBody').querySelectorAll('[data-ob-answer]').forEach(b=>b.addEventListener('click',()=>{
   obAnswers[obQuestion]=q.o[Number(b.dataset.obAnswer)][1];
   obQuestion++;
   if(obQuestion<OB_QUESTIONS.length)obRenderQuestion();else obShowReason();
