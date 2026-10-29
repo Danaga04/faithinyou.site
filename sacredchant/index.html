@@ -220,6 +220,31 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 #supportStatus.error{color:#b42318} 
 @media(max-width:480px){#supportFab{right:14px;bottom:calc(80px + env(safe-area-inset-bottom,0px));width:56px;height:56px}#supportPanel{right:14px;bottom:calc(146px + env(safe-area-inset-bottom,0px))}}
 
+
+/* Mark free chat module — self-contained, no AI API */
+.mark-card{display:flex;gap:12px;align-items:center;text-align:left;padding:12px;border-radius:22px;border:1px solid var(--line);background:var(--card);box-shadow:0 8px 22px rgba(80,120,200,.14);width:100%;margin:8px 0 14px;color:var(--ink)}
+.mark-card img{width:88px;height:88px;object-fit:cover;border-radius:16px;flex:none}
+.mark-card .mark-copy{flex:1;min-width:0}.mark-card strong{display:block;font-size:17px;font-weight:800}.mark-card span{display:block;color:var(--mute);font-size:13px;line-height:1.4;margin-top:3px}.mark-free{display:inline-block!important;width:max-content;background:rgba(52,180,107,.14);color:#218653!important;border-radius:99px;padding:3px 9px;font-size:11px!important;font-weight:800;margin-top:6px!important}
+.mark-chat{display:flex;flex-direction:column;height:calc(100dvh - 230px);min-height:440px;max-height:760px;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--card);box-shadow:0 8px 28px rgba(80,120,200,.12)}
+.mark-chat-head{display:flex;gap:11px;align-items:center;padding:13px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,rgba(255,247,220,.7),rgba(230,240,255,.7))}
+.mark-chat-head img{width:48px;height:48px;object-fit:cover;border-radius:50%;border:2px solid var(--gold)}
+.mark-chat-head strong{display:block;font-size:16px}.mark-chat-head small{color:var(--mute);font-size:12px}
+.mark-online{width:8px;height:8px;border-radius:50%;display:inline-block;background:#34b46b;margin-right:5px}
+.mark-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
+.mark-bubble{max-width:88%;padding:11px 13px;border-radius:17px;font-size:14px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.mark-bubble.bot{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px}
+.mark-bubble.user{align-self:flex-end;background:linear-gradient(135deg,var(--acc2),var(--acc));color:#fff;border-bottom-right-radius:5px}
+.mark-bubble .mark-suggestion{display:inline-block;margin-top:8px;font-weight:800;color:var(--acc)}
+.mark-quick{display:flex;gap:7px;flex-wrap:wrap;padding:0 12px 10px}
+.mark-quick button{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:7px 10px;font-size:12px;font-weight:700;color:var(--acc)}
+.mark-compose{display:flex;gap:8px;align-items:flex-end;padding:10px;border-top:1px solid var(--line);background:var(--card)}
+.mark-compose textarea{resize:none;min-height:44px;max-height:120px;flex:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:11px 12px;color:var(--ink);font:inherit;font-size:14px;line-height:1.4}
+.mark-send{width:44px;height:44px;flex:none;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--acc2),var(--acc));color:#fff;font-size:20px;font-weight:800}
+.mark-send:disabled{opacity:.4}
+.mark-note{font-size:11px;color:var(--mute);text-align:center;padding:0 12px 10px}
+.mark-clear{display:block;margin:12px auto 0}
+@media(max-width:380px){.mark-card img{width:74px;height:74px}.mark-chat{min-height:400px;height:calc(100dvh - 210px)}.mark-bubble{max-width:94%}}
+
 </style>
 
 </head>
@@ -251,6 +276,7 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
   </div>
   <p class="sh">Support &amp; blessings</p><p>Start here, request a prayer, or reach our team.</p>
   <div class="tiles" id="tSup"></div>
+  <button type="button" class="mark-card" data-mod="mark" aria-label="Open free chat with Mark"><img src="https://i.postimg.cc/8kFQyKv5/bubblen6oy3a5sh6q.avif" alt="Mark" width="88" height="88" loading="lazy"><span class="mark-copy"><strong>Talk with Mark</strong><span>Your free spiritual companion for prayer, reflection, and encouragement.</span><span class="mark-free">FREE CHAT</span></span></button>
   <p class="sh">My products</p><p>The programs you have purchased.</p>
   <div class="tiles" id="tPrd"></div>
   <p class="sh">Exclusive bonuses</p><p>Extra gifts for members.</p>
@@ -284,6 +310,31 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
  <section class="screen" id="s-store"><h2 class="h">Store</h2><p class="intro">Exclusive prayers and programs you can unlock with your Light Tokens.</p><div class="storeHead"><span class="e" aria-hidden="true">✦</span><div><b>Each product costs 50 ✦</b><span>Unlock it once and it stays yours forever, here and on your Home screen.</span></div></div><div class="tiles" id="tStore"></div></section>
  <section class="screen" id="s-ser"><button class="back" id="serBack">← Back</button><h2 class="h" id="serT"></h2><p class="intro" id="serI"></p><div class="tiles" id="serDays"></div></section>
  <section class="screen" id="s-web"><button class="back" data-back>← Back</button><h2 class="h" id="wT"></h2><div class="webw" id="wBox"></div></section>
+
+ <section class="screen" id="s-mark">
+  <button class="back" type="button" data-mark-back>← Back</button>
+  <h2 class="h">Talk with Mark</h2>
+  <p class="intro">A free space for prayer, reflection, and encouragement.</p>
+  <div class="mark-chat" role="region" aria-label="Chat with Mark">
+   <div class="mark-chat-head">
+    <img src="https://i.postimg.cc/8kFQyKv5/bubblen6oy3a5sh6q.avif" alt="Mark" width="48" height="48">
+    <div><strong>Mark</strong><small><span class="mark-online"></span>Free spiritual companion · No AI API</small></div>
+   </div>
+   <div class="mark-messages" id="markMessages" aria-live="polite" aria-label="Conversation with Mark"></div>
+   <div class="mark-quick" id="markQuick">
+    <button type="button" data-mark-quick="I need peace and calm">Peace &amp; calm</button>
+    <button type="button" data-mark-quick="I want to pray for prosperity">Prosperity</button>
+    <button type="button" data-mark-quick="Can you suggest a prayer for me?">Find a prayer</button>
+   </div>
+   <form class="mark-compose" id="markForm">
+    <label class="sr" for="markInput">Message Mark</label>
+    <textarea id="markInput" maxlength="1200" rows="1" placeholder="Tell Mark what is on your heart..." required></textarea>
+    <button class="mark-send" id="markSend" type="submit" aria-label="Send message">↑</button>
+   </form>
+   <p class="mark-note">Mark uses built-in conversation rules and a prepared knowledge base. He is not a human or a live AI service.</p>
+  </div>
+  <button type="button" class="ghost mark-clear" id="markClear">Clear this conversation</button>
+ </section>
  <section class="screen" id="s-sol"><button class="back" data-back>← Back</button><h2 class="h">7 Prayers of Solomon</h2><p class="intro">One prayer a day. Tap a day to listen. Days 4 to 7 open 24 hours after you begin.</p><div class="tiles" id="sDays"></div></section>
  
 <section class="screen" id="s-chants">
@@ -785,6 +836,7 @@ function jesClick(i){if(jesOpen(i))return showVid(JDAYS[i][1],'Day '+(i+1)+' · 
  $('#lk').classList.add('on')}
 function openPaid(id,cb){if(!S.unl||S.unl.d!==today())S.unl={d:today(),ids:[]};if(S.unl.ids.includes(id))return cb();spend(2,()=>{S.unl.ids.push(id);save();cb()})}
 function mod(id){
+ if(id==='mark'){if(window.openMarkChat)window.openMarkChat();return}
  if(id==='support'){if(window.openSupportPanel)window.openSupportPanel();return}
  if(id==='start')return openPaid('start',()=>showVid(VID.start,'Start here','',FAQ,'home'));
  if(id==='pray')return prayOpen();
@@ -1195,6 +1247,117 @@ getSupabase().catch(err => {
 homeTiles();
 nUpd();
 setInterval(tickOffer, 1000);
+</script>
+
+
+<script>
+/* Mark free chat: local JavaScript intent/context engine, no AI API calls. */
+(() => {
+ const IMG = 'https://i.postimg.cc/8kFQyKv5/bubblen6oy3a5sh6q.avif';
+ const historyKey = () => 'sc-mark-chat:' + (typeof K !== 'undefined' ? K : 'sc-guest');
+ const $m = id => document.getElementById(id);
+ let history = [];
+ const knowledge = [
+  {keys:['money','financial','debt','bills','job','career','prosper','abundance','wealth','income','rent','bank','rich'],topic:'prosperity',
+   replies:[
+    "I hear how much this matters to you. Financial pressure can feel heavy, especially when you are carrying it alone. We can take this one step at a time. Would a short prayer for strength, or a practical next-step reflection, help most right now?",
+    "When money is worrying you, it can help to make room for both faith and practical action. A prayer can support reflection, but it cannot guarantee a financial outcome. What feels most urgent today: bills, work, debt, or uncertainty about the future?"
+   ]},
+  {keys:['peace','calm','anxious','anxiety','stress','overwhelmed','panic','worry','worried','fear','afraid'],topic:'peace',
+   replies:[
+    "Let's slow this moment down together. Relax your shoulders, breathe in gently, and breathe out a little more slowly. You do not have to solve everything in this minute. What is the main thing weighing on you?",
+    "I'm glad you told me. When everything feels loud, a small quiet moment can help you decide what to do next. Would you like a calming prayer, a short breathing pause, or a chance to talk through what happened?"
+   ]},
+  {keys:['pray','prayer','god','jesus','holy','scripture','bible','solomon','faith','blessing','blessings'],topic:'prayer',
+   replies:[
+    "Of course. We can make this moment simple: take a quiet breath, bring your concern honestly before God, and ask for wisdom, patience, and strength for the next step. What would you like this prayer to focus on?",
+    "Prayer can be a space to speak honestly, even when you do not have the right words. Tell me what is on your heart, and I can suggest a theme for a short prayer or reflection."
+   ]},
+  {keys:['lonely','alone','sad','grief','grieving','miss','loss','heartbroken','hurt'],topic:'comfort',
+   replies:[
+    "I'm sorry this feels so heavy. You do not have to make your feelings sound neat or positive here. If you feel comfortable, tell me what has been hardest about today.",
+    "That sounds painful, and I'm glad you shared it. You deserve care and support, not pressure to pretend everything is fine. Would you like to tell me more, or would a gentle prayer for comfort help?"
+   ]},
+  {keys:['love','relationship','marriage','wife','husband','partner','family','argument','forgive','forgiveness'],topic:'relationships',
+   replies:[
+    "Relationships can bring both deep love and real hurt. It may help to pause before reacting and ask what you need, what you can control, and what conversation might be safe and constructive. What happened?",
+    "I hear that this relationship matters to you. I can help you reflect on patience, honest communication, and forgiveness without asking you to ignore harm or give up healthy boundaries. What is troubling you most?"
+   ]},
+  {keys:['health','sick','illness','pain','healing','heal','doctor','diagnosis'],topic:'health',
+   replies:[
+    "I'm sorry you're dealing with this. I can offer a prayer for comfort and strength, but I can't diagnose an illness or replace medical care. Would you like a short prayer, or help finding words to share your concern with someone you trust?",
+    "Let's hold space for what you're facing. You can pray for comfort and courage while also following qualified medical advice. What kind of support would feel helpful right now?"
+   ]},
+  {keys:['thank','grateful','gratitude','good news','happy','joy','blessed'],topic:'gratitude',
+   replies:[
+    "I'm glad there is something good to pause and notice. Gratitude does not mean every problem has disappeared; it means giving this good moment the attention it deserves. What are you most thankful for today?",
+    "That is worth celebrating. You might take a moment to name one thing you are grateful for, one person who helped, and one good step you want to carry into tomorrow."
+   ]},
+  {keys:['hello','hi','hey','good morning','good evening','good afternoon','who are you','your name'],topic:'greeting',
+   replies:[
+    "Hello, I'm Mark. I'm here to help you reflect, explore a prayer, or talk through what is on your mind. What would you like support with today?",
+    "Welcome. You can talk to me about prayer, peace, faith, gratitude, relationships, or worries about the future. What brought you here today?"
+   ]}
+ ];
+ const general = [
+  "I'm listening. Could you tell me a little more about what that means for you?",
+  "Thank you for sharing that with me. What part of this feels most important to focus on right now?",
+  "Let's take it one step at a time. Would you like to talk more about what happened, or explore a prayer or reflection that fits?",
+  "I may not have understood every part of that yet. Can you tell me what kind of help you are hoping for?"
+ ];
+ function normalize(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s']/g,' ')}
+ function scoreTopic(text,item){const t=' '+normalize(text)+' ';return item.keys.reduce((n,k)=>n+(t.includes(' '+k+' ')?2:(t.includes(k)?1:0)),0)}
+ function inferTopic(text){
+  const prior=history.slice(-6).filter(m=>m.role==='assistant'&&m.topic).map(m=>m.topic).pop();
+  const ranked=knowledge.map(k=>({item:k,score:scoreTopic(text,k)})).sort((a,b)=>b.score-a.score);
+  if(ranked[0]?.score>0)return ranked[0].item;
+  if(prior && ['yes','yeah','please','okay','ok','that one','tell me more','more','sure'].includes(normalize(text).trim()))return knowledge.find(k=>k.topic===prior);
+  return null;
+ }
+ function respond(text){
+  const clean=text.trim(); const topic=inferTopic(clean);
+  if(/\b(thank you|thanks|thank u)\b/i.test(clean))return {topic:'gratitude',text:"You're welcome. I'm glad you reached out. Is there anything else on your heart that you'd like to talk about?"};
+  if(/\b(what should i do|help me decide|next step)\b/i.test(clean))return {topic:'reflection',text:"Let's make the next step small and clear. What is one thing within your control today, even if it is only asking for help, gathering information, or taking a few minutes to think?"};
+  if(/\b(suicid|kill myself|end my life|hurt myself|self harm)\b/i.test(clean))return {topic:'safety',text:"I'm really sorry you're feeling this much pain. You deserve immediate support from a real person. If you may act on these thoughts or are in immediate danger, contact your local emergency service now and reach out to someone you trust who can stay with you. I can't provide emergency care, but I want you to get human support."};
+  if(topic){const n=history.filter(m=>m.role==='user'&&m.topic===topic.topic).length;return {topic:topic.topic,text:topic.replies[n%topic.replies.length]}}
+  const n=history.filter(m=>m.role==='user'&&!m.topic).length;
+  return {topic:'general',text:general[n%general.length]};
+ }
+ function save(){try{localStorage.setItem(historyKey(),JSON.stringify(history.slice(-80)))}catch(e){}}
+ function bubble(role,text,topic){
+  const el=document.createElement('div');el.className='mark-bubble '+(role==='user'?'user':'bot');el.textContent=text;
+  if(role==='assistant'&&topic==='prayer'){
+   const note=document.createElement('div');note.className='mark-suggestion';note.textContent='✦ Explore prayers in Support & blessings';el.appendChild(note);
+  }
+  $m('markMessages').appendChild(el);
+ }
+ function render(){const box=$m('markMessages');box.innerHTML='';history.forEach(m=>bubble(m.role,m.text,m.topic));box.scrollTop=box.scrollHeight}
+ function addWelcome(){
+  if(history.length)return;
+  history.push({role:'assistant',text:"Hi, I'm Mark. This is a free space to talk about faith, prayer, peace, gratitude, relationships, or worries about the future. What is on your heart today?",topic:'greeting',time:Date.now()});save();
+ }
+ function sendMessage(value){
+  const text=value.trim();if(!text)return;
+  history.push({role:'user',text,topic:null,time:Date.now()});
+  const answer=respond(text);history[history.length-1].topic=answer.topic==='general'?null:answer.topic;
+  history.push({role:'assistant',text:answer.text,topic:answer.topic,time:Date.now()});
+  save();render();$m('markInput').value='';$m('markInput').focus();
+ }
+ function openMark(){
+  if(!history.length){try{const saved=localStorage.getItem(historyKey());if(saved)history=JSON.parse(saved).slice(-80)}catch(e){history=[]}}
+  addWelcome();render();go('mark');setTimeout(()=>$m('markInput')?.focus(),80);
+ }
+ window.openMarkChat=openMark;
+ document.addEventListener('DOMContentLoaded',()=>{
+  const form=$m('markForm');if(!form)return;
+  form.addEventListener('submit',e=>{e.preventDefault();sendMessage($m('markInput').value)});
+  $m('markInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit()}});
+  $m('markInput').addEventListener('input',e=>{e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,120)+'px'});
+  document.querySelectorAll('[data-mark-quick]').forEach(b=>b.addEventListener('click',()=>sendMessage(b.dataset.markQuick)));
+  $m('markClear').addEventListener('click',()=>{if(!confirm('Clear your conversation with Mark on this device?'))return;history=[];try{localStorage.removeItem(historyKey())}catch(e){}addWelcome();render()});
+  document.querySelectorAll('[data-mark-back]').forEach(b=>b.addEventListener('click',()=>go('home')));
+ });
+})();
 </script>
 
 <!-- Support chat widget -->
