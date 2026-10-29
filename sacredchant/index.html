@@ -390,15 +390,13 @@ body.on-mark #supportFab{display:none}
 <section class="auth" id="auth" role="dialog" aria-modal="true" aria-label="Sign in"><div>
 <svg width="120" height="90" viewBox="0 0 120 90" aria-hidden="true"><ellipse cx="60" cy="14" rx="24" ry="7" fill="none" stroke="#e0ad3e" stroke-width="4"/><circle cx="60" cy="44" r="18" fill="#ffe2c4"/><path d="M24 90c3-26 17-34 36-34s33 8 36 34z" fill="#7aa6f5"/></svg>
 <h1 style="font-size:26px;font-weight:800">Welcome to Sacred Chant</h1>
-<p class="intro" style="margin-top:4px">Sign in with your email and password. Your tokens and progress stay linked to your account.</p>
+<p class="intro" style="margin-top:4px">Enter with your name and email. Your light and progress stay saved on this device.</p>
 <div class="sheet" id="aTabs"><button data-m="login" class="on">Log in</button><button data-m="signup">Create account</button></div>
 <form id="aForm" novalidate>
 <div id="aNameW" hidden><label for="aName">Name</label><input type="text" id="aName" maxlength="60" autocomplete="name" placeholder="Your name"></div>
-<label for="aMail">Email</label><input type="email" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
-<label for="aPass">Password</label><input type="password" id="aPass" autocomplete="current-password" minlength="8" placeholder="At least 8 characters">
+<label for="aMail">Email</label><input type="text" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
 <p class="err" id="aErr" role="alert"></p>
-<button type="submit" class="btn" id="aGo" style="width:100%">Log in</button>
-<button type="button" class="ghost" id="aForgot" style="width:100%;margin-top:10px">Set or reset password</button></form>
+<button type="submit" class="btn" id="aGo" style="width:100%">Log in</button></form>
 <div style="margin-top:22px;padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--card)">
 <p style="font-size:14px;color:var(--mute);margin-bottom:10px">Couldn't access or log in? Click below to access our app without creating an account.</p>
 <a href="https://appsell-software.com/app/sacred-chant" class="ghost" style="display:inline-block;text-decoration:none">Access the app without an account</a>
@@ -1069,9 +1067,7 @@ async function claimPendingDigistoreOrders() {
 function setAuth(m) {
   amode = m;
   $('#aNameW').hidden = m === 'login';
-  $('#aPass').autocomplete = m === 'login' ? 'current-password' : 'new-password';
-  $('#aForgot').hidden = m === 'signup';
-  $('#aTabs button').forEach(b =>
+  $$('#aTabs button').forEach(b =>
     b.classList.toggle('on', b.dataset.m === m)
   );
   $('#aGo').textContent = m === 'login' ? 'Log in' : 'Create account';
@@ -1095,34 +1091,6 @@ function getSupabase() {
         );
 
         sbClient.auth.onAuthStateChange((event, session) => {
-          if (event === 'PASSWORD_RECOVERY' && session && session.user) {
-            setTimeout(async () => {
-              const newPassword = window.prompt('Create a new password (at least 8 characters):');
-              if (!newPassword) {
-                toast('Password setup cancelled. Open the reset link again when ready.');
-                return;
-              }
-              if (newPassword.length < 8) {
-                alert('Please use at least 8 characters. Open the reset link again to retry.');
-                return;
-              }
-              try {
-                const { error } = await sbClient.auth.updateUser({ password: newPassword });
-                if (error) throw error;
-                await sbClient.auth.signOut();
-                $('#aPass').value = '';
-                $('#aMail').value = session.user.email || '';
-                $('#auth').classList.add('on');
-                setAuth('login');
-                $('#aErr').textContent = 'Password created. You can now log in with your email and password.';
-              } catch (err) {
-                console.error('Password update error:', err);
-                alert(err.message || 'Could not update password. Please request a new reset link.');
-              }
-            }, 0);
-            return;
-          }
-
           if (
             session &&
             session.user &&
@@ -1188,15 +1156,21 @@ setTimeout(async () => {
 
 $('#aForm').onsubmit = async e => {
   e.preventDefault();
+
   const email = $('#aMail').value.trim().toLowerCase();
-  const password = $('#aPass').value;
   const name = $('#aName').value.trim();
   const button = $('#aGo');
   const error = $('#aErr');
 
-  if (!EM.test(email)) { error.textContent = 'Enter a valid email address.'; return; }
-  if (!password || password.length < 8) { error.textContent = 'Enter a password with at least 8 characters.'; return; }
-  if (amode === 'signup' && !name) { error.textContent = 'Please enter your name.'; return; }
+  if (!EM.test(email)) {
+    error.textContent = 'Enter a valid email address.';
+    return;
+  }
+
+  if (amode === 'signup' && !name) {
+    error.textContent = 'Please enter your name.';
+    return;
+  }
 
   button.disabled = true;
   button.textContent = 'Please wait...';
@@ -1204,66 +1178,29 @@ $('#aForm').onsubmit = async e => {
 
   try {
     const client = await getSupabase();
-    let result;
-    if (amode === 'signup') {
-      result = await client.auth.signUp({
-        email,
-        password,
-        options: { data: name ? { full_name: name } : undefined }
-      });
-    } else {
-      result = await client.auth.signInWithPassword({ email, password });
-    }
+
+    const result = await client.auth.signInWithOtp({
+      email: email,
+      options: {
+        emailRedirectTo: window.location.origin + '/sacredchant/',
+        shouldCreateUser: true,
+        data: name ? { full_name: name } : undefined
+      }
+    });
+
     if (result.error) throw result.error;
 
-    if (amode === 'signup' && !result.data.session) {
-      error.textContent = 'Supabase is still requiring email confirmation. In Supabase, open Authentication → Sign In / Providers → Email and turn off Confirm email, then try again.';
-    } else if (amode === 'signup' && result.data.session) {
-      error.textContent = 'Account created. Signing you in...';
-    } else if (amode === 'login' && result.data.session) {
-      error.textContent = 'Login successful. Opening Sacred Chant...';
-    }
+    error.textContent =
+      'Check your email for your secure sign-in link.';
+
   } catch (err) {
     console.error('Authentication error:', err);
-    const message = String(err?.message || '');
-    if (amode === 'login' && /invalid login credentials/i.test(message)) {
-      error.textContent = 'Email or password is incorrect. If this account was created with a magic link, click “Set or reset password” once to create a password.';
-    } else if (amode === 'signup' && /already registered|already exists/i.test(message)) {
-      error.textContent = 'This email already has an account. Log in, or use “Set or reset password” to create a password for an existing account.';
-    } else {
-      error.textContent = err.message || 'Could not sign in. Please try again.';
-    }
+    error.textContent =
+      err.message || 'Could not send the email. Please try again.';
   } finally {
     button.disabled = false;
-    button.textContent = amode === 'login' ? 'Log in' : 'Create account';
-  }
-};
-
-$('#aForgot').onclick = async () => {
-  const email = $('#aMail').value.trim().toLowerCase();
-  const button = $('#aForgot');
-  const error = $('#aErr');
-  if (!EM.test(email)) {
-    error.textContent = 'Enter your account email above first.';
-    $('#aMail').focus();
-    return;
-  }
-  button.disabled = true;
-  button.textContent = 'Sending...';
-  error.textContent = '';
-  try {
-    const client = await getSupabase();
-    const { error: resetError } = await client.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/sacredchant/'
-    });
-    if (resetError) throw resetError;
-    error.textContent = 'If an account exists for this email, a password setup link has been sent. Open it once to create your password; future logins will use email and password.';
-  } catch (err) {
-    console.error('Password reset request error:', err);
-    error.textContent = err.message || 'Could not send the password setup link.';
-  } finally {
-    button.disabled = false;
-    button.textContent = 'Set or reset password';
+    button.textContent =
+      amode === 'login' ? 'Log in' : 'Create account';
   }
 };
 
@@ -1281,7 +1218,6 @@ $('#sOut').onclick = async () => {
 
   clearTimeout(nt);
   $('#aMail').value = '';
-  $('#aPass').value = '';
   $('#aName').value = '';
   
 setAuth('login');
