@@ -86,6 +86,14 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:5;background:var(--card);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}
 .tabbar div{display:flex;max-width:520px;margin:0 auto}
 .tab{flex:1;display:grid;justify-items:center;gap:1px;font-size:11px;font-weight:600;color:var(--mute);padding:5px 0}
+/* loja de tokens */
+.tile .own{position:absolute;left:8px;bottom:8px;z-index:2;background:rgba(52,180,107,.95);color:#fff;border-radius:99px;padding:2px 10px;font-size:12px;font-weight:800}
+.tile.gen{animation:none;background:linear-gradient(150deg,#ffe9a8 0%,#9fc0ff 55%,#4f6fd8 100%);display:grid;place-content:center;gap:6px;text-align:center;color:#fff}
+.tile.gen .gi{font-size:38px;line-height:1;filter:drop-shadow(0 4px 10px rgba(255,214,110,.9))}
+.tile.gen .gd{font-size:22px;font-weight:800;text-shadow:0 2px 8px rgba(28,42,74,.45)}
+.tile.gen .gs{font-size:12px;font-weight:600;opacity:.95;text-shadow:0 1px 6px rgba(28,42,74,.45);padding:0 10px}
+.storeHead{display:flex;gap:12px;align-items:center;background:linear-gradient(135deg,#fff7dc,#e6f0ff);border:1.5px solid var(--gold);border-radius:18px;padding:14px 16px;margin:4px 0 16px;color:#1c2a4a}
+.storeHead .e{font-size:30px;line-height:1}.storeHead b{display:block}.storeHead span{font-size:14px;color:#42537a}
 .tab svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .tab.on{color:var(--acc)}
 .im{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;padding:calc(26px + env(safe-area-inset-top,0px)) 20px calc(28px + env(safe-area-inset-bottom,0px));background:radial-gradient(80% 55% at 50% 40%,#fff7dc,#bcd6ff 55%,#7d9fe8)}
@@ -246,6 +254,9 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
   <div class="tiles" id="tPrd"></div>
   <p class="sh">Exclusive bonuses</p><p>Extra gifts for members.</p>
   <div class="tiles" id="tBon"></div>
+  <p class="sh">Products I traded for tokens</p><p>Everything you unlocked in the Store.</p>
+  <div class="tiles" id="tOwn"></div>
+  <div class="soon" id="ownEmpty">You have not traded tokens for products yet.<br><button type="button" class="ghost" style="margin-top:12px" id="goStore">Visit the Store</button></div>
   <p class="lab" style="text-align:center;margin:18px 0 6px">Each module costs 2 ✦ to open. Offer your intention every 24 hours for +10 ✦.</p>
   <div class="card" style="text-align:center">
    <p class="lab">Chant of the day</p><p class="m" id="dM"></p><p class="lab" id="dX" style="font-weight:500"></p>
@@ -269,6 +280,8 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
  <section class="screen" id="s-vid"><button class="back" id="vBack">← Back</button><h2 class="h" id="vT"></h2><div id="vTop"></div><div class="vidb" id="vBox"></div><div class="faq" id="vTx"></div></section>
  <section class="screen" id="s-pray"><button class="back" data-back>← Back</button><div id="pBody"></div></section>
  <section class="screen" id="s-jes"><button class="back" data-back>← Back</button><h2 class="h">7 Prayers of Jesus</h2><p class="intro">Guided by Mark. One prayer a day. Days 1 and 2 are open now. Each of the following days opens on its own day, or you can open it now for 20 ✦.</p><div class="tiles" id="jDays"></div></section>
+ <section class="screen" id="s-store"><h2 class="h">Store</h2><p class="intro">Exclusive prayers and programs you can unlock with your Light Tokens.</p><div class="storeHead"><span class="e" aria-hidden="true">✦</span><div><b>Each product costs 50 ✦</b><span>Unlock it once and it stays yours forever, here and on your Home screen.</span></div></div><div class="tiles" id="tStore"></div></section>
+ <section class="screen" id="s-ser"><button class="back" id="serBack">← Back</button><h2 class="h" id="serT"></h2><p class="intro" id="serI"></p><div class="tiles" id="serDays"></div></section>
  <section class="screen" id="s-web"><button class="back" data-back>← Back</button><h2 class="h" id="wT"></h2><div class="webw" id="wBox"></div></section>
  <section class="screen" id="s-sol"><button class="back" data-back>← Back</button><h2 class="h">7 Prayers of Solomon</h2><p class="intro">One prayer a day. Tap a day to listen. Days 4 to 7 open 24 hours after you begin.</p><div class="tiles" id="sDays"></div></section>
  
@@ -331,6 +344,7 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
  <button class="tab" data-t="chants"><svg viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg>Chants</button>
  <button class="tab" data-t="sanct"><svg viewBox="0 0 24 24"><path d="M12 3c0 3-4 5-4 9a4 4 0 008 0c0-4-4-6-4-9z"/><path d="M5 20h14"/></svg>Sanctuary</button>
  <button class="tab" data-t="vow"><svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2"/><circle cx="18" cy="6" r="2"/><path d="M8 18h6a3 3 0 000-6h-4a3 3 0 010-6h6"/></svg>Vow</button>
+ <button class="tab" data-t="store"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 11.2a1.5 1.5 0 01-1.5 1.3H7.7a1.5 1.5 0 01-1.5-1.3z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg>Store</button>
  <button class="tab" data-t="me"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20.5c0-4.5 3.1-7 7.5-7s7.5 2.5 7.5 7"/></svg>Profile</button>
 </div></nav>
 
@@ -753,6 +767,49 @@ function openBonus(id){
  $('#lkU').textContent='Unlock now · '+b.cost+' ✦';$('#lkX').textContent='Not now';
  $('#lk').classList.add('on')}
 function openProd(id){const p=PRODS.find(x=>x.id===id);if(p)showYT(p.v,p.t,'home')}
+/* ===== Store: produtos trocados por tokens (50 ✦ cada, desbloqueio permanente na conta) ===== */
+const STORE_COST=50;
+const STORE=[
+ {id:'powerful7',img:P+'sgRHyKN9/bubbleeuxh38ag20e.avif',t:'7 Powerful Prayers',days:[['Day 1','NaJNFnXMC1A'],['Day 2','UQmclie9pmU'],['Day 3','-0aYKWH_VHA'],['Day 4','wCjxMzRl2NA'],['Day 5','eMPHp_8oxIY'],['Day 6','qMBYo60RgLc'],['Day 7','j3vLZDC33Wo']],intro:'Seven powerful prayers, one for each day. Tap a day to begin.'},
+ {id:'words12',img:P+'76TS5rCD/bubblerhg1cad0kt.avif',t:'Secret 12 Words Prayer',v:'_5x_XTSu4iQ'},
+ {id:'arthritis',img:P+'J0LHtDCw/bubblekux8bkjlgei.avif',t:'Prayer for Arthritis',v:'fsiERO4Nyps'},
+ {id:'diabetes',img:P+'fRpLJtYw/bubbleik5jxj4k5ob.avif',t:'Prayer for Diabetes',v:'L2VDxsmYoPk'},
+ {id:'prosperity',img:P+'xCY9zK88/bubblep4xeyqmtqtp.avif',t:'Prosperity Code',days:[['Day 1 · 5-Minute Breathing Exercise','Vi0_7idqcFI',P+'YSNHMh3Z/bubble8uro66k8iln.avif'],['Day 2 · 30 Minute Guided Meditation with Theta Waves Binaural Beats','1c995U368Lc',P+'CLZpdv77/bubble6egmpmx7fr.avif']],intro:'Two guided days to open your heart to abundance. Use headphones for the best experience.'},
+ {id:'miracle',img:P+'TP04tmQg/bubble9jn735hqphu.avif',t:'The Miracle Prayer',v:'FwZ7Ufs7o6o'}
+];
+const storeOK=id=>(S.storeOwned||[]).includes(id);
+const DAY_ICONS=['🌅','🕊️','🙏','✨','🕯️','📿','👼'];
+function storeTiles(){
+ const ownBadge='<span class="own">✓ Yours</span>';
+ $('#tStore').innerHTML=STORE.map(s=>{const ok=storeOK(s.id);return tile('data-store="'+s.id+'"',s.img,s.t,ok?0:STORE_COST,ok?ownBadge:'<span class="lk"><b>🔒</b>Unlock for '+STORE_COST+' ✦</span>')}).join('');
+ const owned=STORE.filter(s=>storeOK(s.id));
+ $('#tOwn').innerHTML=owned.map(s=>tile('data-store="'+s.id+'" data-from="home"',s.img,s.t,0)).join('');
+ $('#tOwn').hidden=!owned.length;$('#ownEmpty').hidden=!!owned.length;
+}
+function syncStore(){if(sbClient)sbClient.auth.updateUser({data:{sc_store_owned:S.storeOwned||[]}}).catch(e=>console.warn('Could not sync store purchases:',e?.message||e))}
+let serBackTo='store',serItem=null;
+function openStoreItem(id,from){
+ const s=STORE.find(x=>x.id===id);if(!s)return;
+ const back=from||'store';
+ if(storeOK(id))return showStoreItem(s,back);
+ lkCost=STORE_COST;
+ lkAct=()=>{S.storeOwned=S.storeOwned||[];if(!S.storeOwned.includes(id))S.storeOwned.push(id);save();syncStore();storeTiles();toast('Unlocked! It is now on your Home screen');showStoreItem(s,back)};
+ $('#lkH').textContent='Unlock "'+s.t+'"';
+ $('#lkT').textContent='Trade '+STORE_COST+' ✦ for this product. It stays yours forever, here in the Store and on your Home screen under "Products I traded for tokens".';
+ $('#lkU').textContent='Unlock now · '+STORE_COST+' ✦';$('#lkX').textContent='Not now';
+ $('#lk').classList.add('on')}
+function showStoreItem(s,back){
+ if(!s.days)return showYT(s.v,s.t,back);
+ serItem=s;serBackTo=back;
+ $('#serT').textContent=s.t;$('#serI').textContent=s.intro||'';
+ $('#serDays').innerHTML=s.days.map((d,i)=>d[2]
+  ?tile('data-ser="'+i+'"',d[2],d[0],0)
+  :'<button class="tile gen" data-ser="'+i+'" aria-label="'+d[0]+'"><span class="gi" aria-hidden="true">'+DAY_ICONS[i%DAY_ICONS.length]+'</span><span class="gd">'+d[0]+'</span><span class="gs">'+s.t+'</span></button>').join('');
+ go('ser')}
+function serClick(i){if(!serItem)return;const d=serItem.days[i];if(d)showYT(d[1],d[0]+' · '+serItem.t,'ser')}
+$('#serBack').onclick=()=>go(serBackTo);
+$('#goStore').onclick=()=>access('store');
+storeTiles();
 /* YouTube dentro do app: sandbox sem popups/navegacao impede abrir o YouTube */
 function showYT(id,title,back){vBackTo=back||'home';$('#vT').textContent=title;$('#vTop').innerHTML='';$('#vTx').innerHTML='';
  $('#vBox').innerHTML='<div class="ytw"><iframe allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-same-origin allow-presentation" title="'+String(title).replace(/"/g,'&quot;')+'"></iframe><div class="ytb" aria-hidden="true"></div></div>';
@@ -804,7 +861,7 @@ let lkDay=0,lkAct=null,lkCost=10;
 function dayClick(i){if(solOpen(i))return showVid(DAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Solomon','','','sol');lkDay=i;lkCost=10;lkAct=()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()};$('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Wait for it';$('#lkH').textContent='Day '+(i+1)+' is resting';$('#lkT').textContent='It opens 24 hours after you began, or you can open it now for 10 ✦.';$('#lk').classList.add('on')}
 $('#lkX').onclick=()=>$('#lk').classList.remove('on');
 $('#lkU').onclick=()=>{const f=lkAct,c=lkCost||10;$('#lk').classList.remove('on');if(f)spend(c,f)};
-document.addEventListener('click',e=>{const m=e.target.closest('[data-mod]');if(m)return mod(m.dataset.mod);const d=e.target.closest('[data-day]');if(d)return dayClick(+d.dataset.day);const bn=e.target.closest('[data-bonus]');if(bn)return openBonus(bn.dataset.bonus);const pr=e.target.closest('[data-prod]');if(pr)return openProd(pr.dataset.prod);const jd=e.target.closest('[data-jday]');if(jd)jesClick(+jd.dataset.jday)});
+document.addEventListener('click',e=>{const m=e.target.closest('[data-mod]');if(m)return mod(m.dataset.mod);const d=e.target.closest('[data-day]');if(d)return dayClick(+d.dataset.day);const st=e.target.closest('[data-store]');if(st)return openStoreItem(st.dataset.store,st.dataset.from);const sr=e.target.closest('[data-ser]');if(sr)return serClick(+sr.dataset.ser);const bn=e.target.closest('[data-bonus]');if(bn)return openBonus(bn.dataset.bonus);const pr=e.target.closest('[data-prod]');if(pr)return openProd(pr.dataset.prod);const jd=e.target.closest('[data-jday]');if(jd)jesClick(+jd.dataset.jday)});
 $('#vBack').onclick=()=>go(vBackTo);$$('[data-back]').forEach(b=>b.onclick=()=>go('home'));
 
 /* First-time welcome quiz for newly created accounts only */
@@ -996,6 +1053,9 @@ if (user.user_metadata?.full_name) {
 }
 const accUnl = user.user_metadata?.sc_bonus_unlocks;
 if (Array.isArray(accUnl)) S.bonusUnl = [...new Set([...(S.bonusUnl || []), ...accUnl])];
+const accStore = user.user_metadata?.sc_store_owned;
+if (Array.isArray(accStore)) S.storeOwned = [...new Set([...(S.storeOwned || []), ...accStore])];
+storeTiles();
 homeTiles();
 
 save();
