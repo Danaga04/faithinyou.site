@@ -390,11 +390,13 @@ body.on-mark #supportFab{display:none}
 <section class="auth" id="auth" role="dialog" aria-modal="true" aria-label="Sign in"><div>
 <svg width="120" height="90" viewBox="0 0 120 90" aria-hidden="true"><ellipse cx="60" cy="14" rx="24" ry="7" fill="none" stroke="#e0ad3e" stroke-width="4"/><circle cx="60" cy="44" r="18" fill="#ffe2c4"/><path d="M24 90c3-26 17-34 36-34s33 8 36 34z" fill="#7aa6f5"/></svg>
 <h1 style="font-size:26px;font-weight:800">Welcome to Sacred Chant</h1>
-<p class="intro" style="margin-top:4px">Enter with your name and email. Your light and progress stay saved on this device.</p>
+<p class="intro" style="margin-top:4px">Sign in or create an account with your email and password. Your light and progress stay saved.</p>
 <div class="sheet" id="aTabs"><button data-m="login" class="on">Log in</button><button data-m="signup">Create account</button></div>
 <form id="aForm" novalidate>
 <div id="aNameW" hidden><label for="aName">Name</label><input type="text" id="aName" maxlength="60" autocomplete="name" placeholder="Your name"></div>
-<label for="aMail">Email</label><input type="text" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
+<label for="aMail">Email</label><input type="email" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
+<label for="aPass">Password</label><input type="password" id="aPass" autocomplete="current-password" minlength="8" maxlength="128" placeholder="Enter your password">
+<button type="button" class="ghost" id="aForgot" style="margin-top:8px">Forgot password?</button>
 <p class="err" id="aErr" role="alert"></p>
 <button type="submit" class="btn" id="aGo" style="width:100%">Log in</button></form>
 <div style="margin-top:22px;padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--card)">
@@ -1066,11 +1068,13 @@ async function claimPendingDigistoreOrders() {
 
 function setAuth(m) {
   amode = m;
-  $('#aNameW').hidden = m === 'login';
-  $$('#aTabs button').forEach(b =>
-    b.classList.toggle('on', b.dataset.m === m)
-  );
-  $('#aGo').textContent = m === 'login' ? 'Log in' : 'Create account';
+  $('#aNameW').hidden = m !== 'signup';
+  $('#aForgot').hidden = m !== 'login';
+  $('#aTabs').hidden = m === 'recovery';
+  $('#aPass').autocomplete = m === 'signup' || m === 'recovery' ? 'new-password' : 'current-password';
+  $('#aPass').placeholder = m === 'recovery' ? 'Create a new password (8+ characters)' : m === 'signup' ? 'Create a password (8+ characters)' : 'Enter your password';
+  $('#aGo').textContent = m === 'recovery' ? 'Save new password' : m === 'login' ? 'Log in' : 'Create account';
+  $('#aTabs button').forEach(b => b.classList.toggle('on', b.dataset.m === m));
   $('#aErr').textContent = '';
 }
 
@@ -1091,6 +1095,12 @@ function getSupabase() {
         );
 
         sbClient.auth.onAuthStateChange((event, session) => {
+          if (event === 'PASSWORD_RECOVERY' && session?.user) {
+            setAuth('recovery');
+            $('#auth').classList.add('on');
+            $('#aErr').textContent = 'Create a new password for your account.';
+            return;
+          }
           if (
             session &&
             session.user &&
@@ -1156,51 +1166,93 @@ setTimeout(async () => {
 
 $('#aForm').onsubmit = async e => {
   e.preventDefault();
-
   const email = $('#aMail').value.trim().toLowerCase();
+  const password = $('#aPass').value;
   const name = $('#aName').value.trim();
   const button = $('#aGo');
   const error = $('#aErr');
 
-  if (!EM.test(email)) {
+  if (amode !== 'recovery' && !EM.test(email)) {
     error.textContent = 'Enter a valid email address.';
     return;
   }
-
+  if (!password || ((amode === 'signup' || amode === 'recovery') && password.length < 8)) {
+    error.textContent = (amode === 'signup' || amode === 'recovery')
+      ? 'Your password must be at least 8 characters.'
+      : 'Enter your password.';
+    return;
+  }
   if (amode === 'signup' && !name) {
     error.textContent = 'Please enter your name.';
     return;
   }
 
+  const modeAtSubmit = amode;
   button.disabled = true;
   button.textContent = 'Please wait...';
   error.textContent = '';
-
   try {
     const client = await getSupabase();
-
-    const result = await client.auth.signInWithOtp({
-      email: email,
-      options: {
-        emailRedirectTo: window.location.origin + '/sacredchant/',
-        shouldCreateUser: true,
-        data: name ? { full_name: name } : undefined
-      }
-    });
-
+    let result;
+    if (modeAtSubmit === 'recovery') {
+      result = await client.auth.updateUser({ password });
+    } else if (modeAtSubmit === 'signup') {
+      result = await client.auth.signUp({
+        email, password,
+        options: { data: { full_name: name } }
+      });
+    } else {
+      result = await client.auth.signInWithPassword({ email, password });
+    }
     if (result.error) throw result.error;
 
-    error.textContent =
-      'Check your email for your secure sign-in link.';
-
+    if (modeAtSubmit === 'recovery') {
+      $('#auth').classList.remove('on');
+      setAuth('login');
+      $('#aPass').value = '';
+      go('home');
+      toast('Password updated successfully.');
+    } else if (modeAtSubmit === 'signup' && !result.data?.session) {
+      error.textContent = 'Account created. Check your email if confirmation is required, then log in with your password.';
+    } else if (modeAtSubmit === 'login' && !result.data?.session) {
+      error.textContent = 'Login was not completed. Please try again.';
+    }
   } catch (err) {
     console.error('Authentication error:', err);
-    error.textContent =
-      err.message || 'Could not send the email. Please try again.';
+    const message = String(err?.message || '');
+    if (modeAtSubmit === 'login' && /invalid login credentials/i.test(message)) {
+      error.textContent = 'Email or password is incorrect. If this is an older account created with a sign-in link, use “Forgot password?” to set a password first.';
+    } else {
+      error.textContent = message || 'Could not authenticate. Please try again.';
+    }
   } finally {
     button.disabled = false;
-    button.textContent =
-      amode === 'login' ? 'Log in' : 'Create account';
+    button.textContent = amode === 'recovery' ? 'Save new password' : amode === 'login' ? 'Log in' : 'Create account';
+  }
+};
+
+$('#aForgot').onclick = async () => {
+  const email = $('#aMail').value.trim().toLowerCase();
+  const error = $('#aErr');
+  if (!EM.test(email)) {
+    error.textContent = 'Enter your email address above first.';
+    return;
+  }
+  const button = $('#aForgot');
+  button.disabled = true;
+  error.textContent = '';
+  try {
+    const client = await getSupabase();
+    const { error: resetError } = await client.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/sacredchant/'
+    });
+    if (resetError) throw resetError;
+    error.textContent = 'If an account exists for this email, a password reset email will be sent.';
+  } catch (err) {
+    console.error('Password reset error:', err);
+    error.textContent = err.message || 'Could not request a password reset.';
+  } finally {
+    button.disabled = false;
   }
 };
 
