@@ -229,7 +229,7 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .mark-card{display:flex;gap:12px;align-items:center;text-align:left;padding:12px;border-radius:22px;border:1px solid var(--line);background:var(--card);box-shadow:0 8px 22px rgba(80,120,200,.14);width:100%;margin:8px 0 14px;color:var(--ink)}
 .mark-card img{width:88px;height:88px;object-fit:cover;border-radius:16px;flex:none}
 .mark-card .mark-copy{flex:1;min-width:0}.mark-card strong{display:block;font-size:17px;font-weight:800}.mark-card span{display:block;color:var(--mute);font-size:13px;line-height:1.4;margin-top:3px}.mark-free{display:inline-block!important;width:max-content;background:rgba(52,180,107,.14);color:#218653!important;border-radius:99px;padding:3px 9px;font-size:11px!important;font-weight:800;margin-top:6px!important}
-.mark-chat{display:flex;flex-direction:column;height:calc(100dvh - 230px);min-height:440px;max-height:760px;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--card);box-shadow:0 8px 28px rgba(80,120,200,.12)}
+.mark-chat{display:flex;flex-direction:column;height:calc(100dvh - 300px - env(safe-area-inset-bottom,0px));min-height:420px;max-height:760px;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--card);box-shadow:0 8px 28px rgba(80,120,200,.12)}
 .mark-chat-head{display:flex;gap:11px;align-items:center;padding:13px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,rgba(255,247,220,.7),rgba(230,240,255,.7))}
 .mark-chat-head img{width:48px;height:48px;object-fit:cover;border-radius:50%;border:2px solid var(--gold)}
 .mark-chat-head strong{display:block;font-size:16px}.mark-chat-head small{color:var(--mute);font-size:12px}
@@ -247,7 +247,15 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .mark-send:disabled{opacity:.4}
 .mark-note{font-size:11px;color:var(--mute);text-align:center;padding:0 12px 10px}
 .mark-clear{display:block;margin:12px auto 0}
-@media(max-width:380px){.mark-card img{width:74px;height:74px}.mark-chat{min-height:400px;height:calc(100dvh - 210px)}.mark-bubble{max-width:94%}}
+body.on-mark #supportFab{display:none}
+.mark-acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;white-space:normal}
+.mark-acts button{border:1px solid var(--gold);background:linear-gradient(135deg,rgba(247,220,146,.35),rgba(255,255,255,.6));color:var(--ink);border-radius:99px;padding:6px 11px;font-size:12px;font-weight:800;line-height:1.3;text-align:left}
+.mark-typing{display:flex;gap:5px;align-items:center;padding:14px 16px}
+.mark-typing i{width:7px;height:7px;border-radius:50%;background:var(--mute);animation:markDot 1.2s infinite}
+.mark-typing i:nth-child(2){animation-delay:.2s}.mark-typing i:nth-child(3){animation-delay:.4s}
+@keyframes markDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+@media(prefers-reduced-motion:reduce){.mark-typing i{animation:none}}
+@media(max-width:380px){.mark-card img{width:74px;height:74px}.mark-chat{min-height:400px;height:calc(100dvh - 280px - env(safe-area-inset-bottom,0px))}.mark-bubble{max-width:94%}}
 
 </style>
 
@@ -1299,132 +1307,550 @@ setInterval(tickOffer, 1000);
 
 
 <script>
-/* Mark free chat: local JavaScript intent/context engine, no AI API calls. */
+/* Mark: offline conversational engine. Runs fully inside the app — no AI API, no external code.
+   Understands typos and phrasing variations, remembers context and the user's name,
+   knows every part of Sacred Chant and the prayer / prosperity niche, and steers off-topic talk back. */
 (() => {
- const IMG = 'https://i.postimg.cc/8kFQyKv5/bubblen6oy3a5sh6q.avif';
- const historyKey = () => 'sc-mark-chat:' + (typeof K !== 'undefined' ? K : 'sc-guest');
  const $m = id => document.getElementById(id);
- let history = [];
- const knowledge = [
-  {keys:['money','financial','debt','bills','job','career','prosper','abundance','wealth','income','rent','bank','rich'],topic:'prosperity',
-   replies:[
-    "I hear how much this matters to you. Financial pressure can feel heavy, especially when you are carrying it alone. We can take this one step at a time. Would a short prayer for strength, or a practical next-step reflection, help most right now?",
-    "When money is worrying you, it can help to make room for both faith and practical action. A prayer can support reflection, but it cannot guarantee a financial outcome. What feels most urgent today: bills, work, debt, or uncertainty about the future?"
-   ]},
-  {keys:['peace','calm','anxious','anxiety','stress','overwhelmed','panic','worry','worried','fear','afraid'],topic:'peace',
-   replies:[
-    "Let's slow this moment down together. Relax your shoulders, breathe in gently, and breathe out a little more slowly. You do not have to solve everything in this minute. What is the main thing weighing on you?",
-    "I'm glad you told me. When everything feels loud, a small quiet moment can help you decide what to do next. Would you like a calming prayer, a short breathing pause, or a chance to talk through what happened?"
-   ]},
-  {keys:['pray','prayer','god','jesus','holy','scripture','bible','solomon','faith','blessing','blessings'],topic:'prayer',
-   replies:[
-    "Of course. We can make this moment simple: take a quiet breath, bring your concern honestly before God, and ask for wisdom, patience, and strength for the next step. What would you like this prayer to focus on?",
-    "Prayer can be a space to speak honestly, even when you do not have the right words. Tell me what is on your heart, and I can suggest a theme for a short prayer or reflection."
-   ]},
-  {keys:['lonely','alone','sad','grief','grieving','miss','loss','heartbroken','hurt'],topic:'comfort',
-   replies:[
-    "I'm sorry this feels so heavy. You do not have to make your feelings sound neat or positive here. If you feel comfortable, tell me what has been hardest about today.",
-    "That sounds painful, and I'm glad you shared it. You deserve care and support, not pressure to pretend everything is fine. Would you like to tell me more, or would a gentle prayer for comfort help?"
-   ]},
-  {keys:['love','relationship','marriage','wife','husband','partner','family','argument','forgive','forgiveness'],topic:'relationships',
-   replies:[
-    "Relationships can bring both deep love and real hurt. It may help to pause before reacting and ask what you need, what you can control, and what conversation might be safe and constructive. What happened?",
-    "I hear that this relationship matters to you. I can help you reflect on patience, honest communication, and forgiveness without asking you to ignore harm or give up healthy boundaries. What is troubling you most?"
-   ]},
-  {keys:['health','sick','illness','pain','healing','heal','doctor','diagnosis'],topic:'health',
-   replies:[
-    "I'm sorry you're dealing with this. I can offer a prayer for comfort and strength, but I can't diagnose an illness or replace medical care. Would you like a short prayer, or help finding words to share your concern with someone you trust?",
-    "Let's hold space for what you're facing. You can pray for comfort and courage while also following qualified medical advice. What kind of support would feel helpful right now?"
-   ]},
-  {keys:['thank','grateful','gratitude','good news','happy','joy','blessed'],topic:'gratitude',
-   replies:[
-    "I'm glad there is something good to pause and notice. Gratitude does not mean every problem has disappeared; it means giving this good moment the attention it deserves. What are you most thankful for today?",
-    "That is worth celebrating. You might take a moment to name one thing you are grateful for, one person who helped, and one good step you want to carry into tomorrow."
-   ]},
-  {keys:['hello','hi','hey','good morning','good evening','good afternoon','who are you','your name'],topic:'greeting',
-   replies:[
-    "Hello, I'm Mark. I'm here to help you reflect, explore a prayer, or talk through what is on your mind. What would you like support with today?",
-    "Welcome. You can talk to me about prayer, peace, faith, gratitude, relationships, or worries about the future. What brought you here today?"
-   ]}
+ const keyBase = () => (typeof K !== 'undefined' ? K : 'sc-guest');
+ const historyKey = () => 'sc-mark-chat:' + keyBase();
+ const memKey = () => 'sc-mark-mem:' + keyBase();
+ let history = [], mem = {}, busy = false, loadedFor = '';
+
+ /* ---------- safe access to app state ---------- */
+ const G = {
+  light: () => { try { return Number(S.light) || 0 } catch (e) { return 0 } },
+  name: () => { try { return (mem.name || S.name || '').split(' ')[0] } catch (e) { return mem.name || '' } },
+  canOffer: () => { try { return canOffer() } catch (e) { return false } },
+  offerLeft: () => { try { return Math.max(0, DAY - (Date.now() - (S.lastTs || 0))) } catch (e) { return 0 } },
+  daysWith: () => { try { return mileStart ? Math.floor((Date.now() - mileStart) / DAY) : null } catch (e) { return null } },
+  owned: () => { try { return S.storeOwned || [] } catch (e) { return [] } },
+  bonusOwned: id => { try { return bonusOK(id) } catch (e) { return false } },
+  solOpenDays: () => { try { return S.solStart ? [0,1,2,3,4,5,6].filter(i => solOpen(i)).map(i => i + 1) : null } catch (e) { return null } },
+  jesOpenDays: () => { try { return S.jesStart ? [0,1,2,3,4,5,6].filter(i => jesOpen(i)).map(i => i + 1) : null } catch (e) { return null } },
+  plans: () => { try { return PLANS } catch (e) { return [] } }
+ };
+ const fmtLeft = ms => { const h = Math.floor(ms / 36e5), m = Math.floor(ms % 36e5 / 6e4); return h ? h + 'h ' + m + 'min' : m + ' min' };
+ const list = a => a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
+
+ /* ---------- actions Mark can offer as buttons ---------- */
+ const ACT = {
+  start: ['Open Start here · 2 ✦', () => mod('start')],
+  solomon: ['Open 7 Prayers of Solomon · 2 ✦', () => mod('solomon')],
+  jesus: ['Open 7 Prayers of Jesus', () => mod('jesus')],
+  pray: ['Open "I want to pray for you"', () => mod('pray')],
+  store: ['Visit the Store', () => access('store')],
+  chants: ['Open Chants · 2 ✦', () => access('chants')],
+  buy: ['See Light Token plans', () => openBuy()],
+  profile: ['Open my Profile', () => go('me')],
+  support: ['Contact our team', () => { if (window.openSupportPanel) window.openSupportPanel() }],
+  offer: ['Claim my daily light', () => { go('home'); setTimeout(() => { const o = $m('offer'); if (o) o.scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 150) }],
+  bonuses: ['See my bonuses', () => { go('home'); setTimeout(() => { const t = $m('tBon'); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 150) }],
+  exclusive: ['See my exclusive prayers', () => { go('home'); setTimeout(() => { const t = $m('tMile'); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 150) }],
+  install: ['Watch: install the app', () => openBonus('install')],
+  acutis: ['Carlos Acutis Prayer · 10 ✦', () => openBonus('acutis')],
+  raphael: ['Archangel Raphael Prayer · 10 ✦', () => openBonus('raphael')],
+  words15: ['Open 15 Words Prayer', () => openBonus('words15')],
+  benedict: ['Open Prayer of Saint Benedict', () => openBonus('benedict')],
+  book: ['Open The Book of Hidden Light', () => openBonus('book')],
+  p_sacredchant: ['Open Sacred Chant', () => openProd('sacredchant')],
+  p_songofgod: ['Open Song of God', () => openProd('songofgod')],
+  p_journey: ['Open The Journey with My Angel', () => openProd('journey')],
+  p_family: ['Open Family Protect', () => openProd('family')],
+  s_powerful7: ['7 Powerful Prayers · Store', () => openStoreItem('powerful7', 'home')],
+  s_words12: ['Secret 12 Words Prayer · Store', () => openStoreItem('words12', 'home')],
+  s_arthritis: ['Prayer for Arthritis · Store', () => openStoreItem('arthritis', 'home')],
+  s_diabetes: ['Prayer for Diabetes · Store', () => openStoreItem('diabetes', 'home')],
+  s_prosperity: ['Prosperity Code · Store', () => openStoreItem('prosperity', 'home')],
+  s_miracle: ['The Miracle Prayer · Store', () => openStoreItem('miracle', 'home')]
+ };
+ const storeLabel = id => G.owned().includes(id) ? ACT['s_' + id][0].replace(' · Store', ' · yours') : ACT['s_' + id][0];
+
+ /* ---------- text understanding ---------- */
+ const CONTR = { im: 'i am', "i'm": 'i am', ive: 'i have', "i've": 'i have', dont: 'do not', "don't": 'do not', doesnt: 'does not', "doesn't": 'does not', didnt: 'did not', "didn't": 'did not', cant: 'cannot', "can't": 'cannot', wont: 'will not', "won't": 'will not', isnt: 'is not', "isn't": 'is not', arent: 'are not', "aren't": 'are not', whats: 'what is', "what's": 'what is', hows: 'how is', "how's": 'how is', "it's": 'it is', u: 'you', ur: 'your', r: 'are', pls: 'please', plz: 'please', thx: 'thanks', ty: 'thanks', tks: 'thanks', bc: 'because', cuz: 'because', wanna: 'want to', gonna: 'going to', gotta: 'have to', idk: 'i do not know', tho: 'though', msg: 'message', acc: 'account', acct: 'account', $: 'money', bucks: 'money', tkns: 'tokens', tokes: 'tokens', ios: 'iphone', apple: 'iphone', samsung: 'android' };
+ const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’‘`´]/g, "'").replace(/'s\b/g, '').replace(/[^a-z0-9'\s]/g, ' ').replace(/\s+/g, ' ').trim();
+ const expand = s => s.split(' ').map(w => CONTR[w] || w).join(' ');
+ const stem = w => {
+  if (w.length <= 3) return w;
+  if (/ies$/.test(w) && w.length > 4) return w.slice(0, -3) + 'y';
+  if (/(sses|xes|ches|shes)$/.test(w)) return w.slice(0, -2);
+  if (/ing$/.test(w) && w.length > 5) { const b = w.slice(0, -3); return /(.)\1$/.test(b) ? b.slice(0, -1) : b }
+  if (/ed$/.test(w) && w.length > 4) { const b = w.slice(0, -2); return /(.)\1$/.test(b) ? b.slice(0, -1) : b.replace(/i$/, 'y') }
+  if (/s$/.test(w) && !/(ss|us|is)$/.test(w)) return w.slice(0, -1);
+  return w;
+ };
+ const stemText = s => expand(norm(s)).split(' ').filter(Boolean).map(stem).join(' ');
+ const lev = (a, b) => { if (Math.abs(a.length - b.length) > 2) return 9; const d = Array.from({ length: a.length + 1 }, (_, i) => [i]); for (let j = 1; j <= b.length; j++) d[0][j] = j; for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) { d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1) } return d[a.length][b.length] };
+ const GENERIC = new Set(['pray', 'prayer', 'god', 'app', 'help', 'day', 'open', 'get', 'work', 'use', 'need', 'want', 'know', 'more', 'thing', 'feel', 'life', 'can', 'how']);
+
+ /* ---------- knowledge base ---------- */
+ // k: keywords / phrases (phrases score higher). r: reply variants (string or fn). a: action buttons. f: follow-up chips. more: deeper reply for "tell me more".
+ const KB = [
+  /* ===== the app ===== */
+  { id: 'about_app', k: ['what is this app', 'what is sacred chant', 'about the app', 'what can i do here', 'what does this app do', 'how does this app work', 'how does the app work', 'explain the app', 'what is in the app', 'what is inside'],
+   r: [() => "Sacred Chant is your pocket sanctuary: guided prayers, sacred chants and quiet practices for faith, peace and provision. On Home you'll find Support & blessings (Start here, \"I want to pray for you\", Support), My products (like the 7 Prayers of Solomon and the 7 Prayers of Jesus, which I guide), Exclusive bonuses, the things you trade for tokens, and rare prayers that open with time. The Chants tab has sacred mantras and relaxing sounds, the Store has special programs for 50 ✦, and Profile keeps your streak and certificate. Where would you like to begin?"],
+   a: ['start', 'jesus', 'store'], f: ['How do Light Tokens work?', 'Where should I start?', 'What is free?'] },
+  { id: 'where_start', k: ['where do i start', 'where to start', 'how do i start', 'how to begin', 'i am new', 'first time', 'just joined', 'just bought', 'getting started', 'start here', 'beginner', 'what first', 'what should i do first', 'i am lost', 'guide me through'],
+   r: [() => "Welcome, I'm really glad you're here. Here's the simplest path: 1) Tap \"Offer your intention\" on Home to receive your free +10 ✦. 2) Open \"Start here\" for a short welcome video and the basics. 3) Begin the 7 Prayers of Solomon or the 7 Prayers of Jesus, one prayer a day, ideally in the morning with headphones. That's it. Small and steady beats long and rare."],
+   a: ['offer', 'start', 'jesus'], f: ['How do Light Tokens work?', 'What is free in the app?'] },
+  { id: 'free', k: ['what is free', 'free content', 'without tokens', 'for free', 'no tokens', 'do not cost', 'free stuff', 'free prayers', 'free to use', 'what can i use free'],
+   r: [() => "Plenty is free: talking with me, the Support popup, the 7 Prayers of Jesus (days 1 and 2 from the start), the bonuses How to install the app, 15 Words Prayer, Prayer of Saint Benedict and The Book of Hidden Light, plus Sacred Chant, Song of God, The Journey with My Angel and Family Protect in My products. And every 24 hours you get +10 ✦ free by offering your intention."],
+   a: ['jesus', 'words15', 'benedict'], f: ['How do I get free tokens?', 'What costs tokens?'] },
+  { id: 'tokens', k: ['light token', 'token', 'tokens', 'what are tokens', 'how do tokens work', 'what is light', 'my balance', 'how many tokens', 'how much light', 'what are the stars', 'star symbol', 'currency'],
+   r: [() => "Light Tokens (✦) are the light you use inside Sacred Chant. Right now you have " + G.light() + " ✦. You earn +10 ✦ free every 24 hours with \"Offer your intention\" on Home, or you can add more with a plan. They open things like Start here and the 7 Prayers of Solomon (2 ✦ a day), a chant session (3 ✦), \"I want to pray for you\" (10 ✦ once), the Carlos Acutis and Archangel Raphael prayers (10 ✦, yours forever) and Store programs (50 ✦, yours forever)."],
+   a: ['offer', 'buy'], f: ['How do I get free tokens?', 'What costs tokens?', 'My tokens did not arrive'] },
+  { id: 'free_tokens', k: ['free tokens', 'free light', 'earn tokens', 'get tokens', 'get more tokens', 'more light', 'daily light', 'daily reward', 'offer your intention', 'offer my intention', 'intention button', 'claim', 'plus 10', '+10', 'daily bonus', 'every day tokens'],
+   r: [() => G.canOffer() ? "Your daily light is ready right now! Go to Home and tap \"Offer your intention\". Take one breath, hold your intention in your heart, and +10 ✦ are added. You can do it once every 24 hours." : "You already offered your intention. Your next free +10 ✦ will be ready in about " + fmtLeft(G.offerLeft()) + ". The button on Home shows the countdown, and in Profile you can turn on a reminder so you don't miss it."],
+   a: ['offer', 'profile'], f: ['What can I do with tokens?', 'How do I buy more tokens?'] },
+  { id: 'costs', k: ['what costs', 'how much does it cost', 'how much is', 'price of', 'cost tokens', 'spend tokens', 'why did i lose tokens', 'tokens disappeared', 'tokens went down', 'charged tokens', 'took my tokens', 'used my tokens'],
+   r: [() => "Here's what uses Light Tokens: Start here and the 7 Prayers of Solomon cost 2 ✦ to open (once per day), the Chants tab 2 ✦, each chant session 3 ✦, opening a resting Solomon day early 10 ✦, a locked day of the 7 Prayers of Jesus 20 ✦, \"I want to pray for you\" 10 ✦ once, Carlos Acutis and Archangel Raphael 10 ✦ each (forever), and each Store program 50 ✦ (forever). Talking to me is always free."],
+   a: ['offer', 'buy'], f: ['How do I get free tokens?', 'What is free?'] },
+  { id: 'plans', k: ['plan', 'plans', 'buy tokens', 'purchase tokens', 'price', 'prices', 'how much', 'pricing', 'premium', 'devotional plan', 'essential plan', 'sacred premium', 'package', 'pay', 'payment', 'checkout', 'digistore', 'upgrade'],
+   r: [() => { const p = G.plans(); return p.length ? "These are the Light Token plans: " + list(p.map(x => x.name.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) + ' — ' + x.tokens.toLocaleString('en-US') + ' ✦ for ' + x.price + (x.monthly ? ' per month (monthly subscription)' : ' (one-time payment)'))) + ". Sacred Premium is the best value and the only one that isn't a subscription. Tap the ✦ counter at the top of the screen anytime to see them." : "Tap the ✦ counter at the top of the screen to see the Light Token plans." }],
+   a: ['buy'], f: ['Is it a subscription?', 'How do I cancel?', 'My tokens did not arrive'] },
+  { id: 'subscription', k: ['subscription', 'monthly', 'recurring', 'charged every month', 'charged again', 'renew', 'renewal', 'auto renew', 'billed', 'one time payment', 'one-time'],
+   r: [() => "Only Sacred Premium (1,000 ✦) is a one-time payment. Devotional (500 ✦) and Essential (100 ✦) are monthly subscriptions, billed every month, and each month brings their tokens again. If you'd like to change or cancel a subscription, our team handles it for you through the yellow chat button."],
+   a: ['support', 'buy'], f: ['How do I cancel?', 'Can I get a refund?'] },
+  { id: 'cancel', k: ['!cancel', 'cancel subscription', 'cancel my subscription', 'cancel my plan', 'cancellation', 'stop subscription', 'stop paying', 'unsubscribe', 'end my plan', 'stop the charges', 'stop charging'],
+   r: ["Of course. To cancel or change a subscription, tap the yellow chat button (or \"Contact our team\" below) and send your name and the email you used at checkout. Our team takes care of it quickly. Anything you already unlocked stays yours."],
+   a: ['support'], f: ['Can I get a refund?'] },
+  { id: 'refund', k: ['refund', 'money back', 'guarantee', 'return my money', 'reimburse', 'chargeback', 'not satisfied', 'want my money'],
+   r: ["You're covered by a 60-day money-back guarantee. Just contact our team through the yellow chat button with the email you used to buy, and they'll take care of it. That's the fastest way, much quicker than going through the bank."],
+   a: ['support'] },
+  { id: 'tokens_missing', k: ['tokens did not arrive', 'did not receive', 'not received', 'tokens not added', 'tokens missing', 'paid but', 'bought but', 'where are my tokens', 'no tokens after', 'balance did not change', 'did not get my tokens', 'purchase not showing', 'payment not showing'],
+   r: ["Tokens can take up to 1 minute to appear after the payment is confirmed. Please wait a moment, then close and reopen the app while logged in with the same email you used at checkout. If they still don't show up, contact our team through the yellow chat button and they'll add them for you."],
+   a: ['support'], f: ['How do I log in?'] },
+  { id: 'login', k: ['login', 'log in', 'sign in', 'signin', 'cannot enter', 'cannot access', 'access the app', 'magic link', 'email link', 'link not arriving', 'did not get the email', 'no email', 'password', 'locked out', 'cannot log', 'account access', 'create account', 'sign up', 'logout', 'log out', 'sign out'],
+   r: ["There's no password: on the sign-in screen you type your email and we send you a secure link. Open that link on the same phone you use for the app. If the email doesn't arrive in 2 minutes, check Spam or Promotions and make sure the address is spelled right. The login screen also has a tutorial video and a link to access the app without an account. To sign out, go to Profile."],
+   a: ['support', 'profile'], f: ['My tokens did not arrive', 'How do I install the app?'] },
+  { id: 'install', k: ['install', 'home screen', 'add to home', 'download', 'download the app', 'app icon', 'shortcut', 'iphone', 'android', 'app store', 'play store', 'save the app'],
+   r: ["On iPhone: open Sacred Chant in Safari, tap the three dots (•••) at the bottom, then Share, View more, Add to Home Screen, turn OFF \"Open as Web App\" and tap Add. On Android: open the browser menu and tap Install app or Add to Home screen. There's also a free video bonus showing every step."],
+   a: ['install'] },
+  { id: 'audio', k: ['no sound', 'no audio', 'cannot hear', 'sound not working', 'audio not working', 'volume', 'headphone', 'headphones', 'earphone', 'earbuds', 'video not playing', 'video not loading', 'video does not work', 'black screen', 'not playing', 'not loading', 'frozen', 'stuck', 'bug', 'error', 'app not working', 'broken'],
+   r: ["Let's fix it: 1) Check your phone isn't on silent and turn the volume up. 2) Headphones make a big difference with our chants. 3) Check your internet connection. 4) Close the app completely and open it again. 5) On iPhone, use Safari. If it still doesn't work, tell our team which screen has the problem through the yellow chat button."],
+   a: ['support'] },
+  { id: 'chants', k: ['chant', 'chants', 'mantra', 'mantras', 'sound', 'sounds', 'music', 'relax sound', 'nature sound', 'singing bowl', 'bells', 'om', 'lokah', 'ganapataye', 'shivaya', 'session', 'breath guide', 'chant of the day'],
+   r: ["In the Chants tab you'll find sacred mantras (Love: \"Lokah Samastah Sukhino Bhavantu\", may all beings be happy and free; Abundance: \"Om Gam Ganapataye Namaha\", gratitude for provision and a clear way ahead; Health: \"Om Namah Shivaya\", a quiet turn toward rest; and the Morning Chant, \"Om\"), Deep Relaxation with bells and singing bowls, and nature sounds: mountain water, dawn birdsong and forest wind. Choose 3, 5 or 10 minutes or an open session, put on headphones and follow the glowing circle: inhale as it grows, exhale as it softens."],
+   a: ['chants'], f: ['Which chant is for prosperity?', 'How do I meditate?'] },
+  { id: 'solomon', k: ['solomon', 'king solomon', '7 prayers of solomon', 'seven prayers of solomon', 'solomon day', 'resting day'],
+   r: [() => { const o = G.solOpenDays(); return "The 7 Prayers of Solomon follow the king who asked God for wisdom above riches, and received wisdom, riches and honor (1 Kings 3). One prayer a day: days 1 to 3 are open from the start, and day 4 to 7 each open on their own day (day 4 after 4 days, and so on), or early for 10 ✦." + (o ? " For you, day" + (o.length > 1 ? 's ' : ' ') + list(o.map(String)) + (o.length > 1 ? ' are' : ' is') + " open right now." : " Opening the module costs 2 ✦ a day.") }],
+   a: ['solomon'], more: ["Solomon's prayer in 1 Kings 3 is a beautiful model: he didn't ask for gold, he asked for \"an understanding heart\". God was pleased and added the rest. That's the spirit of these 7 prayers: seek wisdom first, and let provision follow in God's time (Matthew 6:33)."] },
+  { id: 'jesus7', k: ['7 prayers of jesus', 'seven prayers of jesus', 'prayers of jesus', 'jesus program', 'guided by mark', 'jesus day'],
+   r: [() => { const o = G.jesOpenDays(); return "The 7 Prayers of Jesus is the journey I guide, and it's free. Days 1 and 2 are open right away. Each following day opens on its own day (day 3 after 3 days, day 4 after 4 days…), or you can open it at once for 20 ✦." + (o ? " For you, day" + (o.length > 1 ? 's ' : ' ') + list(o.map(String)) + (o.length > 1 ? ' are' : ' is') + " open now." : " Take it slowly, one prayer a day.") }],
+   a: ['jesus'] },
+  { id: 'prayforyou', k: ['i want to pray for you', 'pray for you module', 'personal reading', 'reading', 'quiz', 'message meant for me', 'my message'],
+   r: ["In \"I want to pray for you\" you answer three short questions about what's on your heart, and a personal reading is prepared for your reflection. You unlock it once for 10 ✦ and it stays open for you."],
+   a: ['pray'] },
+  { id: 'support_mod', k: ['support', 'contact', 'talk to a human', 'real person', 'customer service', 'help desk', 'speak to someone', 'email you', 'contact you', 'yellow button', 'yellow chat', 'team'],
+   r: ["Our team is happy to help with anything about orders, payments, access or refunds. Tap the yellow chat button at the bottom right (or the Support tile on Home), write your name, email and question, and send it. They'll reply to your email."],
+   a: ['support'] },
+  { id: 'bonuses', k: ['bonus', 'bonuses', 'exclusive bonuses', 'gifts', 'extras', 'extra content'],
+   r: [() => "Your Exclusive bonuses on Home: How to install the app (free), Carlos Acutis Prayer (10 ✦, yours forever" + (G.bonusOwned('acutis') ? ', already yours' : '') + "), Prayer of Archangel Raphael (10 ✦, yours forever" + (G.bonusOwned('raphael') ? ', already yours' : '') + "), 15 Words Prayer (free), Prayer of Saint Benedict (free) and The Book of Hidden Light (free)."],
+   a: ['bonuses', 'words15', 'benedict'] },
+  { id: 'acutis', k: ['carlos acutis', 'acutis', 'carlo acutis', 'saint carlo', 'patron of the internet'],
+   r: [() => "Carlo Acutis was an Italian teenager (1991–2006) who loved the Eucharist so much he called it his \"highway to heaven\" and built a website about Eucharistic miracles. He died of leukemia at 15, was beatified in 2020 and canonized in 2025. He's often called the patron of the internet and a friend to young people. His prayer is in your bonuses for 10 ✦" + (G.bonusOwned('acutis') ? ", and it's already yours." : ", and once unlocked it's yours forever.")],
+   a: ['acutis'] },
+  { id: 'raphael', k: ['raphael', 'archangel raphael', 'saint raphael', 'tobit', 'tobias'],
+   r: [() => "Raphael's name means \"God heals\". In the Book of Tobit he guides young Tobias on a journey, protects him and brings healing to his father's eyes. Many people ask for his intercession for health, safe travel and finding a good spouse. His prayer is in your bonuses for 10 ✦" + (G.bonusOwned('raphael') ? ", and it's already yours." : ", and once unlocked it stays yours forever.")],
+   a: ['raphael'] },
+  { id: 'benedict', k: ['saint benedict', 'benedict', 'benedictine', 'medal of saint benedict', 'vade retro', 'ora et labora'],
+   r: ["Saint Benedict of Nursia (c. 480–547) founded the monastic way of life in the West with his Rule, summed up as \"ora et labora\", pray and work. The Saint Benedict medal is a beloved sign of protection against evil. His prayer is free in your bonuses, perfect for protection over your home."],
+   a: ['benedict'] },
+  { id: 'words15', k: ['15 words', 'fifteen words', '15 word prayer'], r: ["The 15 Words Prayer is a short, powerful prayer you can learn by heart and say anywhere, in a hard moment or at the start of the day. It's free in your bonuses."], a: ['words15'] },
+  { id: 'words12', k: ['12 words', 'twelve words', 'secret 12', 'secret prayer'], r: [() => "The Secret 12 Words Prayer is in the Store for 50 ✦ and, once unlocked, it's yours forever and also appears on Home under \"Products I traded for tokens\"."], a: ['s_words12'] },
+  { id: 'book', k: ['book of hidden light', 'hidden light', 'the book', 'scroll', 'ancient scroll', 'ebook'], r: ["The Book of Hidden Light is a free bonus that opens right inside the app. Find a calm moment and read it slowly, a little each day."], a: ['book'] },
+  { id: 'products', k: ['my products', 'song of god', 'sacred chant program', 'journey with my angel', 'the journey', 'family protect', 'family protection program', 'what did i buy', 'my programs'],
+   r: ["In My products you have the 7 Prayers of Solomon, the 7 Prayers of Jesus (which I guide), and four free programs: Sacred Chant, Song of God, The Journey with My Angel and Family Protect. They all play right inside the app."],
+   a: ['p_family', 'p_journey', 'p_songofgod'] },
+  { id: 'store', k: ['store', 'shop', 'trade tokens', '50 tokens', 'buy with tokens', 'products i traded', 'unlock with tokens', 'store products', 'store programs'],
+   r: [() => { const o = G.owned(); return "The Store has six programs for 50 ✦ each: 7 Powerful Prayers (7 days), Secret 12 Words Prayer, Prayer for Arthritis, Prayer for Diabetes, Prosperity Code (a breathing exercise and a 30-minute theta-wave meditation) and The Miracle Prayer. Once you unlock one it's yours forever, in the Store and on Home under \"Products I traded for tokens\"." + (o.length ? ' You already have ' + o.length + ' of them.' : '') }],
+   a: ['store'] },
+  ...[['powerful7', ['7 powerful prayers', 'seven powerful prayers', 'powerful prayers'], '7 Powerful Prayers is a 7-day journey of powerful prayers, one for each day.', 'Write a prayer for a miracle'],
+   ['words12x', [], '', ''],
+   ['arthritis', ['prayer for arthritis', 'arthritis prayer', 'arthritis'], 'Prayer for Arthritis is a guided prayer for comfort and relief for painful joints, to pray alongside your medical care.', 'Write me a healing prayer'],
+   ['diabetes', ['prayer for diabetes', 'diabetes prayer', 'diabetes'], 'Prayer for Diabetes is a guided prayer for strength, balance and healing, to pray alongside your medical care.', 'Write me a healing prayer'],
+   ['prosperity', ['prosperity code'], 'Prosperity Code has two guided days: a 5-minute breathing exercise and a 30-minute guided meditation with theta-wave binaural beats (use headphones).', 'Write a prayer for financial blessing'],
+   ['miracle', ['the miracle prayer', 'miracle prayer'], 'The Miracle Prayer is a powerful prayer for seasons when you need God to make a way where there seems to be none.', 'Write a prayer for a miracle']]
+   .filter(x => x[1].length).map(([sid, k, desc, chip]) => ({ id: 'st_' + sid, k, r: [() => G.owned().includes(sid) ? desc + " It's already yours! Open it from the Store or from Home, under \"Products I traded for tokens\"." : desc + ' It\'s in the Store for 50 ✦, and once unlocked it\'s yours forever, also on Home under \"Products I traded for tokens\". You have ' + G.light() + ' ✦' + (G.light() < 50 ? ', so you\'d need ' + (50 - G.light()) + ' ✦ more.' : ', enough to unlock it now.')], a: ['s_' + sid], f: [chip, 'What else is in the Store?'] })),
+  { id: 'exclusive', k: ['exclusive prayers', 'exclusive prayer', 'day 7', 'day 14', 'day 30', 'day 60', '7 days', '14 days', '30 days', '60 days', 'locked prayer', 'sealed prayer', 'prayer for depression', 'prayer for cancer', 'ringing ears', 'tinnitus', 'morning prayer', 'faithful', 'rare prayer'],
+   r: [() => { const d = G.daysWith(); return "These are rare prayers for faithful members: Prayer for Depression opens on your day 7 with Sacred Chant, Prayer for Cancer on day 14, Prayer for Ringing Ears on day 30 and the Morning Prayer on day 60. They can't be bought with tokens, only received with time." + (d !== null ? ' You are on day ' + (d + 1) + ' with us' + (MILES.filter(m => d >= m.d).length ? ', and ' + list(MILES.filter(m => d >= m.d).map(m => m.t)) + (MILES.filter(m => d >= m.d).length > 1 ? ' are' : ' is') + ' already open for you.' : '.') : '') }],
+   a: ['exclusive'] },
+  { id: 'profile', k: ['profile', 'certificate', 'streak', 'minutes', 'my progress', 'reset', 'reminder', 'notification', 'notifications', 'change my name', 'my name in the app'],
+   r: ["Profile shows your day streak, minutes of listening and your light. There you can change your name, view and print your Certificate of Practice, turn on reminders for your next free +10 ✦, reset your progress or sign out."],
+   a: ['profile'] },
+  { id: 'mark', k: ['who are you', 'what are you', 'your name', 'who is mark', 'what do you do', 'what can you do', 'can you help', 'how can you help'],
+   r: [() => "I'm Mark, your companion here in Sacred Chant. I guide the 7 Prayers of Jesus, and I'm here to talk with you about prayer, faith, peace, healing, family and financial blessings, and to help with anything in the app. I can even write a prayer just for you. What's on your heart" + (G.name() ? ', ' + G.name() : '') + '?'],
+   f: ['Write a prayer for me', 'Where should I start?', 'How do Light Tokens work?'] },
+
+  /* ===== the niche: prayer, faith, prosperity ===== */
+  { id: 'prosperity', cat: 'n', topic: 'prosperity', k: ['prosperity', 'prosper', 'abundance', 'abundant', 'financial blessing', 'blessing financial', 'wealth', 'rich', 'riches', 'money', 'finances', 'financial', 'provision', 'breakthrough financial', 'attract money', 'more money', 'financial freedom', 'increase', 'overflow', 'open doors'],
+   r: ["God cares about your provision. Scripture says \"my God shall supply all your need according to his riches in glory\" (Philippians 4:19) and \"it is he that giveth thee power to get wealth\" (Deuteronomy 8:18). Biblical prosperity starts with trust, gratitude and wise work, not anxiety. Begin each morning thanking God for what you already have, then ask for wisdom for one concrete step: a call, a plan, an opportunity.",
+    "Here's a simple prosperity practice: in the morning, thank God for three things you already have; pray Proverbs 3:9-10, honoring Him with your first fruits; then write one practical step for the day. In the app, the Abundance chant, the 7 Prayers of Solomon (wisdom before riches) and Prosperity Code in the Store were made for this season. Prayer opens the heart, and wise action opens the door."],
+   a: ['solomon', 's_prosperity', 's_miracle'], f: ['Write a prayer for financial blessing', 'Bible verses about provision', 'I am in debt'],
+   more: ["A key truth: \"The blessing of the Lord, it maketh rich, and he addeth no sorrow with it\" (Proverbs 10:22). God's abundance comes with peace, not fear. So pray, give thanks, be generous as you can, work with excellence (Colossians 3:23) and manage carefully what you receive. I can't promise a specific financial result, but I can promise you won't walk this alone."] },
+  { id: 'debt', cat: 'n', topic: 'debt', k: ['debt', 'debts', 'owe', 'loan', 'loans', 'credit card', 'bills', 'cannot pay', 'behind on', 'rent', 'mortgage', 'broke', 'no money', 'bankrupt', 'eviction', 'collector', 'struggling financially', 'money problems', 'financial problems', 'poor'],
+   r: ["I'm sorry, money pressure is exhausting and it can steal your sleep. You're not alone, and this season doesn't define you. Let's take two steps: first, give it to God honestly, \"Cast thy burden upon the Lord, and he shall sustain thee\" (Psalm 55:22). Second, one practical move today: list every debt with amount and due date, and call the most urgent one to ask for a plan. A free credit or debt counselor can help too.",
+    "When bills pile up, fear tells you to hide. Faith invites you to face it with God beside you. Pray for wisdom (James 1:5), protect the essentials first (home, food, light), then talk to creditors before the due date: many accept smaller payments. Would you like me to write a prayer for financial breakthrough?"],
+   a: ['solomon', 's_prosperity'], f: ['Write a prayer for financial breakthrough', 'Bible verses about provision'] },
+  { id: 'work', cat: 'n', topic: 'work', k: ['job', 'jobs', 'work', 'career', 'employment', 'unemployed', 'fired', 'laid off', 'interview', 'promotion', 'boss', 'coworker', 'business', 'my company', 'sales', 'clients', 'customers', 'entrepreneur', 'salary', 'raise'],
+   r: ["\"Commit thy works unto the Lord, and thy thoughts shall be established\" (Proverbs 16:3). Before work or an interview, take one minute: offer your day to God, ask for wisdom and favor, and then give your best as if working for Him (Colossians 3:23). Prepare well, follow up, and trust His timing. Would you like a short prayer for your job or business?",
+    "Work matters to God: He gives strength, ideas and open doors. Pray Jeremiah 29:11 over your career: \"plans to give you a future and a hope\". Practically, pick one action per day (send a CV, call a client, learn a skill). Faith plus consistency is a powerful combination."],
+   a: ['solomon', 's_powerful7'], f: ['Write a prayer for my job', 'Write a prayer for my business'] },
+  { id: 'tithe', cat: 'n', topic: 'prosperity', k: ['tithe', 'tithing', 'tithes', 'offering', 'give to church', 'generosity', 'generous', 'sow a seed', 'seed', 'donate', 'first fruits'],
+   r: ["Giving is an act of trust and gratitude. Malachi 3:10 speaks of tithes and \"the windows of heaven\", and 2 Corinthians 9:7 reminds us that \"God loveth a cheerful giver\". Give freely, joyfully and within your means, never out of fear or pressure, and never at the cost of your family's basic needs. Generosity opens the heart to receive."],
+   f: ['Bible verses about provision', 'Write a prayer for financial blessing'] },
+  { id: 'lottery', cat: 'n', topic: 'prosperity', k: ['lottery', 'lotto', 'jackpot', 'lucky numbers', 'winning numbers', 'casino', 'gamble', 'gambling', 'bet', 'betting', 'win money fast', 'get rich quick', 'crypto', 'bitcoin', 'stocks', 'invest', 'investment', 'trading', 'forex'],
+   r: ["I can't give lucky numbers, investment tips or financial advice, and no prayer can guarantee a win or a profit. What I can do is pray with you for wisdom, so every decision about money is made with a clear mind and peace (James 1:5). Lasting abundance usually grows slowly, through work, care and gratitude (Proverbs 13:11). Would you like a prayer for wisdom with money?"],
+   f: ['Write a prayer for wisdom', 'Tell me about prosperity'] },
+  { id: 'gratitude', cat: 'n', topic: 'gratitude', k: ['grateful', 'gratitude', 'thankful', 'thank god', 'blessed', 'good news', 'answered prayer', 'my prayer was answered', 'it worked', 'testimony', 'miracle happened', 'celebrate'],
+   r: [() => "That's wonderful" + (G.name() ? ', ' + G.name() : '') + "! Thank you for sharing it with me. \"In every thing give thanks\" (1 Thessalonians 5:18). Take a moment today to say it out loud to God, and maybe tell someone you love. Gratitude keeps the door of blessing open. What happened?"],
+   f: ['Write a prayer of thanksgiving'] },
+  { id: 'peace', cat: 'n', topic: 'peace', k: ['anxious', 'anxiety', 'stress', 'stressed', 'worry', 'worried', 'overwhelmed', 'panic', 'nervous', 'restless', 'cannot relax', 'peace', 'calm', 'calm down', 'tension', 'overthinking', 'pressure'],
+   r: ["Let's slow down together. Breathe in for 4 counts… hold for 4… breathe out for 6. Again. \"Be careful for nothing; but in every thing by prayer and supplication with thanksgiving let your requests be made known unto God. And the peace of God… shall keep your hearts and minds\" (Philippians 4:6-7). What is weighing on you most right now?",
+    "When your mind is racing, give it one simple anchor: \"Peace I leave with you, my peace I give unto you\" (John 14:27). Say it slowly with your breath. In the app, the Deep Relaxation sound and the chant breath guide help a lot. And if the anxiety is constant or heavy, please talk to a doctor or counselor too. That's wisdom, not weakness."],
+   a: ['chants'], f: ['Write a prayer for peace', 'How do I meditate?'] },
+  { id: 'fear', cat: 'n', topic: 'protection', k: ['fear', 'afraid', 'scared', 'protection', 'protect', 'protect me', 'evil', 'danger', 'enemies', 'enemy', 'curse', 'cursed', 'evil eye', 'envy', 'jealousy', 'negative energy', 'bad energy', 'spiritual attack', 'demon', 'witchcraft', 'nightmare', 'bad luck', 'hex'],
+   r: ["\"He shall cover thee with his feathers, and under his wings shalt thou trust… thou shalt not be afraid for the terror by night\" (Psalm 91:4-5). You are not unprotected. Pray Psalm 91 over yourself and your home, ask Saint Michael the Archangel to stand guard, and put on \"the whole armour of God\" (Ephesians 6:11). In your app, the Prayer of Saint Benedict (free) and Family Protect are powerful for this.",
+    "Fear shrinks when we name God's presence. Isaiah 41:10: \"Fear thou not; for I am with thee.\" Before sleeping, bless your home room by room, say Psalm 91, and leave a short prayer of protection over each person you love. If you are in real physical danger, please contact local authorities right away."],
+   a: ['benedict', 'p_family'], f: ['Write a prayer of protection', 'Who is Saint Michael?'] },
+  { id: 'health', cat: 'n', topic: 'health', k: ['health', 'sick', 'illness', 'disease', 'pain', 'healing', 'heal', 'cure', 'surgery', 'hospital', 'doctor', 'diagnosis', 'treatment', 'recovery', 'chronic', 'back pain', 'joint', 'blood pressure', 'sugar', 'tumor', 'chemo', 'body'],
+   r: ["I'm sorry you're going through this. God is near the sick: \"Heal me, O Lord, and I shall be healed\" (Jeremiah 17:14). Pray with faith, and please keep following your doctor's guidance; God often heals through medicine and caring hands too. In the app: Archangel Raphael (\"God heals\") in your bonuses, Prayer for Arthritis and Prayer for Diabetes in the Store, and exclusive prayers for those who stay with us.",
+    "Let's hold your health before God. James 5:15 says \"the prayer of faith shall save the sick\". Pray daily, rest, and stay close to your medical team. I can't diagnose or replace a doctor, but I can pray with you. Would you like a healing prayer written for you?"],
+   a: ['raphael', 's_arthritis', 's_diabetes'], f: ['Write a prayer for healing', 'Who is Archangel Raphael?'] },
+  { id: 'sad', cat: 'n', topic: 'comfort', k: ['sad', 'depressed', 'depression', 'crying', 'cry', 'hopeless', 'empty', 'broken', 'heartbroken', 'hurt', 'down', 'tired of everything', 'exhausted', 'give up', 'lost hope', 'no hope', 'miserable', 'lonely', 'alone', 'nobody cares', 'isolated'],
+   r: [() => "I'm really sorry you're feeling this way" + (G.name() ? ', ' + G.name() : '') + ". You don't have to pretend to be fine here. \"The Lord is nigh unto them that are of a broken heart\" (Psalm 34:18). You matter, and this heaviness is not the end of your story. Is there someone you trust you could talk to today? And if the sadness has lasted weeks, a doctor or counselor can really help. What has been the hardest part?",
+    "Thank you for telling me. When everything feels dark, take the next small step: a glass of water, a short walk, a message to someone who cares. God promised \"I will never leave thee, nor forsake thee\" (Hebrews 13:5). Would a gentle prayer for comfort help right now?"],
+   a: ['exclusive'], f: ['Write a prayer for comfort', 'I need peace'] },
+  { id: 'grief', cat: 'n', topic: 'grief', k: ['grief', 'grieving', 'passed away', 'died', 'death', 'lost my', 'funeral', 'mourning', 'miss my', 'widow', 'widower', 'loss'],
+   r: ["I'm so sorry for your loss. Grief is love that has nowhere to go, and it takes the time it takes. \"Blessed are they that mourn: for they shall be comforted\" (Matthew 5:4), and one day \"God shall wipe away all tears\" (Revelation 21:4). Be gentle with yourself. Would you like a prayer for your loved one and for comfort for your heart?"],
+   f: ['Write a prayer for comfort'] },
+  { id: 'family', cat: 'n', topic: 'family', k: ['family', 'my children', 'my kids', 'my son', 'my daughter', 'my mother', 'my father', 'my mom', 'my dad', 'parents', 'grandchildren', 'home', 'household', 'siblings', 'brother', 'sister'],
+   r: ["Praying for your family is one of the most powerful things you can do. \"As for me and my house, we will serve the Lord\" (Joshua 24:15). Each night, name each person before God, asking protection, peace and wisdom for them. In your app, Family Protect is made exactly for this, and Psalm 91 is a beautiful covering for your home. Who would you like to pray for?"],
+   a: ['p_family'], f: ['Write a prayer for my family', 'Write a prayer of protection'] },
+  { id: 'relationship', cat: 'n', topic: 'love', k: ['marriage', 'married', 'husband', 'wife', 'spouse', 'partner', 'boyfriend', 'girlfriend', 'relationship', 'divorce', 'separated', 'cheating', 'argument', 'fight', 'love life', 'soulmate', 'find love', 'single', 'dating', 'reconcile', 'ex'],
+   r: ["Love is precious and sometimes hard. \"Charity suffereth long, and is kind\" (1 Corinthians 13:4). Pray for your heart first, then for the other person, asking God for patience, humility and honest words. If there is any abuse or danger, your safety comes first, so please reach out for help. What's happening in your relationship?",
+    "If you're waiting for love: \"Delight thyself also in the Lord; and he shall give thee the desires of thine heart\" (Psalm 37:4). Grow in faith and in who you are, and stay open. Archangel Raphael, who guided Tobias to his wife, is a lovely intercessor here. Would you like a prayer for love?"],
+   a: ['raphael'], f: ['Write a prayer for my marriage', 'Write a prayer to find love'] },
+  { id: 'forgive', cat: 'n', topic: 'forgiveness', k: ['forgive', 'forgiveness', 'guilt', 'guilty', 'shame', 'ashamed', 'regret', 'sin', 'sinned', 'mistake', 'confess', 'resentment', 'grudge', 'betrayed', 'anger', 'angry', 'hate'],
+   r: ["\"If we confess our sins, he is faithful and just to forgive us\" (1 John 1:9). God's mercy is bigger than any mistake. Bring it to Him honestly, receive His forgiveness, and make right what you can. And forgiving others doesn't mean what they did was okay; it means you set your own heart free (Ephesians 4:32). Would you like a prayer for forgiveness?"],
+   f: ['Write a prayer for forgiveness'] },
+  { id: 'faith', cat: 'n', topic: 'faith', k: ['faith', 'doubt', 'doubts', 'unanswered', 'god is not listening', 'does god hear', 'why god', 'silence of god', 'lost my faith', 'believe', 'trust god', 'god forgot me', 'waiting on god', 'god timing', 'purpose', 'calling', 'meaning of life', 'god plan', 'direction', 'guidance', 'decision', 'what should i do'],
+   r: ["Even strong believers have prayed \"Lord, I believe; help thou mine unbelief\" (Mark 9:24). Silence doesn't mean absence. Sometimes God answers \"yes\", sometimes \"wait\", sometimes \"I have something better\" (Isaiah 55:8-9). Keep showing up: one honest prayer a day keeps the conversation open.",
+    "For a decision: pray Proverbs 3:5-6, \"Trust in the Lord with all thine heart… and he shall direct thy paths.\" Then write the options down, ask advice from someone wise, and watch for peace in your heart. God's direction usually comes step by step, not all at once."],
+   a: ['jesus', 'solomon'], f: ['Write a prayer for guidance', 'How do I pray?'] },
+  { id: 'howpray', cat: 'n', topic: 'prayer', k: ['how to pray', 'how do i pray', 'teach me to pray', 'how should i pray', 'right way to pray', 'learn to pray', 'pray better', 'what to say to god', 'i do not know how to pray', 'prayer routine', 'daily prayer', 'pray every day'],
+   r: ["There's no perfect formula: God wants your honest heart. A simple model is A.C.T.S.: Adoration (praise God for who He is), Confession (be honest about your mistakes), Thanksgiving (thank Him for 3 things), Supplication (ask for what you and others need). Jesus also gave us the Lord's Prayer (Matthew 6:9-13). Start with 3 quiet minutes each morning; consistency matters more than length.",
+    "Try this tomorrow morning: sit somewhere quiet, breathe slowly three times, read one verse, tell God honestly how you feel, thank Him for three things, ask for one thing for yourself and one for someone else. Close with Amen. That's a real, powerful prayer. The 7 Prayers of Jesus I guide follow this same gentle rhythm."],
+   a: ['jesus', 'start'], f: ['What is the Lord’s Prayer?', 'Write a morning prayer'] },
+  { id: 'lordsprayer', cat: 'n', topic: 'prayer', k: ['lord prayer', 'lords prayer', 'our father', 'pater noster'],
+   r: ["The Lord's Prayer (Matthew 6:9-13): \"Our Father which art in heaven, Hallowed be thy name. Thy kingdom come, Thy will be done in earth, as it is in heaven. Give us this day our daily bread. And forgive us our debts, as we forgive our debtors. And lead us not into temptation, but deliver us from evil: For thine is the kingdom, and the power, and the glory, for ever. Amen.\""] },
+  { id: 'psalm23', cat: 'n', topic: 'prayer', k: ['psalm 23', 'the lord is my shepherd', 'shepherd'],
+   r: ["Psalm 23: \"The Lord is my shepherd; I shall not want. He maketh me to lie down in green pastures: he leadeth me beside the still waters. He restoreth my soul… Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me… Surely goodness and mercy shall follow me all the days of my life: and I will dwell in the house of the Lord for ever.\" It's a perfect prayer for provision and peace."] },
+  { id: 'psalm91', cat: 'n', topic: 'protection', k: ['psalm 91', 'secret place', 'under his wings'],
+   r: ["Psalm 91 is the great psalm of protection: \"He that dwelleth in the secret place of the most High shall abide under the shadow of the Almighty… For he shall give his angels charge over thee, to keep thee in all thy ways.\" Many people pray it at night over their home and family. Family Protect and the Prayer of Saint Benedict in your app go beautifully with it."],
+   a: ['p_family', 'benedict'] },
+  { id: 'verses', cat: 'n', topic: 'verses', k: ['verse', 'verses', 'bible verse', 'scripture', 'scriptures', 'promise', 'promises', 'bible says', 'word of god', 'psalm', 'psalms', 'proverb'],
+   r: [() => { const t = mem.topic || 'prosperity'; const V = { prosperity: "Philippians 4:19, \"My God shall supply all your need\"; Deuteronomy 8:18, \"He giveth thee power to get wealth\"; Proverbs 10:22, \"The blessing of the Lord, it maketh rich\"; 3 John 1:2, \"I wish above all things that thou mayest prosper and be in health\"; Matthew 6:33, \"Seek ye first the kingdom of God… and all these things shall be added unto you.\"", debt: "Psalm 55:22, \"Cast thy burden upon the Lord\"; Philippians 4:19; James 1:5, \"If any of you lack wisdom, let him ask of God\".", peace: "Philippians 4:6-7; Isaiah 26:3, \"Thou wilt keep him in perfect peace, whose mind is stayed on thee\"; Matthew 11:28, \"Come unto me… and I will give you rest\".", protection: "Psalm 91; Psalm 121:7, \"The Lord shall preserve thee from all evil\"; Isaiah 54:17, \"No weapon that is formed against thee shall prosper\".", health: "Jeremiah 17:14; Psalm 103:2-3, \"who healeth all thy diseases\"; James 5:15.", comfort: "Psalm 34:18; Matthew 5:4; Hebrews 13:5, \"I will never leave thee, nor forsake thee\".", family: "Joshua 24:15; Psalm 127:1, \"Except the Lord build the house…\"; Isaiah 54:13.", love: "1 Corinthians 13:4-7; Psalm 37:4; Colossians 3:14.", faith: "Proverbs 3:5-6; Jeremiah 29:11; Hebrews 11:1, \"Faith is the substance of things hoped for\".", work: "Proverbs 16:3; Colossians 3:23; Psalm 90:17, \"establish thou the work of our hands\"." }; return 'Here are verses for you: ' + (V[t] || V.prosperity) + ' Pick one, write it down and read it every morning this week.' }],
+   f: ['Verses about provision', 'Verses about peace', 'Verses about protection'] },
+  { id: 'angels', cat: 'n', topic: 'protection', k: ['angel', 'angels', 'guardian angel', 'my angel', 'archangel', 'archangels', 'michael', 'saint michael', 'gabriel', 'heavenly', 'angel numbers', '111', '222', '333', '444', '555', '777', '888', '1111'],
+   r: ["\"For he shall give his angels charge over thee, to keep thee in all thy ways\" (Psalm 91:11). Tradition honors three archangels: Michael (\"Who is like God?\"), protector against evil; Gabriel, God's messenger who announced the birth of Jesus (Luke 1); and Raphael (\"God heals\"), guide and healer in the Book of Tobit. You can greet your guardian angel each morning and ask him to walk with you. The Journey with My Angel in your products is beautiful for this.",
+    "Many people see repeated numbers and wonder about signs. I'd encourage you to treat them as a gentle reminder to pray, not as a fortune to decode: \"prove all things; hold fast that which is good\" (1 Thessalonians 5:21). God speaks most clearly through His Word, prayer and peace in your heart."],
+   a: ['p_journey', 'raphael'], f: ['Write a prayer to my guardian angel', 'Who is Archangel Raphael?'] },
+  { id: 'sleep', cat: 'n', topic: 'peace', k: ['sleep', 'insomnia', 'cannot sleep', 'night prayer', 'evening prayer', 'before bed', 'bedtime', 'wake up at night'],
+   r: ["\"I will both lay me down in peace, and sleep: for thou, Lord, only makest me dwell in safety\" (Psalm 4:8). Tonight: put the phone away 20 minutes early, play a soft nature sound or Deep Relaxation, breathe in 4 and out 6, thank God for 3 moments of the day and hand Him tomorrow's worries."],
+   a: ['chants'], f: ['Write a night prayer'] },
+  { id: 'morning', cat: 'n', topic: 'morning', k: ['morning', 'start my day', 'wake up', 'before work', 'morning routine'],
+   r: ["\"His compassions fail not. They are new every morning\" (Lamentations 3:22-23). A 3-minute morning practice: sit with your feet on the floor, breathe slowly, offer your day to God, name one intention (patience, gratitude, courage), then listen to one chant or one prayer from your program. Don't forget to offer your intention for your +10 ✦!"],
+   a: ['offer', 'jesus'], f: ['Write a morning prayer'] },
+  { id: 'meditate', cat: 'n', topic: 'peace', k: ['meditate', 'meditation', 'breathing', 'breathe', 'breath', 'mindfulness', 'focus', 'concentrate', 'quiet my mind', 'binaural', 'theta', 'frequency', 'frequencies', 'solfeggio', 'hz'],
+   r: ["Christian meditation is simply resting your mind in God: \"Be still, and know that I am God\" (Psalm 46:10). Sit comfortably, breathe in for 4 and out for 6, and repeat one short phrase with your breath, like \"Jesus, I trust in You\". When your mind wanders, gently come back. Use headphones with our chants; Prosperity Code in the Store also includes a 30-minute theta-wave guided meditation."],
+   a: ['chants', 's_prosperity'] },
+  { id: 'rosary', cat: 'n', topic: 'prayer', k: ['rosary', 'hail mary', 'mother mary', 'virgin mary', 'our lady', 'mary'],
+   r: ["The Rosary is a beautiful way to meditate on the life of Jesus with Mary: the Apostles' Creed, an Our Father, three Hail Marys and a Glory Be, then five decades (one Our Father, ten Hail Marys and a Glory Be each) while reflecting on a mystery. Even one decade a day, slowly, is a lovely start."] },
+  { id: 'fasting', cat: 'n', topic: 'faith', k: ['fast', 'fasting', 'daniel fast', 'skip meals'],
+   r: ["Fasting is a way of making space for God (Matthew 6:16-18). It can be simple: skipping one meal and praying in that time, or giving up something like social media for a few days. If you have a health condition, are pregnant, or take medication, talk to your doctor first. A fast of the heart counts too."] },
+  { id: 'church', cat: 'n', topic: 'faith', k: ['church', 'catholic', 'christian', 'protestant', 'evangelical', 'denomination', 'mass', 'pastor', 'priest', 'religion', 'which religion'],
+   r: ["Sacred Chant welcomes everyone who seeks God in prayer, whatever church you belong to. The prayers here are rooted in the Christian tradition and Scripture, and they're meant to support, not replace, your community. If you have a church, keep going; praying together is a blessing."] },
+  { id: 'miracle', cat: 'n', topic: 'miracle', k: ['miracle', 'miracles', 'breakthrough', 'impossible', 'urgent prayer', 'need a miracle', 'desperate', 'last hope', 'help me god'],
+   r: ["\"With God all things are possible\" (Matthew 19:26). Bring Him your impossible situation exactly as it is, and pray Mark 11:24 with faith: \"What things soever ye desire, when ye pray, believe that ye receive them.\" Keep praying, keep doing the next right thing, and let people help you. The Miracle Prayer in the Store and the 7 Powerful Prayers were made for seasons like this."],
+   a: ['s_miracle', 's_powerful7'], f: ['Write a prayer for a miracle'] }
  ];
- const general = [
-  "I'm listening. Could you tell me a little more about what that means for you?",
-  "Thank you for sharing that with me. What part of this feels most important to focus on right now?",
-  "Let's take it one step at a time. Would you like to talk more about what happened, or explore a prayer or reflection that fits?",
-  "I may not have understood every part of that yet. Can you tell me what kind of help you are hoping for?"
+
+ /* ---------- compiled matcher ---------- */
+ const VOCAB = new Set(), RAWV = new Set();
+ KB.forEach(it => {
+  it.c = it.k.map(k => { const strong = k[0] === '!'; const raw = strong ? k.slice(1) : k; expand(norm(raw)).split(' ').forEach(w => RAWV.add(w)); const s = stemText(raw); const words = s.split(' '); words.forEach(w => VOCAB.add(w)); return { s, n: words.length, strong } });
+ });
+ const fixTypos = st => st.split(' ').map(w => { if (RAWV.has(w) || VOCAB.has(w) || w.length < 4 || /\d/.test(w)) return w; let best = w, bd = 9; for (const v of RAWV) { if (v.length < 4 || v[0] !== w[0]) continue; const d = lev(w, v); if (d < bd) { bd = d; best = v } } return bd <= (w.length >= 7 ? 2 : 1) ? best : w }).join(' ');
+ function score(st) {
+  const padded = ' ' + st + ' ';
+  return KB.map(it => {
+   let sc = 0;
+   it.c.forEach(c => { if (padded.includes(' ' + c.s + ' ')) sc += (c.n > 1 ? 1.5 + c.n : (GENERIC.has(c.s) ? 0.4 : 1)) * (c.strong ? 2 : 1) });
+   if (it.id === mem.last) sc += 0.15;
+   return { it, sc };
+  }).sort((a, b) => b.sc - a.sc);
+ }
+
+ /* ---------- special detectors ---------- */
+ const RX = {
+  foreign: /\b(quanto|custa|como|voce|oracao|oracoes|dinheiro|obrigad[oa]|ajuda|preciso|nao|porque|cuanto|cuesta|dinero|oracion|gracias|ayuda|necesito|por favor|senha|entrar|fichas)\b/,
+  crisis: /\b(suicid\w*|kill myself|end my life|take my life|want to die|wanna die|better off dead|hurt myself|self harm|cut myself|no reason to live)\b/,
+  abuse: /\b(he hits me|she hits me|abus\w+|beats me|domestic violence|being hurt by|raped|assault\w*)\b/,
+  greet: /^((hi+|hello+|hey+|hiya|yo|howdy|good (morning|afternoon|evening|night)|greetings|peace be with you|blessings|hola|ola|oi)( (there|mark|friend|everyone|what is up|sup))?|what is up|sup)[\s!.]*$/,
+  howAreYou: /\b(how are you|how r you|how are u|how is it going|how do you do|how you doing|you ok)\b/,
+  thanks: /\b(thanks?|thank you|thank u|thx|ty|appreciate it|god bless you|bless you)\b/,
+  bye: /^(bye|goodbye|see you|good night|gotta go|talk later|amen|that is all|that's all|nothing else)\b/,
+  yes: /^(yes|yeah|yep|yup|sure|ok|okay|please|of course|i would like that|i'd like that|go ahead|tell me more|more|continue|go on|why|how|explain|and then|really|absolutely)[\s!.?]*$/,
+  no: /^(no|nope|not now|no thanks|nah|maybe later|not really)[\s!.]*$/,
+  name: /\b(?:my name is|my name's|call me|i am called)\s+([a-z][a-z'-]{1,20})\b/,
+  human: /\b(are you (a )?(real|human|person|robot|bot|ai|machine|computer|chatbot)|is this (a )?(bot|robot|ai|real person)|am i talking to (a )?(bot|robot|human|real|person|machine)|you are (a )?(bot|robot|ai))\b/,
+  personal: /\b(how old are you|your age|are you married|your wife|your girlfriend|your family|where do you live|where are you from|your address|your phone|your number|your instagram|your facebook|your whatsapp|do you have kids|what do you look like|send (me )?(a )?(photo|picture|pic)|date me|marry me|i love you mark|are you single|your salary|your religion|meet you|meet in person)\b/,
+  offtopic: /\b(weather|forecast|football|soccer|basketball|nba|nfl|baseball|match score|world cup|super bowl|election|president|politic\w*|democrat|republican|trump|biden|government|war|news|movie|movies|netflix|series|tv show|celebrity|music video|song lyrics|lyrics|recipe|cook|cooking|restaurant|pizza|diet plan|workout|gym|code|coding|programming|python|javascript|computer problem|math|homework|translate|chatgpt|stock price|car|cars|travel|hotel|flight|vacation|fashion|makeup|video game|games|minecraft|fortnite|joke|tell me a joke|sex|sexy|porn|nude|nudes|drugs|weed|alcohol|horoscope|zodiac|tarot|astrology|psychic|fortune|spell)\b/,
+  composePrayer: /\b(write|make|create|compose|give|send|say|share|need|want|have|do you have)\b.{0,25}\bprayers?\b|\bpray (for|with|over) (me|my|us|our|him|her|them)\b|\bcan you pray\b|\bplease pray\b|\bprayer (for|of|to)\b/
+ };
+
+ /* ---------- prayer composer ---------- */
+ const PRAYER_TOPICS = [
+  ['prosperity', /\b(prosper\w*|abundan\w*|money|financ\w*|wealth|rich\w*|provision|blessing|increase)\b/],
+  ['debt', /\b(debt\w*|bills?|loan\w*|rent|mortgage|broke|owe)\b/],
+  ['work', /\b(job|work|career|interview|business|company|clients?|sales|promotion|employment)\b/],
+  ['health', /\b(health|heal\w*|sick\w*|illness|disease|pain|surgery|recover\w*|cancer|diabetes|arthritis|body|hospital)\b/],
+  ['peace', /\b(peace|calm|anxi\w*|stress\w*|worr\w*|fear|panic|sleep|night)\b/],
+  ['protection', /\b(protect\w*|safety|safe|evil|enem\w*|danger|guard\w*|home|house)\b/],
+  ['family', /\b(famil\w*|children|kids?|son|daughter|mother|father|mom|dad|parents?|grandchildren)\b/],
+  ['love', /\b(love|marriage|married|husband|wife|spouse|partner|relationship|soulmate)\b/],
+  ['comfort', /\b(sad\w*|depress\w*|comfort|grief|griev\w*|loss|lonely|alone|hope)\b/],
+  ['forgiveness', /\b(forgiv\w*|guilt|shame|sin\w*)\b/],
+  ['guidance', /\b(guid\w*|wisdom|direction|decision|purpose|choice)\b/],
+  ['gratitude', /\b(thank\w*|gratitude|grateful)\b/],
+  ['morning', /\b(morning|start (of )?(my|the) day)\b/],
+  ['miracle', /\b(miracle\w*|breakthrough|impossible|urgent)\b/],
+  ['angel', /\b(angel\w*|guardian)\b/]
  ];
- function normalize(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s']/g,' ')}
- function scoreTopic(text,item){const t=' '+normalize(text)+' ';return item.keys.reduce((n,k)=>n+(t.includes(' '+k+' ')?2:(t.includes(k)?1:0)),0)}
- function inferTopic(text){
-  const prior=history.slice(-6).filter(m=>m.role==='assistant'&&m.topic).map(m=>m.topic).pop();
-  const ranked=knowledge.map(k=>({item:k,score:scoreTopic(text,k)})).sort((a,b)=>b.score-a.score);
-  if(ranked[0]?.score>0)return ranked[0].item;
-  if(prior && ['yes','yeah','please','okay','ok','that one','tell me more','more','sure'].includes(normalize(text).trim()))return knowledge.find(k=>k.topic===prior);
-  return null;
+ const PB = {
+  prosperity: ['I come before You with a grateful heart for everything You have already given me.', 'You are my Provider. Open doors that no one can shut, bring opportunities that honor You, and give me wisdom to work well and to manage well what comes into my hands.', 'Let Your blessing make me rich in the way that adds no sorrow, so I can care for my family and be generous with others.', 'Philippians 4:19'],
+  debt: ['You see every bill and every debt that weighs on my heart.', 'Give me peace in place of fear, wisdom to make a plan, favor with those I owe, and strength to take one faithful step at a time.', 'Break the cycle of lack in my life and teach me to walk in Your provision.', 'Psalm 55:22'],
+  work: ['I commit my work and my plans into Your hands.', 'Bless the work of my hands, give me favor, clear ideas and the right doors at the right time.', 'Help me work with excellence and honesty, as if for You, and let my work bring provision and blessing to others.', 'Proverbs 16:3'],
+  health: ['You are the God who heals.', 'Touch every part of my body that is in pain, strengthen what is weak, guide the hands and minds of the doctors who care for me, and bring rest to my body and peace to my soul.', 'Through the intercession of Saint Raphael, may Your healing power flow into my life.', 'Jeremiah 17:14'],
+  peace: ['I bring You my racing thoughts and every worry I carry.', 'Quiet my mind, slow my breathing, and let Your peace, which passes all understanding, guard my heart and my mind.', 'I choose to trust You with what I cannot control.', 'Philippians 4:7'],
+  protection: ['You are my refuge and my fortress.', 'Cover me, my home and everyone I love under the shadow of Your wings. Let no evil come near us, and send Your angels to guard us in all our ways.', 'Saint Michael the Archangel, defend us in this battle.', 'Psalm 91'],
+  family: ['Thank You for the gift of my family.', 'Watch over each one of them by name. Protect them, heal what is wounded between us, bring unity, patience and love into our home, and draw every heart closer to You.', 'As for me and my house, we will serve the Lord.', 'Joshua 24:15'],
+  love: ['You are love, and every true love comes from You.', 'Heal what is hurt in my heart and in my relationship. Give us patience, humility and kind words, and help us choose each other again every day. If I am waiting for love, prepare me and lead me to the right person in Your time.', 'Let our love reflect Your love.', '1 Corinthians 13:4-7'],
+  comfort: ['You are near to the brokenhearted.', 'Hold me when I feel weak, fill the empty places with Your presence, and give me hope for tomorrow. Send me the right people to walk with me.', 'I am not alone, because You are with me.', 'Psalm 34:18'],
+  forgiveness: ['I come to You as I am, with my mistakes and my regrets.', 'Forgive me and wash my heart clean. Help me also to forgive those who hurt me, so that bitterness has no place in me.', 'Thank You that Your mercy is new every morning.', '1 John 1:9'],
+  guidance: ['I need Your wisdom.', 'Show me the way I should go, close the wrong doors and open the right ones, and give me peace when I choose what pleases You.', 'I trust You with all my heart and do not lean on my own understanding.', 'Proverbs 3:5-6'],
+  gratitude: ['My heart is full of thanks.', 'Thank You for every blessing, the big ones and the small ones I almost missed: for life, for breath, for the people I love and for the provision of each day.', 'May I never stop noticing Your goodness.', '1 Thessalonians 5:18'],
+  morning: ['Thank You for this new day.', 'I offer You my thoughts, my words and my work. Guide my steps, guard my heart, give me patience and joy, and let me be a blessing to someone today.', 'Your mercies are new this morning.', 'Lamentations 3:22-23'],
+  miracle: ['Nothing is impossible for You.', 'I bring You this situation that seems too big for me. Make a way where there is no way, and give me the faith to keep believing while I wait.', 'I receive Your answer with an open and trusting heart.', 'Matthew 19:26'],
+  angel: ['Thank You for the angels You send to guard us.', 'Guardian angel, walk with me today: guide my steps, protect me from all danger, and help me listen to the voice of God.', 'Lord, give Your angels charge over me and over those I love.', 'Psalm 91:11'],
+  general: ['I come to You just as I am.', 'You know what is in my heart even before I speak. Give me strength for today, wisdom for my choices, peace for my mind, and provision for my needs.', 'I place my life and those I love in Your hands.', 'Psalm 23:1']
+ };
+ const OTHER = {
+  prosperity: 'Open doors of provision for {o}, bless the work of {p} hands, and give {o} wisdom to manage well everything You place in {p} care.',
+  debt: 'Lift the weight of debt from {p} shoulders, give {o} a clear plan and favor with those {s} owes, and replace fear with Your peace.',
+  work: 'Go before {o} into this work and every interview and meeting. Give {o} favor, clear words, calm confidence and the right open door at the right time.',
+  health: 'Lay Your healing hand on {o}. Ease every pain, strengthen {p} body, guide the doctors who care for {o}, and fill {o} with courage and peace.',
+  peace: 'Quiet {p} mind, calm {p} heart and let Your peace guard {o} day and night.',
+  protection: 'Cover {o} under the shadow of Your wings, keep {o} from all evil and send Your angels to guard {o} in all {p} ways.',
+  family: 'Hold {o} close, protect {o}, heal what is wounded and fill {p} home with unity and love.',
+  love: 'Bless {p} heart and {p} love. Give {o} patience, kindness and wisdom, and let Your love be the center of {p} relationships.',
+  comfort: 'Comfort {o} in this hard season. Be near to {o}, lift {p} spirit and surround {o} with people who care.',
+  forgiveness: 'Pour Your mercy over {o}, heal what is broken and lead {o} into reconciliation and freedom.',
+  guidance: 'Give {o} wisdom and direction. Make the path clear before {o} and give {o} peace in each decision.',
+  gratitude: 'Thank You for {o} and for every blessing in {p} life.',
+  morning: 'Bless {p} day from beginning to end. Guide {p} steps and let {o} feel Your presence.',
+  miracle: 'Do what only You can do in {p} life. Make a way where there is no way, and strengthen {p} faith while {s} waits.',
+  angel: 'Send Your holy angels to watch over {o}, guide {o} and protect {o} wherever {s} goes.',
+  general: 'Bless {o} with strength, peace, health and provision, and draw {o} closer to You every day.'
+ };
+ const PRAYER_ACTS = { prosperity: ['solomon', 's_prosperity'], debt: ['solomon', 's_prosperity'], work: ['s_powerful7'], health: ['raphael', 's_arthritis'], peace: ['chants'], protection: ['benedict', 'p_family'], family: ['p_family'], love: ['raphael'], comfort: ['exclusive'], guidance: ['solomon'], morning: ['jesus'], miracle: ['s_miracle'], angel: ['p_journey'] };
+ function composePrayer(raw) {
+  const n = norm(raw);
+  let topic = (PRAYER_TOPICS.find(([, rx]) => rx.test(n)) || [])[0];
+  if (!topic && mem.topic && PB[mem.topic]) topic = mem.topic;
+  if (!topic) topic = 'general';
+  const b = PB[topic] || PB.general;
+  const who = /\b(my (mother|mom|father|dad|son|daughter|husband|wife|family|friend|sister|brother|child|children|kids))\b/.exec(n);
+  const nm = G.name();
+  const opener = topic === 'gratitude' ? 'Heavenly Father,' : (Math.random() < .5 ? 'Lord Jesus,' : 'Heavenly Father,');
+  const forWho = who ? ' I lift up ' + who[0] + ' before You today.' : '';
+  let body = b[0] + ' ' + b[1] + ' ' + b[2];
+  if (who) {
+   const rel = who[2], g = /^(husband|son|father|dad|brother)$/.test(rel) ? ['him', 'his', 'he'] : /^(wife|daughter|mother|mom|sister)$/.test(rel) ? ['her', 'her', 'she'] : /^(friend|child)$/.test(rel) ? ['them', 'their', 'they'] : ['them', 'their', 'they'];
+   body = (OTHER[topic] || OTHER.general).replace(/\{o\}/g, g[0]).replace(/\{p\}/g, g[1]).replace(/\{s\}/g, g[2]).replace(/they (owes|waits|goes)/, (m, v) => 'they ' + v.slice(0, -1).replace(/oe$/, 'owe').replace(/goe$/, 'go'));
+  }
+  if (!who && !/^(I|You|Your|Lord)\b/.test(body)) body = body.charAt(0).toLowerCase() + body.slice(1);
+  const text = 'Here is a prayer written for you' + (nm ? ', ' + nm : '') + '. Read it slowly, out loud if you can:\n\n' + opener + forWho + ' ' + body + ' In the name of Jesus, Amen.\n\n(Inspired by ' + b[3] + ')';
+  mem.topic = topic === 'general' ? mem.topic : topic;
+  let acts = PRAYER_ACTS[topic] || ['jesus'];
+  if (/diabet|sugar/.test(n)) acts = ['s_diabetes', 'raphael']; else if (/arthrit|joint/.test(n)) acts = ['s_arthritis', 'raphael']; else if (/cancer|depress|ringing|tinnitus/.test(n)) acts = ['exclusive', 'raphael'];
+  return { text, a: acts, f: ['Write another prayer', 'Give me a Bible verse', 'How do I pray every day?'], id: 'compose' };
  }
- function respond(text){
-  const clean=text.trim(); const topic=inferTopic(clean);
-  if(/\b(thank you|thanks|thank u)\b/i.test(clean))return {topic:'gratitude',text:"You're welcome. I'm glad you reached out. Is there anything else on your heart that you'd like to talk about?"};
-  if(/\b(what should i do|help me decide|next step)\b/i.test(clean))return {topic:'reflection',text:"Let's make the next step small and clear. What is one thing within your control today, even if it is only asking for help, gathering information, or taking a few minutes to think?"};
-  if(/\b(suicid|kill myself|end my life|hurt myself|self harm)\b/i.test(clean))return {topic:'safety',text:"I'm really sorry you're feeling this much pain. You deserve immediate support from a real person. If you may act on these thoughts or are in immediate danger, contact your local emergency service now and reach out to someone you trust who can stay with you. I can't provide emergency care, but I want you to get human support."};
-  if(topic){const n=history.filter(m=>m.role==='user'&&m.topic===topic.topic).length;return {topic:topic.topic,text:topic.replies[n%topic.replies.length]}}
-  const n=history.filter(m=>m.role==='user'&&!m.topic).length;
-  return {topic:'general',text:general[n%general.length]};
+
+ /* ---------- empathy and variety ---------- */
+ const EMO = /\b(sad|scared|afraid|desperate|crying|cry|tired|exhausted|broken|hopeless|lonely|alone|hurt|anxious|worried|stressed|struggling|suffering|lost)\b/;
+ const pick = (it, arr) => { mem.rot = mem.rot || {}; const i = ((mem.rot[it] ?? -1) + 1) % arr.length; mem.rot[it] = i; return arr[i] };
+ const val = r => typeof r === 'function' ? r() : r;
+
+ const REDIRECT = [
+  "That's a bit outside what I can help with here. I'm Mark, and my place is prayer, faith, peace, healing, family and financial blessings, and anything about the Sacred Chant app. Is there something on your heart I can pray about with you?",
+  "I'll leave that one to others, my friend. Here I'm your companion for prayer and for the app. Would you like a prayer for your day, help with your Light Tokens, or a word about prosperity and provision?",
+  "I'd love to keep our conversation where I can really help: your prayer life, God's blessings and the Sacred Chant app. What would you like to talk about?"
+ ];
+ const PERSONAL = [
+  "That's kind of you to ask, but I prefer to keep the focus on you and your walk with God. I'm here as your companion for prayer and for the app. What's on your heart today?",
+  "Let's keep this space about you. I'm Mark, your guide in the 7 Prayers of Jesus and your helper in Sacred Chant. How can I support you in prayer today?"
+ ];
+ const FALLBACK = [
+  () => "I want to make sure I understand you" + (G.name() ? ', ' + G.name() : '') + ". Could you tell me a little more? I can help with prayer, prosperity and financial blessings, healing, family, peace, or anything in the app, like Light Tokens, plans, programs and login.",
+  () => "I'm not sure I caught that. Are you asking about something in the app (tokens, a program, your access) or would you like to talk about something on your heart, like money, health, family or peace?",
+  () => "Tell me in a few words what you need, for example \"prayer for my job\", \"how do I get tokens\" or \"I feel anxious\", and I'll help right away."
+ ];
+
+ /* ---------- main brain ---------- */
+ function think(raw) {
+  const n = expand(norm(raw));
+  if (!n) return null;
+  const nm = G.name();
+  // safety first
+  if (RX.crisis.test(n)) return { text: "I'm really glad you told me, and I'm so sorry you're carrying this much pain. Your life matters. Please reach out right now to someone who can be with you: call or text 988 if you're in the US (Suicide & Crisis Lifeline), or your local emergency number anywhere else. If you're in immediate danger, call emergency services now, and tell someone you trust. I'll be praying for you, and I'm still here to talk.", id: 'crisis' };
+  if (RX.abuse.test(n)) return { text: "I'm so sorry this is happening to you. Your safety matters most. If you're in danger now, call your local emergency number. In the US, the National Domestic Violence Hotline is 1-800-799-7233 (or text START to 88788). Please reach out to someone you trust. God is with you, and you deserve to be safe.", id: 'abuse' };
+  if (RX.foreign.test(n) && score(stemText(fixTypos(n)))[0].sc < 1.5) return { text: "I'm sorry, I can only chat in English for now. Could you write your question in English? Simple words are perfect, like \"tokens\", \"login help\" or \"prayer for money\".", id: 'foreign', f: DEFAULT_CHIPS };
+  // name
+  const nmMatch = RX.name.exec(n);
+  if (nmMatch && !/^(not|very|so|just|sad|tired|here|fine|good|ok|okay|new|lost|sick|broke|afraid|scared)$/.test(nmMatch[1])) {
+   mem.name = nmMatch[1].charAt(0).toUpperCase() + nmMatch[1].slice(1);
+   if (n.replace(RX.name, '').trim().split(' ').length < 3) return { text: 'Nice to meet you, ' + mem.name + '! I\'ll remember your name. What would you like to talk about today: a prayer, a blessing for your finances, your family, or something in the app?', id: 'name', f: ['Write a prayer for me', 'Tell me about prosperity', 'Where should I start?'] };
+  }
+  if (RX.human.test(n)) return { text: "Good question, and I'll be honest with you: I'm Mark, the app's digital companion, not a live person. I was built to know Sacred Chant inside out and to walk with you in prayer. For anything that needs a real person (orders, payments, access), our team answers through the yellow chat button.", a: ['support'], id: 'human' };
+  if (RX.personal.test(n)) return { text: pick('personal', PERSONAL), id: 'personal', f: ['Write a prayer for me', 'Where should I start?'] };
+  if (RX.greet.test(n)) return { text: (mem.greeted ? 'Hello again' : 'Hello') + (nm ? ', ' + nm : '') + '! Peace be with you. How can I help you today: a prayer, a question about the app, or just talking about what\'s on your heart?', id: 'greet', f: ['Write a prayer for me', 'How do Light Tokens work?', 'Tell me about prosperity'] };
+  if (RX.howAreYou.test(n) && n.split(' ').length <= 6) return { text: "I'm well, thank you for asking! And grateful to be here with you. How are you really doing today" + (nm ? ', ' + nm : '') + '?', id: 'howareyou' };
+  if (RX.bye.test(n)) return { text: 'Go in peace' + (nm ? ', ' + nm : '') + '. "The Lord bless thee, and keep thee" (Numbers 6:24). I\'m here whenever you need me, and don\'t forget your daily light on Home.', id: 'bye' };
+  if (RX.thanks.test(n) && n.split(' ').length <= 7) return { text: pick('thanks', ["You're very welcome" + (nm ? ', ' + nm : '') + ". It's a joy to walk with you. Is there anything else on your heart?", 'Amen, and God bless you too! I\'m here anytime.', 'Always. May your day be full of peace and provision.']), id: 'thanks' };
+  // follow-ups
+  if (RX.yes.test(n) && mem.last) {
+   if (mem.offerPrayer) { mem.offerPrayer = false; return composePrayer(mem.topic || ''); }
+   const it = KB.find(k => k.id === mem.last);
+   if (it) {
+    mem.yesN = (mem.yesN || 0) + 1;
+    if (mem.yesN >= 2 && it.cat === 'n') { mem.yesN = 0; return composePrayer(it.topic || '') }
+    if (it.more) return { text: val(pick(it.id + ':more', it.more)), a: it.a, f: it.f, id: it.id };
+    if (it.r.length > 1) return { text: val(pick(it.id, it.r)), a: it.a, f: it.f, id: it.id };
+    if (it.cat === 'n') return composePrayer(it.topic || '');
+   }
+  }
+  if (RX.no.test(n)) { mem.offerPrayer = false; return { text: 'No problem at all. I\'m here if you need anything, a prayer, a verse, or help with the app.', id: 'no', f: ['Give me a Bible verse', 'What is free in the app?'] } }
+  // bible verses on a topic
+  if (/\b(verse|verses|scripture|scriptures|bible say)\b/.test(n) && !/\b(token|app|login|price)\b/.test(n)) {
+   const t = (PRAYER_TOPICS.find(([, rx]) => rx.test(n)) || [])[0];
+   const map = { guidance: 'faith', morning: 'peace', miracle: 'faith', angel: 'protection', gratitude: 'prosperity', forgiveness: 'faith' };
+   if (t) mem.topic = map[t] || t;
+   const it = KB.find(k => k.id === 'verses');
+   return { text: val(it.r[0]), f: it.f, id: 'verses' };
+  }
+  mem.yesN = 0;
+  // write a prayer
+  const pre = score(stemText(fixTypos(n)))[0];
+  if (RX.composePrayer.test(n) && !/\b(how much|cost|price|unlock|buy|purchase|store|where is|where do i find|open|token)\b/.test(n) && !(pre && !pre.it.cat && pre.sc >= 2.5 && !/\b(write|compose|make|create)\b/.test(n))) return composePrayer(n);
+  // knowledge
+  const st = stemText(fixTypos(n));
+  const ranked = score(st);
+  const top = ranked[0];
+  if (RX.offtopic.test(n) && (top.sc < 2 || top.it.id === 'mark')) return { text: pick('redirect', REDIRECT), id: 'offtopic', f: ['Write a prayer for me', 'Tell me about prosperity', 'How do Light Tokens work?'] };
+  if (top.sc >= 0.9) {
+   const it = top.it;
+   if (it.topic) mem.topic = it.topic;
+   let text = val(pick(it.id, it.r));
+   if (it.cat === 'n' && EMO.test(n) && !/sorry|glad you|thank you for/i.test(text.slice(0, 60))) text = "Thank you for trusting me with this. " + text;
+   const second = ranked[1] && ranked[1].sc >= 1.5 && ranked[1].it.id !== it.id ? ranked[1].it : null;
+   const f = (it.f || []).slice(0, 3);
+   if (second && second.f === undefined && f.length < 3) f.push('Tell me about ' + second.k[0]);
+   if (it.cat === 'n' && /\?$/.test(text) && /prayer/.test(text)) mem.offerPrayer = true;
+   return { text, a: it.a, f, id: it.id };
+  }
+  if (RX.offtopic.test(n)) return { text: pick('redirect', REDIRECT), id: 'offtopic', f: ['Write a prayer for me', 'Tell me about prosperity', 'How do Light Tokens work?'] };
+  if (EMO.test(n)) return { text: "I'm here with you" + (nm ? ', ' + nm : '') + ". Whatever you're facing, you don't have to carry it alone. Tell me a bit more about what's happening, or let me write a short prayer for you right now.", id: 'emo', f: ['Write a prayer for me', 'I need peace'] };
+  return { text: val(pick('fallback', FALLBACK)), id: 'fallback', f: ['Where should I start?', 'Write a prayer for me', 'How do Light Tokens work?'] };
  }
- function save(){try{localStorage.setItem(historyKey(),JSON.stringify(history.slice(-80)))}catch(e){}}
- function bubble(role,text,topic){
-  const el=document.createElement('div');el.className='mark-bubble '+(role==='user'?'user':'bot');el.textContent=text;
-  if(role==='assistant'&&topic==='prayer'){
-   const note=document.createElement('div');note.className='mark-suggestion';note.textContent='✦ Explore prayers in Support & blessings';el.appendChild(note);
+
+ /* ---------- persistence ---------- */
+ function save() { try { localStorage.setItem(historyKey(), JSON.stringify(history.slice(-80))); localStorage.setItem(memKey(), JSON.stringify(mem)) } catch (e) { } }
+ function load() {
+  if (loadedFor === keyBase()) return;
+  loadedFor = keyBase(); history = []; mem = {};
+  try { const h = JSON.parse(localStorage.getItem(historyKey()) || '[]'); if (Array.isArray(h)) history = h.slice(-80).map(m => ({ role: m.role, text: m.text, a: m.a || [], f: m.f || [] })) } catch (e) { }
+  try { const mm = JSON.parse(localStorage.getItem(memKey()) || '{}'); if (mm && typeof mm === 'object') mem = mm } catch (e) { }
+ }
+
+ /* ---------- rendering ---------- */
+ function bubble(m) {
+  const el = document.createElement('div'); el.className = 'mark-bubble ' + (m.role === 'user' ? 'user' : 'bot'); el.textContent = m.text;
+  if (m.role !== 'user' && m.a && m.a.length) {
+   const box = document.createElement('div'); box.className = 'mark-acts';
+   m.a.filter(k => ACT[k]).slice(0, 3).forEach(k => { const b = document.createElement('button'); b.type = 'button'; b.textContent = k.startsWith('s_') ? storeLabel(k.slice(2)) : ACT[k][0]; b.addEventListener('click', () => { try { ACT[k][1]() } catch (e) { console.warn('Mark action failed', e) } }); box.appendChild(b) });
+   el.appendChild(box);
   }
   $m('markMessages').appendChild(el);
  }
- function render(){const box=$m('markMessages');box.innerHTML='';history.forEach(m=>bubble(m.role,m.text,m.topic));box.scrollTop=box.scrollHeight}
- function addWelcome(){
-  if(history.length)return;
-  history.push({role:'assistant',text:"Hi, I'm Mark. This is a free space to talk about faith, prayer, peace, gratitude, relationships, or worries about the future. What is on your heart today?",topic:'greeting',time:Date.now()});save();
+ function scrollDown() { const b = $m('markMessages'); b.scrollTop = b.scrollHeight }
+ const DEFAULT_CHIPS = ['Write a prayer for me', 'How do Light Tokens work?', 'Tell me about prosperity', 'Where should I start?'];
+ function chips(list) {
+  const q = $m('markQuick'); if (!q) return;
+  q.innerHTML = '';
+  (list && list.length ? list : DEFAULT_CHIPS).slice(0, 4).forEach(t => { const b = document.createElement('button'); b.type = 'button'; b.textContent = t; b.addEventListener('click', () => sendMessage(t)); q.appendChild(b) });
  }
- function getDestination(text){
-  const n=normalize(text);
-  const asksForPrayer=/(\b(pray|prayer|prayers|bless|blessing|blessings|healing|heal|prosperity|abundance|wealth|money|financial|debt|health|sick|illness|recovery|love|relationship|family|protection|gratitude|peace|anxiety|fear|miracle|breakthrough|guidance|faith|god|jesus|saint|angel|solomon)\b)/.test(n);
-  if(asksForPrayer)return 'prayer';
-  const asksForHelp=/(\b(help|guide|guidance|guide me|where do i start|how do i start|what should i do|i am lost|im lost|i need support|need assistance|how to use|how does this app work|i am new|im new)\b)/.test(n);
-  if(asksForHelp)return 'start';
-  return '';
+ function render() { const box = $m('markMessages'); box.innerHTML = ''; history.forEach(bubble); scrollDown(); const last = [...history].reverse().find(m => m.role !== 'user'); chips(last && last.f) }
+ function welcome() {
+  if (history.length) return;
+  const nm = G.name();
+  history.push({ role: 'assistant', text: 'Hi' + (nm ? ' ' + nm : '') + ", I'm Mark. Peace be with you. I'm here to talk about prayer, faith, healing, family and financial blessings, and to help you with anything in Sacred Chant. I can even write a prayer just for you. What's on your heart today?", a: [], f: DEFAULT_CHIPS });
+  save();
  }
- function randomFreePrayer(){
-  const options=BONUS.filter(b=>b.vt==='yt'&&b.cost===0&&/prayer/i.test(b.t));
-  if(!options.length){toast('Open Support & blessings to explore available prayers.');go('home');return}
-  const chosen=options[Math.floor(Math.random()*options.length)];
-  openBonus(chosen.id);
+ function typing(on) {
+  let t = $m('markTyping');
+  if (on && !t) { t = document.createElement('div'); t.id = 'markTyping'; t.className = 'mark-bubble bot mark-typing'; t.setAttribute('aria-label', 'Mark is typing'); t.innerHTML = '<i></i><i></i><i></i>'; $m('markMessages').appendChild(t); scrollDown() }
+  if (!on && t) t.remove();
  }
- function sendMessage(value){
-  const text=value.trim();if(!text)return;
-  const destination=getDestination(text);
-  history.push({role:'user',text,topic:null,time:Date.now()});
-  let answer=respond(text);
-  if(destination==='start')answer={topic:'guidance',text:"Of course. I'll take you to Start Here, where you can learn how to begin with Sacred Chant."};
-  if(destination==='prayer')answer={topic:'prayer',text:"I'll choose a prayer for you from Sacred Chant now. It may be a prayer for a different intention, but you can use it for what is on your heart."};
-  history[history.length-1].topic=answer.topic==='general'?null:answer.topic;
-  history.push({role:'assistant',text:answer.text,topic:answer.topic,time:Date.now()});
-  save();render();$m('markInput').value='';
-  if(destination){
-   setTimeout(()=>{if(destination==='start')mod('start');else randomFreePrayer()},850);
-  }else if(window.matchMedia('(min-width: 700px)').matches){$m('markInput').focus()}
+
+ /* ---------- send ---------- */
+ function sendMessage(value) {
+  const text = String(value || '').trim().slice(0, 1200);
+  if (!text || busy) return;
+  busy = true; const send = $m('markSend'); if (send) send.disabled = true;
+  history.push({ role: 'user', text, a: [], f: [] });
+  const inp = $m('markInput'); if (inp) { inp.value = ''; inp.style.height = 'auto' }
+  render(); chips([]); $m('markQuick').innerHTML = '';
+  let out;
+  try { out = think(text) } catch (e) { console.warn('Mark engine error', e); out = null }
+  if (!out) out = { text: val(FALLBACK[0]), f: DEFAULT_CHIPS, id: 'fallback' };
+  if (KB.some(k => k.id === out.id)) mem.last = out.id;
+  if (out.id === 'greet') mem.greeted = true;
+  typing(true);
+  const delay = Math.min(2400, 550 + out.text.length * 9) * (matchMedia('(prefers-reduced-motion: reduce)').matches ? .3 : 1);
+  setTimeout(() => {
+   typing(false);
+   history.push({ role: 'assistant', text: out.text, a: out.a || [], f: out.f || [] });
+   save(); render();
+   busy = false; if (send) send.disabled = false;
+   if (window.matchMedia('(min-width: 700px)').matches && inp) inp.focus();
+  }, delay);
  }
- function openMark(){
-  if(!history.length){try{const saved=localStorage.getItem(historyKey());if(saved)history=JSON.parse(saved).slice(-80)}catch(e){history=[]}}
-  addWelcome();render();go('mark');setTimeout(()=>$m('markInput')?.focus(),80);
- }
- window.openMarkChat=openMark;
- document.addEventListener('DOMContentLoaded',()=>{
-  const form=$m('markForm');if(!form)return;
-  form.addEventListener('submit',e=>{e.preventDefault();sendMessage($m('markInput').value)});
-  $m('markInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit()}});
-  $m('markInput').addEventListener('input',e=>{e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,120)+'px'});
-  document.querySelectorAll('[data-mark-quick]').forEach(b=>b.addEventListener('click',()=>sendMessage(b.dataset.markQuick)));
-  $m('markClear').addEventListener('click',()=>{if(!confirm('Clear your conversation with Mark on this device?'))return;history=[];try{localStorage.removeItem(historyKey())}catch(e){}addWelcome();render()});
-  document.querySelectorAll('[data-mark-back]').forEach(b=>b.addEventListener('click',()=>go('home')));
+
+ function openMark() { load(); welcome(); render(); go('mark'); setTimeout(() => { scrollDown(); if (window.matchMedia('(hover: hover)').matches) $m('markInput')?.focus() }, 80) }
+ window.openMarkChat = openMark;
+
+ document.addEventListener('DOMContentLoaded', () => {
+  const form = $m('markForm'); if (!form) return;
+  form.addEventListener('submit', e => { e.preventDefault(); sendMessage($m('markInput').value) });
+  $m('markInput').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); sendMessage($m('markInput').value) } });
+  $m('markInput').addEventListener('input', e => { e.target.style.height = 'auto'; e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px' });
+  $m('markClear').addEventListener('click', () => { if (!confirm('Clear your conversation with Mark on this device?')) return; const keepName = mem.name; history = []; mem = keepName ? { name: keepName } : {}; try { localStorage.removeItem(historyKey()) } catch (e) { } welcome(); save(); render() });
+  document.querySelectorAll('[data-mark-back]').forEach(b => b.addEventListener('click', () => go('home')));
+  // hide the yellow support button while chatting with Mark, so it never covers the send button
+  const scr = $m('s-mark');
+  if (scr) new MutationObserver(() => document.body.classList.toggle('on-mark', scr.classList.contains('on'))).observe(scr, { attributes: true, attributeFilter: ['class'] });
  });
 })();
 </script>
