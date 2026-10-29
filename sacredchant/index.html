@@ -284,6 +284,8 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
   <p class="sh">Products I traded for tokens</p><p>Everything you unlocked in the Store.</p>
   <div class="tiles" id="tOwn"></div>
   <div class="soon" id="ownEmpty">You have not traded tokens for products yet.<br><button type="button" class="ghost" style="margin-top:12px" id="goStore">Visit the Store</button></div>
+  <p class="sh">Exclusive prayers for the faithful</p><p>Rare prayers few people ever receive. A new one opens on your day 7, 14, 30 and 60 with Sacred Chant. They cannot be unlocked with tokens, only with time.</p>
+  <div class="tiles" id="tMile"></div>
   <p class="lab" style="text-align:center;margin:18px 0 6px">Each module costs 2 ✦ to open. Offer your intention every 24 hours for +10 ✦.</p>
   <div class="card" style="text-align:center">
    <p class="lab">Chant of the day</p><p class="m" id="dM"></p><p class="lab" id="dX" style="font-weight:500"></p>
@@ -815,6 +817,32 @@ function serClick(i){if(!serItem)return;const d=serItem.days[i];if(d)showYT(d[1]
 $('#serBack').onclick=()=>go(serBackTo);
 $('#goStore').onclick=()=>access('store');
 storeTiles();
+/* ===== Oracoes exclusivas por tempo de acesso (7, 14, 30 e 60 dias). Nao podem ser desbloqueadas com tokens. ===== */
+const MILES=[
+ {d:7,img:P+'3xznx1N8/bubbleidg55myq2ja.avif',t:'Prayer for Depression',v:'AlHkFBomotY'},
+ {d:14,img:P+'tJrzQtwN/bubble52oiiabnrdk.avif',t:'Prayer for Cancer',v:'feemAhLjiVY'},
+ {d:30,img:P+'XJ4Krz0Q/bubbleihnx7qigrao.avif',t:'Prayer for Ringing Ears',v:'CrxdKDo7V1c'},
+ {d:60,img:P+'pXpf5jgH/bubbletmw31124tck.avif',t:'Morning Prayer',v:'St-Nfz2K0lI'}
+];
+let mileStart=0;
+const mileLeft=m=>mileStart?Math.max(0,mileStart+m.d*DAY-Date.now()):m.d*DAY;
+const mileOK=m=>!!mileStart&&mileLeft(m)<=0;
+function mileTiles(){
+ $('#tMile').innerHTML=MILES.map((m,i)=>{const ok=mileOK(m);return tile('data-mile="'+i+'"',m.img,m.t+' · day '+m.d,0,ok?'<span class="own">✓ Unlocked</span>':'<span class="lk"><b>🔒</b>Day '+m.d+'<span class="mcd" style="font-size:12px;font-weight:600"></span></span>',!ok)}).join('');
+ mileTick()}
+function mileTick(){
+ if(!$('#tMile'))return;
+ if(MILES.some((m,i)=>mileOK(m)&&$('#tMile [data-mile="'+i+'"] .lk')))return mileTiles();
+ MILES.forEach((m,i)=>{const e=$('#tMile [data-mile="'+i+'"] .mcd');if(!e)return;const r=mileLeft(m),dd=Math.floor(r/DAY),hh=Math.floor(r%DAY/36e5),mm=Math.floor(r%36e5/6e4),ss=Math.floor(r%6e4/1e3);e.textContent='Opens in '+(dd?dd+'d ':'')+pad(hh)+':'+pad(mm)+':'+pad(ss)})}
+setInterval(mileTick,1000);
+function mileClick(i){const m=MILES[i];if(!m)return;if(mileOK(m))return showYT(m.v,m.t,'home');const dd=Math.ceil(mileLeft(m)/DAY);$('#lkH').textContent=m.t+' is still sealed';$('#lkT').textContent='This exclusive prayer opens on your day '+m.d+' with Sacred Chant ('+dd+' day'+(dd===1?'':'s')+' left). It cannot be unlocked with tokens, only with time. Keep coming back.';$('#lkU').hidden=true;$('#lkX').textContent='I will wait';$('#lk').classList.add('on')}
+$('#lkX').addEventListener('click',()=>{$('#lkU').hidden=false});
+function setMileStart(user){
+ if(!S.firstSeen){S.firstSeen=Date.now();save()}
+ const created=Date.parse(user&&user.created_at||'');
+ mileStart=Number.isFinite(created)?Math.min(created,S.firstSeen):S.firstSeen;
+ mileTiles()}
+mileTiles();
 /* YouTube dentro do app: sandbox sem popups/navegacao impede abrir o YouTube */
 function showYT(id,title,back){vBackTo=back||'home';$('#vT').textContent=title;$('#vTop').innerHTML='';$('#vTx').innerHTML='';
  $('#vBox').innerHTML='<div class="ytw"><iframe allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-same-origin allow-presentation" title="'+String(title).replace(/"/g,'&quot;')+'"></iframe><div class="ytb" aria-hidden="true"></div></div>';
@@ -867,7 +895,7 @@ let lkDay=0,lkAct=null,lkCost=10;
 function dayClick(i){if(solOpen(i))return showVid(DAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Solomon','','','sol');lkDay=i;lkCost=10;lkAct=()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()};$('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Wait for it';$('#lkH').textContent='Day '+(i+1)+' is resting';$('#lkT').textContent='It opens 24 hours after you began, or you can open it now for 10 ✦.';$('#lk').classList.add('on')}
 $('#lkX').onclick=()=>$('#lk').classList.remove('on');
 $('#lkU').onclick=()=>{const f=lkAct,c=lkCost||10;$('#lk').classList.remove('on');if(f)spend(c,f)};
-document.addEventListener('click',e=>{const m=e.target.closest('[data-mod]');if(m)return mod(m.dataset.mod);const d=e.target.closest('[data-day]');if(d)return dayClick(+d.dataset.day);const st=e.target.closest('[data-store]');if(st)return openStoreItem(st.dataset.store,st.dataset.from);const sr=e.target.closest('[data-ser]');if(sr)return serClick(+sr.dataset.ser);const bn=e.target.closest('[data-bonus]');if(bn)return openBonus(bn.dataset.bonus);const pr=e.target.closest('[data-prod]');if(pr)return openProd(pr.dataset.prod);const jd=e.target.closest('[data-jday]');if(jd)jesClick(+jd.dataset.jday)});
+document.addEventListener('click',e=>{const m=e.target.closest('[data-mod]');if(m)return mod(m.dataset.mod);const d=e.target.closest('[data-day]');if(d)return dayClick(+d.dataset.day);const st=e.target.closest('[data-store]');if(st)return openStoreItem(st.dataset.store,st.dataset.from);const ml=e.target.closest('[data-mile]');if(ml)return mileClick(+ml.dataset.mile);const sr=e.target.closest('[data-ser]');if(sr)return serClick(+sr.dataset.ser);const bn=e.target.closest('[data-bonus]');if(bn)return openBonus(bn.dataset.bonus);const pr=e.target.closest('[data-prod]');if(pr)return openProd(pr.dataset.prod);const jd=e.target.closest('[data-jday]');if(jd)jesClick(+jd.dataset.jday)});
 $('#vBack').onclick=()=>go(vBackTo);$$('[data-back]').forEach(b=>b.onclick=()=>go('home'));
 
 /* First-time welcome quiz for newly created accounts only */
@@ -1062,6 +1090,7 @@ if (Array.isArray(accUnl)) S.bonusUnl = [...new Set([...(S.bonusUnl || []), ...a
 const accStore = user.user_metadata?.sc_store_owned;
 if (Array.isArray(accStore)) S.storeOwned = [...new Set([...(S.storeOwned || []), ...accStore])];
 storeTiles();
+setMileStart(user);
 homeTiles();
 
 save();
