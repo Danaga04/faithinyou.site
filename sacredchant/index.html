@@ -1338,9 +1338,9 @@ setInterval(tickOffer, 1000);
  }
  function getDestination(text){
   const n=normalize(text);
-  const asksForPrayer=/(\\b(pray|prayer|prayers|bless|blessing|blessings|healing|heal|prosperity|abundance|wealth|money|financial|debt|health|sick|illness|recovery|love|relationship|family|protection|gratitude|peace|anxiety|fear|miracle|breakthrough|guidance|faith|god|jesus|saint|angel|solomon)\\b)/.test(n);
+  const asksForPrayer=/(\b(pray|prayer|prayers|bless|blessing|blessings|healing|heal|prosperity|abundance|wealth|money|financial|debt|health|sick|illness|recovery|love|relationship|family|protection|gratitude|peace|anxiety|fear|miracle|breakthrough|guidance|faith|god|jesus|saint|angel|solomon)\b)/.test(n);
   if(asksForPrayer)return 'prayer';
-  const asksForHelp=/(\\b(help|guide|guidance|guide me|where do i start|how do i start|what should i do|i am lost|im lost|i need support|need assistance|how to use|how does this app work|i am new|im new)\\b)/.test(n);
+  const asksForHelp=/(\b(help|guide|guidance|guide me|where do i start|how do i start|what should i do|i am lost|im lost|i need support|need assistance|how to use|how does this app work|i am new|im new)\b)/.test(n);
   if(asksForHelp)return 'start';
   return '';
  }
