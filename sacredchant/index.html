@@ -189,7 +189,8 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .buy__note{text-align:center;color:#5a6c91;font-size:12.5px;margin-top:14px}
 
 /* Floating support chat */
-#supportFab{position:fixed;right:20px;bottom:20px;z-index:9000;width:60px;height:60px;border:0;border-radius:50%;background:#c9a45c;color:#171717;box-shadow:0 8px 28px #0004;display:flex;align-items:center;justify-content:center;cursor:pointer}
+#supportFab{position:fixed;right:20px;bottom:20px;z-index:9000;width:60px;height:60px;border:0;border-radius:50%;background:linear-gradient(135deg,#ffe066,#f5c400);color:#171717;box-shadow:0 8px 28px rgba(245,196,0,.45);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .28s ease,opacity .28s ease}
+#supportFab.fab-hide{transform:translateY(120px);opacity:0;pointer-events:none}
 #supportFab svg{width:28px;height:28px}
 #supportFab .supportBadge{position:absolute;right:0;top:0;width:13px;height:13px;border:2px solid #fff;border-radius:50%;background:#34b46b}
 #supportPanel{position:fixed;right:20px;bottom:92px;z-index:9001;width:min(360px,calc(100vw - 28px));max-height:min(600px,calc(100dvh - 120px));overflow:auto;background:#fff;color:#1e2430;border-radius:18px;box-shadow:0 18px 60px #0004;border:1px solid #e6e7eb;display:none;font-family:inherit}
@@ -352,7 +353,11 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 <div id="aNameW" hidden><label for="aName">Name</label><input type="text" id="aName" maxlength="60" autocomplete="name" placeholder="Your name"></div>
 <label for="aMail">Email</label><input type="text" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
 <p class="err" id="aErr" role="alert"></p>
-<button type="submit" class="btn" id="aGo" style="width:100%">Log in</button></form></div></section>
+<button type="submit" class="btn" id="aGo" style="width:100%">Log in</button></form>
+<div style="margin-top:22px;padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--card)">
+<p style="font-size:14px;color:var(--mute);margin-bottom:10px">Couldn't access or log in? Click below to access our app without creating an account.</p>
+<a href="https://appsell-software.com/app/sacred-chant" class="ghost" style="display:inline-block;text-decoration:none">Access the app without an account</a>
+</div></div></section>
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
 <div class="buy" id="buy" hidden role="dialog" aria-modal="true" aria-labelledby="buyT"><div class="buy__box" id="buyBox" tabindex="-1">
  <button type="button" class="buy__x" id="buyX" aria-label="Close">✕</button>
@@ -769,7 +774,7 @@ function jesClick(i){if(jesOpen(i))return showVid(JDAYS[i][1],'Day '+(i+1)+' · 
  $('#lk').classList.add('on')}
 function openPaid(id,cb){if(!S.unl||S.unl.d!==today())S.unl={d:today(),ids:[]};if(S.unl.ids.includes(id))return cb();spend(2,()=>{S.unl.ids.push(id);save();cb()})}
 function mod(id){
- if(id==='support'){const a=document.createElement('a');a.href=SUPPORT;a.target='_blank';a.rel='noopener';a.click();return}
+ if(id==='support'){if(window.openSupportPanel)window.openSupportPanel();return}
  if(id==='start')return openPaid('start',()=>showVid(VID.start,'Start here','',FAQ,'home'));
  if(id==='pray')return prayOpen();
  if(id==='jesus'){if(!S.jesStart){S.jesStart=Date.now();save()}return jesPage()}
@@ -1123,6 +1128,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (open) setTimeout(() => document.getElementById('supportName').focus(), 60);
   };
   fab.addEventListener('click', () => setOpen(!panel.classList.contains('open')));
+  /* Support module on Home opens this same popup */
+  window.openSupportPanel = () => { fab.classList.remove('fab-hide'); setOpen(true); };
+  /* Yellow chat icon: hides when scrolling down, shows again when scrolling up */
+  let lastY = window.scrollY, ticking = false;
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const y = window.scrollY;
+      if (panel.classList.contains('open') || y < 60 || y < lastY - 4) fab.classList.remove('fab-hide');
+      else if (y > lastY + 4) fab.classList.add('fab-hide');
+      lastY = y;
+      ticking = false;
+    });
+  }, { passive: true });
   close.addEventListener('click', () => setOpen(false));
   document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
 
