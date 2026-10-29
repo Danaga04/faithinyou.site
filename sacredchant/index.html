@@ -188,6 +188,7 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .plan .tag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f7dc92,#e0ad3e);color:#3b2a05;font-weight:800;font-size:12px;letter-spacing:.06em;padding:4px 14px;border-radius:99px;white-space:nowrap}
 .plan h3{font-size:13px;font-weight:800;letter-spacing:.1em;color:#2f5fc4}
 .plan .pr{font-size:36px;font-weight:800;line-height:1.1}
+.plan .pr .mo{font-size:16px;font-weight:700;color:#5a6c91;margin-left:3px}
 .plan .old-pr{font-size:15px;font-weight:600;color:#b8bdc7;text-decoration:line-through;margin-bottom:-3px}
 .plan .badge-popular{background:linear-gradient(135deg,#dce8ff,#9ebcff);color:#173b80}
 .plan .tk{font-weight:700;color:#7a560b}
@@ -563,7 +564,7 @@ const PLANS=[
 ];
 const BUY_DEFAULT='Choose a plan to add Light Tokens to your account.';
 let buyFocus=null,buyBusy=false,purchaseStarted=false;
-$('#plans').innerHTML=PLANS.map(p=>`<article class="plan${p.best?' best':''}">${p.badge?'<span class="tag '+(p.badge==='MOST POPULAR'?'badge-popular':'')+'">'+p.badge+'</span>':''}<h3>${p.name}</h3><div class="old-pr">${p.oldPrice}</div><div class="pr">${p.price}</div><div class="tk">${p.tokens.toLocaleString('en-US')} Light Tokens</div><p>${p.desc}</p><button type="button" class="btn${p.best?' gold':''}" data-plan="${p.id}">${p.cta}</button></article>`).join('');
+$('#plans').innerHTML=PLANS.map(p=>`<article class="plan${p.best?' best':''}">${p.badge?'<span class="tag '+(p.badge==='MOST POPULAR'?'badge-popular':'')+'">'+p.badge+'</span>':''}<h3>${p.name}</h3><div class="old-pr">${p.oldPrice}</div><div class="pr">${p.price}<span class="mo">/month</span></div><div class="tk">${p.tokens.toLocaleString('en-US')} Light Tokens</div><p>${p.desc}</p><button type="button" class="btn${p.best?' gold':''}" data-plan="${p.id}">${p.cta}</button></article>`).join('');
 function openBuy(msg){
   const b=$('#buy');
   $('#buyMsg').textContent=msg||BUY_DEFAULT;
