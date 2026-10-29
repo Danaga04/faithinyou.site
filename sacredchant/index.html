@@ -114,6 +114,10 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .angel.flap{filter:drop-shadow(0 0 34px rgba(255,214,110,1)) drop-shadow(0 0 10px rgba(255,255,255,.9))}
 @keyframes fl{50%{transform:rotate(-26deg) scaleY(.9)}}@keyframes fr{50%{transform:rotate(26deg) scaleY(.9)}}
 .low-actions{display:grid;gap:10px;margin-top:16px}
+.auth-help{text-align:right;font-size:14px;font-weight:700;color:var(--ink);margin:26px 64px 70px 0;line-height:1.45}
+.auth-arrow{display:inline-block;font-size:30px;line-height:1;color:#f5c400;vertical-align:middle;animation:authArrow 1.3s ease-in-out infinite}
+@keyframes authArrow{0%,100%{transform:translate(0,0)}50%{transform:translate(6px,6px)}}
+@media(prefers-reduced-motion:reduce){.auth-arrow{animation:none}}
 .auth{position:fixed;inset:0;z-index:50;display:none;overflow:auto;padding:calc(28px + env(safe-area-inset-top,0px)) 20px calc(28px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,var(--b1),var(--b2))}.auth.on{display:block}.auth>div{max-width:420px;margin:0 auto;text-align:center}.auth form{text-align:left;margin-top:14px}.auth label{font-size:13px;font-weight:600;color:var(--mute)}.auth .err{color:#d24b4b;min-height:22px;font-size:14px;margin:4px 0 8px}
 .cert{display:none;position:fixed;inset:0;z-index:25;background:rgba(10,20,50,.6);place-items:center;padding:20px}.cert.on{display:grid}
 .cert>div{background:linear-gradient(160deg,#fffdf5,#e9f2ff);color:#1c2a4a;border:3px double #e0ad3e;border-radius:20px;padding:28px 22px;text-align:center;max-width:400px;width:100%}
@@ -388,7 +392,13 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 <div style="margin-top:22px;padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--card)">
 <p style="font-size:14px;color:var(--mute);margin-bottom:10px">Couldn't access or log in? Click below to access our app without creating an account.</p>
 <a href="https://appsell-software.com/app/sacred-chant" class="ghost" style="display:inline-block;text-decoration:none">Access the app without an account</a>
-</div></div></section>
+</div>
+<div style="margin-top:18px">
+<button type="button" class="ghost" id="tutBtn" aria-expanded="false" aria-controls="tutBox">▶ Watch the access tutorial</button>
+<div id="tutBox" hidden style="margin-top:14px"></div>
+</div>
+<p class="auth-help">If you can't log in, contact us to receive your access <span class="auth-arrow" aria-hidden="true">➘</span></p>
+</div></section>
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
 <div class="buy" id="buy" hidden role="dialog" aria-modal="true" aria-labelledby="buyT"><div class="buy__box" id="buyBox" tabindex="-1">
  <button type="button" class="buy__x" id="buyX" aria-label="Close">✕</button>
@@ -1264,6 +1274,15 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 });
 
+/* Tutorial de acesso: so carrega e mostra o video quando a pessoa clica */
+$('#tutBtn').onclick=()=>{
+  const box=$('#tutBox'),btn=$('#tutBtn');
+  if(!box.hidden){box.hidden=true;box.innerHTML='';btn.setAttribute('aria-expanded','false');btn.textContent='▶ Watch the access tutorial';return}
+  box.innerHTML='<vturb-smartplayer id="vid-6ae34923c3ff612f67d25923" style="display:block;margin:0 auto;width:100%;max-width:400px"><div class="vturb-player-placeholder" style="position:relative;width:100%;padding:177.77777777777777% 0 0;z-index:0;background-color:black"></div></vturb-smartplayer>';
+  box.hidden=false;btn.setAttribute('aria-expanded','true');btn.textContent='✕ Hide the tutorial';
+  const s=document.createElement('script');s.src='https://scripts.converteai.net/80d0b89d-7901-4c62-bf15-807e2dab2483/players/6ae34923c3ff612f67d25923/v4/player.js';s.async=true;document.head.appendChild(s);
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+};
 setAuth('login');
 $('#auth').classList.add('on');
 
