@@ -366,6 +366,7 @@ body.on-mark #supportFab{display:none}
   <div class="card" style="margin-top:14px"><label for="nIn" class="lab">Your name</label><input type="text" id="nIn" maxlength="40" placeholder="Your name"><button class="btn" id="nSave">Save name</button></div>
   <div class="card"><h3>Certificate of practice</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">A keepsake with your name and your days of practice. Print it or save it as a PDF.</p><button class="ghost" id="cOpen">View certificate</button></div>
   <div class="card"><h3>Reminders</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Get a notification when your next +10 ✦ is ready, 24 hours after you offer your intention.</p><button class="ghost" id="nBtn">Enable notifications</button><p class="lab" id="nSt"></p></div>
+  <div class="card"><h3>🕊️ Daily verse on your lock screen</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Receive one Bible verse or short prayer every day, as a notification right on your phone's lock screen.</p><button class="ghost" id="dvBtn">Send me a daily verse</button><p class="lab" id="dvSt"></p></div>
   <button class="ghost" id="reset">Reset my progress</button> <button class="ghost" id="sOut">Sign out</button>
  </section>
 </div>
@@ -730,6 +731,46 @@ function notifyReady(){try{if(Notification.permission!=='granted')return;const o
 let nt;function scheduleNotif(){clearTimeout(nt);const w=DAY-(Date.now()-(S.lastTs||0));if(w>0)nt=setTimeout(()=>{notifyReady();toast('Your +10 ✦ is ready')},w)}
 function nUpd(){const e=$('#nSt'),b=$('#nBtn');if(!('Notification' in window)){e.textContent='Notifications are not supported on this browser.';b.hidden=true;return}const p=Notification.permission;b.hidden=p!=='default';e.textContent=p==='granted'?'Reminders are on.':p==='denied'?'Blocked. Turn them on in your browser settings.':''}
 $('#nBtn').onclick=()=>{try{Notification.requestPermission().then(()=>{nUpd();scheduleNotif()})}catch(e){}};
+/* ===== versiculo/oracao diario na tela de bloqueio (push via servidor Supabase) ===== */
+/* Cole aqui a sua VAPID PUBLIC KEY (gere com: npx web-push generate-vapid-keys) */
+const VAPID_PUBLIC_KEY='REPLACE_WITH_YOUR_VAPID_PUBLIC_KEY';
+const vapidReady=()=>!!VAPID_PUBLIC_KEY&&!/^REPLACE/.test(VAPID_PUBLIC_KEY);
+function b64ToU8(s){const pad='='.repeat((4-s.length%4)%4);const b=(s+pad).replace(/-/g,'+').replace(/_/g,'/');const raw=atob(b);const u=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)u[i]=raw.charCodeAt(i);return u}
+async function dvSubscribe(){
+ if(!('serviceWorker' in navigator)||!('PushManager' in window))throw new Error('unsupported');
+ if(!vapidReady())throw new Error('not_configured');
+ if(Notification.permission!=='granted'){const pm=await Notification.requestPermission();if(pm!=='granted')throw new Error('denied')}
+ const reg=await navigator.serviceWorker.ready;
+ let sub=await reg.pushManager.getSubscription();
+ if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64ToU8(VAPID_PUBLIC_KEY)});
+ const client=await getSupabase();
+ const {error}=await client.rpc('save_push_subscription',{p_sub:sub.toJSON()});
+ if(error)throw error;
+ S.dailyVerse=true;save();
+}
+async function dvUnsubscribe(){
+ try{const reg=await navigator.serviceWorker.ready;const sub=await reg.pushManager.getSubscription();
+  if(sub){try{const client=await getSupabase();await client.rpc('delete_push_subscription',{p_endpoint:sub.endpoint})}catch(e){}await sub.unsubscribe()}}catch(e){console.warn('dvUnsubscribe',e)}
+ S.dailyVerse=false;save();
+}
+function dvUpd(){const b=$('#dvBtn'),st=$('#dvSt');if(!b)return;
+ if(!('serviceWorker' in navigator)||!('PushManager' in window)){b.hidden=true;st.textContent='On iPhone, add the app to your Home screen first to receive daily verses.';return}
+ b.hidden=false;b.disabled=false;
+ b.textContent=S.dailyVerse?'Turn off the daily verse':'Send me a daily verse';
+ st.textContent=S.dailyVerse?'On. A verse will appear on your lock screen each day.':(Notification.permission==='denied'?'Notifications are blocked. Turn them on in your phone settings.':'');
+ if(!vapidReady()&&!S.dailyVerse){st.textContent='Daily verse is not set up yet.';b.disabled=true}
+}
+$('#dvBtn').onclick=async()=>{const b=$('#dvBtn'),st=$('#dvSt');b.disabled=true;st.textContent='Please wait…';
+ try{
+  if(S.dailyVerse){await dvUnsubscribe();toast('Daily verse off')}
+  else{await dvSubscribe();toast('Daily verse on 🕊️')}
+ }catch(e){
+  const m=e&&e.message;
+  st.textContent=m==='denied'?'Notifications are blocked. Turn them on in your phone settings, then try again.':m==='not_configured'?'Daily verse is not set up yet. (Admin: add your VAPID public key in the code.)':m==='unsupported'?'On iPhone, add the app to your Home screen first, then try again.':'Could not change this right now. Please try again.';
+  b.disabled=false;return;
+ }
+ dvUpd();
+};
 /* instalar */
 let dip=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e});
 if(matchMedia('(display-mode: standalone)').matches||navigator.standalone){const c=$('#iosCard');if(c)c.style.display='none'}
@@ -1123,6 +1164,7 @@ setTimeout(async () => {
 }, 0);
             scheduleNotif();
             nUpd();
+            if (S.dailyVerse) dvSubscribe().catch(() => {});
             toast('Welcome' + (S.name ? ', ' + S.name : ''));
             setTimeout(() => maybeStartOnboarding(user), 300);
           }
@@ -1302,6 +1344,7 @@ getSupabase().catch(err => {
 
 homeTiles();
 nUpd();
+dvUpd();
 setInterval(tickOffer, 1000);
 </script>
 
