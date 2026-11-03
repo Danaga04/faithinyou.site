@@ -391,13 +391,13 @@ body.on-mark #supportFab{display:none}
 <section class="auth" id="auth" role="dialog" aria-modal="true" aria-label="Sign in"><div>
 <svg width="120" height="90" viewBox="0 0 120 90" aria-hidden="true"><ellipse cx="60" cy="14" rx="24" ry="7" fill="none" stroke="#e0ad3e" stroke-width="4"/><circle cx="60" cy="44" r="18" fill="#ffe2c4"/><path d="M24 90c3-26 17-34 36-34s33 8 36 34z" fill="#7aa6f5"/></svg>
 <h1 style="font-size:26px;font-weight:800">Welcome to Sacred Chant</h1>
-<p class="intro" style="margin-top:4px">Enter with your name and email. Your light and progress stay saved on this device.</p>
-<div class="sheet" id="aTabs"><button data-m="login" class="on">Log in</button><button data-m="signup">Create account</button></div>
+<p class="intro" style="margin-top:4px">Just enter your email to come in — no password and no confirmation code. Your light and progress are saved to your email.</p>
+
 <form id="aForm" novalidate>
-<div id="aNameW" hidden><label for="aName">Name</label><input type="text" id="aName" maxlength="60" autocomplete="name" placeholder="Your name"></div>
+<label for="aName">Name <span style="font-weight:400;color:var(--mute)">(optional)</span></label><input type="text" id="aName" maxlength="60" autocomplete="name" placeholder="Your name">
 <label for="aMail">Email</label><input type="text" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
 <p class="err" id="aErr" role="alert"></p>
-<button type="submit" class="btn" id="aGo" style="width:100%">Log in</button></form>
+<button type="submit" class="btn" id="aGo" style="width:100%">Enter</button></form>
 <div style="margin-top:22px;padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--card)">
 <p style="font-size:14px;color:var(--mute);margin-bottom:10px">Couldn't access or log in? Click below to access our app without creating an account.</p>
 <a href="https://appsell-software.com/app/sacred-chant" class="ghost" style="display:inline-block;text-decoration:none">Access the app without an account</a>
@@ -1038,7 +1038,7 @@ function obFinishAndStart(){
 
 /* login conectado ao Supabase */
 const EM = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-let amode = 'login';
+let amode = 'login'; // kept for compatibility; login and signup are now one flow
 let sbClient = null;
 let sbPromise = null;
 
@@ -1105,19 +1105,7 @@ async function claimPendingDigistoreOrders() {
   }
 }
 
-function setAuth(m) {
-  amode = m;
-  $('#aNameW').hidden = m === 'login';
-  $$('#aTabs button').forEach(b =>
-    b.classList.toggle('on', b.dataset.m === m)
-  );
-  $('#aGo').textContent = m === 'login' ? 'Log in' : 'Create account';
-  $('#aErr').textContent = '';
-}
-
-$$('#aTabs button').forEach(b => {
-  b.onclick = () => setAuth(b.dataset.m);
-});
+function setAuth() { $('#aErr').textContent = ''; }
 
 function getSupabase() {
   if (sbClient) return Promise.resolve(sbClient);
@@ -1196,6 +1184,16 @@ setTimeout(async () => {
   return sbPromise;
 }
 
+/* Senha automatica e invisivel, derivada do e-mail. O cliente nunca ve senha nem codigo.
+   (Seguranca: a derivacao esta no app, entao quem souber um e-mail consegue acessar aquela conta.
+    E a troca por acesso instantaneo que voce pediu.) */
+async function pwForEmail(email) {
+  const enc = new TextEncoder().encode('SacredChant\u00b7auth\u00b7v1:' + email.trim().toLowerCase());
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  return 'Sc1!' + hex.slice(0, 28); // tem maiuscula, minuscula, numero e simbolo
+}
+
 $('#aForm').onsubmit = async e => {
   e.preventDefault();
 
@@ -1209,40 +1207,48 @@ $('#aForm').onsubmit = async e => {
     return;
   }
 
-  if (amode === 'signup' && !name) {
-    error.textContent = 'Please enter your name.';
-    return;
-  }
-
   button.disabled = true;
-  button.textContent = 'Please wait...';
+  button.textContent = 'Entering...';
   error.textContent = '';
 
   try {
     const client = await getSupabase();
+    const password = await pwForEmail(email);
 
-    const result = await client.auth.signInWithOtp({
-      email: email,
-      options: {
-        emailRedirectTo: window.location.origin + '/sacredchant/',
-        shouldCreateUser: true,
-        data: name ? { full_name: name } : undefined
+    // 1) Tenta entrar direto (conta ja existe)
+    let { data, error: signInErr } = await client.auth.signInWithPassword({ email, password });
+
+    // 2) Ainda nao existe -> cria e entra na hora
+    if (signInErr) {
+      const up = await client.auth.signUp({
+        email,
+        password,
+        options: { data: name ? { full_name: name } : undefined }
+      });
+
+      if (up.error) {
+        // Conta criada pelo login antigo (link magico), sem esta senha
+        if (/already registered|already exists|user already/i.test(up.error.message || '')) {
+          error.textContent = 'This email was created with the old login. Tap "Access the app without an account" below, or contact us to reset it.';
+        } else {
+          throw up.error;
+        }
+        return;
       }
-    });
 
-    if (result.error) throw result.error;
-
-    error.textContent =
-      'Check your email for your secure sign-in link.';
-
+      // Sem sessao = "Confirm email" ainda esta LIGADO no Supabase
+      if (!up.data || !up.data.session) {
+        error.textContent = 'Almost ready. In Supabase, turn OFF "Confirm email" (Authentication \u2192 Providers \u2192 Email) so people enter instantly.';
+        return;
+      }
+    }
+    // Sucesso: o onAuthStateChange (SIGNED_IN) assume daqui (carrega o usuario e abre a Home).
   } catch (err) {
     console.error('Authentication error:', err);
-    error.textContent =
-      err.message || 'Could not send the email. Please try again.';
+    error.textContent = err.message || 'Could not log in. Please try again.';
   } finally {
     button.disabled = false;
-    button.textContent =
-      amode === 'login' ? 'Log in' : 'Create account';
+    button.textContent = 'Enter';
   }
 };
 
