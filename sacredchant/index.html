@@ -197,6 +197,10 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .plan .badge-popular{background:linear-gradient(135deg,#dce8ff,#9ebcff);color:#173b80}
 .plan .tk{font-weight:700;color:#7a560b}
 .plan p{color:#42537a;font-size:14px;flex:1;margin:4px 0 10px}
+.plan-perks{list-style:none;padding:0;margin:10px 0 12px;text-align:left;flex:1;display:flex;flex-direction:column;gap:7px}
+.plan-perks li{position:relative;padding-left:24px;font-size:13.5px;line-height:1.4;color:#42537a}
+.plan-perks li::before{content:"";position:absolute;left:0;top:1px;width:17px;height:17px;border-radius:50%;background:rgba(47,143,87,.15);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232f8f57' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E");background-size:12px;background-repeat:no-repeat;background-position:center}
+.plan.best .plan-perks li::before{background-color:rgba(224,173,62,.2);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c99a2e' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E")}
 .plan .btn{width:100%;padding:13px 12px}
 .buy__offer{display:block;margin:16px auto 0}
 .buy__note{text-align:center;color:#5a6c91;font-size:12.5px;margin-top:14px}
@@ -750,13 +754,13 @@ async function access(t){
 function play(c){spend(PLAY_COST,()=>open(c))}
 /* ===== popup de compra (3 planos, Digistore24) ===== */
 const PLANS=[
- {id:'734743',name:'SACRED PREMIUM',oldPrice:'$49.99',price:'$24.99',tokens:1000,best:true,badge:'BEST VALUE',monthly:true,cta:'Get 1,000 Light Tokens',url:'https://www.checkout-ds24.com/product/734743',desc:'Unlocks the chat with Mark (included, no token cost), the entire Store — all programs — plus 1,000 Light Tokens every month and priority support.'},
- {id:'734742',name:'DEVOTIONAL',oldPrice:'$29.99',price:'$14.99',tokens:500,best:false,badge:'MOST POPULAR',monthly:true,cta:'Get 500 Light Tokens',url:'https://www.checkout-ds24.com/product/734742',desc:'Unlocks 4 Store programs (Secret 12 Words Prayer, The Miracle Prayer, Prayer for Arthritis, Prayer for Diabetes), plus 500 Light Tokens every month.'},
- {id:'734741',name:'ESSENTIAL',oldPrice:'$9.99',price:'$4.99',tokens:100,best:false,badge:'',monthly:true,cta:'Get 100 Light Tokens',url:'https://www.checkout-ds24.com/product/734741',desc:'Unlocks 2 Store programs (Secret 12 Words Prayer and The Miracle Prayer), plus 100 Light Tokens every month.'}
+ {id:'734743',name:'SACRED PREMIUM',oldPrice:'$49.99',price:'$24.99',tokens:1000,best:true,badge:'BEST VALUE',monthly:true,cta:'Get 1,000 Light Tokens',url:'https://www.checkout-ds24.com/product/734743',perks:['Chat with Mark included — no token cost','The entire Store unlocked (all programs)','1,000 Light Tokens every month','Priority support']},
+ {id:'734742',name:'DEVOTIONAL',oldPrice:'$29.99',price:'$14.99',tokens:500,best:false,badge:'MOST POPULAR',monthly:true,cta:'Get 500 Light Tokens',url:'https://www.checkout-ds24.com/product/734742',perks:['4 Store programs unlocked','Adds Prayer for Arthritis & Diabetes','500 Light Tokens every month']},
+ {id:'734741',name:'ESSENTIAL',oldPrice:'$9.99',price:'$4.99',tokens:100,best:false,badge:'',monthly:true,cta:'Get 100 Light Tokens',url:'https://www.checkout-ds24.com/product/734741',perks:['2 Store programs unlocked','Secret 12 Words Prayer & The Miracle Prayer','100 Light Tokens every month']}
 ];
 const BUY_DEFAULT='Choose a plan to add Light Tokens to your account.';
 let buyFocus=null,buyBusy=false,purchaseStarted=false;
-$('#plans').innerHTML=PLANS.map(p=>`<article class="plan${p.best?' best':''}">${p.badge?'<span class="tag '+(p.badge==='MOST POPULAR'?'badge-popular':'')+'">'+p.badge+'</span>':''}<h3>${p.name}</h3><div class="old-pr">${p.oldPrice}</div><div class="pr">${p.price}<span class="mo">${p.monthly?'/month':' one-time'}</span></div><div class="tk">${p.tokens.toLocaleString('en-US')} Light Tokens</div><p>${p.desc}</p><button type="button" class="btn${p.best?' gold':''}" data-plan="${p.id}">${p.cta}</button></article>`).join('');
+$('#plans').innerHTML=PLANS.map(p=>`<article class="plan${p.best?' best':''}">${p.badge?'<span class="tag '+(p.badge==='MOST POPULAR'?'badge-popular':'')+'">'+p.badge+'</span>':''}<h3>${p.name}</h3><div class="old-pr">${p.oldPrice}</div><div class="pr">${p.price}<span class="mo">${p.monthly?'/month':' one-time'}</span></div><div class="tk">${p.tokens.toLocaleString('en-US')} Light Tokens / month</div><ul class="plan-perks">${(p.perks||[]).map(x=>'<li>'+x+'</li>').join('')}</ul><button type="button" class="btn${p.best?' gold':''}" data-plan="${p.id}">${p.cta}</button></article>`).join('');
 function openBuy(msg){
   const b=$('#buy');
   $('#buyMsg').textContent=msg||BUY_DEFAULT;
@@ -788,6 +792,8 @@ $('#plans').addEventListener('click',e=>{
   const b=e.target.closest('[data-plan]');if(!b||buyBusy)return;
   const p=PLANS.find(x=>x.id===b.dataset.plan);if(!p)return;
   buyBusy=true;purchaseStarted=true;
+  // guarda o saldo ANTES da compra e o plano clicado, para liberar pelo tanto de tokens que entrar
+  S.buyBase=Number(S.light)||0;S.pendingPlan=p.id;S.buyAt=Date.now();save();
   $$('#plans button').forEach(x=>x.disabled=true);
   let url=p.url;
   try{
@@ -818,6 +824,7 @@ document.addEventListener('visibilitychange',async()=>{
   await claimPendingDigistoreOrders();
   await syncLightBalance();
   await syncDailyLightStatus();
+  detectTierFromPurchase();
   await refreshTier();
 });
 function flap(){
@@ -996,6 +1003,24 @@ function applyTier(tier){
  if(typeof syncStore==='function')syncStore();
  updateMarkCard();
  try{if(sbClient)sbClient.auth.updateUser({data:{sc_tier:S.tier,sc_mark:!!S.markUnlocked}})}catch(e){}
+}
+/* Libera o nivel pelo tanto de tokens que entrou na compra (100/500/1000 -> essential/devotional/premium). */
+function detectTierFromPurchase(){
+ if(S.buyBase==null&&!S.pendingPlan)return;
+ const before=Number(S.buyBase)||0, after=Number(S.light)||0, delta=after-before;
+ let tier=null;
+ if(delta>=1000)tier='premium';
+ else if(delta>=500)tier='devotional';
+ else if(delta>=100)tier='essential';
+ if(!tier&&S.pendingPlan&&delta>=50)tier=PLAN_TIER[S.pendingPlan]||null;
+ if(tier){
+  applyTier(tier);
+  toast('Your '+tier.charAt(0).toUpperCase()+tier.slice(1)+' plan is unlocked ✨');
+  S.buyBase=null;S.pendingPlan=null;S.buyAt=null;save();
+  return;
+ }
+ // tokens ainda nao cairam? tenta de novo nos proximos syncs, por ate 1 hora
+ if(!S.buyAt||Date.now()-S.buyAt>36e5){S.buyBase=null;S.pendingPlan=null;S.buyAt=null;save()}
 }
 async function refreshTier(){
  try{
@@ -1269,6 +1294,7 @@ async function claimPendingDigistoreOrders() {
     S.light = Number(data.balance);
     save();
     render();
+    if (S.buyBase != null || S.pendingPlan) detectTierFromPurchase();
 
   } catch (err) {
     console.error('Could not sync token balance:', err);
