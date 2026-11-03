@@ -301,6 +301,14 @@ body.on-mark #supportFab{display:none}
 .candle-wall .sc-candle.lighting{animation:scLightW .7s ease-out}
 @keyframes scLightW{0%{transform:scale(.15);opacity:0}60%{transform:scale(.72)}100%{transform:scale(.6);opacity:1}}
 @media(prefers-reduced-motion:reduce){.sc-candle .flame,.sc-candle .flame::before,.sc-candle .glow,.streak-card.celebrate,.sc-candle.lighting,.candle-altar.flare .flame{animation:none}}
+/* relatorio de assinatura (Profile) */
+.bill .bill-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:14.5px}
+.bill .bill-row:first-child{border-top:0}
+.bill .bill-row span{color:var(--mute)}
+.bill .bill-row b{text-align:right;word-break:break-word}
+.bill .bill-row b.ok{color:#2f8f57}
+.bill-note{font-size:12.5px;color:var(--mute);margin-top:12px;line-height:1.45}
+.bill-note .lnk{color:var(--acc);font-weight:700;text-decoration:underline;padding:0;font-size:inherit}
 </style>
 
 </head>
@@ -427,6 +435,11 @@ body.on-mark #supportFab{display:none}
   <h2 class="h">Your sanctuary</h2>
   <div class="stats"><div class="stat"><b id="stS">0</b><small>day streak</small></div><div class="stat"><b id="stM">0</b><small>minutes</small></div><div class="stat"><b id="stL">0</b><small>light</small></div></div>
   <div class="card" style="margin-top:14px"><label for="nIn" class="lab">Your name</label><input type="text" id="nIn" maxlength="40" placeholder="Your name"><button class="btn" id="nSave">Save name</button></div>
+  <div class="card bill"><h3>My subscription</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Your plan, status and next payment.</p>
+   <div id="billBody"></div>
+   <p class="bill-note">Light Tokens can take up to 1 minute to appear after a purchase. To manage or cancel your plan, <button type="button" class="lnk" data-open-support>contact us</button>.</p>
+   <div style="margin-top:12px"><button type="button" class="ghost" data-open-support>Manage or cancel my plan</button></div>
+  </div>
   <div class="card"><h3>Certificate of practice</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">A keepsake with your name and your days of practice. Print it or save it as a PDF.</p><button class="ghost" id="cOpen">View certificate</button></div>
   <div class="card"><h3>Reminders</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Get a notification when your next +10 ✦ is ready, 24 hours after you claim your Free tokens.</p><button class="ghost" id="nBtn">Enable notifications</button><p class="lab" id="nSt"></p></div>
   <div class="card"><h3>🕊️ Daily verse on your lock screen</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Receive one Bible verse or short prayer every day, as a notification right on your phone's lock screen.</p><button class="ghost" id="dvBtn">Send me a daily verse</button><p class="lab" id="dvSt"></p></div>
@@ -507,7 +520,7 @@ function streak(){let n=0,d=new Date();if(!S.days.includes(ymd(d)))d.setDate(d.g
 function row(c){return `<button class="item" data-id="${c.id}"><span class="ic" style="--g:${c.g}">${c.e}</span><span><b>${c.n}</b><span>${c.tag}</span></span><span style="margin-left:auto;color:var(--acc);font-size:22px">▶</span></button>`}
 $('#lM').innerHTML=CH.filter(c=>c.k=='m').map(row).join('');$('#lD').innerHTML=CH.filter(c=>c.k=='d').map(row).join('');$('#lN').innerHTML=CH.filter(c=>c.k=='n').map(row).join('');
 $$('.item').forEach(b=>b.onclick=()=>play(CH.find(c=>c.id===b.dataset.id)));
-function go(t){if(t!=='vid')$('#vBox').innerHTML='';if(t!=='web'&&$('#wBox'))$('#wBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));scrollTo(0,0)}
+function go(t){if(t!=='vid')$('#vBox').innerHTML='';if(t!=='web'&&$('#wBox'))$('#wBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='me'){if(typeof renderBilling==='function')renderBilling();if(typeof renderGrowth==='function')renderGrowth()}scrollTo(0,0)}
 $$('.tab').forEach(b=>b.onclick=()=>access(b.dataset.t));
 function render(){
  const h=new Date().getHours();$('#greet').textContent=h<12?'This morning':h<18?'This afternoon':'Tonight';
@@ -516,6 +529,7 @@ function render(){
  tickOffer();
  const ms=CH.filter(c=>c.k=='m');window.DC=ms[Math.floor(Date.now()/864e5)%ms.length];$('#dM').textContent=DC.m;$('#dX').textContent=DC.x;
  renderGrowth();
+ if(typeof renderBilling==='function')renderBilling();
 }
 $('#dPlay').onclick=()=>play(DC);
 /* ===== recorrencia: streak + marcos, oracao da semana, versiculo, vela ===== */
@@ -1011,12 +1025,48 @@ function detectTierFromPurchase(){
  // o checkout nao deixa trocar de plano, entao liberamos o plano CLICADO assim que os tokens caem (delta>=50 confirma a compra)
  if(delta>=50&&S.pendingPlan){
   const tier=PLAN_TIER[S.pendingPlan];
-  if(tier){applyTier(tier);toast('Your '+tier.charAt(0).toUpperCase()+tier.slice(1)+' plan is unlocked ✨')}
+  if(tier){
+   applyTier(tier);
+   S.planId=S.pendingPlan;S.planAt=Date.now();
+   try{if(sbClient)sbClient.auth.updateUser({data:{sc_plan_id:S.planId,sc_plan_at:S.planAt}})}catch(e){}
+   toast('Your '+tier.charAt(0).toUpperCase()+tier.slice(1)+' plan is unlocked ✨');
+  }
   S.buyBase=null;S.pendingPlan=null;S.buyAt=null;save();
   return;
  }
  // tokens ainda nao cairam? tenta de novo nos proximos syncs, por ate 1 hora
  if(!S.buyAt||Date.now()-S.buyAt>36e5){S.buyBase=null;S.pendingPlan=null;S.buyAt=null;save()}
+}
+/* ===== Relatorio de assinatura (so com o que o app ja sabe; sem Supabase) ===== */
+function planById(id){return PLANS.find(x=>x.id===id)||null}
+function planForTier(t){const id=Object.keys(PLAN_TIER).find(k=>PLAN_TIER[k]===t);return id?planById(id):null}
+function currentPlan(){return planById(S.planId)||planForTier(S.tier)||null}
+function billPeriod(pl){return pl&&pl.yearly?'year':(pl&&pl.monthly?'month':null)}
+function nicePlanName(pl){let n=pl.name.toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());if(pl.id==='734743')n+=' · Family';return n}
+const fmtBillDate=d=>d?d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';
+function nextPaymentDate(){
+ const pl=currentPlan();if(!pl||!S.planAt)return null;
+ const per=billPeriod(pl);if(!per)return null;
+ const d=new Date(Number(S.planAt));const now=Date.now();let guard=0;
+ while(d.getTime()<=now&&guard<100){if(per==='year')d.setFullYear(d.getFullYear()+1);else d.setMonth(d.getMonth()+1);guard++}
+ return d;
+}
+function renderBilling(){
+ const box=$('#billBody');if(!box)return;
+ const pl=currentPlan();
+ if(!pl){
+  box.innerHTML='<div class="bill-row"><span>Plan</span><b>Free</b></div><div class="bill-row"><span>Light Tokens</span><b>+10 ✦ free every day</b></div><p class="lab" style="font-weight:500;margin:10px 0 0">Unlock Mark and the Store with a plan.</p>';
+  const nb=document.createElement('button');nb.type='button';nb.className='btn';nb.style.marginTop='10px';nb.textContent='See plans';nb.onclick=()=>openBuy();box.appendChild(nb);
+  return;
+ }
+ const per=billPeriod(pl),np=nextPaymentDate();
+ box.innerHTML=
+  '<div class="bill-row"><span>Plan</span><b>'+nicePlanName(pl)+'</b></div>'+
+  '<div class="bill-row"><span>Price</span><b>'+pl.price+(per?'/'+per:'')+'</b></div>'+
+  '<div class="bill-row"><span>Status</span><b class="ok">Active</b></div>'+
+  '<div class="bill-row"><span>Light Tokens</span><b>'+Number(pl.tokens).toLocaleString('en-US')+' / '+(per||'period')+'</b></div>'+
+  (S.planAt?'<div class="bill-row"><span>Started</span><b>'+fmtBillDate(new Date(Number(S.planAt)))+'</b></div>':'')+
+  '<div class="bill-row"><span>Next payment</span><b>'+fmtBillDate(np)+'</b></div>';
 }
 async function refreshTier(){
  try{
@@ -1332,6 +1382,8 @@ const accStore = user.user_metadata?.sc_store_owned;
 if (Array.isArray(accStore)) S.storeOwned = [...new Set([...(S.storeOwned || []), ...accStore])];
 if (user.user_metadata?.sc_mark) S.markUnlocked = true;
 if (user.user_metadata?.sc_tier) applyTier(user.user_metadata.sc_tier);
+if (user.user_metadata?.sc_plan_id) S.planId = user.user_metadata.sc_plan_id;
+if (user.user_metadata?.sc_plan_at) S.planAt = Number(user.user_metadata.sc_plan_at) || S.planAt;
 storeTiles();
 updateMarkCard();
 setMileStart(user);
