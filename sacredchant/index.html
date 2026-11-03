@@ -260,6 +260,25 @@ body.on-mark #supportFab{display:none}
 @media(prefers-reduced-motion:reduce){.mark-typing i{animation:none}}
 @media(max-width:380px){.mark-card img{width:74px;height:74px}.mark-chat{min-height:400px;height:calc(100dvh - 280px - env(safe-area-inset-bottom,0px))}.mark-bubble{max-width:94%}}
 
+
+/* ===== recorrencia: streak, oracao da semana, versiculo, vela ===== */
+.streak-card{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(247,220,146,.20),rgba(122,166,245,.12));border:1px solid var(--line);border-radius:20px;padding:14px 16px;margin:6px 0 14px}
+.streak-flame{font-size:34px;line-height:1;filter:drop-shadow(0 0 10px rgba(255,160,60,.6))}
+.streak-card .n{font-size:28px;font-weight:800;color:var(--acc);line-height:1.1}
+.streak-card .sub{font-size:13px;color:var(--mute);margin-top:2px}
+.streak-card.celebrate{animation:stkCel 1.2s ease 2}
+@keyframes stkCel{0%,100%{box-shadow:0 0 0 0 rgba(224,173,62,0)}50%{box-shadow:0 0 0 6px rgba(224,173,62,.35),0 0 26px rgba(224,173,62,.55)}}
+.invite{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--gold);border-radius:18px;padding:13px 15px;margin:6px 0 14px}
+.invite .e{font-size:26px;line-height:1}
+.invite b{display:block;font-size:15px}
+.invite .row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.pow{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin:6px 0 14px}
+.pow .theme{display:inline-block;background:rgba(224,173,62,.22);color:var(--gold);border-radius:99px;padding:3px 11px;font-size:12px;font-weight:800;margin-bottom:8px}
+.pow h3{font-size:19px;font-weight:800;margin:2px 0}
+.candle-wall{display:flex;flex-wrap:wrap;gap:3px;margin:10px 0;font-size:22px;min-height:26px;justify-content:center}
+.candle-card .lit{animation:flick 2.4s ease-in-out infinite}
+@keyframes flick{0%,100%{opacity:1;transform:translateY(0) rotate(-1deg)}50%{opacity:.72;transform:translateY(-1px) rotate(1deg)}}
+@media(prefers-reduced-motion:reduce){.candle-card .lit,.streak-card.celebrate{animation:none}}
 </style>
 
 </head>
@@ -289,6 +308,22 @@ body.on-mark #supportFab{display:none}
    <p>A few quiet minutes of chant, prayer and breath.</p>
    <p style="margin-top:16px"><button class="btn gold" id="offer">✦ Free tokens</button></p>
   </div>
+  <div class="streak-card" id="streakCard">
+   <span class="streak-flame" aria-hidden="true">🔥</span>
+   <div style="flex:1"><div><span class="n" id="stkN">0</span> <span id="stkLbl">days</span> in a row</div><div class="sub" id="stkNext"></div></div>
+  </div>
+  <div class="invite" id="verseInvite" hidden>
+   <span class="e" aria-hidden="true">🕊️</span>
+   <div style="flex:1"><b>A verse on your lock screen each day</b><span class="sub">One Bible verse or short prayer every morning, to start your day in faith.</span>
+    <div class="row"><button type="button" class="btn gold" id="viOn" style="padding:9px 16px">Turn it on</button><button type="button" class="ghost" id="viNo" style="padding:9px 14px">Maybe later</button></div>
+   </div>
+  </div>
+  <div class="pow">
+   <span class="theme" id="powTheme"></span>
+   <p class="lab">Prayer of the week</p><h3 id="powT">—</h3>
+   <p class="lab" id="powSub" style="font-weight:500;margin:4px 0 10px">A new prayer to carry you through the week. Free to listen.</p>
+   <button type="button" class="btn" id="powBtn">▶ Listen now</button>
+  </div>
   <p class="sh">Support &amp; blessings</p><p>Start here, request a prayer, or reach our team.</p>
   <div class="tiles" id="tSup"></div>
   <button type="button" class="mark-card" data-mod="mark" aria-label="Open chat with Mark"><img src="https://i.postimg.cc/8kFQyKv5/bubblen6oy3a5sh6q.avif" alt="Mark" width="88" height="88" loading="lazy"><span class="mark-copy"><strong>Talk with Mark</strong><span>Your spiritual companion for prayer, reflection, and encouragement.</span><span class="mark-free">3 ✦ / MESSAGE</span></span></button>
@@ -305,6 +340,14 @@ body.on-mark #supportFab{display:none}
   <div class="card" style="text-align:center">
    <p class="lab">Chant of the day</p><p class="m" id="dM"></p><p class="lab" id="dX" style="font-weight:500"></p>
    <p style="margin-top:12px"><button class="btn" id="dPlay">▶ Chant with me</button></p>
+  </div>
+  <div class="card candle-card" style="text-align:center">
+   <p class="lab">Light a candle</p>
+   <p class="lab" style="font-weight:500;margin:4px 0 8px">Light a candle for an intention or for someone you love.</p>
+   <div class="candle-wall" id="candWall" aria-hidden="true"></div>
+   <input type="text" id="candIn" maxlength="60" placeholder="Your intention (optional)">
+   <button type="button" class="btn gold" id="candBtn">🕯️ Light a candle · 1 ✦</button>
+   <p class="lab" id="candN" style="margin-top:8px"></p>
   </div>
   <div class="card ios" id="iosCard">
    <h3>📲 Add Sacred Chant to your iPhone home screen</h3>
@@ -455,8 +498,42 @@ function render(){
  ['#lightN','#stL'].forEach(s=>$(s).textContent=S.light);$('#stM').textContent=Math.round(S.min);$('#stS').textContent=streak();
  tickOffer();
  const ms=CH.filter(c=>c.k=='m');window.DC=ms[Math.floor(Date.now()/864e5)%ms.length];$('#dM').textContent=DC.m;$('#dX').textContent=DC.x;
+ renderGrowth();
 }
 $('#dPlay').onclick=()=>play(DC);
+/* ===== recorrencia: streak + marcos, oracao da semana, versiculo, vela ===== */
+const MILEST=[3,7,14,30,60,90,180,365];
+const nextMile=s=>MILEST.find(m=>m>s)||null;
+const THEMES=['New Beginnings','Love & Mercy','Renewal','Hope','Faith & Trust','Healing','Light & Joy','Strength','Gratitude','Protection','Gratitude','Peace & Hope'];
+const WEEK_MS=6048e5;
+const WEEKLY=[
+ {t:'The 15 Words Prayer',v:'Y1h9SdVUKIc'},
+ {t:'Prayer of Saint Benedict',v:'V-XWXNoPXoA'},
+ {t:'Sacred Chant',v:'7Qq1E3TTNcU'},
+ {t:'Song of God',v:'vELBkxa-8EQ'},
+ {t:'The Journey with My Angel',v:'ZPZ-tr5ud-o'},
+ {t:'Family Protect',v:'14a96XGTgqM'}
+];
+const CANDLE_COST=1;
+function celebrateStreak(s){const c=$('#streakCard');if(c){c.classList.remove('celebrate');void c.offsetWidth;c.classList.add('celebrate');setTimeout(()=>c.classList.remove('celebrate'),2600)}toast('🎉 '+s+'-day streak! Keep the light burning.')}
+function renderGrowth(){
+ const s=streak();
+ if($('#stkN')){$('#stkN').textContent=s;$('#stkLbl').textContent=(s===1?'day':'days');
+  const nm=nextMile(s);
+  $('#stkNext').textContent=s===0?'Begin today — your first day of practice.':(nm?('Only '+(nm-s)+' day'+((nm-s)===1?'':'s')+' to your '+nm+'-day milestone 🎉'):'A true light. 🌟');
+ }
+ if(s>0&&MILEST.includes(s)){S.msSeen=S.msSeen||[];if(!S.msSeen.includes(s)){S.msSeen.push(s);save();celebrateStreak(s)}}
+ const inv=$('#verseInvite');
+ if(inv){const canPush=('serviceWorker' in navigator)&&('PushManager' in window);inv.hidden=!(canPush&&!S.dailyVerse&&!S.verseInviteDismissed)}
+ const w=WEEKLY[Math.floor(Date.now()/WEEK_MS)%WEEKLY.length];
+ if($('#powT')){$('#powT').textContent=w.t;$('#powBtn').dataset.v=w.v;$('#powBtn').dataset.t=w.t;$('#powTheme').textContent='This month: '+THEMES[new Date().getMonth()]}
+ if($('#candWall')){const list=S.candles||[];$('#candWall').innerHTML=list.slice(-12).map(()=>'<span class="lit">🕯️</span>').join('');
+  $('#candN').textContent=list.length?('You have lit '+list.length+' candle'+(list.length===1?'':'s')+'.'):''}
+}
+if($('#powBtn'))$('#powBtn').onclick=()=>{const b=$('#powBtn');showYT(b.dataset.v,'Prayer of the week · '+b.dataset.t,'home')};
+if($('#viOn'))$('#viOn').onclick=async()=>{const btn=$('#viOn');btn.disabled=true;try{await dvSubscribe();toast('Daily verse on 🕊️')}catch(e){go('me');setTimeout(()=>{const d=$('#dvBtn');if(d)d.scrollIntoView({behavior:'smooth',block:'center'})},200)}btn.disabled=false;renderGrowth()};
+if($('#viNo'))$('#viNo').onclick=()=>{S.verseInviteDismissed=true;save();renderGrowth()};
+if($('#candBtn'))$('#candBtn').onclick=()=>{spend(CANDLE_COST,()=>{S.candles=S.candles||[];S.candles.push({t:($('#candIn').value||'').trim().slice(0,60),at:Date.now()});save();if($('#candIn'))$('#candIn').value='';renderGrowth();const wall=$('#candWall');if(wall&&wall.lastElementChild)wall.lastElementChild.animate([{transform:'scale(.2)',opacity:0},{transform:'scale(1.3)',opacity:1,offset:.5},{transform:'scale(1)'}],{duration:700,easing:'ease-out'});toast('A candle is lit 🕯️')})};
 /* ===== Offer your intention: clique suave, auréola voando até o anjo, sino na chegada ===== */
 let offerBusy=false,offerAu=null;
 function offerSound(){
