@@ -275,10 +275,28 @@ body.on-mark #supportFab{display:none}
 .pow{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin:6px 0 14px}
 .pow .theme{display:inline-block;background:rgba(224,173,62,.22);color:var(--gold);border-radius:99px;padding:3px 11px;font-size:12px;font-weight:800;margin-bottom:8px}
 .pow h3{font-size:19px;font-weight:800;margin:2px 0}
-.candle-wall{display:flex;flex-wrap:wrap;gap:3px;margin:10px 0;font-size:22px;min-height:26px;justify-content:center}
-.candle-card .lit{animation:flick 2.4s ease-in-out infinite}
-@keyframes flick{0%,100%{opacity:1;transform:translateY(0) rotate(-1deg)}50%{opacity:.72;transform:translateY(-1px) rotate(1deg)}}
-@media(prefers-reduced-motion:reduce){.candle-card .lit,.streak-card.celebrate{animation:none}}
+.sc-candle{position:relative;display:inline-block;width:38px;height:94px;vertical-align:bottom;z-index:0;isolation:isolate}
+.sc-candle .wax{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:28px;height:62px;border-radius:7px 7px 6px 6px;background:linear-gradient(90deg,#b99a5e 0%,#f3e4bd 30%,#fffaf0 48%,#ecd9a8 66%,#b08f52 100%);box-shadow:inset 0 -7px 10px rgba(110,80,35,.35),0 3px 9px rgba(0,0,0,.35)}
+.sc-candle .wax::before{content:"";position:absolute;top:-3px;left:0;width:100%;height:9px;border-radius:50%;background:radial-gradient(circle at 50% 35%,#fff7e2,#dcc48c);box-shadow:inset 0 -2px 3px rgba(120,90,40,.4)}
+.sc-candle .wax::after{content:"";position:absolute;top:4px;left:6px;width:4px;height:48px;border-radius:4px;background:rgba(255,255,255,.6);filter:blur(1px)}
+.sc-candle .wick{position:absolute;left:50%;bottom:60px;transform:translateX(-50%);width:2.5px;height:9px;background:linear-gradient(#2a2018,#5a4632);border-radius:2px}
+.sc-candle .flame{position:absolute;left:50%;bottom:66px;transform:translateX(-50%);width:16px;height:32px;border-radius:50% 50% 45% 45%/72% 72% 40% 40%;background:radial-gradient(ellipse at 50% 78%,#fffbe6 0%,#ffe79a 22%,#ffc24d 46%,#ff8a1f 72%,#ff5e00 100%);transform-origin:50% 100%;animation:scFlame 1.7s ease-in-out infinite;box-shadow:0 -3px 14px rgba(255,150,40,.85),0 0 22px rgba(255,120,20,.5)}
+.sc-candle .flame::before{content:"";position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:8px;height:15px;border-radius:50% 50% 45% 45%/70% 70% 42% 42%;background:radial-gradient(ellipse at 50% 85%,#bcd7ff 0%,#6d9bff 60%,transparent 100%);opacity:.9;animation:scFlame 1.7s ease-in-out infinite reverse}
+.sc-candle .flame::after{content:"";position:absolute;left:50%;top:5px;transform:translateX(-50%);width:5px;height:10px;border-radius:50%;background:#fffdf6;filter:blur(.4px)}
+.sc-candle .glow{position:absolute;left:50%;bottom:52px;transform:translateX(-50%);width:66px;height:66px;border-radius:50%;background:radial-gradient(circle,rgba(255,200,95,.55) 0%,rgba(255,165,50,.22) 42%,transparent 70%);animation:scGlow 1.7s ease-in-out infinite;pointer-events:none;z-index:-1}
+@keyframes scFlame{0%,100%{transform:translateX(-50%) scaleY(1) scaleX(1) rotate(-1deg)}20%{transform:translateX(-52%) scaleY(1.09) scaleX(.93) rotate(2deg)}40%{transform:translateX(-49%) scaleY(.93) scaleX(1.05) rotate(-2deg)}60%{transform:translateX(-51%) scaleY(1.06) scaleX(.96) rotate(1.5deg)}80%{transform:translateX(-50%) scaleY(.97) scaleX(1.02) rotate(-1deg)}}
+@keyframes scGlow{0%,100%{opacity:.7;transform:translateX(-50%) scale(1)}30%{opacity:1;transform:translateX(-50%) scale(1.14)}60%{opacity:.82;transform:translateX(-50%) scale(1.05)}}
+.candle-altar{display:grid;place-items:end center;height:214px;margin:8px 0 2px}
+.candle-altar .sc-candle{transform:scale(2.05);transform-origin:bottom center}
+.candle-altar.flare .flame{animation:scFlare .85s ease-out}
+@keyframes scFlare{0%{transform:translateX(-50%) scaleY(1) scaleX(1)}30%{transform:translateX(-50%) scaleY(1.55) scaleX(1.12)}70%{transform:translateX(-50%) scaleY(1.1) scaleX(.97)}100%{transform:translateX(-50%) scaleY(1) scaleX(1)}}
+.candle-wall{display:flex;flex-wrap:wrap;gap:4px;margin:16px 0 4px;min-height:44px;justify-content:center;align-items:flex-end}
+.candle-wall .sc-candle{transform:scale(.6);transform-origin:bottom center;margin:0 -7px}
+.sc-candle.lighting{animation:scLight .7s ease-out}
+@keyframes scLight{0%{transform:scale(.25);opacity:0}60%{transform:scale(1.15)}100%{opacity:1}}
+.candle-wall .sc-candle.lighting{animation:scLightW .7s ease-out}
+@keyframes scLightW{0%{transform:scale(.15);opacity:0}60%{transform:scale(.72)}100%{transform:scale(.6);opacity:1}}
+@media(prefers-reduced-motion:reduce){.sc-candle .flame,.sc-candle .flame::before,.sc-candle .glow,.streak-card.celebrate,.sc-candle.lighting,.candle-altar.flare .flame{animation:none}}
 </style>
 
 </head>
@@ -312,12 +330,6 @@ body.on-mark #supportFab{display:none}
    <span class="streak-flame" aria-hidden="true">🔥</span>
    <div style="flex:1"><div><span class="n" id="stkN">0</span> <span id="stkLbl">days</span> in a row</div><div class="sub" id="stkNext"></div></div>
   </div>
-  <div class="invite" id="verseInvite" hidden>
-   <span class="e" aria-hidden="true">🕊️</span>
-   <div style="flex:1"><b>A verse on your lock screen each day</b><span class="sub">One Bible verse or short prayer every morning, to start your day in faith.</span>
-    <div class="row"><button type="button" class="btn gold" id="viOn" style="padding:9px 16px">Turn it on</button><button type="button" class="ghost" id="viNo" style="padding:9px 14px">Maybe later</button></div>
-   </div>
-  </div>
   <div class="pow">
    <span class="theme" id="powTheme"></span>
    <p class="lab">Prayer of the week</p><h3 id="powT">—</h3>
@@ -343,7 +355,8 @@ body.on-mark #supportFab{display:none}
   </div>
   <div class="card candle-card" style="text-align:center">
    <p class="lab">Light a candle</p>
-   <p class="lab" style="font-weight:500;margin:4px 0 8px">Light a candle for an intention or for someone you love.</p>
+   <p class="lab" style="font-weight:500;margin:4px 0 2px">Light a candle for an intention or for someone you love.</p>
+   <div class="candle-altar" id="candAltar"><span class="sc-candle"><span class="glow"></span><span class="wax"></span><span class="wick"></span><span class="flame"></span></span></div>
    <div class="candle-wall" id="candWall" aria-hidden="true"></div>
    <input type="text" id="candIn" maxlength="60" placeholder="Your intention (optional)">
    <button type="button" class="btn gold" id="candBtn">🕯️ Light a candle · 1 ✦</button>
@@ -515,6 +528,7 @@ const WEEKLY=[
  {t:'Family Protect',v:'14a96XGTgqM'}
 ];
 const CANDLE_COST=1;
+const CANDLE_INNER='<span class="glow"></span><span class="wax"></span><span class="wick"></span><span class="flame"></span>';
 function celebrateStreak(s){const c=$('#streakCard');if(c){c.classList.remove('celebrate');void c.offsetWidth;c.classList.add('celebrate');setTimeout(()=>c.classList.remove('celebrate'),2600)}toast('🎉 '+s+'-day streak! Keep the light burning.')}
 function renderGrowth(){
  const s=streak();
@@ -523,17 +537,17 @@ function renderGrowth(){
   $('#stkNext').textContent=s===0?'Begin today — your first day of practice.':(nm?('Only '+(nm-s)+' day'+((nm-s)===1?'':'s')+' to your '+nm+'-day milestone 🎉'):'A true light. 🌟');
  }
  if(s>0&&MILEST.includes(s)){S.msSeen=S.msSeen||[];if(!S.msSeen.includes(s)){S.msSeen.push(s);save();celebrateStreak(s)}}
- const inv=$('#verseInvite');
- if(inv){const canPush=('serviceWorker' in navigator)&&('PushManager' in window);inv.hidden=!(canPush&&!S.dailyVerse&&!S.verseInviteDismissed)}
  const w=WEEKLY[Math.floor(Date.now()/WEEK_MS)%WEEKLY.length];
  if($('#powT')){$('#powT').textContent=w.t;$('#powBtn').dataset.v=w.v;$('#powBtn').dataset.t=w.t;$('#powTheme').textContent='This month: '+THEMES[new Date().getMonth()]}
- if($('#candWall')){const list=S.candles||[];$('#candWall').innerHTML=list.slice(-12).map(()=>'<span class="lit">🕯️</span>').join('');
-  $('#candN').textContent=list.length?('You have lit '+list.length+' candle'+(list.length===1?'':'s')+'.'):''}
+ updateMarkCard();
+ if($('#candWall')){const list=S.candles||[];$('#candWall').innerHTML=list.slice(-16).map(()=>'<span class="sc-candle">'+CANDLE_INNER+'</span>').join('');
+  $('#candN').textContent=list.length?('You have lit '+list.length+' candle'+(list.length===1?'':'s')+' 🕯️'):'Your altar is ready.'}
 }
 if($('#powBtn'))$('#powBtn').onclick=()=>{const b=$('#powBtn');showYT(b.dataset.v,'Prayer of the week · '+b.dataset.t,'home')};
-if($('#viOn'))$('#viOn').onclick=async()=>{const btn=$('#viOn');btn.disabled=true;try{await dvSubscribe();toast('Daily verse on 🕊️')}catch(e){go('me');setTimeout(()=>{const d=$('#dvBtn');if(d)d.scrollIntoView({behavior:'smooth',block:'center'})},200)}btn.disabled=false;renderGrowth()};
-if($('#viNo'))$('#viNo').onclick=()=>{S.verseInviteDismissed=true;save();renderGrowth()};
-if($('#candBtn'))$('#candBtn').onclick=()=>{spend(CANDLE_COST,()=>{S.candles=S.candles||[];S.candles.push({t:($('#candIn').value||'').trim().slice(0,60),at:Date.now()});save();if($('#candIn'))$('#candIn').value='';renderGrowth();const wall=$('#candWall');if(wall&&wall.lastElementChild)wall.lastElementChild.animate([{transform:'scale(.2)',opacity:0},{transform:'scale(1.3)',opacity:1,offset:.5},{transform:'scale(1)'}],{duration:700,easing:'ease-out'});toast('A candle is lit 🕯️')})};
+if($('#candBtn'))$('#candBtn').onclick=()=>{spend(CANDLE_COST,()=>{S.candles=S.candles||[];S.candles.push({t:($('#candIn').value||'').trim().slice(0,60),at:Date.now()});save();if($('#candIn'))$('#candIn').value='';renderGrowth();
+ const wall=$('#candWall');if(wall&&wall.lastElementChild){wall.lastElementChild.classList.add('lighting');const el=wall.lastElementChild;setTimeout(()=>el&&el.classList.remove('lighting'),800)}
+ const altar=$('#candAltar');if(altar){altar.classList.remove('flare');void altar.offsetWidth;altar.classList.add('flare');setTimeout(()=>altar.classList.remove('flare'),900)}
+ toast('A candle is lit 🕯️')})};
 /* ===== Offer your intention: clique suave, auréola voando até o anjo, sino na chegada ===== */
 let offerBusy=false,offerAu=null;
 function offerSound(){
@@ -736,9 +750,9 @@ async function access(t){
 function play(c){spend(PLAY_COST,()=>open(c))}
 /* ===== popup de compra (3 planos, Digistore24) ===== */
 const PLANS=[
- {id:'734743',name:'SACRED PREMIUM',oldPrice:'$49.99',price:'$24.99',tokens:1000,best:true,badge:'BEST VALUE',monthly:true,cta:'Get 1,000 Light Tokens',url:'https://www.checkout-ds24.com/product/734743',desc:'Get 1,000 Light Tokens, free daily updates, and priority human support.'},
- {id:'734742',name:'DEVOTIONAL',oldPrice:'$29.99',price:'$14.99',tokens:500,best:false,badge:'MOST POPULAR',monthly:true,cta:'Get 500 Light Tokens',url:'https://www.checkout-ds24.com/product/734742',desc:'More Light Tokens to support your regular prayer and devotional practice.'},
- {id:'734741',name:'ESSENTIAL',oldPrice:'$9.99',price:'$4.99',tokens:100,best:false,badge:'',monthly:true,cta:'Get 100 Light Tokens',url:'https://www.checkout-ds24.com/product/734741',desc:'A simple way to experience Sacred Chant and get started with Light Tokens.'}
+ {id:'734743',name:'SACRED PREMIUM',oldPrice:'$49.99',price:'$24.99',tokens:1000,best:true,badge:'BEST VALUE',monthly:true,cta:'Get 1,000 Light Tokens',url:'https://www.checkout-ds24.com/product/734743',desc:'Unlocks the chat with Mark (included, no token cost), the entire Store — all programs — plus 1,000 Light Tokens every month and priority support.'},
+ {id:'734742',name:'DEVOTIONAL',oldPrice:'$29.99',price:'$14.99',tokens:500,best:false,badge:'MOST POPULAR',monthly:true,cta:'Get 500 Light Tokens',url:'https://www.checkout-ds24.com/product/734742',desc:'Unlocks 4 Store programs (Secret 12 Words Prayer, The Miracle Prayer, Prayer for Arthritis, Prayer for Diabetes), plus 500 Light Tokens every month.'},
+ {id:'734741',name:'ESSENTIAL',oldPrice:'$9.99',price:'$4.99',tokens:100,best:false,badge:'',monthly:true,cta:'Get 100 Light Tokens',url:'https://www.checkout-ds24.com/product/734741',desc:'Unlocks 2 Store programs (Secret 12 Words Prayer and The Miracle Prayer), plus 100 Light Tokens every month.'}
 ];
 const BUY_DEFAULT='Choose a plan to add Light Tokens to your account.';
 let buyFocus=null,buyBusy=false,purchaseStarted=false;
@@ -804,6 +818,7 @@ document.addEventListener('visibilitychange',async()=>{
   await claimPendingDigistoreOrders();
   await syncLightBalance();
   await syncDailyLightStatus();
+  await refreshTier();
 });
 function flap(){
  const g=$('.angel');if(!g)return;
@@ -960,6 +975,37 @@ const STORE=[
  {id:'miracle',img:P+'TP04tmQg/bubble9jn735hqphu.avif',t:'The Miracle Prayer',v:'FwZ7Ufs7o6o'}
 ];
 const storeOK=id=>(S.storeOwned||[]).includes(id);
+/* ===== membership por plano: Mark so no Premium; Store liberada conforme o plano ===== */
+const PLAN_TIER={'734743':'premium','734742':'devotional','734741':'essential'};
+const TIER_RANK={none:0,essential:1,devotional:2,premium:3};
+const ENTITLE={
+ essential:{store:['words12','miracle'],mark:false},
+ devotional:{store:['words12','miracle','arthritis','diabetes'],mark:false},
+ premium:{store:['powerful7','words12','arthritis','diabetes','prosperity','miracle'],mark:true}
+};
+const markUnlocked=()=>!!S.markUnlocked;
+function updateMarkCard(){const el=document.querySelector('.mark-card .mark-free');if(el){el.textContent=markUnlocked()?'INCLUDED':'SACRED PREMIUM';el.style.color=markUnlocked()?'#218653':'#8a5d00';el.style.background=markUnlocked()?'rgba(52,180,107,.14)':'rgba(224,173,62,.2)'}}
+function applyTier(tier){
+ if(!tier||!ENTITLE[tier])return;
+ if((TIER_RANK[tier]||0)>(TIER_RANK[S.tier||'none']||0))S.tier=tier;
+ S.storeOwned=S.storeOwned||[];
+ ENTITLE[tier].store.forEach(id=>{if(!S.storeOwned.includes(id))S.storeOwned.push(id)});
+ if(ENTITLE[tier].mark)S.markUnlocked=true;
+ save();
+ if(typeof storeTiles==='function')storeTiles();
+ if(typeof syncStore==='function')syncStore();
+ updateMarkCard();
+ try{if(sbClient)sbClient.auth.updateUser({data:{sc_tier:S.tier,sc_mark:!!S.markUnlocked}})}catch(e){}
+}
+async function refreshTier(){
+ try{
+  const client=await getSupabase();
+  const {data,error}=await client.functions.invoke('billing-report',{body:{}});
+  if(error||!data||data.error)return;
+  let best='none';(data.plans||[]).forEach(pl=>{const t=PLAN_TIER[pl.product_id];if(t&&(TIER_RANK[t]||0)>(TIER_RANK[best]||0))best=t});
+  if(best!=='none')applyTier(best);
+ }catch(e){/* billing-report ainda nao publicada */}
+}
 const DAY_ICONS=['🌅','🕊️','🙏','✨','🕯️','📿','👼'];
 function storeTiles(){
  const ownBadge='<span class="own">✓ Yours</span>';
@@ -1039,7 +1085,17 @@ function jesClick(i){if(jesOpen(i))return showVid(JDAYS[i][1],'Day '+(i+1)+' · 
  $('#lk').classList.add('on')}
 function openPaid(id,cb){if(!S.unl||S.unl.d!==today())S.unl={d:today(),ids:[]};if(S.unl.ids.includes(id))return cb();spend(2,()=>{S.unl.ids.push(id);save();cb()})}
 function mod(id){
- if(id==='mark'){if(window.openMarkChat)window.openMarkChat();return}
+ if(id==='mark'){
+  if(!markUnlocked()){
+   lkCost=0;
+   lkAct=()=>{openBuy('Unlock the chat with Mark — included with Sacred Premium.')};
+   $('#lkH').textContent='Mark is part of Sacred Premium';
+   $('#lkT').textContent='The chat with Mark, your spiritual companion, is included with the Sacred Premium plan. Unlock it to talk with him anytime, with no token cost.';
+   $('#lkU').hidden=false;$('#lkU').textContent='See Sacred Premium';$('#lkX').textContent='Maybe later';
+   $('#lk').classList.add('on');return;
+  }
+  if(window.openMarkChat)window.openMarkChat();return
+ }
  if(id==='support'){if(window.openSupportPanel)window.openSupportPanel();return}
  if(id==='start')return openPaid('start',()=>showVid(VID.start,'Start here','',FAQ,'home'));
  if(id==='pray')return prayOpen();
@@ -1069,7 +1125,7 @@ setInterval(solTick,1000);
 let lkDay=0,lkAct=null,lkCost=10;
 function dayClick(i){if(solOpen(i))return showVid(DAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Solomon','','','sol');lkDay=i;lkCost=10;lkAct=()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()};$('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Wait for it';$('#lkH').textContent='Day '+(i+1)+' is resting';$('#lkT').textContent='It opens 24 hours after you began, or you can open it now for 10 ✦.';$('#lk').classList.add('on')}
 $('#lkX').onclick=()=>$('#lk').classList.remove('on');
-$('#lkU').onclick=()=>{const f=lkAct,c=lkCost||10;$('#lk').classList.remove('on');if(f)spend(c,f)};
+$('#lkU').onclick=()=>{const f=lkAct,c=lkCost||0;$('#lk').classList.remove('on');if(!f)return;if(c>=1)spend(c,f);else f()};
 document.addEventListener('click',e=>{const m=e.target.closest('[data-mod]');if(m)return mod(m.dataset.mod);const d=e.target.closest('[data-day]');if(d)return dayClick(+d.dataset.day);const st=e.target.closest('[data-store]');if(st)return openStoreItem(st.dataset.store,st.dataset.from);const ml=e.target.closest('[data-mile]');if(ml)return mileClick(+ml.dataset.mile);const sr=e.target.closest('[data-ser]');if(sr)return serClick(+sr.dataset.ser);const bn=e.target.closest('[data-bonus]');if(bn)return openBonus(bn.dataset.bonus);const pr=e.target.closest('[data-prod]');if(pr)return openProd(pr.dataset.prod);const jd=e.target.closest('[data-jday]');if(jd)jesClick(+jd.dataset.jday)});
 $('#vBack').onclick=()=>go(vBackTo);$$('[data-back]').forEach(b=>b.onclick=()=>go('home'));
 
@@ -1252,7 +1308,10 @@ const accUnl = user.user_metadata?.sc_bonus_unlocks;
 if (Array.isArray(accUnl)) S.bonusUnl = [...new Set([...(S.bonusUnl || []), ...accUnl])];
 const accStore = user.user_metadata?.sc_store_owned;
 if (Array.isArray(accStore)) S.storeOwned = [...new Set([...(S.storeOwned || []), ...accStore])];
+if (user.user_metadata?.sc_mark) S.markUnlocked = true;
+if (user.user_metadata?.sc_tier) applyTier(user.user_metadata.sc_tier);
 storeTiles();
+updateMarkCard();
 setMileStart(user);
 homeTiles();
 
@@ -1265,6 +1324,7 @@ setTimeout(async () => {
   await claimPendingDigistoreOrders();
   await syncLightBalance();
   await syncDailyLightStatus();
+  await refreshTier();
 }, 0);
             scheduleNotif();
             nUpd();
@@ -1977,10 +2037,12 @@ setInterval(tickOffer, 1000);
   const text = String(value || '').trim().slice(0, 1200);
   if (!text || busy) return;
   busy = true; const send = $m('markSend'); if (send) send.disabled = true;
-  // Mark charges 3 Light Tokens per message. On low balance, spend() opens the buy popup and the message is kept.
-  let paid = false;
-  try { await spend(MARK_COST, () => { paid = true }); } catch (e) { console.warn('Mark spend error', e); }
-  if (!paid) { busy = false; if (send) send.disabled = false; return; }
+  // Mark is included with Sacred Premium (no token cost). Only premium members can open this chat.
+  if (!(typeof markUnlocked === 'function' && markUnlocked())) {
+    let paid = false;
+    try { await spend(MARK_COST, () => { paid = true }); } catch (e) { console.warn('Mark spend error', e); }
+    if (!paid) { busy = false; if (send) send.disabled = false; return; }
+  }
   history.push({ role: 'user', text, a: [], f: [] });
   const inp = $m('markInput'); if (inp) { inp.value = ''; inp.style.height = 'auto' }
   render(); chips([]); $m('markQuick').innerHTML = '';
