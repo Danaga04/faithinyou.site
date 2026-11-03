@@ -309,6 +309,11 @@ body.on-mark #supportFab{display:none}
 .bill .bill-row b.ok{color:#2f8f57}
 .bill-note{font-size:12.5px;color:var(--mute);margin-top:12px;line-height:1.45}
 .bill-note .lnk{color:var(--acc);font-weight:700;text-decoration:underline;padding:0;font-size:inherit}
+/* email da conta (so leitura + copiar) */
+.acct-mail{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:11px 13px;margin-top:4px}
+.acct-mail .em{flex:1;min-width:0;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acct-mail .cp{flex:none;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:7px 12px;font-weight:700;color:var(--acc);font-size:13px}
+.acct-mail .cp:active{transform:scale(.96)}
 </style>
 
 </head>
@@ -433,6 +438,9 @@ body.on-mark #supportFab{display:none}
   <h2 class="h">Your sanctuary</h2>
   <div class="stats"><div class="stat"><b id="stS">0</b><small>day streak</small></div><div class="stat"><b id="stM">0</b><small>minutes</small></div><div class="stat"><b id="stL">0</b><small>light</small></div></div>
   <div class="card" style="margin-top:14px"><label for="nIn" class="lab">Your name</label><input type="text" id="nIn" maxlength="40" placeholder="Your name"><button class="btn" id="nSave">Save name</button></div>
+  <div class="card"><h3>Your account</h3><p class="lab" style="font-weight:500;margin:4px 0 8px">This is the email your account and purchases are tied to. It can't be changed here.</p>
+   <div class="acct-mail"><span class="em" id="acctEmail" title="">—</span><button type="button" class="cp" id="acctCopy">Copy</button></div>
+  </div>
   <div class="card bill"><h3>My subscription</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Your plan, status and next payment.</p>
    <div id="billBody"></div>
    <p class="bill-note">Light Tokens can take up to 1 minute to appear after a purchase. To manage or cancel your plan, <button type="button" class="lnk" data-open-support>contact us</button>.</p>
@@ -1076,7 +1084,18 @@ function nextPaymentDate(){
  while(d.getTime()<=now&&guard<100){if(per==='year')d.setFullYear(d.getFullYear()+1);else d.setMonth(d.getMonth()+1);guard++}
  return d;
 }
+function renderAccount(){
+ const el=$('#acctEmail');if(!el)return;
+ const em=(S.email||'').trim();
+ el.textContent=em||'Not signed in';el.title=em;
+}
+if($('#acctCopy'))$('#acctCopy').onclick=async()=>{
+ const em=(S.email||'').trim();if(!em)return;
+ try{await navigator.clipboard.writeText(em);toast('Email copied')}
+ catch(e){try{const t=document.createElement('textarea');t.value=em;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();toast('Email copied')}catch(x){toast('Could not copy')}}
+};
 function renderBilling(){
+ renderAccount();
  const box=$('#billBody');if(!box)return;
  const pl=currentPlan();
  if(!pl){
