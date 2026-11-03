@@ -200,6 +200,9 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .plan .btn{width:100%;padding:13px 12px}
 .buy__offer{display:block;margin:16px auto 0}
 .buy__note{text-align:center;color:#5a6c91;font-size:12.5px;margin-top:14px}
+.buy__email{display:flex;gap:10px;align-items:flex-start;text-align:left;background:rgba(224,173,62,.16);border:1px solid rgba(224,173,62,.55);border-radius:14px;padding:11px 13px;margin:0 auto 18px;max-width:560px;color:#3b2a05;font-size:13.5px;line-height:1.45}
+.buy__email .e{font-size:19px;line-height:1.1}
+.buy__email b{word-break:break-all}
 
 /* Floating support chat */
 #supportFab{position:fixed;right:20px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:9000;width:60px;height:60px;border:0;border-radius:50%;background:linear-gradient(135deg,#ffe066,#f5c400);color:#171717;box-shadow:0 8px 28px rgba(245,196,0,.45);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .28s ease,opacity .28s ease}
@@ -413,6 +416,7 @@ body.on-mark #supportFab{display:none}
  <button type="button" class="buy__x" id="buyX" aria-label="Close">✕</button>
  <h2 id="buyT">Get more Light Tokens</h2>
  <p class="buy__msg" id="buyMsg"></p>
+ <div class="buy__email" id="buyEmail" hidden><span class="e" aria-hidden="true">📧</span><span>Important: use this same email at checkout, so your Light Tokens go to <b>your</b> account: <b id="buyEmailVal"></b></span></div>
  <div class="plans" id="plans"></div>
  <button type="button" class="ghost buy__offer" id="buyOffer" hidden>Or claim today's free +10 ✦</button>
  <p class="buy__note">Secure checkout by Digistore24. Light Tokens are added to your account after your payment is confirmed.</p>
@@ -640,6 +644,8 @@ $('#plans').innerHTML=PLANS.map(p=>`<article class="plan${p.best?' best':''}">${
 function openBuy(msg){
   const b=$('#buy');
   $('#buyMsg').textContent=msg||BUY_DEFAULT;
+  const em=(S.email||'').trim(),eb=$('#buyEmail');
+  if(eb){if(em){$('#buyEmailVal').textContent=em;eb.hidden=false}else eb.hidden=true}
   $('#buyOffer').hidden=!canOffer();
   if(!b.hidden)return;
   buyFocus=document.activeElement;buyBusy=false;
@@ -667,7 +673,15 @@ $('#plans').addEventListener('click',e=>{
   const p=PLANS.find(x=>x.id===b.dataset.plan);if(!p)return;
   buyBusy=true;purchaseStarted=true;
   $$('#plans button').forEach(x=>x.disabled=true);
-  const a=document.createElement('a');a.href=p.url;a.target='_blank';a.rel='noopener noreferrer';
+  let url=p.url;
+  try{
+    const params=new URLSearchParams();
+    if(S.email)params.set('email',S.email);
+    if(S.name)params.set('first_name',String(S.name).trim().split(' ')[0]);
+    const qs=params.toString();
+    if(qs)url+=(p.url.includes('?')?'&':'?')+qs;
+  }catch(e){url=p.url}
+  const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener noreferrer';
   document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>{buyBusy=false;$$('#plans button').forEach(x=>x.disabled=false)},2500);
 });
@@ -1129,6 +1143,7 @@ function getSupabase() {
 
             loadUser(user.id);
 
+if (user.email) S.email = user.email;
 if (user.user_metadata?.full_name) {
   S.name = user.user_metadata.full_name;
 }
