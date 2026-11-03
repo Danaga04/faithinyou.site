@@ -401,15 +401,6 @@ body.on-mark #supportFab{display:none}
 <label for="aMail">Email</label><input type="text" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
 <p class="err" id="aErr" role="alert"></p>
 <button type="submit" class="btn" id="aGo" style="width:100%">Enter</button></form>
-<div style="margin-top:22px;padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--card)">
-<p style="font-size:14px;color:var(--mute);margin-bottom:10px">Couldn't access or log in? Click below to access our app without creating an account.</p>
-<a href="https://appsell-software.com/app/sacred-chant" class="ghost" style="display:inline-block;text-decoration:none">Access the app without an account</a>
-</div>
-<div style="margin-top:18px">
-<button type="button" class="ghost" id="tutBtn" aria-expanded="false" aria-controls="tutBox">▶ Watch the access tutorial</button>
-<div id="tutBox" hidden style="margin-top:14px"></div>
-</div>
-<p class="auth-help">If you can't log in, contact us to receive your access <span class="auth-arrow" aria-hidden="true">➘</span></p>
 </div></section>
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
 <div class="buy" id="buy" hidden role="dialog" aria-modal="true" aria-labelledby="buyT"><div class="buy__box" id="buyBox" tabindex="-1">
@@ -592,6 +583,7 @@ $('#offer').onclick = async () => {
   plusFloat();
   toast('+10 light added!');
 };
+document.addEventListener('click',e=>{if(e.target.closest('[data-open-support]')){e.preventDefault();if(window.openSupportPanel)window.openSupportPanel()}});
 $('#nSave').onclick=()=>{S.name=$('#nIn').value.trim();save();render();toast('Saved')};
 $('#reset').onclick=()=>{if(confirm('Reset all progress on this device?')){S={name:S.name,light:10,min:0,days:[],last:'',lastTs:0,vow:null,unl:null};save();render()}};
 $('#cOpen').onclick=()=>{$('#cN').textContent=S.name||'Guest';$('#cS').textContent=streak();$('#cM').textContent=Math.round(S.min);$('#cD').textContent=new Date().toLocaleDateString('en',{dateStyle:'long'});$('#cert').classList.add('on')};
@@ -852,7 +844,7 @@ const FAQ=`<h2 class="h" style="font-size:20px">Good to know</h2>
 <h3>2. How long does my money-back guarantee last?</h3><p>You have 60 days to ask for a full refund. Contact our support team and we will take care of it. Contacting support is usually the fastest way to get your money back.</p>
 <h3>3. How do I start listening to the prayers?</h3><p>We suggest one guided prayer a day, ideally first thing in the morning. Follow each prayer at your own pace.</p>
 <h3>4. Is this a subscription?</h3><p>Only the Sacred Premium plan (1,000 Light Tokens) is a one-time payment and is not a subscription. The Essential and Devotional plans are monthly subscriptions, billed every month.</p>
-<p style="margin:16px 0 8px">Need help? Our support team is here for you.</p><p><a class="btn" href="${SUPPORT}" target="_blank" rel="noopener">Contact support</a></p>`;
+<p style="margin:16px 0 8px">Need help? Our support team is here for you.</p><p><button type="button" class="btn" data-open-support>Contact support</button></p>`;
 const tile=(attr,src,label,cost,lock,dim)=>`<button class="tile${dim?' dim':''}" ${attr} aria-label="${label}">${cost?'<span class="cs">'+cost+' ✦</span>':''}<img src="${src}" alt="${label}" loading="lazy" decoding="async" width="400" height="400" onload="this.parentNode.classList.add('ld')" onerror="this.parentNode.classList.add('ld')">${lock||''}</button>`;
 const prayOK=()=>!!(S.prayUnlocked||S.prayDone);
 function prayOpen(){
@@ -1276,7 +1268,7 @@ $('#aForm').onsubmit = async e => {
       if (up.error) {
         // Conta criada pelo login antigo (link magico), sem esta senha
         if (/already registered|already exists|user already/i.test(up.error.message || '')) {
-          error.textContent = 'This email was created with the old login. Tap "Access the app without an account" below, or contact us to reset it.';
+          error.textContent = 'This email was created with the old login. Please contact us through the chat button to reset it.';
         } else {
           throw up.error;
         }
@@ -1378,14 +1370,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* Tutorial de acesso: so carrega e mostra o video quando a pessoa clica */
-$('#tutBtn').onclick=()=>{
-  const box=$('#tutBox'),btn=$('#tutBtn');
-  if(!box.hidden){box.hidden=true;box.innerHTML='';btn.setAttribute('aria-expanded','false');btn.textContent='▶ Watch the access tutorial';return}
-  box.innerHTML='<vturb-smartplayer id="vid-6ae34923c3ff612f67d25923" style="display:block;margin:0 auto;width:100%;max-width:400px"><div class="vturb-player-placeholder" style="position:relative;width:100%;padding:177.77777777777777% 0 0;z-index:0;background-color:black"></div></vturb-smartplayer>';
-  box.hidden=false;btn.setAttribute('aria-expanded','true');btn.textContent='✕ Hide the tutorial';
-  const s=document.createElement('script');s.src='https://scripts.converteai.net/80d0b89d-7901-4c62-bf15-807e2dab2483/players/6ae34923c3ff612f67d25923/v4/player.js';s.async=true;document.head.appendChild(s);
-  box.scrollIntoView({behavior:'smooth',block:'start'});
-};
 setAuth('login');
 $('#auth').classList.add('on');
 
