@@ -157,8 +157,8 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 
 /* First-time onboarding: large, simple controls for easy reading */
 .onboard{position:fixed;inset:0;z-index:90;display:none;overflow:auto;padding:calc(18px + env(safe-area-inset-top,0px)) 14px calc(18px + env(safe-area-inset-bottom,0px));background:rgba(10,20,50,.78);align-items:center;justify-content:center}
-.onboard.on{display:flex}
-.ob-box{width:100%;max-width:500px;max-height:calc(100dvh - 36px);overflow:auto;background:linear-gradient(160deg,#fffdf5,#e9f2ff);color:#1c2a4a;border:2px solid #e0ad3e;border-radius:24px;padding:24px 20px;box-shadow:0 24px 70px rgba(0,0,0,.35)}
+.onboard.on{display:flex;align-items:center;justify-content:center}
+.ob-box{width:100%;max-width:500px;margin:auto;max-height:calc(100dvh - 36px);overflow:auto;background:linear-gradient(160deg,#fffdf5,#e9f2ff);color:#1c2a4a;border:2px solid #e0ad3e;border-radius:24px;padding:24px 20px;box-shadow:0 24px 70px rgba(0,0,0,.35)}
 .ob-top{text-align:center;font-size:13px;font-weight:800;letter-spacing:.04em;color:#365fae;margin-bottom:8px}
 .ob-title{font-size:26px;line-height:1.2;font-weight:800;text-align:center;margin:0 0 10px;color:#1c2a4a}
 .ob-copy{font-size:17px;line-height:1.5;text-align:center;color:#42537a;margin:0 0 18px}
@@ -287,7 +287,7 @@ body.on-mark #supportFab{display:none}
    <p class="lab"><span id="greet">Tonight</span>, <b id="uname">Guest</b></p>
    <h1>Let your angel guide your day in sound.</h1>
    <p>A few quiet minutes of chant, prayer and breath.</p>
-   <p style="margin-top:16px"><button class="btn gold" id="offer">✦ Offer your intention</button></p>
+   <p style="margin-top:16px"><button class="btn gold" id="offer">✦ Free tokens</button></p>
   </div>
   <p class="sh">Support &amp; blessings</p><p>Start here, request a prayer, or reach our team.</p>
   <div class="tiles" id="tSup"></div>
@@ -301,7 +301,7 @@ body.on-mark #supportFab{display:none}
   <div class="soon" id="ownEmpty">You have not traded tokens for products yet.<br><button type="button" class="ghost" style="margin-top:12px" id="goStore">Visit the Store</button></div>
   <p class="sh">Exclusive prayers for the faithful</p><p>Rare prayers few people ever receive. A new one opens on your day 7, 14, 30 and 60 with Sacred Chant. They cannot be unlocked with tokens, only with time.</p>
   <div class="tiles" id="tMile"></div>
-  <p class="lab" style="text-align:center;margin:18px 0 6px">Each module costs 2 ✦ to open. Offer your intention every 24 hours for +10 ✦.</p>
+  <p class="lab" style="text-align:center;margin:18px 0 6px">Each module costs 2 ✦ to open. Tap Free tokens every 24 hours for +10 ✦.</p>
   <div class="card" style="text-align:center">
    <p class="lab">Chant of the day</p><p class="m" id="dM"></p><p class="lab" id="dX" style="font-weight:500"></p>
    <p style="margin-top:12px"><button class="btn" id="dPlay">▶ Chant with me</button></p>
@@ -368,7 +368,7 @@ body.on-mark #supportFab{display:none}
   <div class="stats"><div class="stat"><b id="stS">0</b><small>day streak</small></div><div class="stat"><b id="stM">0</b><small>minutes</small></div><div class="stat"><b id="stL">0</b><small>light</small></div></div>
   <div class="card" style="margin-top:14px"><label for="nIn" class="lab">Your name</label><input type="text" id="nIn" maxlength="40" placeholder="Your name"><button class="btn" id="nSave">Save name</button></div>
   <div class="card"><h3>Certificate of practice</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">A keepsake with your name and your days of practice. Print it or save it as a PDF.</p><button class="ghost" id="cOpen">View certificate</button></div>
-  <div class="card"><h3>Reminders</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Get a notification when your next +10 ✦ is ready, 24 hours after you offer your intention.</p><button class="ghost" id="nBtn">Enable notifications</button><p class="lab" id="nSt"></p></div>
+  <div class="card"><h3>Reminders</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Get a notification when your next +10 ✦ is ready, 24 hours after you claim your Free tokens.</p><button class="ghost" id="nBtn">Enable notifications</button><p class="lab" id="nSt"></p></div>
   <div class="card"><h3>🕊️ Daily verse on your lock screen</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Receive one Bible verse or short prayer every day, as a notification right on your phone's lock screen.</p><button class="ghost" id="dvBtn">Send me a daily verse</button><p class="lab" id="dvSt"></p></div>
   <button class="ghost" id="reset">Reset my progress</button> <button class="ghost" id="sOut">Sign out</button>
  </section>
@@ -506,6 +506,29 @@ function plusFloat(){
  e.style.cssText='position:fixed;z-index:70;pointer-events:none;font-weight:800;font-size:18px;color:#e0ad3e;text-shadow:0 2px 8px rgba(0,0,0,.25);left:'+(r.left+r.width/2-22)+'px;top:'+(r.bottom+4)+'px';
  document.body.appendChild(e);e.animate([{transform:'translateY(0)',opacity:0},{opacity:1,offset:.2},{transform:'translateY(-16px)',opacity:0}],{duration:1500}).onfinish=()=>e.remove();
 }
+/* brilhozinho que vai do anjo ate o contador de tokens; so conta quando chega */
+function sparkleToTokens(){
+ const ang=$('.angel'),pill=$('#lightBtn');if(!ang||!pill)return Promise.resolve();
+ const a=ang.getBoundingClientRect(),t=pill.getBoundingClientRect();
+ const sx=a.left+a.width/2,sy=a.top+a.height*0.2;
+ const c=document.createElement('div');
+ c.innerHTML='<svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2l2.6 9.4L27 14l-9.4 2.6L15 26l-2.6-9.4L3 14l9.4-2.6z" fill="#fff7d6"/></svg>';
+ c.style.cssText='position:fixed;z-index:71;width:30px;height:30px;line-height:0;pointer-events:none;filter:drop-shadow(0 0 8px rgba(255,214,110,1)) drop-shadow(0 0 16px rgba(255,236,170,.85));left:'+(sx-15)+'px;top:'+(sy-15)+'px';
+ document.body.appendChild(c);
+ const dx=(t.left+t.width/2)-sx,dy=(t.top+t.height/2)-sy;
+ const an=c.animate([
+  {transform:'translate(0,0) scale(.4) rotate(0deg)',opacity:0},
+  {opacity:1,offset:.15},
+  {transform:'translate('+(dx*0.5)+'px,'+(dy*0.5-24)+'px) scale(1.15) rotate(90deg)',offset:.55},
+  {transform:'translate('+dx+'px,'+dy+'px) scale(.8) rotate(180deg)',opacity:1,offset:.92},
+  {transform:'translate('+dx+'px,'+dy+'px) scale(.3) rotate(200deg)',opacity:0}
+ ],{duration:1200,easing:'ease-in-out'});
+ const tr=setInterval(()=>{const r=c.getBoundingClientRect(),s=document.createElement('i');
+  s.style.cssText='position:fixed;z-index:70;pointer-events:none;width:6px;height:6px;border-radius:50%;background:#ffe9a8;box-shadow:0 0 7px #f7c75a;left:'+(r.left+r.width/2-3)+'px;top:'+(r.top+r.height/2-3)+'px';
+  document.body.appendChild(s);s.animate([{opacity:.9,transform:'scale(1)'},{opacity:0,transform:'scale(.2)'}],{duration:600}).onfinish=()=>s.remove()},90);
+ return new Promise(res=>{an.onfinish=()=>{clearInterval(tr);c.remove();
+  pill.animate([{transform:'scale(1)'},{transform:'scale(1.18)',offset:.4},{transform:'scale(1)'}],{duration:500,easing:'ease-out'});res()}});
+}
 $('#offer').onclick = async () => {
   const button = $('#offer');
   if (offerBusy || button.disabled || !canOffer()) return;
@@ -521,30 +544,12 @@ $('#offer').onclick = async () => {
     return Number(data);
   })();
   rpc.catch(() => {});
+
+  // Fase 1: a aureola voa do botao ate o anjo
   if (!reduced) flyHalo();
-  await new Promise(r => setTimeout(r, 1400));
   try {
-    const balance = await rpc;
-    // Read the canonical wallet after claiming: RPC data may be only the +10 reward.
-    S.last = today();
-    S.lastTs = Date.now();
-    S.srvBlock = '';
-    if (!S.days.includes(today())) S.days.push(today());
-    save();
-    const stage = $('#angelStage');
-    if (stage) {
-      stage.classList.remove('reward-glow');
-      void stage.offsetWidth;
-      stage.classList.add('reward-glow');
-      setTimeout(() => stage.classList.remove('reward-glow'), 4200);
-    }
-    flap();
-    offerBusy = false;
-    render();
-    await syncLightBalance();
-    scheduleNotif();
-    plusFloat();
-    toast('+10 light added!');
+    await new Promise(r => setTimeout(r, reduced ? 150 : 1450));
+    await rpc; // garante que o servidor concedeu antes de seguir
   } catch (err) {
     console.error('Daily reward error:', err);
     stopOffer();
@@ -552,12 +557,40 @@ $('#offer').onclick = async () => {
     button.disabled = false;
     tickOffer();
     if (err.message?.includes('daily_reward_already_claimed')) {
-      S.srvBlock=today();save();tickOffer();
+      S.srvBlock = today(); save(); tickOffer();
       toast('Daily reward already claimed');
     } else {
       toast('Could not add light. Please try again.');
     }
+    return;
   }
+
+  // Fase 2: o anjo faz TODA a sua animacao (brilho + bater de asas)
+  const stage = $('#angelStage');
+  if (stage && !reduced) {
+    stage.classList.remove('reward-glow');
+    void stage.offsetWidth;
+    stage.classList.add('reward-glow');
+    setTimeout(() => stage.classList.remove('reward-glow'), 4200);
+  }
+  flap();
+  await new Promise(r => setTimeout(r, reduced ? 150 : 2800));
+
+  // Fase 3: um brilhozinho vai do anjo ate o contador de tokens
+  if (!reduced) { await sparkleToTokens(); }
+
+  // Fase 4: so AGORA, quando o brilho chega nos tokens, o token diario e contabilizado
+  S.last = today();
+  S.lastTs = Date.now();
+  S.srvBlock = '';
+  if (!S.days.includes(today())) S.days.push(today());
+  save();
+  offerBusy = false;
+  render();
+  await syncLightBalance();
+  scheduleNotif();
+  plusFloat();
+  toast('+10 light added!');
 };
 $('#nSave').onclick=()=>{S.name=$('#nIn').value.trim();save();render();toast('Saved')};
 $('#reset').onclick=()=>{if(confirm('Reset all progress on this device?')){S={name:S.name,light:10,min:0,days:[],last:'',lastTs:0,vow:null,unl:null};save();render()}};
@@ -738,7 +771,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#im').classList.
 /* 24h: a oferta volta 24 horas depois da ultima */
 const DAY=864e5,pad=n=>String(n).padStart(2,'0');
 const canOffer=()=>S.srvBlock!==today()&&Date.now()-(S.lastTs||0)>=DAY;
-function tickOffer(){const b=$('#offer');if(offerBusy)return;if(canOffer()){b.disabled=false;b.removeAttribute('aria-disabled');b.dataset.w='';b.classList.add('reward-ready');b.textContent='✦ Offer your intention'}else{b.classList.remove('reward-ready');const r=Math.max(0,DAY-(Date.now()-(S.lastTs||0))),h=Math.floor(r/36e5),m=Math.floor(r%36e5/6e4),s=Math.floor(r%6e4/1e3);b.disabled=true;b.setAttribute('aria-disabled','true');b.dataset.w=1;b.textContent=r>0?'Next offer in '+pad(h)+':'+pad(m)+':'+pad(s):'Already claimed. Come back tomorrow'}}
+function tickOffer(){const b=$('#offer');if(offerBusy)return;if(canOffer()){b.disabled=false;b.removeAttribute('aria-disabled');b.dataset.w='';b.classList.add('reward-ready');b.textContent='✦ Free tokens'}else{b.classList.remove('reward-ready');const r=Math.max(0,DAY-(Date.now()-(S.lastTs||0))),h=Math.floor(r/36e5),m=Math.floor(r%36e5/6e4),s=Math.floor(r%6e4/1e3);b.disabled=true;b.setAttribute('aria-disabled','true');b.dataset.w=1;b.textContent=r>0?'Next offer in '+pad(h)+':'+pad(m)+':'+pad(s):'Already claimed. Come back tomorrow'}}
 setInterval(tickOffer,1000);
 /* notificacoes */
 function notifyReady(){try{if(Notification.permission!=='granted')return;const o={body:'Your light is ready. Come back and claim +10 ✦.',icon:'icon-192.png'};if(navigator.serviceWorker&&navigator.serviceWorker.controller)navigator.serviceWorker.ready.then(r=>r.showNotification('Sacred Chant',o));else new Notification('Sacred Chant',o)}catch(e){}}
@@ -1046,8 +1079,7 @@ function obFinishAndStart(){
  $('#onboard').classList.remove('on');
  document.body.classList.remove('nos');
  if(sbClient){sbClient.auth.updateUser({data:{sacredchant_onboarding_seen:true}}).catch(e=>console.warn('Could not sync onboarding status:',e?.message||e));}
- solPage();
- showVid(DAYS[0][1],'Day 1 · 7 Prayers of Solomon','<p class="intro">Your first prayer is ready. Listen at your own pace, and return for one prayer each day.</p>','','sol');
+ showVid(VID.start,'Start here','',FAQ,'home');
 }
 
 /* login conectado ao Supabase */
@@ -1455,16 +1487,16 @@ setInterval(tickOffer, 1000);
    r: [() => "Sacred Chant is your pocket sanctuary: guided prayers, sacred chants and quiet practices for faith, peace and provision. On Home you'll find Support & blessings (Start here, \"I want to pray for you\", Support), My products (like the 7 Prayers of Solomon and the 7 Prayers of Jesus, which I guide), Exclusive bonuses, the things you trade for tokens, and rare prayers that open with time. The Chants tab has sacred mantras and relaxing sounds, the Store has special programs for 50 ✦, and Profile keeps your streak and certificate. Where would you like to begin?"],
    a: ['start', 'jesus', 'store'], f: ['How do Light Tokens work?', 'Where should I start?', 'What is free?'] },
   { id: 'where_start', k: ['where do i start', 'where to start', 'how do i start', 'how to begin', 'i am new', 'first time', 'just joined', 'just bought', 'getting started', 'start here', 'beginner', 'what first', 'what should i do first', 'i am lost', 'guide me through'],
-   r: [() => "Welcome, I'm really glad you're here. Here's the simplest path: 1) Tap \"Offer your intention\" on Home to receive your free +10 ✦. 2) Open \"Start here\" for a short welcome video and the basics. 3) Begin the 7 Prayers of Solomon or the 7 Prayers of Jesus, one prayer a day, ideally in the morning with headphones. That's it. Small and steady beats long and rare."],
+   r: [() => "Welcome, I'm really glad you're here. Here's the simplest path: 1) Tap \"Free tokens\" on Home to receive your free +10 ✦. 2) Open \"Start here\" for a short welcome video and the basics. 3) Begin the 7 Prayers of Solomon or the 7 Prayers of Jesus, one prayer a day, ideally in the morning with headphones. That's it. Small and steady beats long and rare."],
    a: ['offer', 'start', 'jesus'], f: ['How do Light Tokens work?', 'What is free in the app?'] },
   { id: 'free', k: ['what is free', 'free content', 'without tokens', 'for free', 'no tokens', 'do not cost', 'free stuff', 'free prayers', 'free to use', 'what can i use free'],
    r: [() => "Plenty is free: the Support popup, the 7 Prayers of Jesus (days 1 and 2 from the start), the bonuses How to install the app, 15 Words Prayer, Prayer of Saint Benedict and The Book of Hidden Light, plus Sacred Chant, Song of God, The Journey with My Angel and Family Protect in My products. And every 24 hours you get +10 ✦ free by offering your intention."],
    a: ['jesus', 'words15', 'benedict'], f: ['How do I get free tokens?', 'What costs tokens?'] },
   { id: 'tokens', k: ['light token', 'token', 'tokens', 'what are tokens', 'how do tokens work', 'what is light', 'my balance', 'how many tokens', 'how much light', 'what are the stars', 'star symbol', 'currency'],
-   r: [() => "Light Tokens (✦) are the light you use inside Sacred Chant. Right now you have " + G.light() + " ✦. You earn +10 ✦ free every 24 hours with \"Offer your intention\" on Home, or you can add more with a plan. They open things like Start here and the 7 Prayers of Solomon (2 ✦ a day), a chant session (3 ✦), \"I want to pray for you\" (10 ✦ once), the Carlos Acutis and Archangel Raphael prayers (10 ✦, yours forever) and Store programs (50 ✦, yours forever)."],
+   r: [() => "Light Tokens (✦) are the light you use inside Sacred Chant. Right now you have " + G.light() + " ✦. You earn +10 ✦ free every 24 hours with \"Free tokens\" on Home, or you can add more with a plan. They open things like Start here and the 7 Prayers of Solomon (2 ✦ a day), a chant session (3 ✦), \"I want to pray for you\" (10 ✦ once), the Carlos Acutis and Archangel Raphael prayers (10 ✦, yours forever) and Store programs (50 ✦, yours forever)."],
    a: ['offer', 'buy'], f: ['How do I get free tokens?', 'What costs tokens?', 'My tokens did not arrive'] },
-  { id: 'free_tokens', k: ['free tokens', 'free light', 'earn tokens', 'get tokens', 'get more tokens', 'more light', 'daily light', 'daily reward', 'offer your intention', 'offer my intention', 'intention button', 'claim', 'plus 10', '+10', 'daily bonus', 'every day tokens'],
-   r: [() => G.canOffer() ? "Your daily light is ready right now! Go to Home and tap \"Offer your intention\". Take one breath, hold your intention in your heart, and +10 ✦ are added. You can do it once every 24 hours." : "You already offered your intention. Your next free +10 ✦ will be ready in about " + fmtLeft(G.offerLeft()) + ". The button on Home shows the countdown, and in Profile you can turn on a reminder so you don't miss it."],
+  { id: 'free_tokens', k: ['free tokens', 'free light', 'earn tokens', 'get tokens', 'get more tokens', 'more light', 'daily light', 'daily reward', 'free tokens', 'free token', 'offer your intention', 'offer my intention', 'intention button', 'claim', 'plus 10', '+10', 'daily bonus', 'every day tokens'],
+   r: [() => G.canOffer() ? "Your daily light is ready right now! Go to Home and tap \"Free tokens\". Take one breath, hold your intention in your heart, and +10 ✦ are added. You can do it once every 24 hours." : "You already offered your intention. Your next free +10 ✦ will be ready in about " + fmtLeft(G.offerLeft()) + ". The button on Home shows the countdown, and in Profile you can turn on a reminder so you don't miss it."],
    a: ['offer', 'profile'], f: ['What can I do with tokens?', 'How do I buy more tokens?'] },
   { id: 'costs', k: ['what costs', 'how much does it cost', 'how much is', 'price of', 'cost tokens', 'spend tokens', 'why did i lose tokens', 'tokens disappeared', 'tokens went down', 'charged tokens', 'took my tokens', 'used my tokens'],
    r: [() => "Here's what uses Light Tokens: Start here and the 7 Prayers of Solomon cost 2 ✦ to open (once per day), the Chants tab 2 ✦, each chant session 3 ✦, opening a resting Solomon day early 10 ✦, a locked day of the 7 Prayers of Jesus 20 ✦, \"I want to pray for you\" 10 ✦ once, Carlos Acutis and Archangel Raphael 10 ✦ each (forever), each Store program 50 ✦ (forever), and talking with me 3 ✦ per message. Talking with me costs 3 ✦ per message."],
@@ -1624,7 +1656,7 @@ setInterval(tickOffer, 1000);
    r: ["\"I will both lay me down in peace, and sleep: for thou, Lord, only makest me dwell in safety\" (Psalm 4:8). Tonight: put the phone away 20 minutes early, play a soft nature sound or Deep Relaxation, breathe in 4 and out 6, thank God for 3 moments of the day and hand Him tomorrow's worries."],
    a: ['chants'], f: ['Write a night prayer'] },
   { id: 'morning', cat: 'n', topic: 'morning', k: ['morning', 'start my day', 'wake up', 'before work', 'morning routine'],
-   r: ["\"His compassions fail not. They are new every morning\" (Lamentations 3:22-23). A 3-minute morning practice: sit with your feet on the floor, breathe slowly, offer your day to God, name one intention (patience, gratitude, courage), then listen to one chant or one prayer from your program. Don't forget to offer your intention for your +10 ✦!"],
+   r: ["\"His compassions fail not. They are new every morning\" (Lamentations 3:22-23). A 3-minute morning practice: sit with your feet on the floor, breathe slowly, offer your day to God, name one intention (patience, gratitude, courage), then listen to one chant or one prayer from your program. Don't forget to tap Free tokens for your +10 ✦!"],
    a: ['offer', 'jesus'], f: ['Write a morning prayer'] },
   { id: 'meditate', cat: 'n', topic: 'peace', k: ['meditate', 'meditation', 'breathing', 'breathe', 'breath', 'mindfulness', 'focus', 'concentrate', 'quiet my mind', 'binaural', 'theta', 'frequency', 'frequencies', 'solfeggio', 'hz'],
    r: ["Christian meditation is simply resting your mind in God: \"Be still, and know that I am God\" (Psalm 46:10). Sit comfortably, breathe in for 4 and out for 6, and repeat one short phrase with your breath, like \"Jesus, I trust in You\". When your mind wanders, gently come back. Use headphones with our chants; Prosperity Code in the Store also includes a 30-minute theta-wave guided meditation."],
