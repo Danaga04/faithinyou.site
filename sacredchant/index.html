@@ -922,7 +922,20 @@ if($('#installBtn'))$('#installBtn').onclick=async()=>{
  const steps=$('#iosSteps');if(steps){steps.style.display='';steps.scrollIntoView({behavior:'smooth',block:'center'});steps.animate&&steps.animate([{opacity:.4},{opacity:1}],{duration:600})}
 };
 updateInstall();
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+/* Service worker: mantem o app sempre atualizado (busca a versao nova e recarrega sozinho) */
+if('serviceWorker' in navigator){
+ let reloaded=false;
+ navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloaded)return;reloaded=true;location.reload()});
+ navigator.serviceWorker.register('sw.js').then(reg=>{
+  reg.update();
+  setInterval(()=>reg.update().catch(()=>{}),60*60*1000); // confere a cada 1h
+  reg.addEventListener('updatefound',()=>{const nw=reg.installing;if(!nw)return;nw.addEventListener('statechange',()=>{
+   if(nw.state==='installed'&&navigator.serviceWorker.controller){try{nw.postMessage({type:'SKIP_WAITING'})}catch(e){}}
+  })});
+ }).catch(()=>{});
+ // tambem confere quando o app volta ao primeiro plano
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)navigator.serviceWorker.getRegistration().then(r=>r&&r.update()).catch(()=>{})});
+}
 /* ===== modulos oficiais ===== */
 const ACC='80d0b89d-7901-4c62-bf15-807e2dab2483',P='https://i.postimg.cc/';
 const IMG={start:P+'QdxDS1Tz/bubblec7gbichscy.avif',pray:P+'wTwZqPtH/bubbleh6zrnusxx1k.avif',support:P+'ncKqbjLt/bubbleyp6b74txkh.avif',solomon:P+'d1mJtYZm/bubble9c284nsyya7.avif'};
