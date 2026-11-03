@@ -375,14 +375,12 @@ body.on-mark #supportFab{display:none}
    <p class="lab" id="candN" style="margin-top:8px"></p>
   </div>
   <div class="card ios" id="iosCard">
-   <h3>📲 Add Sacred Chant to your iPhone home screen</h3>
-   <p class="lab" style="font-weight:500">Open this page in Safari, then follow these steps:</p>
-   <ol>
-    <li><span>Tap the <b>three dots ( ••• )</b> at the bottom of the screen.</span></li>
-    <li><span>Tap <b>Share</b>.</span></li>
-    <li><span>Tap <b>View more</b>.</span></li>
-    <li><span>Tap <b>Add to Home Screen</b>.</span></li>
-    <li><span>Turn <b>off</b> the option <span class="warn">Open as Web App</span>.</span></li>
+   <h3>📲 Add Sacred Chant to your home screen</h3>
+   <p style="margin:6px 0 10px"><button type="button" class="btn gold" id="installBtn">📲 Add to home screen</button></p>
+   <p class="lab" id="iosHint" style="font-weight:500">Open this page in Safari, then follow these steps:</p>
+   <ol id="iosSteps">
+    <li><span>Tap the <b>Share</b> button (the square with an arrow ↑) at the bottom of the screen.</span></li>
+    <li><span>Scroll down and tap <b>Add to Home Screen</b>.</span></li>
     <li><span>Tap <b>Add</b> (top right). Done!</span></li>
    </ol>
    <p class="nt">The app icon will appear on your home screen, one tap away.</p>
@@ -924,8 +922,35 @@ $('#dvBtn').onclick=async()=>{const b=$('#dvBtn'),st=$('#dvSt');b.disabled=true;
  dvUpd();
 };
 /* instalar */
-let dip=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e});
-if(matchMedia('(display-mode: standalone)').matches||navigator.standalone){const c=$('#iosCard');if(c)c.style.display='none'}
+let dip=null;
+const isiOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const isStandalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+function updateInstall(){
+ const card=$('#iosCard'),btn=$('#installBtn'),steps=$('#iosSteps'),hint=$('#iosHint');
+ if(!card)return;
+ if(isStandalone()){card.style.display='none';return}
+ card.style.display='';
+ if(dip){ // Android / Chrome / Edge: instala com 1 toque
+  if(btn){btn.style.display='';btn.textContent='📲 Add to home screen'}
+  if(steps)steps.style.display='none';
+  if(hint)hint.textContent='One tap and the app icon appears on your phone.';
+ }else if(isiOS){ // iPhone/iPad: Apple so permite manualmente
+  if(btn){btn.style.display='';btn.textContent='📲 How to add on my iPhone'}
+  if(steps)steps.style.display='';
+  if(hint)hint.textContent='On iPhone, open this page in Safari, then:';
+ }else{ // outros navegadores
+  if(btn)btn.style.display='none';
+  if(steps)steps.style.display='';
+  if(hint)hint.textContent='Open your browser menu and choose “Install app” or “Add to Home screen”.';
+ }
+}
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e;updateInstall()});
+addEventListener('appinstalled',()=>{dip=null;const c=$('#iosCard');if(c)c.style.display='none';toast('Added to your home screen 🙏')});
+if($('#installBtn'))$('#installBtn').onclick=async()=>{
+ if(dip){try{dip.prompt();const r=await dip.userChoice;if(r&&r.outcome==='accepted')toast('Installing… 🙏');}catch(e){}dip=null;updateInstall();return}
+ const steps=$('#iosSteps');if(steps){steps.style.display='';steps.scrollIntoView({behavior:'smooth',block:'center'});steps.animate&&steps.animate([{opacity:.4},{opacity:1}],{duration:600})}
+};
+updateInstall();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 /* ===== modulos oficiais ===== */
 const ACC='80d0b89d-7901-4c62-bf15-807e2dab2483',P='https://i.postimg.cc/';
