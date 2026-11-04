@@ -317,6 +317,20 @@ body.on-mark #supportFab{display:none}
 /* rodape "Need help?" em todas as paginas */
 .help-foot{text-align:center;color:var(--mute);font-size:14px;margin:26px 0 8px;padding:14px 0 2px;border-top:1px solid var(--line)}
 .help-foot .lnk{color:var(--acc);font-weight:800;text-decoration:underline;padding:0;font-size:inherit}
+/* ===== aba Today (Daily) ===== */
+.today-head{margin:2px 0 10px}
+.td-streak{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(247,220,146,.20),rgba(122,166,245,.12));border:1px solid var(--line);border-radius:18px;padding:12px 15px;margin-bottom:14px}
+.td-streak .f{font-size:28px;line-height:1;filter:drop-shadow(0 0 8px rgba(255,160,60,.5))}
+.td-streak b{font-size:20px;color:var(--acc);line-height:1.1}
+.td-streak small{display:block;color:var(--mute);font-size:12.5px}
+.td-progress{display:flex;gap:9px;align-items:center;margin:4px 0 16px}
+.td-progress .dot{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:13px;color:var(--mute);font-weight:800}
+.td-progress .dot.on{background:linear-gradient(135deg,var(--gold2),var(--gold));border-color:transparent;color:#3b2a05}
+.td-progress span{font-size:13px;color:var(--mute);font-weight:700}
+.td-verse .td-versetext{font-size:19px;line-height:1.6;color:var(--ink);margin:6px 0}
+.td-prayertext{color:var(--mute);font-size:15px;line-height:1.6}
+.td-reflecttext{font-size:16px;line-height:1.6;color:var(--ink);font-style:italic}
+.td-done{font-size:12.5px;font-weight:800;color:#2f8f57;margin-left:6px}
 </style>
 
 </head>
@@ -327,7 +341,18 @@ body.on-mark #supportFab{display:none}
   <button type="button" class="pill" id="lightBtn" aria-haspopup="dialog" title="Get more Light Tokens"><span class="sr">Light Tokens:</span><span aria-hidden="true">✦</span><span id="lightN">0</span><span class="pl" aria-hidden="true">+</span></button>
  </div>
 
- <section class="screen on" id="s-home">
+ <section class="screen on" id="s-today">
+  <div class="today-head"><p class="lab" id="tdGreet">Today</p><h2 class="h" id="tdDate" style="margin:2px 0 0">Today</h2></div>
+  <div class="td-streak" id="tdStreakBox"><span class="f" aria-hidden="true">🔥</span><div style="flex:1"><b id="tdStreakN">0</b><small id="tdStreakSub">days in a row</small></div></div>
+  <p class="sh">Your daily moment</p><p>Three small steps. A few quiet minutes is enough.</p>
+  <div class="td-progress" id="tdProgress"></div>
+  <div class="card td-verse"><p class="lab">Verse of the day</p><p class="td-versetext" id="tdVerse">—</p><p class="lab" id="tdVerseRef" style="font-weight:600;margin-top:2px"></p><p style="margin-top:10px"><button class="ghost" id="tdVerseMark">Mark as read</button><span class="td-done" id="tdVerseDone" hidden>✓ Read</span></p></div>
+  <div class="card"><p class="lab">Today's prayer</p><h3 id="tdPrayerT" style="margin:2px 0 6px">—</h3><p class="td-prayertext" id="tdPrayer"></p><p style="margin-top:10px"><button class="btn gold" id="tdPrayBtn">🙏 Pray with me</button><span class="td-done" id="tdPrayDone" hidden>✓ Done</span></p></div>
+  <div class="card"><p class="lab">Today's meditation</p><h3 id="tdMedT" style="margin:2px 0 4px">—</h3><p class="lab" id="tdMedX" style="font-weight:500"></p><p style="margin-top:10px"><button class="btn" id="tdMedBtn">▶ Begin · breathe with me</button><span class="td-done" id="tdMedDone" hidden>✓ Done</span></p></div>
+  <div class="card td-reflect"><p class="lab">A thought for today</p><p id="tdReflect" class="td-reflecttext"></p></div>
+  <div class="card" style="text-align:center"><p class="lab" id="tdTokenHint" style="margin-bottom:8px">Your daily light</p><button class="btn gold" id="tdTokens">✦ Claim your Free tokens</button></div>
+ </section>
+ <section class="screen" id="s-home">
   <div class="hero">
    <div class="angel-stage" id="angelStage" aria-label="Animated guardian angel with glowing halo">
    <svg class="angel" viewBox="0 0 230 190" aria-hidden="true">
@@ -457,7 +482,8 @@ body.on-mark #supportFab{display:none}
 </div>
 
 <nav class="tabbar" aria-label="Main"><div>
- <button class="tab on" data-t="home"><svg viewBox="0 0 24 24"><path d="M12 3l1.2 7.8L21 12l-7.8 1.2L12 21l-1.2-7.8L3 12l7.8-1.2z"/></svg>Home</button>
+ <button class="tab on" data-t="today"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Today</button>
+ <button class="tab" data-t="home"><svg viewBox="0 0 24 24"><path d="M12 3l1.2 7.8L21 12l-7.8 1.2L12 21l-1.2-7.8L3 12l7.8-1.2z"/></svg>Home</button>
  <button class="tab" data-t="chants"><svg viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg>Chants</button>
  <button class="tab" data-t="store"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 11.2a1.5 1.5 0 01-1.5 1.3H7.7a1.5 1.5 0 01-1.5-1.3z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg>Store</button>
  <button class="tab" data-t="me"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20.5c0-4.5 3.1-7 7.5-7s7.5 2.5 7.5 7"/></svg>Profile</button>
@@ -529,7 +555,7 @@ function streak(){let n=0,d=new Date();if(!S.days.includes(ymd(d)))d.setDate(d.g
 function row(c){return `<button class="item" data-id="${c.id}"><span class="ic" style="--g:${c.g}">${c.e}</span><span><b>${c.n}</b><span>${c.tag}</span></span><span style="margin-left:auto;color:var(--acc);font-size:22px">▶</span></button>`}
 $('#lM').innerHTML=CH.filter(c=>c.k=='m').map(row).join('');$('#lD').innerHTML=CH.filter(c=>c.k=='d').map(row).join('');$('#lN').innerHTML=CH.filter(c=>c.k=='n').map(row).join('');
 $$('.item').forEach(b=>b.onclick=()=>play(CH.find(c=>c.id===b.dataset.id)));
-function go(t){if(t!=='vid')$('#vBox').innerHTML='';if(t!=='web'&&$('#wBox'))$('#wBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='me'){if(typeof renderBilling==='function')renderBilling();if(typeof renderGrowth==='function')renderGrowth()}scrollTo(0,0)}
+function go(t){if(t!=='vid')$('#vBox').innerHTML='';if(t!=='web'&&$('#wBox'))$('#wBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='me'){if(typeof renderBilling==='function')renderBilling();if(typeof renderGrowth==='function')renderGrowth()}if(t==='today'&&typeof renderToday==='function')renderToday();scrollTo(0,0)}
 $$('.tab').forEach(b=>b.onclick=()=>access(b.dataset.t));
 function render(){
  const h=new Date().getHours();$('#greet').textContent=h<12?'This morning':h<18?'This afternoon':'Tonight';
@@ -539,6 +565,7 @@ function render(){
  const ms=CH.filter(c=>c.k=='m');window.DC=ms[Math.floor(Date.now()/864e5)%ms.length];$('#dM').textContent=DC.m;$('#dX').textContent=DC.x;
  renderGrowth();
  if(typeof renderBilling==='function')renderBilling();
+ if(typeof renderToday==='function')renderToday();
 }
 $('#dPlay').onclick=()=>play(DC);
 /* ===== recorrencia: streak + marcos, oracao da semana, versiculo, vela ===== */
@@ -884,6 +911,95 @@ $$('#imLen button').forEach(b=>b.onclick=()=>{limit=+b.dataset.m*60;$$('#imLen b
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#im').classList.contains('on')&&$('#buy').hidden)close(0)});
 /* 24h: a oferta volta 24 horas depois da ultima */
 const DAY=864e5,pad=n=>String(n).padStart(2,'0');
+/* ===== aba Today (conteudo diario) ===== */
+const TD_VERSES=[
+ {t:'“The Lord is my shepherd; I shall not want.”',r:'Psalm 23:1'},
+ {t:'“Be still, and know that I am God.”',r:'Psalm 46:10'},
+ {t:'“Cast all your anxiety on him, because he cares for you.”',r:'1 Peter 5:7'},
+ {t:'“I can do all things through Christ which strengtheneth me.”',r:'Philippians 4:13'},
+ {t:'“The Lord bless thee, and keep thee.”',r:'Numbers 6:24'},
+ {t:'“My God shall supply all your need according to his riches in glory.”',r:'Philippians 4:19'},
+ {t:'“Trust in the Lord with all thine heart.”',r:'Proverbs 3:5'},
+ {t:'“Fear thou not; for I am with thee.”',r:'Isaiah 41:10'},
+ {t:'“Come unto me, all ye that labour, and I will give you rest.”',r:'Matthew 11:28'},
+ {t:'“The Lord is my light and my salvation; whom shall I fear?”',r:'Psalm 27:1'},
+ {t:'“His compassions fail not. They are new every morning.”',r:'Lamentations 3:22-23'},
+ {t:'“Weeping may endure for a night, but joy cometh in the morning.”',r:'Psalm 30:5'},
+ {t:'“And we know that all things work together for good to them that love God.”',r:'Romans 8:28'},
+ {t:'“He shall cover thee with his feathers, and under his wings shalt thou trust.”',r:'Psalm 91:4'},
+ {t:'“Delight thyself also in the Lord; and he shall give thee the desires of thine heart.”',r:'Psalm 37:4'},
+ {t:'“The joy of the Lord is your strength.”',r:'Nehemiah 8:10'},
+ {t:'“Seek ye first the kingdom of God… and all these things shall be added unto you.”',r:'Matthew 6:33'},
+ {t:'“Peace I leave with you, my peace I give unto you.”',r:'John 14:27'},
+ {t:'“I will never leave thee, nor forsake thee.”',r:'Hebrews 13:5'},
+ {t:'“Commit thy works unto the Lord, and thy thoughts shall be established.”',r:'Proverbs 16:3'},
+ {t:'“With God all things are possible.”',r:'Matthew 19:26'},
+ {t:'“Be strong and of a good courage… for the Lord thy God is with thee.”',r:'Joshua 1:9'},
+ {t:'“This is the day which the Lord hath made; we will rejoice and be glad in it.”',r:'Psalm 118:24'},
+ {t:'“For I know the thoughts that I think toward you… thoughts of peace.”',r:'Jeremiah 29:11'},
+ {t:'“In every thing give thanks.”',r:'1 Thessalonians 5:18'},
+ {t:'“He healeth the broken in heart, and bindeth up their wounds.”',r:'Psalm 147:3'},
+ {t:'“Let not your heart be troubled: ye believe in God, believe also in me.”',r:'John 14:1'},
+ {t:'“The Lord will give strength unto his people; the Lord will bless his people with peace.”',r:'Psalm 29:11'}
+];
+const TD_PRAYERS=[
+ {t:'A prayer to begin',b:"Heavenly Father, thank You for this new day. Guide my steps, guard my heart, and let me be a blessing to someone today. Give me peace in what I cannot control and courage for what I can. In Jesus' name, Amen."},
+ {t:'A prayer for peace',b:"Lord, quiet my mind and still my worries. Let Your peace, which passes all understanding, guard my heart today. I place what weighs on me into Your hands. Amen."},
+ {t:'A prayer for provision',b:"Father, You are my Provider. Open doors in Your time, give me wisdom to work well, and a grateful heart for what I already have. Supply all my needs according to Your riches. Amen."},
+ {t:'A prayer for strength',b:"Lord, when I feel weak, be my strength. Renew me like the eagle, lift my head, and help me take the next small step with faith. I can do all things through You. Amen."},
+ {t:'A prayer for my family',b:"Father, watch over each person I love by name. Protect them, bring peace into our home, and draw every heart closer to You. As for me and my house, we will serve the Lord. Amen."},
+ {t:'A prayer of gratitude',b:"Thank You, Lord, for the gift of today, for breath, for the people in my life, and for Your mercy that is new every morning. May I never stop noticing Your goodness. Amen."},
+ {t:'A prayer for guidance',b:"Lord, I need Your wisdom. Make the right path clear, close the wrong doors, and give me peace in what pleases You. I trust You with all my heart. Amen."},
+ {t:'A prayer for healing',b:"God who heals, touch what is hurting in my body and my soul. Give comfort, strength, and rest, and guide the hands of those who care for me. I trust You. Amen."},
+ {t:'A prayer of surrender',b:"Father, I give You this day exactly as it is — my hopes, my fears, my plans. Have Your way in me. Not my will, but Yours be done. Amen."},
+ {t:'A prayer for hope',b:"Lord, when the road feels long, remind me that You hold my future. Fill me with hope that does not disappoint, and let me rest in Your promises today. Amen."},
+ {t:'A prayer of protection',b:"Father, cover me and those I love under the shadow of Your wings. Keep us from all evil, and send Your angels to guard us in all our ways. Amen."},
+ {t:'A prayer to forgive',b:"Lord, wash my heart clean and help me to forgive as I have been forgiven. Free me from bitterness, and let love lead the way. Amen."}
+];
+const TD_REFLECTIONS=[
+ "You don't have to carry today all at once. One prayer, one breath, one step is enough.",
+ "God is not far away. He is as close as your next honest word to Him.",
+ "Gratitude turns what you have into enough. Name one thing you're thankful for right now.",
+ "Peace is not the absence of storms, but the presence of God within them.",
+ "Small faithful steps, repeated daily, become a life of devotion.",
+ "You are not defined by what you carried. In God's hands, today can begin again.",
+ "Rest is holy too. Let yourself breathe and simply be with God.",
+ "A quiet heart hears what a hurried one misses. Slow down and listen.",
+ "The same God who holds the stars holds you. You are seen and loved.",
+ "Give today your honest heart, not a perfect one. That is the prayer God receives.",
+ "Kindness is a prayer with hands. Let someone feel God's love through you today.",
+ "Hope is choosing to believe that tomorrow can be gentler. Hold on."
+];
+function tdIdx(){return Math.floor(Date.now()/DAY)}
+function tdState(){if(!S.tdRitual||S.tdRitual.d!==today())S.tdRitual={d:today(),verse:false,prayer:false,chant:false};return S.tdRitual}
+const TD_PRAY_SESSION={id:'tdpray',n:"Today's prayer",tag:'A quiet moment with God',m:'Breathe. Pray. Be still.',f:126.2,g:'linear-gradient(135deg,#8aa6ff,#5a5bd6)',e:'🙏'};
+function tdMeditation(){const ms=CH.filter(c=>c.k=='m');return ms[tdIdx()%ms.length]}
+function renderToday(){
+ if(!$('#s-today'))return;
+ const hh=new Date().getHours();
+ $('#tdGreet').textContent=(hh<12?'Good morning':hh<18?'Good afternoon':'Good evening')+(S.name?', '+S.name:'');
+ $('#tdDate').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+ const r=tdState();
+ const s=streak();$('#tdStreakN').textContent=s;$('#tdStreakSub').textContent=(s===1?'day in a row':'days in a row')+(r.verse&&r.prayer&&r.chant?' · today complete 🙏':'');
+ const v=TD_VERSES[tdIdx()%TD_VERSES.length];$('#tdVerse').textContent=v.t;$('#tdVerseRef').textContent='— '+v.r;
+ const pr=TD_PRAYERS[tdIdx()%TD_PRAYERS.length];$('#tdPrayerT').textContent=pr.t;$('#tdPrayer').textContent=pr.b;
+ const med=tdMeditation();$('#tdMedT').textContent=med.m;$('#tdMedX').textContent=med.x||'A few quiet minutes with your breath.';
+ $('#tdReflect').textContent=TD_REFLECTIONS[tdIdx()%TD_REFLECTIONS.length];
+ $('#tdVerseDone').hidden=!r.verse;$('#tdVerseMark').style.display=r.verse?'none':'';
+ $('#tdPrayDone').hidden=!r.prayer;$('#tdMedDone').hidden=!r.chant;
+ const done=(r.verse?1:0)+(r.prayer?1:0)+(r.chant?1:0);
+ $('#tdProgress').innerHTML='<span class="dot'+(r.verse?' on':'')+'">'+(r.verse?'✓':'1')+'</span><span class="dot'+(r.prayer?' on':'')+'">'+(r.prayer?'✓':'2')+'</span><span class="dot'+(r.chant?' on':'')+'">'+(r.chant?'✓':'3')+'</span><span>'+done+' of 3 done today</span>';
+ $('#tdTokenHint').textContent=canOffer()?'Your daily light is ready':'You already claimed today — come back tomorrow';
+ $('#tdTokens').disabled=!canOffer();
+}
+function tdMark(step){const r=tdState();if(r[step])return;r[step]=true;
+ if(r.verse&&r.prayer&&r.chant&&S.tdCredited!==today()){S.tdCredited=today();if(!S.days.includes(today()))S.days.push(today());toast('Today complete 🙏 — your streak grew')}
+ save();renderToday();if(typeof renderGrowth==='function')renderGrowth();
+}
+if($('#tdVerseMark'))$('#tdVerseMark').onclick=()=>tdMark('verse');
+if($('#tdPrayBtn'))$('#tdPrayBtn').onclick=()=>{open(TD_PRAY_SESSION);tdMark('prayer')};
+if($('#tdMedBtn'))$('#tdMedBtn').onclick=()=>{open(tdMeditation());tdMark('chant')};
+if($('#tdTokens'))$('#tdTokens').onclick=()=>{go('home');setTimeout(()=>{const o=$('#offer');if(o){o.scrollIntoView({behavior:'smooth',block:'center'});if(canOffer())o.click()}},250)};
 const canOffer=()=>S.srvBlock!==today()&&Date.now()-(S.lastTs||0)>=DAY;
 function tickOffer(){const b=$('#offer');if(offerBusy)return;if(canOffer()){b.disabled=false;b.removeAttribute('aria-disabled');b.dataset.w='';b.classList.add('reward-ready');b.textContent='✦ Free tokens'}else{b.classList.remove('reward-ready');const r=Math.max(0,DAY-(Date.now()-(S.lastTs||0))),h=Math.floor(r/36e5),m=Math.floor(r%36e5/6e4),s=Math.floor(r%6e4/1e3);b.disabled=true;b.setAttribute('aria-disabled','true');b.dataset.w=1;b.textContent=r>0?'Next offer in '+pad(h)+':'+pad(m)+':'+pad(s):'Already claimed. Come back tomorrow'}}
 setInterval(tickOffer,1000);
@@ -1411,7 +1527,7 @@ homeTiles();
 
 save();
 $('#auth').classList.remove('on');
-go('home');
+go('today');
 render();
 
 setTimeout(async () => {
