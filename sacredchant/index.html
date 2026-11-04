@@ -317,6 +317,11 @@ body.on-mark #supportFab{display:none}
 /* rodape "Need help?" em todas as paginas */
 .help-foot{text-align:center;color:var(--mute);font-size:14px;margin:26px 0 8px;padding:14px 0 2px;border-top:1px solid var(--line)}
 .help-foot .lnk{color:var(--acc);font-weight:800;text-decoration:underline;padding:0;font-size:inherit}
+/* carregamentozinho no contador de tokens apos a compra */
+.pill-spin{width:13px;height:13px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--gold);display:inline-block;vertical-align:middle;animation:pillSpin .8s linear infinite}
+.pill.loading{border-color:var(--gold)}
+@keyframes pillSpin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.pill-spin{animation:none}}
 </style>
 
 </head>
@@ -324,7 +329,7 @@ body.on-mark #supportFab{display:none}
 <div id="app">
  <div class="top">
   <div class="brand"><svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="8" rx="9" ry="3.2" fill="none" stroke="#e0ad3e" stroke-width="2"/><circle cx="20" cy="19" r="6" fill="#4378de"/><path d="M6 36c1-9 7-12 14-12s13 3 14 12z" fill="#7aa6f5"/></svg><div>Sacred Chant<small>Sound for the inner life</small></div></div>
-  <button type="button" class="pill" id="lightBtn" aria-haspopup="dialog" title="Get more Light Tokens"><span class="sr">Light Tokens:</span><span aria-hidden="true">✦</span><span id="lightN">0</span><span class="pl" aria-hidden="true">+</span></button>
+  <button type="button" class="pill" id="lightBtn" aria-haspopup="dialog" title="Get more Light Tokens"><span class="sr">Light Tokens:</span><span aria-hidden="true">✦</span><span id="lightN">0</span><span id="lightSpin" class="pill-spin" hidden aria-label="Updating your tokens"></span><span class="pl" aria-hidden="true">+</span></button>
  </div>
 
  <section class="screen on" id="s-home">
@@ -841,14 +846,37 @@ document.addEventListener('keydown',e=>{
   }
 });
 /* ao voltar do checkout, usa o fluxo ja existente para buscar tokens confirmados */
-document.addEventListener('visibilitychange',async()=>{
+function setTokenLoading(on){
+  const sp=$('#lightSpin'),n=$('#lightN'),pill=$('#lightBtn');
+  if(sp)sp.hidden=!on;
+  if(n)n.style.display=on?'none':'';
+  if(pill)pill.classList.toggle('loading',on);
+}
+let tokenWaiting=false;
+async function waitForTokens(){
+  if(tokenWaiting)return;tokenWaiting=true;
+  const base=(S.buyBase!=null)?Number(S.buyBase):(Number(S.light)||0);
+  setTokenLoading(true);
+  const start=Date.now();let first=true;
+  while(true){
+    try{await claimPendingDigistoreOrders();await syncLightBalance();await syncDailyLightStatus()}catch(e){}
+    detectTierFromPurchase();
+    if((Number(S.light)||0)>base)break;      // tokens cairam
+    if(!first&&S.buyBase==null)break;          // nada pendente
+    if(Date.now()-start>90000)break;           // ate 90s
+    first=false;
+    await new Promise(r=>setTimeout(r,4000));
+  }
+  setTokenLoading(false);
+  tokenWaiting=false;
+  const got=(Number(S.light)||0)-base;
+  if(got>0){const pill=$('#lightBtn');if(pill&&pill.animate)pill.animate([{transform:'scale(1)'},{transform:'scale(1.15)',offset:.4},{transform:'scale(1)'}],{duration:500});toast('+'+got+' ✦ added!')}
+}
+document.addEventListener('visibilitychange',()=>{
   if(document.hidden||!purchaseStarted)return;
   purchaseStarted=false;
-  await claimPendingDigistoreOrders();
-  await syncLightBalance();
-  await syncDailyLightStatus();
-  detectTierFromPurchase();
-  await refreshTier();
+  waitForTokens();
+  refreshTier();
 });
 function flap(){
  const g=$('.angel');if(!g)return;
@@ -971,21 +999,23 @@ const tile=(attr,src,label,cost,lock,dim)=>`<button class="tile${dim?' dim':''}"
 const prayOK=()=>!!(S.prayUnlocked||S.prayDone);
 function prayOpen(){
  if(prayOK())return S.prayDone?reading():quiz();
+ if(gateOpen('pray',()=>{S.prayUnlocked=1;save();homeTiles();quiz()}))return;
  lkCost=10;lkAct=()=>{S.prayUnlocked=1;save();homeTiles();quiz()};
  $('#lkH').textContent='Unlock "I want to pray for you"';
  $('#lkT').textContent='Unlock this module once for 10 ✦. After that, it stays open for you.';
  $('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Not now';
  $('#lk').classList.add('on')}
 function homeTiles(){
- $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',2)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',prayOK()?0:10,prayOK()?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')+tile('data-mod="support"',IMG.support,'Support',0);
+ $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',2)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',(linkedOwned('pray')!==null?(linkedOwned('pray')?0:0):(prayOK()?0:10)),((linkedOwned('pray')===true||(linkedOwned('pray')===null&&prayOK()))?'':(linkedOwned('pray')===false?'<span class="lk"><b>🔒</b>Buy to unlock</span>':'<span class="lk"><b>🔒</b>Click to unlock</span>')))+tile('data-mod="support"',IMG.support,'Support',0);
  $('#tPrd').innerHTML=tile('data-mod="solomon"',IMG.solomon,'7 Prayers of Solomon',2)+tile('data-mod="jesus"',JES_IMG,'7 Prayers of Jesus, guided by Mark',0)+PRODS.map(p=>tile('data-prod="'+p.id+'"',p.img,p.t,0)).join('');
- $('#tBon').innerHTML=BONUS.map(b=>{const ok=!b.cost||bonusOK(b.id);return tile('data-bonus="'+b.id+'"',b.img,b.t,ok?0:b.cost,ok?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')}).join('')}
+ $('#tBon').innerHTML=BONUS.map(b=>{const lo=linkedOwned(b.id);const ok=lo!==null?lo:(!b.cost||bonusOK(b.id));const cost=lo!==null?0:(ok?0:b.cost);const lk=ok?'':(lo===false?'<span class="lk"><b>🔒</b>Buy to unlock</span>':'<span class="lk"><b>🔒</b>Click to unlock</span>');return tile('data-bonus="'+b.id+'"',b.img,b.t,cost,lk)}).join('')}
 /* desbloqueio permanente por conta (salvo no aparelho e na conta do usuario) */
 const bonusOK=id=>(S.bonusUnl||[]).includes(id);
 function syncUnlocks(){if(sbClient)sbClient.auth.updateUser({data:{sc_bonus_unlocks:S.bonusUnl||[]}}).catch(e=>console.warn('Could not sync unlocks:',e?.message||e))}
 function openBonus(id){
  const b=BONUS.find(x=>x.id===id);if(!b)return;
  const show=()=>{if(b.vt==='vid')return showVid(b.v,b.t,'','','home');if(b.vt==='yt')return showYT(b.v,b.t,'home');openWeb(b.v,b.t)};
+ if(gateOpen(id,show))return;
  if(!b.cost||bonusOK(id))return show();
  lkCost=b.cost;
  lkAct=()=>{S.bonusUnl=S.bonusUnl||[];if(!S.bonusUnl.includes(id))S.bonusUnl.push(id);save();syncUnlocks();homeTiles();show()};
@@ -993,7 +1023,7 @@ function openBonus(id){
  $('#lkT').textContent='Unlock this bonus once for '+b.cost+' ✦. After that, it stays open on your account forever.';
  $('#lkU').textContent='Unlock now · '+b.cost+' ✦';$('#lkX').textContent='Not now';
  $('#lk').classList.add('on')}
-function openProd(id){const p=PRODS.find(x=>x.id===id);if(p)showYT(p.v,p.t,'home')}
+function openProd(id){const p=PRODS.find(x=>x.id===id);if(!p)return;if(gateOpen(id,()=>showYT(p.v,p.t,'home')))return;showYT(p.v,p.t,'home')}
 /* ===== Store: produtos trocados por tokens (50 ✦ cada, desbloqueio permanente na conta) ===== */
 const STORE_COST=50;
 const STORE=[
@@ -1088,6 +1118,43 @@ function renderBilling(){
   (S.planAt?'<div class="bill-row"><span>Started</span><b>'+fmtBillDate(new Date(Number(S.planAt)))+'</b></div>':'')+
   '<div class="bill-row"><span>Next payment</span><b>'+fmtBillDate(np)+'</b></div>';
 }
+/* ===== VINCULAR MODULOS A PRODUTOS DA DIGISTORE24 (libera so quem comprou) =====
+   Preencha abaixo: "id do item no app": { id:'<ID do produto na Digistore24>', url:'<link do checkout>', name:'<nome>' }
+   IDs de item disponiveis:
+     Home:  'start','pray','solomon','jesus'
+     Bonus: 'install','acutis','raphael','words15','benedict','book'
+     Produtos: 'sacredchant','songofgod','journey','family'
+     Store: 'powerful7','words12','arthritis','diabetes','prosperity','miracle'
+   Deixe {} para manter tudo como esta (por tokens). Ex.:
+     'acutis': { id:'735001', url:'https://www.checkout-ds24.com/product/735001', name:'Carlos Acutis Prayer' },
+*/
+const DS_PRODUCT = {
+};
+const ownsProduct = pid => (S.ownedProducts||[]).includes(String(pid));
+function openCheckoutFor(m){
+ try{
+  const params=new URLSearchParams();
+  if(S.email)params.set('email',S.email);
+  if(S.name)params.set('first_name',String(S.name).trim().split(' ')[0]);
+  const qs=params.toString(), url=m.url+(qs?((m.url||'').includes('?')?'&':'?')+qs:'');
+  purchaseStarted=true;
+  const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener noreferrer';document.body.appendChild(a);a.click();a.remove();
+ }catch(e){}
+}
+/* retorna true se tratou pelo produto (abriu ou mostrou "comprar"); false se o item nao esta vinculado */
+function gateOpen(itemId,openFn){
+ const m=DS_PRODUCT[itemId];
+ if(!m)return false;
+ if(ownsProduct(m.id)){openFn();return true}
+ lkCost=0;lkAct=()=>{$('#lk').classList.remove('on');openCheckoutFor(m)};
+ $('#lkH').textContent='Unlock "'+(m.name||itemId)+'"';
+ $('#lkT').textContent='This is available with a one-time purchase. After you buy with the same email, it unlocks here automatically.';
+ $('#lkU').hidden=false;$('#lkU').textContent='Buy to unlock';$('#lkX').textContent='Not now';
+ $('#lk').classList.add('on');
+ return true;
+}
+/* para os tiles: true/false se vinculado, null se nao vinculado */
+const linkedOwned = id => { const m=DS_PRODUCT[id]; return m ? ownsProduct(m.id) : null };
 async function refreshTier(){
  try{
   const client=await getSupabase();
@@ -1095,13 +1162,20 @@ async function refreshTier(){
   if(error||!data||data.error)return;
   let best='none';(data.plans||[]).forEach(pl=>{const t=PLAN_TIER[pl.product_id];if(t&&(TIER_RANK[t]||0)>(TIER_RANK[best]||0))best=t});
   if(best!=='none')applyTier(best);
+  if(Array.isArray(data.products)){
+   S.ownedProducts=[...new Set(data.products.map(String))];
+   save();
+   try{if(sbClient)sbClient.auth.updateUser({data:{sc_owned_products:S.ownedProducts}})}catch(e){}
+   if(typeof homeTiles==='function')homeTiles();
+   if(typeof storeTiles==='function')storeTiles();
+  }
  }catch(e){/* billing-report ainda nao publicada */}
 }
 const DAY_ICONS=['🌅','🕊️','🙏','✨','🕯️','📿','👼'];
 function storeTiles(){
  const ownBadge='<span class="own">✓ Yours</span>';
- $('#tStore').innerHTML=STORE.map(s=>{const ok=storeOK(s.id);return tile('data-store="'+s.id+'"',s.img,s.t,ok?0:STORE_COST,ok?ownBadge:'<span class="lk"><b>🔒</b>Unlock for '+STORE_COST+' ✦</span>')}).join('');
- const owned=STORE.filter(s=>storeOK(s.id));
+ $('#tStore').innerHTML=STORE.map(s=>{const lo=linkedOwned(s.id);const ok=lo!==null?lo:storeOK(s.id);const lk=ok?ownBadge:(lo===false?'<span class="lk"><b>🔒</b>Buy to unlock</span>':'<span class="lk"><b>🔒</b>Unlock for '+STORE_COST+' ✦</span>');const cost=ok?0:(lo===false?0:STORE_COST);return tile('data-store="'+s.id+'"',s.img,s.t,cost,lk)}).join('');
+ const owned=STORE.filter(s=>storeOK(s.id)||linkedOwned(s.id)===true);
  $('#tOwn').innerHTML=owned.map(s=>tile('data-store="'+s.id+'" data-from="home"',s.img,s.t,0)).join('');
  $('#tOwn').hidden=!owned.length;$('#ownEmpty').hidden=!!owned.length;
 }
@@ -1110,6 +1184,7 @@ let serBackTo='store',serItem=null;
 function openStoreItem(id,from){
  const s=STORE.find(x=>x.id===id);if(!s)return;
  const back=from||'store';
+ if(gateOpen(id,()=>showStoreItem(s,back)))return;
  if(storeOK(id))return showStoreItem(s,back);
  lkCost=STORE_COST;
  lkAct=()=>{S.storeOwned=S.storeOwned||[];if(!S.storeOwned.includes(id))S.storeOwned.push(id);save();syncStore();storeTiles();toast('Unlocked! It is now on your Home screen');showStoreItem(s,back)};
@@ -1174,7 +1249,7 @@ function jesClick(i){if(jesOpen(i))return showVid(JDAYS[i][1],'Day '+(i+1)+' · 
  $('#lkT').textContent='It opens '+(i+1)+' days after you began, or you can open it now for '+JES_COST+' ✦.';
  $('#lkU').textContent='Unlock now · '+JES_COST+' ✦';$('#lkX').textContent='Wait for it';
  $('#lk').classList.add('on')}
-function openPaid(id,cb){if(!S.unl||S.unl.d!==today())S.unl={d:today(),ids:[]};if(S.unl.ids.includes(id))return cb();spend(2,()=>{S.unl.ids.push(id);save();cb()})}
+function openPaid(id,cb){if(gateOpen(id,cb))return;if(!S.unl||S.unl.d!==today())S.unl={d:today(),ids:[]};if(S.unl.ids.includes(id))return cb();spend(2,()=>{S.unl.ids.push(id);save();cb()})}
 function mod(id){
  if(id==='mark'){
   if(!markUnlocked()){
@@ -1190,7 +1265,7 @@ function mod(id){
  if(id==='support'){if(window.openSupportPanel)window.openSupportPanel();return}
  if(id==='start')return openPaid('start',()=>showVid(VID.start,'Start here','',FAQ,'home'));
  if(id==='pray')return prayOpen();
- if(id==='jesus'){if(!S.jesStart){S.jesStart=Date.now();save()}return jesPage()}
+ if(id==='jesus'){if(gateOpen('jesus',()=>{if(!S.jesStart){S.jesStart=Date.now();save()}jesPage()}))return;if(!S.jesStart){S.jesStart=Date.now();save()}return jesPage()}
  if(id==='solomon')return openPaid('solomon',()=>{if(!S.solStart){S.solStart=Date.now();save()}solPage()})}
 let vBackTo='home',sdkOk=false;
 function showVid(id,title,top,bottom,back){vBackTo=back||'home';$('#vT').textContent=title;$('#vTop').innerHTML=top||'';$('#vTx').innerHTML=bottom||'';
@@ -1403,6 +1478,7 @@ if (Array.isArray(accStore)) S.storeOwned = [...new Set([...(S.storeOwned || [])
 if (user.user_metadata?.sc_mark) S.markUnlocked = true;
 if (user.user_metadata?.sc_tier) applyTier(user.user_metadata.sc_tier);
 if (user.user_metadata?.sc_plan_id) S.planId = user.user_metadata.sc_plan_id;
+if (Array.isArray(user.user_metadata?.sc_owned_products)) S.ownedProducts = [...new Set(user.user_metadata.sc_owned_products.map(String))];
 if (user.user_metadata?.sc_plan_at) S.planAt = Number(user.user_metadata.sc_plan_at) || S.planAt;
 storeTiles();
 updateMarkCard();
