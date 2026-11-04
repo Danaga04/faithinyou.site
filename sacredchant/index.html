@@ -113,7 +113,7 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .wl,.wr{transform-box:view-box}
 .angel.flap{filter:drop-shadow(0 0 34px rgba(255,214,110,1)) drop-shadow(0 0 10px rgba(255,255,255,.9))}
 @keyframes fl{50%{transform:rotate(-26deg) scaleY(.9)}}@keyframes fr{50%{transform:rotate(26deg) scaleY(.9)}}
-.low-actions{display:grid;gap:10px;margin-top:16px}
+.low-actions{display:grid;gap:10px;margin-top:16px}.btn[hidden],.ghost[hidden]{display:none!important}
 .auth-help{text-align:right;font-size:14px;font-weight:700;color:var(--ink);margin:26px 64px 70px 0;line-height:1.45}
 .auth-arrow{display:inline-block;font-size:30px;line-height:1;color:#f5c400;vertical-align:middle;animation:authArrow 1.3s ease-in-out infinite}
 @keyframes authArrow{0%,100%{transform:translate(0,0)}50%{transform:translate(6px,6px)}}
@@ -1328,8 +1328,7 @@ function mileTick(){
  if(MILES.some((m,i)=>mileOK(m)&&$('#tMile [data-mile="'+i+'"] .lk')))return mileTiles();
  MILES.forEach((m,i)=>{const e=$('#tMile [data-mile="'+i+'"] .mcd');if(!e)return;const r=mileLeft(m),dd=Math.floor(r/DAY),hh=Math.floor(r%DAY/36e5),mm=Math.floor(r%36e5/6e4),ss=Math.floor(r%6e4/1e3);e.textContent='Opens in '+(dd?dd+'d ':'')+pad(hh)+':'+pad(mm)+':'+pad(ss)})}
 setInterval(mileTick,1000);
-function mileClick(i){const m=MILES[i];if(!m)return;if(mileOK(m))return showYT(m.v,m.t,'home');const dd=Math.ceil(mileLeft(m)/DAY);$('#lkH').textContent=m.t+' is still sealed';$('#lkT').textContent='This exclusive prayer opens on your day '+m.d+' with Sacred Chant ('+dd+' day'+(dd===1?'':'s')+' left). It cannot be unlocked with tokens, only with time. Keep coming back.';$('#lkU').hidden=true;$('#lkX').textContent='I will wait';$('#lk').classList.add('on')}
-$('#lkX').addEventListener('click',()=>{$('#lkU').hidden=false});
+function mileClick(i){const m=MILES[i];if(!m)return;if(mileOK(m))return showYT(m.v,m.t,'home');const dd=Math.ceil(mileLeft(m)/DAY);$('#lkH').textContent=m.t+' is still sealed';$('#lkT').textContent='This exclusive prayer opens on your day '+m.d+' with Sacred Chant ('+dd+' day'+(dd===1?'':'s')+' left). It cannot be unlocked with tokens, only with time. Keep coming back.';lkAct=null;lkCost=0;$('#lkU').hidden=true;$('#lkX').textContent='I will wait';$('#lk').classList.add('on')}
 function setMileStart(user){
  if(!S.firstSeen){S.firstSeen=Date.now();save()}
  const created=Date.parse(user&&user.created_at||'');
@@ -1396,8 +1395,8 @@ function solTick(){if(!$('#s-sol').classList.contains('on'))return;const now=Dat
 setInterval(solTick,1000);
 let lkDay=0,lkAct=null,lkCost=10;
 function dayClick(i){if(solOpen(i))return showVid(DAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Solomon','','','sol');lkDay=i;lkCost=10;lkAct=()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()};$('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Wait for it';$('#lkH').textContent='Day '+(i+1)+' is resting';$('#lkT').textContent='It opens 24 hours after you began, or you can open it now for 10 ✦.';$('#lk').classList.add('on')}
-$('#lkX').onclick=()=>$('#lk').classList.remove('on');
-$('#lkU').onclick=()=>{const f=lkAct,c=lkCost||0;$('#lk').classList.remove('on');if(!f)return;if(c>=1)spend(c,f);else f()};
+$('#lkX').onclick=()=>{$('#lk').classList.remove('on');$('#lkU').hidden=false;lkAct=null;lkCost=0};
+$('#lkU').onclick=()=>{const f=lkAct,c=lkCost||0;$('#lk').classList.remove('on');$('#lkU').hidden=false;if(!f)return;if(c>=1)spend(c,f);else f()};
 document.addEventListener('click',e=>{const m=e.target.closest('[data-mod]');if(m)return mod(m.dataset.mod);const d=e.target.closest('[data-day]');if(d)return dayClick(+d.dataset.day);const st=e.target.closest('[data-store]');if(st)return openStoreItem(st.dataset.store,st.dataset.from);const ml=e.target.closest('[data-mile]');if(ml)return mileClick(+ml.dataset.mile);const sr=e.target.closest('[data-ser]');if(sr)return serClick(+sr.dataset.ser);const bn=e.target.closest('[data-bonus]');if(bn)return openBonus(bn.dataset.bonus);const pr=e.target.closest('[data-prod]');if(pr)return openProd(pr.dataset.prod);const jd=e.target.closest('[data-jday]');if(jd)jesClick(+jd.dataset.jday)});
 $('#vBack').onclick=()=>go(vBackTo);$$('[data-back]').forEach(b=>b.onclick=()=>go('home'));
 
