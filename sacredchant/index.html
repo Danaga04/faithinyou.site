@@ -318,6 +318,18 @@ body.on-mark #supportFab{display:none}
 /* rodape "Need help?" em todas as paginas */
 .help-foot{text-align:center;color:var(--mute);font-size:14px;margin:26px 0 8px;padding:14px 0 2px;border-top:1px solid var(--line)}
 .help-foot .lnk{color:var(--acc);font-weight:800;text-decoration:underline;padding:0;font-size:inherit}
+.faqx{margin:24px 0 8px}
+.faqx-t{font-size:21px;font-weight:800;margin:0 0 4px;color:var(--ink)}
+.faqx-hint{color:var(--mute);font-size:15px;margin:0 0 14px}
+.faqx-g{font-size:13px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--acc);margin:20px 0 9px}
+.faqx details{border:1.5px solid var(--line);border-radius:14px;margin-bottom:11px;background:var(--card)}
+.faqx summary{list-style:none;cursor:pointer;padding:17px 48px 17px 17px;font-size:17px;font-weight:700;line-height:1.4;color:var(--ink);position:relative}
+.faqx summary::-webkit-details-marker{display:none}
+.faqx summary::after{content:'+';position:absolute;right:18px;top:16px;font-size:26px;line-height:1;font-weight:700;color:var(--acc)}
+.faqx details[open] summary::after{content:'\2013'}
+.faqx details[open] summary{border-bottom:1.5px solid var(--line)}
+.faqx-a{padding:15px 17px 18px;font-size:16px;line-height:1.65;color:var(--ink)}
+.faqx-more{font-size:15px;color:var(--mute);margin:14px 0 0;text-align:center}
 /* ===== aba Today (Daily) ===== */
 .today-head{margin:2px 0 10px}
 .td-streak{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(247,220,146,.20),rgba(122,166,245,.12));border:1px solid var(--line);border-radius:18px;padding:12px 15px;margin-bottom:14px}
@@ -431,6 +443,12 @@ body.on-mark #supportFab{display:none}
    </ol>
    <p class="nt">The app icon will appear on your home screen, one tap away.</p>
   </div>
+  <div class="faqx">
+   <h3 class="faqx-t">Good to know</h3>
+   <p class="faqx-hint">Tap a question to read the answer.</p>
+   <div id="faqHome"></div>
+   <p class="faqx-more">More questions? <button type="button" class="lnk" id="faqGoProfile">See all answers in Profile</button></p>
+  </div>
  </section>
 
  <section class="screen" id="s-vid"><button class="back" id="vBack">← Back</button><h2 class="h" id="vT"></h2><div id="vTop"></div><div class="vidb" id="vBox"></div><div class="faq" id="vTx"></div></section>
@@ -489,6 +507,11 @@ body.on-mark #supportFab{display:none}
   </div>
   <div class="card"><h3>Certificate of practice</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">A keepsake with your name and your days of practice. Print it or save it as a PDF.</p><button class="ghost" id="cOpen">View certificate</button></div>
   <div class="card"><h3>Reminders</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Get a notification when your next +10 ✦ is ready, 24 hours after you claim your Free tokens.</p><button class="ghost" id="nBtn">Enable notifications</button><p class="lab" id="nSt"></p></div>
+  <div class="faqx">
+   <h3 class="faqx-t">Questions &amp; answers</h3>
+   <p class="faqx-hint">Tap a question to read the answer.</p>
+   <div id="faqFull"></div>
+  </div>
   <button class="ghost" id="reset">Reset my progress</button> <button class="ghost" id="sOut">Sign out</button>
  </section>
  <p class="help-foot">Need help? <button type="button" class="lnk" data-open-support>Contact us</button></p>
@@ -617,6 +640,45 @@ document.addEventListener('click',e=>{const bl=e.target.closest('[data-bless]');
 function row(c){return `<button class="item" data-id="${c.id}"><span class="ic" style="--g:${c.g}">${c.e}</span><span><b>${c.n}</b><span>${c.tag}</span></span><span style="margin-left:auto;color:var(--acc);font-size:22px">▶</span></button>`}
 $('#lM').innerHTML=CH.filter(c=>c.k=='m').map(row).join('');$('#lD').innerHTML=CH.filter(c=>c.k=='d').map(row).join('');$('#lN').innerHTML=CH.filter(c=>c.k=='n').map(row).join('');
 $$('.item').forEach(b=>b.onclick=()=>play(CH.find(c=>c.id===b.dataset.id)));
+/* ===== FAQ2 (Home mostra o grupo "por que abre por dia"; Profile mostra tudo) ===== */
+const FAQ2=[
+ {g:'Why content opens one day at a time', items:[
+  {q:'Why do some prayers and programs unlock day by day?', a:`Sacred Chant is built as a daily practice, not a one-time binge. Each day opens on its own day so you can truly live the prayer, let it settle, and come back — the way a real devotion works. Receiving everything at once would turn a spiritual journey into a checklist.`},
+  {q:'Can I unlock all the days at once?', a:`Some programs let you open the next day early with Light Tokens, but by design the deepest paths — like the Exclusive prayers — open only with time. The waiting is part of the practice: it builds the habit of returning to God each day.`},
+  {q:'Why do the Exclusive prayers open only on day 7, 14, 30 and 60?', a:`They are reserved for people who keep showing up. They cannot be bought with tokens — only time and faithfulness open them. It is our way of honouring commitment over shortcuts.`},
+  {q:'I missed a day — did I lose my progress?', a:`No. Your journey waits for you. Come back and continue where you left off; a missed day never erases what you have unlocked. And your streak can be protected with a freeze.`},
+ ]},
+ {g:'Light Tokens', items:[
+  {q:'What are Light Tokens (✦)?', a:`They are the light you use inside the app — to open a session, light a candle, send a blessing or talk with Mark. You receive +10 free every 24 hours, and plans add more.`},
+  {q:'How do I get more tokens?', a:`Tap "Free tokens" on Home once a day for +10 ✦, or choose a plan for a larger monthly or yearly amount of Light Tokens.`},
+  {q:'Do my tokens expire or reset?', a:`No. Your tokens stay in your account and carry over from day to day. Whatever you unlock with them — programs, prayers — is yours forever.`},
+  {q:'Why did my token balance go down?', a:`Tokens are spent on actions: opening a module (2 ✦), a chant session (3 ✦), a message to Mark (3 ✦), a Store program (120 ✦), and so on. Nothing is ever charged twice.`},
+ ]},
+ {g:'Billing, subscription & refunds', items:[
+  {q:'Is my plan a subscription?', a:`Essential renews monthly; Devotional and Sacred Premium (Family) renew once a year. You can cancel anytime before the next renewal.`},
+  {q:'How do I cancel my subscription?', a:`Your purchase is handled by Digistore24. Use the link in your purchase confirmation email to manage or cancel, or contact us and we will guide you. After cancelling, you keep access until the end of the period you already paid for.`},
+  {q:'Can I get a refund?', a:`Yes — purchases are covered by a 30-day money-back guarantee through Digistore24. Just contact support within 30 days of your purchase and we will help.`},
+  {q:'What happens to my access if I am refunded?', a:`If a purchase is refunded or charged back, access to the app ends permanently for that account. A refund undoes the purchase, so the access it paid for ends with it.`},
+  {q:'I was charged but did not get my tokens — what do I do?', a:`Tokens can take up to a minute to arrive after a confirmed purchase. If they still have not appeared, contact support with the email you used at checkout and we will sort it out.`},
+  {q:'Do I need to buy with the same email I log in with?', a:`Yes, please use the same email at checkout and in the app, so your tokens and your plan land in the right account.`},
+ ]},
+ {g:'Your account', items:[
+  {q:'How do I log in?', a:`Just your email — no password and no code. Enter the email you purchased with and you are in.`},
+  {q:'Can I use the app on more than one device?', a:`Yes. Sign in with the same email on any phone, tablet or computer, and your progress, tokens and unlocks follow you.`},
+  {q:'How does the Family plan work?', a:`Sacred Premium is a shared account for the family: everyone signs in with the same email and shares the plan's benefits and Light Tokens.`},
+ ]},
+ {g:'Content', items:[
+  {q:'What is included in each plan?', a:`Higher plans unlock more of the Store and more features. Sacred Premium adds the chat with Mark and the entire Store. Each plan card shows exactly what it unlocks.`},
+  {q:'Who is Mark?', a:`Mark is your spiritual companion inside the app — he prays with you, listens, and guides you through the programs. The chat with Mark is part of Sacred Premium (3 ✦ per message).`},
+ ]},
+];
+function faqGroupHTML(g){return '<p class="faqx-g">'+g.g+'</p>'+g.items.map(it=>'<details><summary>'+it.q+'</summary><div class="faqx-a">'+it.a+'</div></details>').join('')}
+function renderFAQ(){
+ const full=$('#faqFull');if(full&&!full.dataset.done){full.innerHTML=FAQ2.map(faqGroupHTML).join('');full.dataset.done='1'}
+ const home=$('#faqHome');if(home&&!home.dataset.done){home.innerHTML=faqGroupHTML(FAQ2[0]);home.dataset.done='1'}
+}
+renderFAQ();
+if($('#faqGoProfile'))$('#faqGoProfile').onclick=()=>go('me');
 function go(t){if(t!=='vid')$('#vBox').innerHTML='';if(t!=='web'&&$('#wBox'))$('#wBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='me'){if(typeof renderBilling==='function')renderBilling();if(typeof renderGrowth==='function')renderGrowth()}if(t==='today'&&typeof renderToday==='function')renderToday();scrollTo(0,0)}
 $$('.tab').forEach(b=>b.onclick=()=>access(b.dataset.t));
 function render(){
