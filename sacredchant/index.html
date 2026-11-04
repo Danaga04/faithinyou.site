@@ -114,6 +114,7 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .angel.flap{filter:drop-shadow(0 0 34px rgba(255,214,110,1)) drop-shadow(0 0 10px rgba(255,255,255,.9))}
 @keyframes fl{50%{transform:rotate(-26deg) scaleY(.9)}}@keyframes fr{50%{transform:rotate(26deg) scaleY(.9)}}
 .low-actions{display:grid;gap:10px;margin-top:16px}.btn[hidden],.ghost[hidden]{display:none!important}
+#banned{display:none;position:fixed;inset:0;z-index:999;background:linear-gradient(160deg,#1a1026,#2a0d12);color:#fff;padding:28px;place-items:center;text-align:center}#banned.on{display:grid}#banned .bwrap{max-width:360px}#banned .bang{font-size:52px}#banned h2{font-size:24px;margin:10px 0 6px}#banned p{color:#e9d9dd;font-size:15px;line-height:1.5;margin-top:8px}#banned .bsub{color:#b89aa2;font-size:13px}#banned button{margin-top:20px;background:#fff;color:#2a0d12;border:0;border-radius:99px;padding:13px 26px;font-weight:700}
 .auth-help{text-align:right;font-size:14px;font-weight:700;color:var(--ink);margin:26px 64px 70px 0;line-height:1.45}
 .auth-arrow{display:inline-block;font-size:30px;line-height:1;color:#f5c400;vertical-align:middle;animation:authArrow 1.3s ease-in-out infinite}
 @keyframes authArrow{0%,100%{transform:translate(0,0)}50%{transform:translate(6px,6px)}}
@@ -1570,6 +1571,56 @@ function getSupabase() {
           ) {
             const user = session.user;
 
+            // Bloqueio por reembolso/chargeback (produto principal 680704) — verificado no servidor.
+            (async () => {
+              let blocked = false;
+              try {
+                const { data } = await sbClient.rpc('sc_account_blocked');
+                blocked = data === true;
+              } catch (e) { blocked = false; } // falha de rede: nao tranca por engano
+              if (blocked) { showBanned(); try { await sbClient.auth.signOut(); } catch (e) {} return; }
+              enterApp(user);
+            })();
+          }
+        });
+
+        resolve(sbClient);
+      } catch (err) {
+        reject(err);
+      }
+    }
+
+    if (window.supabase?.createClient) {
+      initialize();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src =
+      'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+
+    script.onload = initialize;
+    script.onerror = () => {
+      reject(new Error('Could not load the authentication service.'));
+    };
+
+    document.head.appendChild(script);
+  });
+  return sbPromise;
+}
+
+function showBanned(){
+  try{$('#auth').classList.remove('on');}catch(e){}
+  try{document.getElementById('app')?.remove();}catch(e){}
+  let b=document.getElementById('banned');
+  if(!b){b=document.createElement('div');b.id='banned';document.body.appendChild(b);}
+  b.innerHTML='<div class="bwrap"><div class="bang">⛔</div><h2>Access closed</h2><p>Your purchase was refunded, so this account no longer has access to Sacred Chant. This is permanent.</p><p class="bsub">If you believe this is a mistake, contact support.</p><button type="button" id="bContact">Contact support</button></div>';
+  b.classList.add('on');
+  const c=document.getElementById('bContact');
+  if(c)c.onclick=()=>{try{window.openSupportPanel&&window.openSupportPanel()}catch(e){location.href='mailto:support@sacred-chant.app'}};
+}
+
+function enterApp(user){
             loadUser(user.id);
 
 if (user.email) S.email = user.email;
@@ -1605,33 +1656,6 @@ setTimeout(async () => {
             nUpd();
             toast('Welcome' + (S.name ? ', ' + S.name : ''));
             setTimeout(() => maybeStartOnboarding(user), 300);
-          }
-        });
-
-        resolve(sbClient);
-      } catch (err) {
-        reject(err);
-      }
-    }
-
-    if (window.supabase?.createClient) {
-      initialize();
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src =
-      'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-
-    script.onload = initialize;
-    script.onerror = () => {
-      reject(new Error('Could not load the authentication service.'));
-    };
-
-    document.head.appendChild(script);
-  });
-
-  return sbPromise;
 }
 
 /* Senha automatica e invisivel, derivada do e-mail. O cliente nunca ve senha nem codigo.
