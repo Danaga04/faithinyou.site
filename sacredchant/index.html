@@ -331,6 +331,13 @@ body.on-mark #supportFab{display:none}
 .td-prayertext{color:var(--mute);font-size:15px;line-height:1.6}
 .td-reflecttext{font-size:16px;line-height:1.6;color:var(--ink);font-style:italic}
 .td-done{font-size:12.5px;font-weight:800;color:#2f8f57;margin-left:6px}
+/* ===== streak freeze + blessings ===== */
+.td-freeze{flex:none;padding:6px 10px;font-size:13px;border-radius:12px;align-self:center}
+.bless-actions{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.bless-actions .ghost{text-align:left}
+.bless-result{margin-top:12px;background:rgba(224,173,62,.12);border:1px solid rgba(224,173,62,.4);border-radius:14px;padding:12px 14px}
+.bless-text{font-size:15.5px;line-height:1.6;color:var(--ink)}
+.streak-card .freeze-note{display:block;font-size:12.5px;color:var(--mute);margin-top:4px}
 </style>
 
 </head>
@@ -343,13 +350,18 @@ body.on-mark #supportFab{display:none}
 
  <section class="screen on" id="s-today">
   <div class="today-head"><p class="lab" id="tdGreet">Today</p><h2 class="h" id="tdDate" style="margin:2px 0 0">Today</h2></div>
-  <div class="td-streak" id="tdStreakBox"><span class="f" aria-hidden="true">🔥</span><div style="flex:1"><b id="tdStreakN">0</b><small id="tdStreakSub">days in a row</small></div></div>
+  <div class="td-streak" id="tdStreakBox"><span class="f" aria-hidden="true">🔥</span><div style="flex:1"><b id="tdStreakN">0</b><small id="tdStreakSub">days in a row</small></div><button type="button" class="ghost td-freeze" id="tdFreezeBtn" title="Protect your streak">🛡️</button></div>
   <p class="sh">Your daily moment</p><p>Three small steps. A few quiet minutes is enough.</p>
   <div class="td-progress" id="tdProgress"></div>
   <div class="card td-verse"><p class="lab">Verse of the day</p><p class="td-versetext" id="tdVerse">—</p><p class="lab" id="tdVerseRef" style="font-weight:600;margin-top:2px"></p><p style="margin-top:10px"><button class="ghost" id="tdVerseMark">Mark as read</button><span class="td-done" id="tdVerseDone" hidden>✓ Read</span></p></div>
   <div class="card"><p class="lab">Today's prayer</p><h3 id="tdPrayerT" style="margin:2px 0 6px">—</h3><p class="td-prayertext" id="tdPrayer"></p><p style="margin-top:10px"><button class="btn gold" id="tdPrayBtn">🙏 Pray with me</button><span class="td-done" id="tdPrayDone" hidden>✓ Done</span></p></div>
   <div class="card"><p class="lab">Today's meditation</p><h3 id="tdMedT" style="margin:2px 0 4px">—</h3><p class="lab" id="tdMedX" style="font-weight:500"></p><p style="margin-top:10px"><button class="btn" id="tdMedBtn">▶ Begin · breathe with me</button><span class="td-done" id="tdMedDone" hidden>✓ Done</span></p></div>
   <div class="card td-reflect"><p class="lab">A thought for today</p><p id="tdReflect" class="td-reflecttext"></p></div>
+  <div class="card bless"><h3>🙏 Blessings &amp; intentions</h3><p class="lab" style="font-weight:500;margin:4px 0 8px">Bring someone you love before God.</p>
+   <input type="text" id="biName" maxlength="40" placeholder="A name (optional)">
+   <div class="bless-actions"><button type="button" class="ghost" data-bless="pray">🙏 Pray for them · 2 ✦</button><button type="button" class="ghost" data-bless="dedicate">🕊️ Dedicate today's prayer · 1 ✦</button><button type="button" class="ghost" data-bless="blessing">💌 Send a blessing · 3 ✦</button></div>
+   <div id="blessResult" class="bless-result" hidden></div>
+  </div>
   <div class="card" style="text-align:center"><p class="lab" id="tdTokenHint" style="margin-bottom:8px">Your daily light</p><button class="btn gold" id="tdTokens">✦ Claim your Free tokens</button></div>
  </section>
  <section class="screen" id="s-home">
@@ -551,7 +563,56 @@ function loadUser(e){K='sc-user:'+e;S={name:'',light:10,min:0,days:[],last:'',la
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
 const ymd=d=>d.toISOString().slice(0,10),today=()=>ymd(new Date());
 const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),2200)};
-function streak(){let n=0,d=new Date();if(!S.days.includes(ymd(d)))d.setDate(d.getDate()-1);while(S.days.includes(ymd(d))){n++;d.setDate(d.getDate()-1)}return n}
+function streak(){const pr=new Set(S.days||[]),fz=new Set(S.frozenDays||[]);let n=0,d=new Date();if(!pr.has(ymd(d)))d.setDate(d.getDate()-1);while(true){const k=ymd(d);if(pr.has(k)){n++;d.setDate(d.getDate()-1)}else if(fz.has(k)){d.setDate(d.getDate()-1)}else break}return n}
+/* ===== streak freeze (protecao da sequencia) ===== */
+const FREEZE_COST=15,FREEZE_CAP=3;
+const freezeCount=()=>(typeof S.freezes==='number')?S.freezes:1;
+function checkStreakFreeze(){
+ S.frozenDays=S.frozenDays||[];
+ if(typeof S.freezes!=='number')S.freezes=1;
+ const pr=new Set(S.days||[]);if(!pr.size){save();return}
+ const fz=new Set(S.frozenDays||[]);
+ let used=false,guard=0;
+ let d=new Date();if(!pr.has(ymd(d)))d.setDate(d.getDate()-1); // comeca hoje (ou ontem se hoje nao foi feito)
+ while(guard++<800){
+  const k=ymd(d);
+  if(pr.has(k)||fz.has(k)){d.setDate(d.getDate()-1);continue} // dia coberto -> continua voltando
+  if(S.freezes<=0)break;                                      // sem freeze -> deixa quebrar
+  // procura o dia praticado/congelado mais proximo ANTES deste buraco, dentro do orcamento de freezes
+  let probe=new Date(d),gap=0,anchor=false;
+  while(true){
+   if(pr.has(ymd(probe))||fz.has(ymd(probe))){anchor=true;break}
+   gap++;probe.setDate(probe.getDate()-1);
+   if(gap>S.freezes||gap>700)break;
+  }
+  if(!anchor)break;                                           // buraco maior que os freezes -> quebra
+  for(let i=0;i<gap;i++){const fk=ymd(d);if(!pr.has(fk)&&!fz.has(fk)){S.frozenDays.push(fk);fz.add(fk);S.freezes--;used=true}d.setDate(d.getDate()-1)}
+ }
+ save();
+ if(used)setTimeout(()=>{try{toast('A streak freeze saved your streak 🛡️')}catch(e){}},600);
+}
+function buyFreeze(){
+ if(freezeCount()>=FREEZE_CAP){toast('You already have the most streak freezes 🛡️');return}
+ spend(FREEZE_COST,()=>{S.freezes=freezeCount()+1;save();if(typeof renderToday==='function')renderToday();if(typeof renderGrowth==='function')renderGrowth();toast('Streak freeze added 🛡️')});
+}
+/* ===== gastos emocionais: rezar por alguem, dedicar, enviar bencao ===== */
+const BLESS_COST={pray:2,dedicate:1,blessing:3};
+const _E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function prayerForName(name){const n=(name||'').trim()||'this person';const o=['Lord, I lift up '+n+' to You. Surround '+n+' with Your peace, protect '+n+' from all harm, and let '+n+' feel how deeply loved they are. Amen.','Father, watch over '+n+' today. Give '+n+' strength, healing where it hurts, and hope for tomorrow. Hold '+n+' close to Your heart. Amen.','God of mercy, bless '+n+' with peace, provision and joy. Guide the steps of '+n+' and let Your light shine on '+n+' always. Amen.'];return o[Math.floor(Math.random()*o.length)]}
+function blessingForName(name){const n=(name||'').trim()||'you';const o=['May the Lord bless '+n+' and keep '+n+'; may His face shine upon '+n+' and give '+n+' peace. 🕊️','Sending '+n+' a blessing today: may God fill your days with peace, your heart with hope, and your home with love. 🙏','A prayer for '+n+': may you be strong, may you be safe, and may you always know you are loved by God. ✨'];return o[Math.floor(Math.random()*o.length)]}
+function blessAct(kind){
+ const el=$('#biName');const name=((el&&el.value)||'').trim().slice(0,40);
+ spend(BLESS_COST[kind],()=>{
+  const box=$('#blessResult');let txt='',html='';
+  if(kind==='pray'){txt=prayerForName(name);S.intentions=S.intentions||[];S.intentions.push({name,at:Date.now()});html='<p class="lab">A prayer for '+(_E(name)||'them')+'</p><p class="bless-text">'+_E(txt)+'</p>'}
+  else if(kind==='dedicate'){S.dedication={name,d:today()};save();html='<p class="bless-text">🕊️ Today\'s prayer is dedicated to <b>'+(_E(name)||'someone you love')+'</b>. Carry them in your heart as you pray.</p>'}
+  else{txt=blessingForName(name);html='<p class="lab">A blessing to share</p><p class="bless-text">'+_E(txt)+'</p><button type="button" class="ghost" id="blessCopy" style="margin-top:8px">Copy blessing</button>'}
+  if(box){box.innerHTML=html;box.hidden=false}
+  if(kind==='blessing'){const c=$('#blessCopy');if(c)c.onclick=async()=>{try{await navigator.clipboard.writeText(txt)}catch(e){try{const t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()}catch(x){}}toast('Blessing copied')}}
+  toast('🙏')
+ });
+}
+document.addEventListener('click',e=>{const bl=e.target.closest('[data-bless]');if(bl)blessAct(bl.dataset.bless)});
 function row(c){return `<button class="item" data-id="${c.id}"><span class="ic" style="--g:${c.g}">${c.e}</span><span><b>${c.n}</b><span>${c.tag}</span></span><span style="margin-left:auto;color:var(--acc);font-size:22px">▶</span></button>`}
 $('#lM').innerHTML=CH.filter(c=>c.k=='m').map(row).join('');$('#lD').innerHTML=CH.filter(c=>c.k=='d').map(row).join('');$('#lN').innerHTML=CH.filter(c=>c.k=='n').map(row).join('');
 $$('.item').forEach(b=>b.onclick=()=>play(CH.find(c=>c.id===b.dataset.id)));
@@ -590,7 +651,8 @@ function renderGrowth(){
   const nm=nextMile(s);
   $('#stkNext').textContent=s===0?'Begin today — your first day of practice.':(nm?('Only '+(nm-s)+' day'+((nm-s)===1?'':'s')+' to your '+nm+'-day milestone 🎉'):'A true light. 🌟');
  }
- if(s>0&&MILEST.includes(s)){S.msSeen=S.msSeen||[];if(!S.msSeen.includes(s)){S.msSeen.push(s);save();celebrateStreak(s)}}
+ if($('#stkNext')&&$('#streakCard')){let fn=$('#streakCard').querySelector('.freeze-note');if(!fn){fn=document.createElement('span');fn.className='freeze-note';$('#stkNext').parentNode.appendChild(fn)}fn.textContent='🛡️ '+freezeCount()+' streak freeze'+(freezeCount()===1?'':'s')+' protecting you'}
+ if(s>0&&MILEST.includes(s)){S.msSeen=S.msSeen||[];if(!S.msSeen.includes(s)){S.msSeen.push(s);if(freezeCount()<FREEZE_CAP)S.freezes=freezeCount()+1;save();celebrateStreak(s)}}
  const w=WEEKLY[Math.floor(Date.now()/WEEK_MS)%WEEKLY.length];
  if($('#powT')){$('#powT').textContent=w.t;$('#powBtn').dataset.v=w.v;$('#powBtn').dataset.t=w.t;$('#powTheme').textContent='This month: '+THEMES[new Date().getMonth()]}
  updateMarkCard();
@@ -980,7 +1042,9 @@ function renderToday(){
  $('#tdGreet').textContent=(hh<12?'Good morning':hh<18?'Good afternoon':'Good evening')+(S.name?', '+S.name:'');
  $('#tdDate').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
  const r=tdState();
- const s=streak();$('#tdStreakN').textContent=s;$('#tdStreakSub').textContent=(s===1?'day in a row':'days in a row')+(r.verse&&r.prayer&&r.chant?' · today complete 🙏':'');
+ const s=streak();const complete=r.verse&&r.prayer&&r.chant;$('#tdStreakN').textContent=s;
+ $('#tdStreakSub').textContent=(s===1?'day in a row':'days in a row')+(complete?' · today complete 🙏':(s>0?" · keep it alive today":''));
+ const fb=$('#tdFreezeBtn');if(fb)fb.textContent='🛡️ '+freezeCount();
  const v=TD_VERSES[tdIdx()%TD_VERSES.length];$('#tdVerse').textContent=v.t;$('#tdVerseRef').textContent='— '+v.r;
  const pr=TD_PRAYERS[tdIdx()%TD_PRAYERS.length];$('#tdPrayerT').textContent=pr.t;$('#tdPrayer').textContent=pr.b;
  const med=tdMeditation();$('#tdMedT').textContent=med.m;$('#tdMedX').textContent=med.x||'A few quiet minutes with your breath.';
@@ -1000,6 +1064,7 @@ if($('#tdVerseMark'))$('#tdVerseMark').onclick=()=>tdMark('verse');
 if($('#tdPrayBtn'))$('#tdPrayBtn').onclick=()=>{open(TD_PRAY_SESSION);tdMark('prayer')};
 if($('#tdMedBtn'))$('#tdMedBtn').onclick=()=>{open(tdMeditation());tdMark('chant')};
 if($('#tdTokens'))$('#tdTokens').onclick=()=>{go('home');setTimeout(()=>{const o=$('#offer');if(o){o.scrollIntoView({behavior:'smooth',block:'center'});if(canOffer())o.click()}},250)};
+if($('#tdFreezeBtn'))$('#tdFreezeBtn').onclick=buyFreeze;
 const canOffer=()=>S.srvBlock!==today()&&Date.now()-(S.lastTs||0)>=DAY;
 function tickOffer(){const b=$('#offer');if(offerBusy)return;if(canOffer()){b.disabled=false;b.removeAttribute('aria-disabled');b.dataset.w='';b.classList.add('reward-ready');b.textContent='✦ Free tokens'}else{b.classList.remove('reward-ready');const r=Math.max(0,DAY-(Date.now()-(S.lastTs||0))),h=Math.floor(r/36e5),m=Math.floor(r%36e5/6e4),s=Math.floor(r%6e4/1e3);b.disabled=true;b.setAttribute('aria-disabled','true');b.dataset.w=1;b.textContent=r>0?'Next offer in '+pad(h)+':'+pad(m)+':'+pad(s):'Already claimed. Come back tomorrow'}}
 setInterval(tickOffer,1000);
@@ -1523,6 +1588,7 @@ if (user.user_metadata?.sc_plan_at) S.planAt = Number(user.user_metadata.sc_plan
 storeTiles();
 updateMarkCard();
 setMileStart(user);
+checkStreakFreeze();
 homeTiles();
 
 save();
@@ -1709,6 +1775,7 @@ getSupabase().catch(err => {
     'Authentication could not be initialized. Please refresh the page.';
 });
 
+checkStreakFreeze();
 homeTiles();
 nUpd();
 setInterval(tickOffer, 1000);
