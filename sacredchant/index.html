@@ -351,6 +351,17 @@ body.big #tdPrayer,body.big #tdReflect{font-size:18px}
 #a2hs .a2step .n{flex:none;width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--acc2),var(--acc));color:#fff;display:grid;place-items:center;font-size:16px;font-weight:800}
 #a2hs .a2btn{display:block;width:100%;text-align:center;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3b2a05;font-weight:800;font-size:19px;border:0;border-radius:99px;padding:16px;margin-top:8px}
 #a2hs .a2later{display:block;width:100%;text-align:center;background:none;border:0;color:var(--mute);font-weight:700;font-size:16px;padding:14px 0 2px;margin-top:2px}
+.dms-card{background:linear-gradient(160deg,#fffdf5,#eaf2ff);border:1.5px solid var(--gold);border-radius:18px;padding:18px;text-align:center;box-shadow:0 8px 22px rgba(224,173,62,.18)}
+.dms-read{max-width:640px;margin:0 auto}
+.dms-read .dms-hero{text-align:center;margin:0 0 18px}
+.dms-read .dms-hero .k{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.dms-read .dms-hero h2{font-size:26px;margin:4px 0 0;color:var(--ink)}
+.dms-read h3{font-size:21px;color:var(--acc);margin:24px 0 8px}
+.dms-read p{font-size:17px;line-height:1.75;margin:0 0 12px;color:var(--ink)}
+.dms-read ol,.dms-read ul{margin:0 0 14px;padding-left:22px}
+.dms-read li{font-size:16px;line-height:1.65;margin:9px 0;color:var(--ink)}
+body.big .dms-read p{font-size:19px}
+body.big .dms-read li{font-size:18px}
 /* ===== aba Today (Daily) ===== */
 .today-head{margin:2px 0 10px}
 .td-streak{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(247,220,146,.20),rgba(122,166,245,.12));border:1px solid var(--line);border-radius:18px;padding:12px 15px;margin-bottom:14px}
@@ -470,10 +481,13 @@ body.big #tdPrayer,body.big #tdReflect{font-size:18px}
    <div id="faqHome"></div>
    <p class="faqx-more">More questions? <button type="button" class="lnk" id="faqGoProfile">See all answers in Profile</button></p>
   </div>
+  <div id="dmsHome"></div>
  </section>
 
  <section class="screen" id="s-vid"><button class="back" id="vBack">← Back</button><h2 class="h" id="vT"></h2><div id="vTop"></div><div class="vidb" id="vBox"></div><div class="faq" id="vTx"></div></section>
  <section class="screen" id="s-pray"><button class="back" data-back>← Back</button><div id="pBody"></div></section>
+ <section class="screen" id="s-dms"><button class="back" data-back>← Back</button><div id="dmsBody"></div></section>
+ <section class="screen" id="s-flourish"><button class="back" data-back>← Back</button><iframe id="flourishFrame" title="Divine Manifestation Script" style="width:100%;height:calc(100vh - 150px);min-height:520px;border:0;border-radius:14px;background:#0a0805"></iframe></section>
  <section class="screen" id="s-jes"><button class="back" data-back>← Back</button><h2 class="h">7 Prayers of Jesus</h2><p class="intro">Guided by Mark. All seven prayers are open — tap any day to begin. You can take one a day, or go at your own pace.</p><div class="tiles" id="jDays"></div></section>
  <section class="screen" id="s-store"><h2 class="h">Store</h2><p class="intro">Exclusive prayers and programs you can unlock with your Light Tokens.</p><div class="storeHead"><span class="e" aria-hidden="true">✦</span><div><b>Each product costs 120 ✦</b><span>Unlock it once and it stays yours forever, here and on your Home screen.</span></div></div><div class="tiles" id="tStore"></div></section>
  <section class="screen" id="s-ser"><button class="back" id="serBack">← Back</button><h2 class="h" id="serT"></h2><p class="intro" id="serI"></p><div class="tiles" id="serDays"></div></section>
@@ -713,6 +727,61 @@ function applyBig(){document.body.classList.toggle('big',!!S.big);const n=$('#ts
 if($('#tsN'))$('#tsN').onclick=()=>{S.big=false;save();applyBig()};
 if($('#tsL'))$('#tsL').onclick=()=>{S.big=true;save();applyBig()};
 applyBig();
+/* ===== Divine Manifestation Script — entrega instantanea na compra ===== */
+/* EDITE: link de checkout do produto (Digistore). Na pagina de OBRIGADO desse produto,
+   aponte de volta para o app com ?dms=27 (ou 47/77/100), e o Script abre na hora. */
+var DMS_CHECKOUT="https://SEU-LINK-DE-CHECKOUT-AQUI";
+const DMS_TITLES={27:'The First Step',47:'The Open Door',77:'The Breakthrough',100:'The Legacy'};
+const _dOpen=`<h3>A Sacred Opening</h3><p>Beloved, you did not arrive here by accident. Every road you walked, every tear you carried, every quiet prayer whispered in the dark — all of it led you to this moment. Heaven has been waiting for you to stop, and listen.</p><p>So breathe. Let your shoulders fall. What you hold now is not a lucky charm or an empty promise. It is a declaration — your declaration — meant to be read aloud, slowly, until your own voice begins to believe it.</p>`;
+const _dIdentity=`<h3>Who I Am Now</h3><p>I am a child of the Most High. I am not what happened to me. I am not my failures, my debts, my fears, or the names other people gave me. I am chosen, I am loved, and I am free to begin again.</p><p>I was not made for a small, shrinking life. I was made to flourish. Today I take back the name Heaven gave me — and I answer to it.</p>`;
+const _dBreak=`<h3>I Break Every Chain</h3><p>In the name of the Lord, I break the cycle of lack that has followed my family and my mind. I break the habit of fear that whispers "not for you." I break the agreement I made with shame, with scarcity, with "it is too late."</p><p>Every door that was shut by doubt, I now leave behind. What kept me stuck has no authority over my tomorrow. I close that chapter, and I do not reopen it.</p>`;
+const _dChoose=`<h3>Today I Choose</h3><p>The life of my dreams begins with my choice — and today I choose it. I choose faith over fear. I choose action over waiting. I choose to believe that God still writes new beginnings, and that mine starts now.</p><p>I will not stay frozen one more time. I take the step, even a small and trembling one, because I am someone who believes in miracles and acts like it.</p>`;
+const _dVision=`<h3>The Life I Am Called To</h3><p>I can see it: provision flowing where there was lack, peace where there was striving, open doors where there were walls. I see my needs met and my hands able to give. I see my home filled with warmth, my purpose made clear, my sleep made sweet.</p><p>This is not fantasy. This is the life being prepared for me, and I walk toward it with my head lifted.</p>`;
+const _dFaith=`<h3>Declarations of Faith</h3><p>The Lord is my shepherd; I shall not want. He opens His hand and satisfies my every need. I am blessed to be a blessing. Favor surrounds me like a shield. What I set my hand to will prosper, for I commit my work to Him.</p><p>No weapon formed against me shall prosper. Goodness and mercy follow me all the days of my life. The best is not behind me — it is ahead.</p>`;
+const _dSeal=`<h3>The Seal</h3><p>I receive this word over my life. I speak it, I believe it, and I act on it. It is done. Amen.</p>`;
+const _dHeal=`<h3>Healing and Restoration</h3><p>I let the Lord into the places I usually hide. The disappointments, the wounds I carried silently, the version of me that gave up — I bring them into the light. I am not asking to forget; I am asking to be healed.</p><p>I release the people I needed to forgive, including myself. I lay down the heavy coat of regret, and in its place I put on peace. My heart is being restored, quietly and completely, day by day.</p>`;
+const _dFamily=`<h3>Over My Family</h3><p>I speak blessing over every person I love by name. I pray unity where there has been distance, tenderness where there has been tension, and protection over each one, coming and going. As for me and my house, we will seek the Lord. Our home is becoming a place of peace, laughter, and provision.</p>`;
+const _dBlocks=`<h3>Breaking Spiritual Blocks</h3><p>Every unseen weight that has pressed on me — every spirit of fear, of delay, of heaviness — I renounce its grip in Jesus' name. I was not given a spirit of fear, but of power, of love, and of a sound mind.</p><p>I tear down the inner voice of "you are not worthy." I am worthy, because He says so. I cancel every curse spoken over me and replace it with blessing. The way is being cleared before me, and no darkness can hold back what God has released.</p>`;
+const _dPros=`<h3>A Vision of Prosperity</h3><p>I see myself free from debt and full of gratitude. I see opportunity finding me, wisdom guiding my decisions, and provision arriving on time. I am a good steward; what comes into my hands multiplies and blesses others. Abundance is not greed — it is the capacity to love, to give, and to build.</p>`;
+const _dRit7=`<h3>Your 7-Day Faith Ritual</h3><p>For the next seven mornings, before the world gets loud, do this:</p><ol><li><b>Day 1 — Stillness.</b> Read the Sacred Opening aloud, then sit in silence for two minutes. Declare: "I am here, and I am listening."</li><li><b>Day 2 — Identity.</b> Read "Who I Am Now" aloud three times. Say your name, then say: "Chosen. Loved. Free."</li><li><b>Day 3 — Breaking.</b> Read "I Break Every Chain." Name one thing you are leaving behind, out loud, and let it go.</li><li><b>Day 4 — Choice.</b> Read "Today I Choose." Take one small action your future self would thank you for.</li><li><b>Day 5 — Vision.</b> Read "The Life I Am Called To." Close your eyes and picture it for three minutes as if it were already here.</li><li><b>Day 6 — Gratitude.</b> Thank God out loud for ten things, big or small. Gratitude opens the next door.</li><li><b>Day 7 — Sealing.</b> Read the whole Script from the top, and end with "The Seal." You have planted; now you trust.</li></ol>`;
+const _dDecl=`<h3>My Declaration of Identity</h3><p>I am not a victim of my past; I am the author of my next chapter, under the hand of God. I am disciplined, I am faithful, I am generous, and I am brave. I keep my promises — above all, the ones I make to God and to myself. This is who I am, on the hard days and on the good ones.</p>`;
+const _dCons=`<h3>A Prayer of Consecration</h3><p>Father, I give You this life — all of it. My mornings and my nights, my money and my work, my family and my fears. Have Your way in me. Where I am weak, be my strength; where I am lost, be my light. I consecrate my hands to good work, my mouth to blessing, and my heart to You. Not my will, but Yours. Amen.</p>`;
+const _dLeg=`<h3>A Letter of Legacy</h3><p>To those who come after me: know that our story changed here. That on one ordinary day, I decided to stop shrinking and start believing. I chose faith when it would have been easier to quit. I broke chains older than me, so that you would never have to carry them.</p><p>If you are reading this, know that you are loved, you are capable, and you were built to flourish. Live generously. Keep your promises. And never forget the God who makes a way where there seems to be none.</p>`;
+const _dDay21=`<h3>Your 21-Day Script</h3><p>It takes three weeks to turn a decision into a way of life. For twenty-one days, keep this simple rhythm:</p><ul><li><b>Days 1–7 — Foundation.</b> Each morning, read the full Script aloud and complete the 7-Day Faith Ritual above.</li><li><b>Days 8–14 — Alignment.</b> Each day, read your Declaration of Identity and take one concrete action toward the life you declared. Write down what moves.</li><li><b>Days 15–21 — Overflow.</b> Each day, bless someone else — with your time, your words, or your giving. What you release returns multiplied. End each night with the Prayer of Consecration.</li></ul><p>On Day 21, read the Letter of Legacy aloud. You are no longer the same person who began.</p>`;
+const DMS={
+ 27:[_dOpen,_dIdentity,_dBreak,_dChoose,_dVision,_dFaith,_dSeal],
+ 47:[_dOpen,_dIdentity,_dBreak,_dHeal,_dFamily,_dChoose,_dVision,_dFaith,_dSeal],
+ 77:[_dOpen,_dIdentity,_dBreak,_dHeal,_dFamily,_dBlocks,_dChoose,_dVision,_dPros,_dFaith,_dRit7,_dSeal],
+ 100:[_dOpen,_dIdentity,_dDecl,_dBreak,_dHeal,_dFamily,_dBlocks,_dChoose,_dVision,_dPros,_dFaith,_dRit7,_dDay21,_dCons,_dLeg,_dSeal]
+};
+let dmsPending=0;
+try{const _dp=new URLSearchParams(location.search).get('dms');if(_dp&&DMS[Number(_dp)])dmsPending=Number(_dp);}catch(e){}
+function dmsTier(){return Number(S.dmsTier)||0}
+function applyDmsPending(){
+ if(!dmsPending)return;
+ S.dmsTier=Math.max(dmsTier(),dmsPending);save();dmsPending=0;
+ try{if(sbClient)sbClient.auth.updateUser({data:{sc_dms:S.dmsTier}}).catch(()=>{})}catch(e){}
+ if(typeof renderDmsHome==='function')renderDmsHome();
+ toast('Your Divine Manifestation Script is ready ✦');
+ setTimeout(openDms,600);
+}
+function renderDmsHome(){
+ const el=$('#dmsHome');if(!el)return;const t=dmsTier();
+ if(t){
+  el.innerHTML='<p class="sh">Your Divine Manifestation Script</p><div class="pow"><span class="theme">Your Script</span><p class="lab">Divine Manifestation Script</p><h3>'+DMS_TITLES[t]+'</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Your sacred script is ready. Read it aloud, slowly, over your life.</p><button type="button" class="btn gold" id="dmsOpen">\u{1F4D6} Open my Script</button></div>';
+  const b=$('#dmsOpen');if(b)b.onclick=openDms;
+ }else{
+  el.innerHTML='<p class="sh">Divine Manifestation Script</p><div class="pow"><span class="theme">New</span><p class="lab">Your sacred script</p><h3>A declaration written for you</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Take the short journey of faith, and receive a personalized Script to read aloud over your life. It opens right here.</p><button type="button" class="btn gold" id="dmsStart">✦ Begin your journey</button></div>';
+  const b=$('#dmsStart');if(b)b.onclick=openFlourish;
+ }
+}
+function openFlourish(){const f=$('#flourishFrame');if(f&&!f.getAttribute('src'))f.setAttribute('src','flourish.html');go('flourish');}
+function openDms(){
+ const t=dmsTier();if(!t)return;
+ const body=$('#dmsBody');if(!body)return;
+ body.innerHTML='<div class="dms-read"><div class="dms-hero"><div class="k">Divine Manifestation Script</div><h2>'+DMS_TITLES[t]+'</h2></div>'+DMS[t].join('')+'</div>';
+ go('dms');
+}
 function go(t){if(t!=='vid')$('#vBox').innerHTML='';if(t!=='web'&&$('#wBox'))$('#wBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='me'){if(typeof renderBilling==='function')renderBilling();if(typeof renderGrowth==='function')renderGrowth()}if(t==='today'&&typeof renderToday==='function')renderToday();scrollTo(0,0)}
 $$('.tab').forEach(b=>b.onclick=()=>access(b.dataset.t));
 function render(){
@@ -1357,7 +1426,7 @@ function prayOpen(){
 function homeTiles(){
  $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',2)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',prayOK()?0:10,prayOK()?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')+tile('data-mod="support"',IMG.support,'Support',0);
  $('#tPrd').innerHTML=tile('data-mod="solomon"',IMG.solomon,'7 Prayers of Solomon',2)+tile('data-mod="jesus"',JES_IMG,'7 Prayers of Jesus, guided by Mark',0)+PRODS.map(p=>tile('data-prod="'+p.id+'"',p.img,p.t,0)).join('');
- $('#tBon').innerHTML=BONUS.map(b=>{const ok=!b.cost||bonusOK(b.id);return tile('data-bonus="'+b.id+'"',b.img,b.t,ok?0:b.cost,ok?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')}).join('')}
+ $('#tBon').innerHTML=BONUS.map(b=>{const ok=!b.cost||bonusOK(b.id);return tile('data-bonus="'+b.id+'"',b.img,b.t,ok?0:b.cost,ok?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')}).join('');if(typeof renderDmsHome==='function')renderDmsHome()}
 /* desbloqueio permanente por conta (salvo no aparelho e na conta do usuario) */
 const bonusOK=id=>(S.bonusUnl||[]).includes(id);
 function syncUnlocks(){if(sbClient)sbClient.auth.updateUser({data:{sc_bonus_unlocks:S.bonusUnl||[]}}).catch(e=>console.warn('Could not sync unlocks:',e?.message||e))}
@@ -1842,6 +1911,7 @@ if (Array.isArray(accUnl)) S.bonusUnl = [...new Set([...(S.bonusUnl || []), ...a
 const accStore = user.user_metadata?.sc_store_owned;
 if (Array.isArray(accStore)) S.storeOwned = [...new Set([...(S.storeOwned || []), ...accStore])];
 if (user.user_metadata?.sc_mark) S.markUnlocked = true;
+if (user.user_metadata?.sc_dms) S.dmsTier = Math.max(Number(S.dmsTier)||0, Number(user.user_metadata.sc_dms)||0);
 if (user.user_metadata?.sc_tier) applyTier(user.user_metadata.sc_tier);
 if (user.user_metadata?.sc_plan_id) S.planId = user.user_metadata.sc_plan_id;
 if (user.user_metadata?.sc_plan_at) S.planAt = Number(user.user_metadata.sc_plan_at) || S.planAt;
@@ -1857,6 +1927,7 @@ $('#auth').classList.remove('on');
 go('home');
 render();
 if(typeof maybeA2==='function')maybeA2();
+if(typeof applyDmsPending==='function')applyDmsPending();
 
 setTimeout(async () => {
   await claimPendingDigistoreOrders();
