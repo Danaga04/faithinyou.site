@@ -330,6 +330,17 @@ body.on-mark #supportFab{display:none}
 .faqx details[open] summary{border-bottom:1.5px solid var(--line)}
 .faqx-a{padding:15px 17px 18px;font-size:16px;line-height:1.65;color:var(--ink)}
 .faqx-more{font-size:15px;color:var(--mute);margin:14px 0 0;text-align:center}
+body.big{font-size:19px}
+body.big .h{font-size:26px}
+body.big .intro,body.big .lab,body.big p,body.big li,body.big .item{font-size:18px}
+body.big .btn,body.big .opt{font-size:19px}
+body.big .faqx summary,body.big .faqx-a,body.big .ans{font-size:18px}
+body.big #tdVerse{font-size:25px}
+body.big #tdPrayer,body.big #tdReflect{font-size:18px}
+.tsize{display:flex;gap:10px}
+.tsize button{flex:1;padding:14px;border-radius:12px;border:1.5px solid var(--line);background:transparent;font:inherit;font-weight:700;color:var(--mute);cursor:pointer}
+.tsize button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.tsize button:last-child{font-size:20px}
 /* ===== aba Today (Daily) ===== */
 .today-head{margin:2px 0 10px}
 .td-streak{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(247,220,146,.20),rgba(122,166,245,.12));border:1px solid var(--line);border-radius:18px;padding:12px 15px;margin-bottom:14px}
@@ -361,7 +372,7 @@ body.on-mark #supportFab{display:none}
   <button type="button" class="pill" id="lightBtn" aria-haspopup="dialog" title="Get more Light Tokens"><span class="sr">Light Tokens:</span><span aria-hidden="true">✦</span><span id="lightN">0</span><span class="pl" aria-hidden="true">+</span></button>
  </div>
 
- <section class="screen on" id="s-today">
+ <section class="screen" id="s-today">
   <div class="today-head"><p class="lab" id="tdGreet">Today</p><h2 class="h" id="tdDate" style="margin:2px 0 0">Today</h2></div>
   <div class="td-streak" id="tdStreakBox"><span class="f" aria-hidden="true">🔥</span><div style="flex:1"><b id="tdStreakN">0</b><small id="tdStreakSub">days in a row</small></div><button type="button" class="ghost td-freeze" id="tdFreezeBtn" title="Protect your streak">🛡️</button></div>
   <p class="sh">Your daily moment</p><p>Three small steps. A few quiet minutes is enough.</p>
@@ -377,7 +388,7 @@ body.on-mark #supportFab{display:none}
   </div>
   <div class="card" style="text-align:center"><p class="lab" id="tdTokenHint" style="margin-bottom:8px">Your daily light</p><button class="btn gold" id="tdTokens">✦ Claim your Free tokens</button></div>
  </section>
- <section class="screen" id="s-home">
+ <section class="screen on" id="s-home">
   <div class="hero">
    <div class="angel-stage" id="angelStage" aria-label="Animated guardian angel with glowing halo">
    <svg class="angel" viewBox="0 0 230 190" aria-hidden="true">
@@ -453,7 +464,7 @@ body.on-mark #supportFab{display:none}
 
  <section class="screen" id="s-vid"><button class="back" id="vBack">← Back</button><h2 class="h" id="vT"></h2><div id="vTop"></div><div class="vidb" id="vBox"></div><div class="faq" id="vTx"></div></section>
  <section class="screen" id="s-pray"><button class="back" data-back>← Back</button><div id="pBody"></div></section>
- <section class="screen" id="s-jes"><button class="back" data-back>← Back</button><h2 class="h">7 Prayers of Jesus</h2><p class="intro">Guided by Mark. One prayer a day. Days 1 and 2 are open now. Each of the following days opens on its own day, or you can open it now for 20 ✦.</p><div class="tiles" id="jDays"></div></section>
+ <section class="screen" id="s-jes"><button class="back" data-back>← Back</button><h2 class="h">7 Prayers of Jesus</h2><p class="intro">Guided by Mark. All seven prayers are open — tap any day to begin. You can take one a day, or go at your own pace.</p><div class="tiles" id="jDays"></div></section>
  <section class="screen" id="s-store"><h2 class="h">Store</h2><p class="intro">Exclusive prayers and programs you can unlock with your Light Tokens.</p><div class="storeHead"><span class="e" aria-hidden="true">✦</span><div><b>Each product costs 120 ✦</b><span>Unlock it once and it stays yours forever, here and on your Home screen.</span></div></div><div class="tiles" id="tStore"></div></section>
  <section class="screen" id="s-ser"><button class="back" id="serBack">← Back</button><h2 class="h" id="serT"></h2><p class="intro" id="serI"></p><div class="tiles" id="serDays"></div></section>
  <section class="screen" id="s-web"><button class="back" data-back>← Back</button><h2 class="h" id="wT"></h2><div class="webw" id="wBox"></div></section>
@@ -497,6 +508,9 @@ body.on-mark #supportFab{display:none}
   <h2 class="h">Your sanctuary</h2>
   <div class="stats"><div class="stat"><b id="stS">0</b><small>day streak</small></div><div class="stat"><b id="stM">0</b><small>minutes</small></div><div class="stat"><b id="stL">0</b><small>light</small></div></div>
   <div class="card" style="margin-top:14px"><label for="nIn" class="lab">Your name</label><input type="text" id="nIn" maxlength="40" placeholder="Your name"><button class="btn" id="nSave">Save name</button></div>
+  <div class="card"><h3>Text size</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Make everything bigger and easier to read.</p>
+   <div class="tsize"><button type="button" id="tsN">Normal</button><button type="button" id="tsL">Large text</button></div>
+  </div>
   <div class="card"><h3>Your account</h3><p class="lab" style="font-weight:500;margin:4px 0 8px">This is the email your account and purchases are tied to. It can't be changed here.</p>
    <div class="acct-mail"><span class="em" id="acctEmail" title="">—</span><button type="button" class="cp" id="acctCopy">Copy</button></div>
   </div>
@@ -518,8 +532,8 @@ body.on-mark #supportFab{display:none}
 </div>
 
 <nav class="tabbar" aria-label="Main"><div>
- <button class="tab on" data-t="today"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Today</button>
- <button class="tab" data-t="home"><svg viewBox="0 0 24 24"><path d="M12 3l1.2 7.8L21 12l-7.8 1.2L12 21l-1.2-7.8L3 12l7.8-1.2z"/></svg>Home</button>
+ <button class="tab" data-t="today"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Today</button>
+ <button class="tab on" data-t="home"><svg viewBox="0 0 24 24"><path d="M12 3l1.2 7.8L21 12l-7.8 1.2L12 21l-1.2-7.8L3 12l7.8-1.2z"/></svg>Home</button>
  <button class="tab" data-t="chants"><svg viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg>Chants</button>
  <button class="tab" data-t="store"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 11.2a1.5 1.5 0 01-1.5 1.3H7.7a1.5 1.5 0 01-1.5-1.3z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg>Store</button>
  <button class="tab" data-t="me"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20.5c0-4.5 3.1-7 7.5-7s7.5 2.5 7.5 7"/></svg>Profile</button>
@@ -576,6 +590,10 @@ const CH=[
  {id:'abun',k:'m',n:'Abundance',tag:'Chamber of Provision',m:'Om Gam Ganapataye Namaha',x:'Gratitude for provision and a clear way ahead.',f:144.7,g:'linear-gradient(135deg,#f7c75a,#e58f3a)',e:'✨',src:''},
  {id:'heal',k:'m',n:'Health',tag:'Chamber of the Body',m:'Om Namah Shivaya',x:'A quiet turn toward rest and renewal.',f:126.2,g:'linear-gradient(135deg,#5fd0b8,#3a8fe0)',e:'🌿',src:''},
  {id:'morn',k:'m',n:'Morning Chant',tag:'A morning practice',m:'Om',x:'Begin the day with one steady tone.',f:172.1,g:'linear-gradient(135deg,#ffc979,#ff8f7a)',e:'🌅',src:''},
+ {id:'mara',k:'m',n:'Maranatha',tag:'Come, Lord',m:'Maranatha',x:'An ancient prayer word: Come, Lord Jesus.',f:130.8,g:'linear-gradient(135deg,#8aa6ff,#5a5bd6)',e:'🕊️',src:''},
+ {id:'kyrie',k:'m',n:'Kyrie',tag:'Lord, have mercy',m:'Kyrie Eleison',x:'Lord, have mercy — a chant of humility and peace.',f:138.6,g:'linear-gradient(135deg,#b49cff,#6c5ce0)',e:'🙏',src:''},
+ {id:'allel',k:'m',n:'Alleluia',tag:'Praise the Lord',m:'Alleluia',x:'A quiet song of praise and joy.',f:146.8,g:'linear-gradient(135deg,#ffd27a,#f0a93a)',e:'✨',src:''},
+ {id:'abba',k:'m',n:'Abba',tag:'Father',m:'Abba, Father',x:'Rest in being a beloved child of God.',f:120.0,g:'linear-gradient(135deg,#7fd0c0,#3a9fd0)',e:'💛',src:''},
  {id:'med',k:'d',n:'Deep Relaxation',tag:'Wind, bells and singing bowls',m:'Breathe in. Breathe out.',x:'Play it before or after prayer.',f:98,bell:1,g:'linear-gradient(135deg,#8aa6ff,#5a5bd6)',e:'🔔',src:''},
  {id:'nw',k:'n',n:'Mountain water',tag:'Field recording',m:'Let the water carry it.',x:'',noise:{t:'bandpass',f:1400,q:.4},g:'linear-gradient(135deg,#6fd0f0,#3a86e8)',e:'💧',src:''},
  {id:'nb',k:'n',n:'Dawn birdsong',tag:'Field recording',m:'A new day begins.',x:'',noise:{t:'highpass',f:5000,q:.3,v:.25},birds:1,g:'linear-gradient(135deg,#a8e07a,#4cb88a)',e:'🐦',src:''},
@@ -585,7 +603,7 @@ const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 let K='sc-guest';let S={name:'',light:10,min:0,days:[],last:'',vow:null,unl:null};
 function loadUser(e){K='sc-user:'+e;S={name:'',light:10,min:0,days:[],last:'',lastTs:0,vow:null,unl:null};try{const r=localStorage.getItem(K);if(r)S=Object.assign(S,JSON.parse(r))}catch(x){}}
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
-const ymd=d=>d.toISOString().slice(0,10),today=()=>ymd(new Date());
+const ymd=d=>{const m=d.getMonth()+1,da=d.getDate();return d.getFullYear()+'-'+(m<10?'0'+m:m)+'-'+(da<10?'0'+da:da)},today=()=>ymd(new Date());
 const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),2200)};
 function streak(){const pr=new Set(S.days||[]),fz=new Set(S.frozenDays||[]);let n=0,d=new Date();if(!pr.has(ymd(d)))d.setDate(d.getDate()-1);while(true){const k=ymd(d);if(pr.has(k)){n++;d.setDate(d.getDate()-1)}else if(fz.has(k)){d.setDate(d.getDate()-1)}else break}return n}
 /* ===== streak freeze (protecao da sequencia) ===== */
@@ -642,10 +660,10 @@ $('#lM').innerHTML=CH.filter(c=>c.k=='m').map(row).join('');$('#lD').innerHTML=C
 $$('.item').forEach(b=>b.onclick=()=>play(CH.find(c=>c.id===b.dataset.id)));
 /* ===== FAQ2 (Home mostra o grupo "por que abre por dia"; Profile mostra tudo) ===== */
 const FAQ2=[
- {g:'Why content opens one day at a time', items:[
-  {q:'Why do some prayers and programs unlock day by day?', a:`Sacred Chant is built as a daily practice, not a one-time binge. Each day opens on its own day so you can truly live the prayer, let it settle, and come back — the way a real devotion works. Receiving everything at once would turn a spiritual journey into a checklist.`},
-  {q:'Can I unlock all the days at once?', a:`Some programs let you open the next day early with Light Tokens, but by design the deepest paths — like the Exclusive prayers — open only with time. The waiting is part of the practice: it builds the habit of returning to God each day.`},
-  {q:'Why do the Exclusive prayers open only on day 7, 14, 30 and 60?', a:`They are reserved for people who keep showing up. They cannot be bought with tokens — only time and faithfulness open them. It is our way of honouring commitment over shortcuts.`},
+ {g:'Your prayers & how to use them', items:[
+  {q:'Where do I find my prayers?', a:`On the Home page. The 7 Prayers of Solomon and the 7 Prayers of Jesus are ready for you — just tap one to begin. The app also has bonus prayers and a Store you can open with your Light Tokens.`},
+  {q:'Do I have to wait to open the prayers?', a:`No. Your 7 Prayers of Solomon and 7 Prayers of Jesus are fully open — take them at your own pace. Some extra programs and bonuses use Light Tokens, and you get +10 free every 24 hours.`},
+  {q:'How do I listen to or read a prayer?', a:`Tap a prayer to open it. Most play as a short video — press play and turn your volume up. If you prefer to read, the Today page has a written prayer each day, and in Profile you can make all the text bigger.`},
   {q:'I missed a day — did I lose my progress?', a:`No. Your journey waits for you. Come back and continue where you left off; a missed day never erases what you have unlocked. And your streak can be protected with a freeze.`},
  ]},
  {g:'Light Tokens', items:[
@@ -679,6 +697,11 @@ function renderFAQ(){
 }
 renderFAQ();
 if($('#faqGoProfile'))$('#faqGoProfile').onclick=()=>go('me');
+/* ===== Tamanho do texto (acessibilidade) ===== */
+function applyBig(){document.body.classList.toggle('big',!!S.big);const n=$('#tsN'),l=$('#tsL');if(n)n.classList.toggle('on',!S.big);if(l)l.classList.toggle('on',!!S.big)}
+if($('#tsN'))$('#tsN').onclick=()=>{S.big=false;save();applyBig()};
+if($('#tsL'))$('#tsL').onclick=()=>{S.big=true;save();applyBig()};
+applyBig();
 function go(t){if(t!=='vid')$('#vBox').innerHTML='';if(t!=='web'&&$('#wBox'))$('#wBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='me'){if(typeof renderBilling==='function')renderBilling();if(typeof renderGrowth==='function')renderGrowth()}if(t==='today'&&typeof renderToday==='function')renderToday();scrollTo(0,0)}
 $$('.tab').forEach(b=>b.onclick=()=>access(b.dataset.t));
 function render(){
@@ -686,7 +709,7 @@ function render(){
  $('#uname').textContent=S.name||'Guest';$('#nIn').value=S.name;
  ['#lightN','#stL'].forEach(s=>$(s).textContent=S.light);$('#stM').textContent=Math.round(S.min);$('#stS').textContent=streak();
  tickOffer();
- const ms=CH.filter(c=>c.k=='m');window.DC=ms[Math.floor(Date.now()/864e5)%ms.length];$('#dM').textContent=DC.m;$('#dX').textContent=DC.x;
+ const ms=CH.filter(c=>c.k=='m');window.DC=ms[tdIdx()%ms.length];$('#dM').textContent=DC.m;$('#dX').textContent=DC.x;
  renderGrowth();
  if(typeof renderBilling==='function')renderBilling();
  if(typeof renderToday==='function')renderToday();
@@ -1065,7 +1088,41 @@ const TD_VERSES=[
  {t:'“In every thing give thanks.”',r:'1 Thessalonians 5:18'},
  {t:'“He healeth the broken in heart, and bindeth up their wounds.”',r:'Psalm 147:3'},
  {t:'“Let not your heart be troubled: ye believe in God, believe also in me.”',r:'John 14:1'},
- {t:'“The Lord will give strength unto his people; the Lord will bless his people with peace.”',r:'Psalm 29:11'}
+ {t:'“The Lord will give strength unto his people; the Lord will bless his people with peace.”',r:'Psalm 29:11'},
+ {t:'“Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me.”',r:'Psalm 23:4'},
+ {t:'“O taste and see that the Lord is good.”',r:'Psalm 34:8'},
+ {t:'“What time I am afraid, I will trust in thee.”',r:'Psalm 56:3'},
+ {t:'“Thy word is a lamp unto my feet, and a light unto my path.”',r:'Psalm 119:105'},
+ {t:'“They that wait upon the Lord shall renew their strength; they shall mount up with wings as eagles.”',r:'Isaiah 40:31'},
+ {t:'“Thou wilt keep him in perfect peace, whose mind is stayed on thee.”',r:'Isaiah 26:3'},
+ {t:'“Blessed are the pure in heart: for they shall see God.”',r:'Matthew 5:8'},
+ {t:'“For God so loved the world, that he gave his only begotten Son.”',r:'John 3:16'},
+ {t:'“I am the light of the world: he that followeth me shall not walk in darkness.”',r:'John 8:12'},
+ {t:'“Rejoicing in hope; patient in tribulation; continuing instant in prayer.”',r:'Romans 12:12'},
+ {t:'“Now the God of hope fill you with all joy and peace in believing.”',r:'Romans 15:13'},
+ {t:'“For we walk by faith, not by sight.”',r:'2 Corinthians 5:7'},
+ {t:'“My grace is sufficient for thee: for my strength is made perfect in weakness.”',r:'2 Corinthians 12:9'},
+ {t:'“And let us not be weary in well doing: for in due season we shall reap, if we faint not.”',r:'Galatians 6:9'},
+ {t:'“Be careful for nothing; but in every thing by prayer and supplication… let your requests be made known unto God.”',r:'Philippians 4:6'},
+ {t:'“And the peace of God, which passeth all understanding, shall keep your hearts and minds.”',r:'Philippians 4:7'},
+ {t:'“And let the peace of God rule in your hearts.”',r:'Colossians 3:15'},
+ {t:'“Humble yourselves therefore under the mighty hand of God, that he may exalt you in due time.”',r:'1 Peter 5:6'},
+ {t:'“Thou wilt shew me the path of life: in thy presence is fulness of joy.”',r:'Psalm 16:11'},
+ {t:'“The Lord is my strength and my shield; my heart trusted in him, and I am helped.”',r:'Psalm 28:7'},
+ {t:'“Why art thou cast down, O my soul? … hope thou in God.”',r:'Psalm 42:11'},
+ {t:'“Create in me a clean heart, O God; and renew a right spirit within me.”',r:'Psalm 51:10'},
+ {t:'“Cast thy burden upon the Lord, and he shall sustain thee.”',r:'Psalm 55:22'},
+ {t:'“Bless the Lord, O my soul, and forget not all his benefits.”',r:'Psalm 103:2'},
+ {t:'“I will lift up mine eyes unto the hills, from whence cometh my help.”',r:'Psalm 121:1'},
+ {t:'“I will praise thee; for I am fearfully and wonderfully made.”',r:'Psalm 139:14'},
+ {t:'“In all thy ways acknowledge him, and he shall direct thy paths.”',r:'Proverbs 3:6'},
+ {t:'“The name of the Lord is a strong tower: the righteous runneth into it, and is safe.”',r:'Proverbs 18:10'},
+ {t:'“Blessed is the man that trusteth in the Lord, and whose hope the Lord is.”',r:'Jeremiah 17:7'},
+ {t:'“The Lord thy God in the midst of thee is mighty; he will save.”',r:'Zephaniah 3:17'},
+ {t:'“Lo, I am with you alway, even unto the end of the world.”',r:'Matthew 28:20'},
+ {t:'“Be of good cheer; I have overcome the world.”',r:'John 16:33'},
+ {t:'“We love him, because he first loved us.”',r:'1 John 4:19'},
+ {t:'“Be strong and of a good courage, fear not: for the Lord thy God, he it is that doth go with thee.”',r:'Deuteronomy 31:6'}
 ];
 const TD_PRAYERS=[
  {t:'A prayer to begin',b:"Heavenly Father, thank You for this new day. Guide my steps, guard my heart, and let me be a blessing to someone today. Give me peace in what I cannot control and courage for what I can. In Jesus' name, Amen."},
@@ -1079,7 +1136,24 @@ const TD_PRAYERS=[
  {t:'A prayer of surrender',b:"Father, I give You this day exactly as it is — my hopes, my fears, my plans. Have Your way in me. Not my will, but Yours be done. Amen."},
  {t:'A prayer for hope',b:"Lord, when the road feels long, remind me that You hold my future. Fill me with hope that does not disappoint, and let me rest in Your promises today. Amen."},
  {t:'A prayer of protection',b:"Father, cover me and those I love under the shadow of Your wings. Keep us from all evil, and send Your angels to guard us in all our ways. Amen."},
- {t:'A prayer to forgive',b:"Lord, wash my heart clean and help me to forgive as I have been forgiven. Free me from bitterness, and let love lead the way. Amen."}
+ {t:'A prayer to forgive',b:"Lord, wash my heart clean and help me to forgive as I have been forgiven. Free me from bitterness, and let love lead the way. Amen."},
+ {t:'A prayer for the evening',b:"Lord, as this day ends, I lay down what I could not finish and what I could not fix. Thank You for being with me through all of it. Grant me rest, and let me wake with new mercy. Amen."},
+ {t:'A prayer in anxiety',b:"Father, my mind is racing and my chest is tight. Meet me here. Breathe Your peace into me, loosen what I am gripping too hard, and remind me that You hold what I cannot. Amen."},
+ {t:'A prayer for patience',b:"Lord, teach me to wait well. Where I want to rush, give me trust; where I want to force, give me stillness. Your timing is never late. Amen."},
+ {t:'A prayer over my work',b:"Father, bless the work of my hands today. Give me focus, integrity, and favor, and let what I do bring provision for my home and good to others. Amen."},
+ {t:'A prayer for my marriage',b:"Lord, strengthen the bond between us. Soften where we are hard, grow patience where we are tired, and let love and respect lead our home. Amen."},
+ {t:'A prayer for my children',b:"Father, watch over my children wherever they are. Guard their hearts, surround them with good, and help them know, deep down, that they are loved by You and by me. Amen."},
+ {t:'A prayer for finances',b:"Lord, You see every bill and every need. Give me wisdom with what I have, open honest doors, and free me from fear. Teach me to trust Your provision one day at a time. Amen."},
+ {t:'A prayer for someone I love',b:"Father, I lift up the person on my heart right now. You know their need better than I do. Draw near to them, give them strength, and let them feel that they are not alone. Amen."},
+ {t:'A prayer in grief',b:"Lord, my heart is heavy with loss. Be close to the broken-hearted, as You promised. Hold me in what I cannot carry, and let me grieve with hope. Amen."},
+ {t:'A prayer of trust',b:"Father, I do not understand everything, and I do not need to. I choose to trust that You are good and that You are working, even now, in what I cannot see. Amen."},
+ {t:'A prayer for courage',b:"Lord, give me courage for what I am facing. Steady my hands, quiet my fear, and let me take the next step knowing You go before me and behind me. Amen."},
+ {t:'A prayer while waiting',b:"Father, the answer has not come yet, and the waiting is hard. Keep my faith alive, keep my heart soft, and help me to seek You more than the answer itself. Amen."},
+ {t:'A prayer to forgive myself',b:"Lord, I keep carrying what You have already forgiven. Help me to receive Your mercy, to make right what I can, and to walk forward free. Amen."},
+ {t:'A prayer for joy',b:"Father, restore to me the joy of simple things — a breath, a kindness, Your presence. Let gladness rise in me today, not because all is perfect, but because You are near. Amen."},
+ {t:'A prayer of humility',b:"Lord, make me teachable. Where I am proud, make me gentle; where I am right, make me kind. Let my life point to You and not to me. Amen."},
+ {t:'A prayer for mercy',b:"Father, have mercy on me, and make me merciful. Let me be quick to forgive, slow to judge, and generous with grace, as You have been with me. Amen."},
+ {t:'A prayer before a decision',b:"Lord, I have a choice before me and I need Your wisdom. Make the right path clear, give me peace about it, and help me to follow where You lead. Amen."}
 ];
 const TD_REFLECTIONS=[
  "You don't have to carry today all at once. One prayer, one breath, one step is enough.",
@@ -1093,9 +1167,26 @@ const TD_REFLECTIONS=[
  "The same God who holds the stars holds you. You are seen and loved.",
  "Give today your honest heart, not a perfect one. That is the prayer God receives.",
  "Kindness is a prayer with hands. Let someone feel God's love through you today.",
- "Hope is choosing to believe that tomorrow can be gentler. Hold on."
+ "Hope is choosing to believe that tomorrow can be gentler. Hold on.",
+ "You were never meant to carry it all alone. Hand one thing to God right now.",
+ "Prayer doesn't have to be eloquent. It only has to be honest.",
+ "What you water grows. Today, water faith instead of fear.",
+ "God is not finished with you. This chapter is not the whole story.",
+ "Stillness is not doing nothing. It is letting God do something in you.",
+ "You are allowed to begin again, today, as many times as you need.",
+ "The smallest act of love is never wasted in God's hands.",
+ "Worry asks 'what if'; faith answers 'even if, God is with me'.",
+ "Your worth was settled before you did anything. You are loved as you are.",
+ "Breathe. The same breath in your lungs is a gift being given right now.",
+ "Let today be enough. Tomorrow will have grace of its own.",
+ "When words run out, simply sit with God. Presence is its own prayer.",
+ "Gratitude is the shortest road back to peace. Start with one thing.",
+ "You don't have to feel strong to be held. Lean back into Him.",
+ "Forgiveness sets a prisoner free, and often the prisoner is you.",
+ "A gentle answer, a patient pause, a kind word — small seeds of heaven.",
+ "God meets you where you are, not where you think you should be."
 ];
-function tdIdx(){return Math.floor(Date.now()/DAY)}
+function tdIdx(){const n=new Date();return Math.floor((n.getTime()-n.getTimezoneOffset()*6e4)/DAY)}
 function tdState(){if(!S.tdRitual||S.tdRitual.d!==today())S.tdRitual={d:today(),verse:false,prayer:false,chant:false};return S.tdRitual}
 const TD_PRAY_SESSION={id:'tdpray',n:"Today's prayer",tag:'A quiet moment with God',m:'Breathe. Pray. Be still.',f:126.2,g:'linear-gradient(135deg,#8aa6ff,#5a5bd6)',e:'🙏'};
 function tdMeditation(){const ms=CH.filter(c=>c.k=='m');return ms[tdIdx()%ms.length]}
@@ -1407,7 +1498,7 @@ function openWeb(url,title){$('#wT').textContent=title;$('#wBox').innerHTML='<if
 /* 7 Prayers of Jesus: dias 1 e 2 abertos; o dia N abre N dias depois de comecar, ou na hora por 20 tokens */
 const JES_COST=20;
 const jesDayMs=i=>(i+1)*DAY;
-const jesOpen=i=>i<2||(S.jesPaid||[]).includes(i)||(Number.isFinite(Number(S.jesStart))&&Date.now()-Number(S.jesStart)>=jesDayMs(i));
+const jesOpen=i=>true;
 function jesPage(){$('#jDays').innerHTML=JDAYS.map((d,i)=>{const o=jesOpen(i);return tile('data-jday="'+i+'"',P+d[0]+'.avif','Day '+(i+1),0,o?'':'<span class="lk"><b>🔒</b><span class="cd"></span></span>',!o)}).join('');go('jes');jesTick()}
 function jesTick(){if(!$('#s-jes').classList.contains('on'))return;const now=Date.now(),start=Number(S.jesStart);if(!Number.isFinite(start))return;if(JDAYS.some((d,i)=>jesOpen(i)&&$('#jDays [data-jday="'+i+'"] .lk')))return jesPage();$$('#jDays [data-jday]').forEach((t,i)=>{if(jesOpen(i))return;const r=Math.max(0,jesDayMs(i)-(now-start)),dd=Math.floor(r/DAY),hh=Math.floor(r%DAY/36e5),mm=Math.floor(r%36e5/6e4),ss=Math.floor(r%6e4/1e3);const cd=t.querySelector('.cd');if(cd)cd.textContent='Opens in '+(dd?dd+'d ':'')+pad(hh)+':'+pad(mm)+':'+pad(ss)})}
 setInterval(jesTick,1000);
@@ -1452,7 +1543,7 @@ function calc(){$('#pBody').innerHTML='<div style="text-align:center"><div class
 function reading(){showVid(VID.pray,'Your reading is ready','<h2 class="h" style="font-size:20px">The Message Meant for You</h2><p class="intro">Based on your answers, this short reading offers a message for reflection. Press play — your sound is on.</p>','','home')}
 /* 7 Prayers of Solomon — unlock each day at its exact elapsed-day milestone */
 const solDayMs=i=>(i+1)*DAY;
-const solOpen=i=>i<3||(S.solPaid||[]).includes(i)||(Number.isFinite(Number(S.solStart))&&Date.now()-Number(S.solStart)>=solDayMs(i));
+const solOpen=i=>true; /* tudo liberado: a pessoa comprou, recebe na hora */
 function solPage(){$('#sDays').innerHTML=DAYS.map((d,i)=>{const o=solOpen(i);return tile('data-day="'+i+'"',P+d[0]+'.avif','Day '+(i+1),0,o?'':'<span class="lk"><b>🔒</b><span class="cd"></span></span>',!o)}).join('');go('sol');solTick()}
 function solTick(){if(!$('#s-sol').classList.contains('on'))return;const now=Date.now(),start=Number(S.solStart);if(!Number.isFinite(start))return;let changed=false;DAYS.forEach((d,i)=>{if(i>=3&&!solOpen(i)&&now-start>=solDayMs(i))changed=true});if(changed){solPage();return}$$('#sDays [data-day]').forEach((tile,i)=>{if(solOpen(i))return;const remain=Math.max(0,solDayMs(i)-(now-start));const days=Math.floor(remain/DAY),hours=Math.floor((remain%DAY)/36e5),mins=Math.floor((remain%36e5)/6e4),secs=Math.floor((remain%6e4)/1e3);const cd=tile.querySelector('.cd');if(cd)cd.textContent='Opens in '+(days?days+'d ':'')+pad(hours)+':'+pad(mins)+':'+pad(secs)})}
 setInterval(solTick,1000);
@@ -1484,7 +1575,21 @@ function startOnboarding(){
  obAnswers=[];obQuestion=0;obStage='quiz';
  $('#onboard').classList.add('on');
  document.body.classList.add('nos');
- obRenderQuestion();
+ obShowWelcome();
+}
+function obShowWelcome(){
+ obStage='welcome';
+ $('#obTop').textContent='WELCOME';
+ $('#obTitle').textContent="You're in — welcome!";
+ $('#obProgress').style.width='8%';
+ $('#obBody').innerHTML='<div class="ob-reason">'
+  +'<b>Your prayers are ready right now.</b><br>The 7 Prayers of Solomon and the 7 Prayers of Jesus are open for you — tap and begin. The app also has bonus prayers and a Store you can open with Light Tokens.<br><br>'
+  +'<b>No App Store needed.</b><br>Sacred Chant is a web app — there is nothing to download. To keep it handy, add it to your home screen. The <b>Home</b> page shows you how, in two taps.<br><br>'
+  +'<b>Where are your prayers?</b><br>On the <b>Home</b> page: the 7 Prayers of Solomon, the 7 Prayers of Jesus, and more. Tap one to open it.<br><br>'
+  +'<b>Watch or read.</b><br>Each prayer plays as a short video — press play and turn your volume up. Prefer reading? The <b>Today</b> page has a written prayer every day, and in <b>Profile</b> you can make all the text bigger.<br><br>'
+  +'<b>About your plan.</b><br>It renews automatically (monthly or yearly), you can cancel anytime, and there is a 30-day money-back guarantee.'
+  +'</div><button type="button" class="ob-primary" id="obWelcomeGo">Let\'s begin</button>';
+ $('#obWelcomeGo').onclick=()=>{obQuestion=0;obRenderQuestion()};
 }
 function obRenderQuestion(){
  const q=OB_QUESTIONS[obQuestion];
@@ -1704,8 +1809,9 @@ checkStreakFreeze();
 homeTiles();
 
 save();
+if(typeof applyBig==='function')applyBig();
 $('#auth').classList.remove('on');
-go('today');
+go('home');
 render();
 
 setTimeout(async () => {
@@ -1958,13 +2064,13 @@ setInterval(tickOffer, 1000);
    r: [() => "Plenty is free: the Support popup, the 7 Prayers of Jesus (days 1 and 2 from the start), the bonuses How to install the app, 15 Words Prayer, Prayer of Saint Benedict and The Book of Hidden Light, plus Sacred Chant, Song of God, The Journey with My Angel and Family Protect in My products. And every 24 hours you get +10 ✦ free by offering your intention."],
    a: ['jesus', 'words15', 'benedict'], f: ['How do I get free tokens?', 'What costs tokens?'] },
   { id: 'tokens', k: ['light token', 'token', 'tokens', 'what are tokens', 'how do tokens work', 'what is light', 'my balance', 'how many tokens', 'how much light', 'what are the stars', 'star symbol', 'currency'],
-   r: [() => "Light Tokens (✦) are the light you use inside Sacred Chant. Right now you have " + G.light() + " ✦. You earn +10 ✦ free every 24 hours with \"Free tokens\" on Home, or you can add more with a plan. They open things like Start here and the 7 Prayers of Solomon (2 ✦ a day), a chant session (3 ✦), \"I want to pray for you\" (10 ✦ once), the Carlos Acutis and Archangel Raphael prayers (10 ✦, yours forever) and Store programs (120 ✦, yours forever)."],
+   r: [() => "Light Tokens (✦) are the light you use inside Sacred Chant. Right now you have " + G.light() + " ✦. You earn +10 ✦ free every 24 hours with \"Free tokens\" on Home, or you can add more with a plan. They open things like Start here (2 ✦ a day), a chant session (3 ✦), \"I want to pray for you\" (10 ✦ once), the Carlos Acutis and Archangel Raphael prayers (10 ✦, yours forever) and Store programs (120 ✦, yours forever). The 7 Prayers of Solomon and 7 Prayers of Jesus are all open for you."],
    a: ['offer', 'buy'], f: ['How do I get free tokens?', 'What costs tokens?', 'My tokens did not arrive'] },
   { id: 'free_tokens', k: ['free tokens', 'free light', 'earn tokens', 'get tokens', 'get more tokens', 'more light', 'daily light', 'daily reward', 'free tokens', 'free token', 'offer your intention', 'offer my intention', 'intention button', 'claim', 'plus 10', '+10', 'daily bonus', 'every day tokens'],
    r: [() => G.canOffer() ? "Your daily light is ready right now! Go to Home and tap \"Free tokens\". Take one breath, hold your intention in your heart, and +10 ✦ are added. You can do it once every 24 hours." : "You already offered your intention. Your next free +10 ✦ will be ready in about " + fmtLeft(G.offerLeft()) + ". The button on Home shows the countdown, and in Profile you can turn on a reminder so you don't miss it."],
    a: ['offer', 'profile'], f: ['What can I do with tokens?', 'How do I buy more tokens?'] },
   { id: 'costs', k: ['what costs', 'how much does it cost', 'how much is', 'price of', 'cost tokens', 'spend tokens', 'why did i lose tokens', 'tokens disappeared', 'tokens went down', 'charged tokens', 'took my tokens', 'used my tokens'],
-   r: [() => "Here's what uses Light Tokens: Start here and the 7 Prayers of Solomon cost 2 ✦ to open (once per day), the Chants tab 2 ✦, each chant session 3 ✦, opening a resting Solomon day early 10 ✦, a locked day of the 7 Prayers of Jesus 20 ✦, \"I want to pray for you\" 10 ✦ once, Carlos Acutis and Archangel Raphael 10 ✦ each (forever), each Store program 120 ✦ (forever), and talking with me 3 ✦ per message. Talking with me costs 3 ✦ per message."],
+   r: [() => "Here's what uses Light Tokens: Start here costs 2 ✦ to open (once per day), the Chants tab 2 ✦, each chant session 3 ✦, \"I want to pray for you\" 10 ✦ once, Carlos Acutis and Archangel Raphael 10 ✦ each (forever), each Store program 120 ✦ (forever), and talking with me 3 ✦ per message. The 7 Prayers of Solomon and the 7 Prayers of Jesus are all open — every day is free to go through."],
    a: ['offer', 'buy'], f: ['How do I get free tokens?', 'What is free?'] },
   { id: 'plans', k: ['plan', 'plans', 'buy tokens', 'purchase tokens', 'price', 'prices', 'how much', 'pricing', 'premium', 'devotional plan', 'essential plan', 'sacred premium', 'package', 'pay', 'payment', 'checkout', 'digistore', 'upgrade'],
    r: [() => { const p = G.plans(); return p.length ? "These are the Light Token plans: " + list(p.map(x => x.name.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) + ' — ' + x.tokens.toLocaleString('en-US') + ' ✦ for ' + x.price + (x.monthly ? ' per month' : x.yearly ? ' per year' : ' one-time'))) + ". Sacred Premium is the best value. All plans are monthly subscriptions. Tap the ✦ counter at the top of the screen anytime to see them." : "Tap the ✦ counter at the top of the screen to see the Light Token plans." }],
