@@ -5,12 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>TIME TO FLOURISH</title>
-<script type="text/javascript">
-  var s = document.createElement("script");
-  s.src = "https://scripts.converteai.net/80d0b89d-7901-4c62-bf15-807e2dab2483/players/6aeca384d1189b35ed072a90/v4/player.js";
-  s.async = true;
-  document.head.appendChild(s);
-</script>
+<!-- O player do VSL e carregado em gotoOffer(), quando o elemento ja existe na tela -->
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   html, body { min-height:100%; }
@@ -692,6 +687,14 @@ function gotoOffer(){
   `;
   ['27','47','77','100'].forEach(function(k){ var a=document.getElementById('seed'+k); if(a && CHECKOUT[k]) a.setAttribute('href', CHECKOUT[k]); });
   show('finalScreen');
+  // Carrega o player do VSL agora que o elemento existe e esta visivel
+  if(!window.__vslLoaded){
+    window.__vslLoaded = true;
+    var sc = document.createElement('script');
+    sc.src = 'https://scripts.converteai.net/80d0b89d-7901-4c62-bf15-807e2dab2483/players/6aeca384d1189b35ed072a90/v4/player.js';
+    sc.async = true;
+    document.head.appendChild(sc);
+  }
 }
 
 /* START */
