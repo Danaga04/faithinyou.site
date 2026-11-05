@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>TIME TO FLOURISH</title>
+<script type="text/javascript">
+  var s = document.createElement("script");
+  s.src = "https://scripts.converteai.net/80d0b89d-7901-4c62-bf15-807e2dab2483/players/6aeca384d1189b35ed072a90/v4/player.js";
+  s.async = true;
+  document.head.appendChild(s);
+</script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { min-height:100%; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #fff7e6;
+    min-height: 100vh;
+    padding-bottom: 60px;
+    background: #0a0805;
+  }
+  body::before {
+    content:""; position:fixed; inset:0; z-index:-2;
+    background: radial-gradient(ellipse at 50% 0%, #1a1408 0%, #0a0805 55%);
+  }
+  body::after {
+    content:""; position:fixed; inset:0; z-index:-1;
+    background:rgba(0,0,0,0.45);
+  }
+
+  .screen { display:none; }
+  .screen.active { display:block; animation: fade .4s ease; }
+  @keyframes fade { from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:translateY(0);} }
+  .wrap { max-width: 820px; margin:0 auto; padding: 26px 18px; text-align:center; }
+
+  /* ENTRANCE */
+  .logo-placeholder {
+    width: 220px; max-width: 70%; height: 80px; margin: 6px auto 22px;
+    background: linear-gradient(135deg, #f3c34e, #e0a91d);
+    border-radius: 16px; display:flex; align-items:center; justify-content:center;
+    font-size: 22px; font-weight:bold; color:#1a1206; letter-spacing:1px;
+    box-shadow: 0 0 28px rgba(243,195,78,.4);
+  }
+  .lead { font-size: 30px; line-height: 1.4; font-weight: bold; margin: 6px auto 26px; max-width: 700px; }
+  .lead .big { color:#f3c34e; }
+
+  .cta {
+    font-family: inherit; font-size: 30px; font-weight:bold;
+    padding: 22px 40px; border:none; border-radius: 14px;
+    background: linear-gradient(180deg,#f7d873,#e0a91d); color:#1a1206;
+    cursor:pointer; display:inline-block; width:100%; max-width:600px;
+    box-shadow: 0 6px 0 #b8911f, 0 0 30px rgba(243,195,78,.25);
+    transition: transform .08s ease;
+  }
+  .cta:hover { transform: translateY(-2px); }
+  .cta:active { transform: translateY(3px); box-shadow:0 2px 0 #b8911f; }
+
+  /* AFFIRMATION */
+  .glowbox {
+    max-width: 660px; margin: 40px auto; padding: 46px 30px; border-radius: 22px;
+    border: 3px solid #f3c34e; background: rgba(10,8,4,.7);
+    animation: glowpulse 2s ease-in-out infinite;
+  }
+  @keyframes glowpulse {
+    0%,100% { box-shadow: 0 0 28px rgba(243,195,78,.45), inset 0 0 30px rgba(243,195,78,.12); }
+    50%     { box-shadow: 0 0 60px rgba(243,195,78,.85), inset 0 0 45px rgba(243,195,78,.22); }
+  }
+  .glowbox .small { font-size: 24px; color:#ffe9ab; margin-bottom: 18px; }
+  .glowbox .phrase { font-size: 36px; font-weight:bold; color:#f3c34e; line-height:1.25; margin: 22px auto; font-style:italic; }
+  .glowbox .note { font-size: 20px; color:#cdbd92; margin-bottom: 30px; }
+
+  /* QUESTION HEADER */
+  .qhead { text-align:center; padding-top: 14px; }
+  .qhead .logo-sm {
+    width: 90px; height: 36px; margin: 0 auto 10px; display:flex; align-items:center; justify-content:center;
+    background: linear-gradient(135deg, #f3c34e, #e0a91d); border-radius: 10px;
+    font-size: 13px; font-weight:bold; color:#1a1206; letter-spacing:0.5px;
+  }
+  .hello { font-size: 24px; font-weight:bold; color:#f3c34e; margin-bottom: 16px; }
+  .energy { max-width: 100%; margin: 22px auto 0; }
+  .energy-row { display:flex; justify-content:space-between; font-size: 15px; font-style:italic; color:#b7a878; margin-bottom:6px; }
+  .energy-track { height: 12px; width:100%; background:#1c1810; border-radius: 8px; overflow:hidden; border:1px solid #3a3018; }
+  .energy-fill { height:100%; width:0%; background: linear-gradient(90deg,#e0a91d,#f7d873); transition: width .5s ease; border-radius:8px; }
+  .strip { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; padding: 14px 2px 4px; margin-top: 12px; }
+  .strip .thumb {
+    width:52px; height:52px; border-radius:11px; border:2px solid #f3c34e; overflow:hidden;
+    box-shadow:0 0 10px rgba(243,195,78,.4); background:#1c1810;
+    display:flex; align-items:center; justify-content:center; font-size:22px;
+  }
+
+  .qcard {
+    margin: 26px auto 0; max-width: 820px; padding: 34px 22px 30px;
+    border-radius: 18px; background: rgba(8,6,3,.6); border:1px solid rgba(243,195,78,.25);
+  }
+  .tag {
+    display:inline-block; font-size: 17px; padding: 7px 18px; border-radius: 30px;
+    background: rgba(40,36,24,.8); color:#cdbd92; margin-bottom: 18px; border:1px solid #3a3018;
+  }
+  .question { font-size: 34px; line-height: 1.25; font-weight: bold; margin: 0 auto 30px; max-width: 740px; }
+  .options { display:flex; flex-direction:column; gap:16px; max-width:720px; margin:0 auto; }
+  .opt {
+    font-family: inherit; font-size: 24px; font-weight:bold; line-height:1.3;
+    padding: 22px 26px; border:none; border-radius: 12px;
+    background: linear-gradient(180deg,#f7d873,#e0a91d); color:#1a1206; cursor:pointer; text-align:left;
+    box-shadow: 0 0 18px rgba(243,195,78,.25); transition: transform .08s ease, filter .15s ease;
+  }
+  .opt:hover { filter:brightness(1.08); }
+  .opt:active { transform: scale(.985); }
+
+  .progress-wrap { position: fixed; top:0; left:0; width:100%; height: 8px; background:#1c160c; z-index: 60; }
+  .progress-bar { height:100%; width:0%; background:#f3c34e; transition: width .3s ease; }
+
+  /* UNLOCK MODAL */
+  .overlay {
+    display:none; position:fixed; inset:0; z-index:80; background: rgba(0,0,0,.85);
+    align-items:center; justify-content:center; padding: 20px; overflow-y:auto;
+  }
+  .overlay.active { display:flex; animation: fade .3s ease; }
+  .modalcard {
+    max-width: 520px; width:100%; margin:auto; text-align:center; padding: 36px 26px 30px;
+    border-radius: 22px; background:#070503; border: 3px solid #f3c34e;
+    box-shadow: 0 0 50px rgba(243,195,78,.55);
+  }
+  .modaltop { font-size: 30px; font-weight:bold; color:#f3c34e; letter-spacing:1px; margin-bottom: 22px; }
+  .achimg {
+    width: 170px; height:170px; margin: 0 auto 22px; border-radius: 18px; border:3px solid #f3c34e;
+    overflow:hidden; box-shadow: 0 0 30px rgba(243,195,78,.5); background:#100b04;
+    display:flex; align-items:center; justify-content:center; font-size:64px;
+  }
+  .achname { font-size: 40px; font-weight:bold; color:#f3c34e; margin-bottom: 14px; line-height:1.1; }
+  .achsub { font-size: 24px; line-height:1.35; margin: 0 auto 24px; max-width: 440px; }
+  .modalcard .cta { font-size: 26px; padding: 20px; }
+
+  /* LOADING */
+  .loadwrap { max-width: 720px; margin: 0 auto; padding: 40px 20px; text-align:center; }
+  .loadwrap h2 { font-size: 38px; color:#f3c34e; line-height:1.2; margin-bottom: 16px; }
+  .loadwrap .sub { font-size: 22px; color:#cdbd92; margin-bottom: 28px; }
+  .load-status { font-size: 24px; font-weight:bold; min-height: 32px; margin-bottom: 14px; }
+  .load-track { height: 22px; width:100%; max-width:560px; margin:0 auto; background:#1c1810; border-radius: 12px; overflow:hidden; border:2px solid #3a3018; }
+  .load-fill { height:100%; width:0%; background: linear-gradient(90deg,#e0a91d,#f7d873); transition: width .2s linear; }
+  .load-pct { font-size: 44px; font-weight:bold; color:#f3c34e; margin: 16px 0 30px; }
+
+  .portals { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin: 20px auto 10px; max-width:560px; }
+  .portal {
+    font-size: 15px; font-weight:bold; padding:12px 10px; border:2px solid #f3c34e; border-radius:12px;
+    background:rgba(22,18,10,.75); color:#fff7e6; display:flex; flex-direction:column; align-items:center;
+    gap:8px; min-height:100px; box-shadow:0 0 14px rgba(243,195,78,.2);
+  }
+  .portal .portal-icon {
+    width:48px; height:48px; border-radius:10px; border:2px solid #f3c34e;
+    background:#1c1810; display:flex; align-items:center; justify-content:center; font-size:24px;
+  }
+
+  /* ========== VSL / OFFER PAGE (matches screenshot) ========== */
+  #finalScreen { background: transparent; }
+  #finalScreen .wrap { max-width: 720px; padding: 20px 16px 40px; }
+
+  .vsl-logo {
+    width: 120px; height: 48px; margin: 10px auto 18px;
+    background: linear-gradient(135deg, #f3c34e, #c9a227);
+    border-radius: 12px; display:flex; align-items:center; justify-content:center;
+    font-size: 13px; font-weight:bold; color:#1a1206; letter-spacing:0.5px;
+    box-shadow: 0 0 24px rgba(243,195,78,.45);
+  }
+  .vsl-title {
+    font-size: 34px; line-height:1.2; color:#f3c34e; font-weight:bold;
+    margin: 0 auto 12px; max-width: 620px;
+  }
+  .vsl-sub {
+    font-size: 18px; color:#d4c49a; margin: 0 auto 28px; max-width: 520px; line-height:1.45;
+  }
+
+  /* VTurb player container */
+  .vsl-player-wrap {
+    width: 100%; max-width: 400px; margin: 0 auto 32px;
+  }
+  .vsl-player-wrap vturb-smartplayer {
+    display: block; margin: 0 auto; width: 100%; max-width: 400px;
+  }
+
+  /* Portals on VSL page */
+  .vsl-portals-box {
+    background: rgba(10,8,4,.75); border: 2px solid #f3c34e; border-radius: 16px;
+    padding: 20px 16px; margin: 0 auto 28px; max-width: 560px;
+    box-shadow: 0 0 24px rgba(243,195,78,.2);
+  }
+  .vsl-portals-box h3 {
+    font-size: 20px; color:#f3c34e; margin-bottom: 16px;
+  }
+  .vsl-portals-grid {
+    display:grid; grid-template-columns:repeat(4,1fr); gap:10px;
+  }
+  .vsl-portal-card {
+    background: rgba(20,16,8,.8); border: 2px solid #c9a227; border-radius: 12px;
+    padding: 10px 6px; display:flex; flex-direction:column; align-items:center; gap:6px;
+  }
+  .vsl-portal-card .icon {
+    width: 48px; height: 48px; border-radius: 10px; background:#1c1810;
+    border: 1px solid #f3c34e; display:flex; align-items:center; justify-content:center; font-size:24px;
+  }
+  .vsl-portal-card .label {
+    font-size: 11px; font-weight:bold; color:#f3c34e; line-height:1.2; text-align:center;
+  }
+
+  /* Sales copy blocks */
+  .vsl-block {
+    background: rgba(10,8,4,.7); border: 1px solid rgba(243,195,78,.3);
+    border-radius: 14px; padding: 22px 20px; margin: 0 auto 18px; max-width: 620px;
+    text-align: left;
+  }
+  .vsl-block p { font-size: 18px; line-height:1.55; margin-bottom: 12px; color:#f0e6c8; }
+  .vsl-block p:last-child { margin-bottom: 0; }
+  .vsl-block .highlight { color:#f3c34e; font-weight:bold; }
+  .vsl-block .arrow { color:#f3c34e; }
+  .vsl-block h3 { font-size: 22px; color:#f3c34e; margin-bottom: 14px; text-align:center; }
+  .vsl-quote {
+    font-style:italic; color:#ffe9ab; border-left: 4px solid #f3c34e;
+    padding: 12px 16px; margin: 14px 0; background: rgba(30,24,10,.6); font-size: 18px;
+  }
+
+  .vsl-divider {
+    height: 3px; width: 100px; background: #f3c34e; margin: 28px auto;
+    border-radius: 3px;
+  }
+
+  /* Seed cards */
+  .seeds-title {
+    font-size: 28px; color:#f3c34e; font-weight:bold; margin: 30px auto 20px;
+  }
+  .seeds-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
+    max-width: 520px; margin: 0 auto 30px;
+  }
+  .seed-card {
+    background: rgba(12,10,5,.85); border: 3px solid #f3c34e; border-radius: 16px;
+    overflow: hidden; cursor: default;
+    box-shadow: 0 0 20px rgba(243,195,78,.25);
+  }
+  .seed-card .seed-img {
+    width: 100%; aspect-ratio: 1/1;
+    display:flex; align-items:center; justify-content:center;
+    font-size: 64px; background: linear-gradient(160deg, #1a1408, #0d0a05);
+  }
+  .seed-card .seed-img.s27 { background: linear-gradient(160deg, #2a1f0a, #0d0a05); }
+  .seed-card .seed-img.s47 { background: linear-gradient(160deg, #1a2a0a, #0d0a05); }
+  .seed-card .seed-img.s77 { background: linear-gradient(160deg, #2a2208, #0d0a05); }
+  .seed-card .seed-img.s100 { background: linear-gradient(160deg, #2a1a08, #0d0a05); }
+  .seed-card .seed-btn {
+    display:block; width:100%; padding: 14px 10px;
+    background: linear-gradient(180deg, #f7d873, #e0a91d);
+    color: #1a1206; font-family: inherit; font-size: 16px; font-weight:bold;
+    border: none; cursor: pointer; text-align:center;
+  }
+  a.seed-card { text-decoration:none; cursor:pointer; display:block; }
+
+  .site-footer {
+    max-width: 640px; margin: 40px auto 0; padding: 20px 16px;
+    border-top: 1px solid #3a3018; text-align:center; color:#9a8f6f; font-size: 13px; line-height: 1.7;
+  }
+  .site-footer a { color:#cdb86a; text-decoration:underline; margin: 0 8px; }
+
+  @media (max-width:600px){
+    .lead { font-size: 22px; }
+    .question { font-size: 26px; }
+    .opt { font-size: 18px; padding:16px; }
+    .vsl-title { font-size: 26px; }
+    .vsl-sub { font-size: 16px; }
+    .vsl-player-wrap { max-width: 360px; }
+    .vsl-portals-grid { grid-template-columns: repeat(2,1fr); }
+    .vsl-block p { font-size: 16px; }
+    .seeds-grid { gap: 12px; }
+    .seed-card .seed-btn { font-size: 14px; padding: 12px 8px; }
+    .achname { font-size: 28px; }
+    .achsub { font-size: 18px; }
+    .loadwrap h2 { font-size: 26px; }
+  }
+
+  @media (max-width:760px){
+    html { background:#0a0805; }
+    html, body { height:100%; overflow:hidden; }
+    body { min-height:0; padding-bottom:0; display:flex; flex-direction:column; overscroll-behavior:none; }
+    .screen.active { display:flex; flex-direction:column; flex:1; min-height:0; }
+    .screen.active > .wrap {
+      flex:1; min-height:0; width:100%;
+      display:flex; flex-direction:column;
+      padding:14px 16px 18px;
+      overflow-y:auto; -webkit-overflow-scrolling:touch;
+    }
+    #questionScreen > .wrap { overflow:hidden; }
+    #questionScreen .qhead { flex-shrink:0; padding-top:2px; }
+    #questionScreen .qcard {
+      flex:1; min-height:0; margin-top:10px; padding:16px 14px;
+      display:flex; flex-direction:column;
+    }
+    #questionScreen #qbody {
+      flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    }
+    .qhead .logo-sm { width:58px; height:24px; margin-bottom:2px; font-size:10px; }
+    .hello { font-size:16px; margin-bottom:4px; }
+    .energy { margin-top:8px; }
+    .energy-row { font-size:10px; margin-bottom:3px; }
+    .energy-track { height:8px; }
+    .strip { gap:5px; padding:6px 2px 0; margin-top:4px; }
+    .strip .thumb { width:32px; height:32px; border-radius:7px; border-width:1px; font-size:16px; }
+    .tag { font-size:11px; padding:4px 11px; margin-bottom:8px; }
+    .question { font-size:19px; line-height:1.25; margin-bottom:12px; }
+    .options { gap:9px; }
+    .opt { font-size:15px; line-height:1.25; padding:13px 15px; border-radius:10px; }
+    #entrance .logo-placeholder { width:170px; height:60px; margin:0 auto 12px; font-size:16px; }
+    .lead { font-size:18px; line-height:1.35; margin:2px auto 16px; }
+    .cta { font-size:20px; padding:16px 24px; }
+    #affirmation .glowbox { padding:24px 16px; margin:14px auto; border-radius:16px; }
+    .glowbox .small { font-size:16px; margin-bottom:10px; }
+    .glowbox .phrase { font-size:21px; line-height:1.25; margin:12px auto; }
+    .glowbox .note { font-size:14px; margin-bottom:18px; }
+    .modalcard { padding:22px 18px 20px; }
+    .modaltop { font-size:20px; margin-bottom:12px; }
+    .achimg { width:110px; height:110px; margin-bottom:14px; font-size:48px; }
+    .achname { font-size:24px; margin-bottom:8px; }
+    .achsub { font-size:16px; margin-bottom:14px; }
+    .modalcard .cta { font-size:18px; padding:14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<!-- ENTRANCE -->
+<div class="screen active" id="entrance">
+  <div class="wrap">
+    <div class="logo-placeholder">TIME TO FLOURISH</div>
+    <div class="lead">
+      God does not bring you here by accident.<br><br>
+      <span class="big">Click below to begin.</span>
+    </div>
+    <button class="cta" id="startBtn">BEGIN</button>
+  </div>
+</div>
+
+<!-- AFFIRMATION -->
+<div class="screen" id="affirmation">
+  <div class="wrap">
+    <div class="logo-placeholder" style="width:160px; height:56px; font-size:14px;">TIME TO FLOURISH</div>
+    <div class="glowbox">
+      <div class="small" id="affName"></div>
+      <div class="note">Repeat this phrase out loud:</div>
+      <div class="phrase">"The life of my dreams begins with my choice."</div>
+      <div class="note">Only click continue after repeating it out loud.</div>
+      <button class="cta" id="affBtn">Continue Journey</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUESTION -->
+<div class="screen" id="questionScreen">
+  <div class="wrap">
+    <div class="qhead">
+      <div class="logo-sm">TTF</div>
+      <div class="hello" id="hello"></div>
+      <div class="energy">
+        <div class="energy-row"><span>Your energy is aligning with the divine...</span><span id="energyPct">5%</span></div>
+        <div class="energy-track"><div class="energy-fill" id="energyFill"></div></div>
+      </div>
+      <div class="strip" id="strip"></div>
+    </div>
+    <div class="qcard">
+      <div class="tag" id="qtag"></div>
+      <div class="question" id="qtext"></div>
+      <div id="qbody"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="screen" id="loading">
+  <div class="wrap">
+    <div class="loadwrap">
+      <h2 id="loadTitle"></h2>
+      <div class="sub">Processing your answers with divine precision</div>
+      <div class="load-status" id="loadStatus">Starting transformation...</div>
+      <div class="load-track"><div class="load-fill" id="loadFill"></div></div>
+      <div class="load-pct" id="loadPct">0%</div>
+      <h2 style="font-size:26px;">Unlocked Portals</h2>
+      <div class="portals" id="loadPortals"></div>
+      <p style="font-size:21px;color:#cdbd92;margin-top:24px;" id="loadFoot"></p>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL / VSL PAGE -->
+<div class="screen" id="finalScreen">
+  <div class="wrap"><div class="offer" id="offer"></div></div>
+</div>
+
+<!-- UNLOCK OVERLAY -->
+<div class="overlay" id="overlay">
+  <div class="modalcard" id="modalcard"></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ===== COLOQUE AQUI OS LINKS DE CHECKOUT DE CADA SEED (Digistore) =====
+   IMPORTANTE: na pagina de OBRIGADO de cada seed, aponte de volta para o app
+   com o parametro do plano, para liberar o Script certo na Home:
+     Seed $27  -> https://faithinyou.site/sacredchant/?dms=27
+     Seed $47  -> https://faithinyou.site/sacredchant/?dms=47
+     Seed $77  -> https://faithinyou.site/sacredchant/?dms=77
+     Seed $100 -> https://faithinyou.site/sacredchant/?dms=100
+*/
+var CHECKOUT = {
+  "27":  "#COLOQUE-O-LINK-DO-SEED-27",
+  "47":  "#COLOQUE-O-LINK-DO-SEED-47",
+  "77":  "#COLOQUE-O-LINK-DO-SEED-77",
+  "100": "#COLOQUE-O-LINK-DO-SEED-100"
+};
+
+const questions = [
+  { n:2, type:"choice", text:"Do you feel like you're living the life God dreamed for you?",
+    options:["Yes, but I know I can live more","No, I feel I'm far from it","Sometimes I wonder about this..."] },
+  { n:3, type:"choice", text:"How often do you feel an emptiness in your chest... as if something is missing?",
+    options:["Every day","A few times a week","Rarely"] },
+  { n:4, type:"choice", text:"Do you feel stuck in the same negative cycles for years?",
+    options:["Yes, it feels like a loop","Sometimes I feel this","I'm not sure"] },
+  { n:5, type:"choice", text:"If the life you live today was the direct result of your own choices... would you be satisfied?",
+    options:["No, I want to change","More or less","Yes, but I want more"] },
+  { n:6, type:"choice", text:"How many times have you asked God for a sign to change your life?",
+    options:["Many times","A few times","I don't usually ask for signs","This is my first time"] },
+  { n:7, type:"choice", text:"If today were your final faith test… what would you do right now?",
+    options:["I would take action like someone who believes in miracles","I'd take a small, scared step... but still take a step","I'd stay frozen... one more time... just like the other times I gave up"] },
+  { n:8, type:"choice", text:"Do you believe God can transform your life with just one single decision from you?",
+    options:["Yes, absolutely","I have doubts","I don't know"] },
+  { n:9, type:"choice", text:"Are you willing to make TODAY your day of faith and responsibility for your new life?",
+    options:["Yes, I'm ready","I need a clearer sign","No"] },
+  { n:12, type:"choice", text:"What is your family life like today?",
+    options:["I feel there's a lack of unity","I miss someone special","I have a good family, but we can be happier","I don't think much about it"] },
+  { n:16, type:"choice", text:"Do you feel there's something spiritual or emotional blocking you?",
+    options:["Yes, a weight I can't explain","Sometimes I feel this","No"] },
+  { n:17, type:"choice", text:"Which of these statements best describes you?",
+    options:["I feel cursed, nothing ever works out for me","My life has never been easy","I don't feel worthy","I lack energy and motivation"] },
+  { n:18, type:"choice", text:"Do you accept to be part of a group of people who decided to create their dream life through the power of faith?",
+    options:["Yes, I accept","I'm not sure","I need to think about it"] },
+  { n:19, type:"choice", text:"If you could change just one thing right now... what would it be?",
+    options:["My financial situation","My relationships","My health","My purpose in life"] },
+  { n:20, type:"choice", text:"If God gave you the chance to start over today… would you accept?",
+    options:["Yes, without hesitation","Yes, but with some fear","I'm not ready"] },
+];
+
+function tagFor(n){
+  if(n<=6) return "Financial Awakening";
+  if(n<=9) return "Faith & Commitment";
+  if(n<=15) return "Vision & Desire";
+  return "Breaking Blocks";
+}
+
+const ACH = {
+  future: { name:"I Choose My Future", icon:"⚡", sub:"The power to change your life is in your hands!", btn:"⚡ Continue Evolution" },
+  faith:  { name:"Faith Decision",     icon:"🙏", sub:"🙏 Your Faith Will Move Mountains", btn:"⚡ Continue Evolution" },
+  family: { name:"Happy Family",       icon:"👨‍👩‍👧‍👦", sub:"👨‍👩‍👧‍👦 The Happy Family You Deserve", btn:"⚡ Continue Evolution" },
+  blocks: { name:"Blocks Broken",      icon:"🔓", sub:"🔓 All Mental Blocks Have Been Removed", btn:"⚡ Continue Evolution" },
+};
+const unlockAfter = { 5:"future", 8:"faith", 12:"family", 16:"blocks" };
+const FINAL_ORDER = ["future","faith","family","blocks"];
+
+let current = 0;
+const answers = [];
+const unlocked = [];
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el = $(id);
+  el.classList.add('active');
+  const w = el.querySelector('.wrap');
+  if(w) w.scrollTop = 0;
+  window.scrollTo(0,0);
+}
+
+function renderHeader(){
+  $('hello').textContent = "Your journey has begun...";
+  const pct = Math.round(((current+1)/questions.length)*100);
+  $('energyPct').textContent = pct + "%";
+  $('energyFill').style.width = pct + "%";
+  const strip = $('strip');
+  if(unlocked.length === 0){ strip.style.display = "none"; strip.innerHTML=""; return; }
+  strip.style.display = "flex";
+  strip.innerHTML = unlocked.map(k=>
+    '<div class="thumb" title="'+ACH[k].name+'">'+ACH[k].icon+'</div>'
+  ).join('');
+}
+
+function updateProgress(){
+  $('progressBar').style.width = (current/questions.length*100) + "%";
+}
+
+function renderQuestion(){
+  const q = questions[current];
+  renderHeader();
+  updateProgress();
+  $('qtag').textContent = tagFor(q.n);
+  $('qtext').textContent = q.text;
+  const body = $('qbody'); body.innerHTML = "";
+  const w = document.createElement('div'); w.className = "options";
+  q.options.forEach(opt=>{
+    const b = document.createElement('button'); b.className = "opt"; b.textContent = opt;
+    b.onclick = ()=>{ answers[current] = opt; afterAnswer(); };
+    w.appendChild(b);
+  });
+  body.appendChild(w);
+  body.scrollTop = 0;
+  const wrap = $('questionScreen').querySelector('.wrap');
+  if(wrap) wrap.scrollTop = 0;
+}
+
+function afterAnswer(){
+  const n = questions[current].n;
+  const key = unlockAfter[n];
+  if(key){
+    showUnlock(key, ()=>{ advance(); });
+  } else {
+    advance();
+  }
+}
+function advance(){
+  current++;
+  if(current >= questions.length){ startLoading(); }
+  else { renderQuestion(); }
+}
+
+function openOverlay(html){
+  if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  $('modalcard').innerHTML = html; $('overlay').classList.add('active');
+}
+function closeOverlay(){ $('overlay').classList.remove('active'); }
+
+function showUnlock(key, done){
+  const a = ACH[key];
+  const html = `
+    <div class="modaltop">✓  UNLOCKED!  ✦</div>
+    <div class="achimg">${a.icon}</div>
+    <div class="achname">${a.name}</div>
+    <div class="achsub">${a.sub}</div>
+    <button class="cta" id="modalBtn">${a.btn}</button>`;
+  openOverlay(html);
+  $('modalBtn').onclick = ()=>{
+    if(!unlocked.includes(key)) unlocked.push(key);
+    closeOverlay(); done();
+  };
+}
+
+function startLoading(){
+  $('progressBar').style.width = "100%";
+  $('loadTitle').textContent = "Your Divine Manifestation Script is being created...";
+  $('loadFoot').textContent = '"We\'re preparing your Divine Manifestation Script..."';
+  $('loadPortals').innerHTML = FINAL_ORDER.filter(k=>unlocked.includes(k)).map(k=>
+    '<div class="portal"><div class="portal-icon">'+ACH[k].icon+'</div>'+ACH[k].name+'</div>'
+  ).join('');
+  show('loading');
+
+  const stages = [
+    [0,  "Starting transformation..."],
+    [22, "Reading the desires of your heart..."],
+    [45, "Aligning your energy with the divine..."],
+    [68, "Breaking spiritual blocks..."],
+    [85, "Writing your Sacred Script, word by word..."],
+    [97, "Finalizing your manifestation..."],
+  ];
+  let pct = 0;
+  const fill = $('loadFill'), pctEl = $('loadPct'), statusEl = $('loadStatus');
+
+  const timer = setInterval(()=>{
+    pct += Math.random()*3 + 1;
+    if(pct >= 100){ pct = 100; }
+    for(let i=stages.length-1;i>=0;i--){ if(pct >= stages[i][0]){ statusEl.textContent = stages[i][1]; break; } }
+    fill.style.width = pct + "%";
+    pctEl.textContent = Math.floor(pct) + "%";
+    if(pct >= 100){
+      clearInterval(timer);
+      statusEl.textContent = "Your Divine Manifestation Script is ready ✦";
+      setTimeout(gotoOffer, 1100);
+    }
+  }, 140);
+}
+
+/* ========== FINAL VSL PAGE (matches the screenshot layout) ========== */
+function gotoOffer(){
+  const portalsHTML = FINAL_ORDER.map(k => `
+    <div class="vsl-portal-card">
+      <div class="icon">${ACH[k].icon}</div>
+      <div class="label">${ACH[k].name}</div>
+    </div>
+  `).join('');
+
+  $('offer').innerHTML = `
+    <div class="vsl-logo">TIME TO FLOURISH</div>
+
+    <h1 class="vsl-title">You've made it this far... and that's no accident.</h1>
+    <p class="vsl-sub">Watch the message below, then choose your Seed of Faith to receive your Script.</p>
+
+    <!-- VSL PLAYER (VTurb) -->
+    <div class="vsl-player-wrap">
+      <vturb-smartplayer id="vid-6aeca384d1189b35ed072a90" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;">
+        <div class="vturb-player-placeholder" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0; z-index: 0; background-color: black;"></div>
+      </vturb-smartplayer>
+    </div>
+
+    <div id="esconder">
+    <!-- UNLOCKED PORTALS -->
+    <div class="vsl-portals-box">
+      <h3>🏆 Your Unlocked Prosperity Portals:</h3>
+      <div class="vsl-portals-grid">${portalsHTML}</div>
+    </div>
+
+    <!-- COPY BLOCKS -->
+    <div class="vsl-block">
+      <p>You went through every step...</p>
+      <p><span class="arrow">👉</span> Reflected on your life...</p>
+      <p><span class="arrow">👉</span> Faced your inner blocks...</p>
+      <p><span class="arrow">👉</span> And unlocked breakthroughs that showed... a new life is possible.</p>
+      <p>Now... you're standing before a decision.</p>
+      <p>And just like Joseph, Abraham, and Job...</p>
+      <p class="highlight">Maybe this... Is your moment of being tested.</p>
+    </div>
+
+    <div class="vsl-block">
+      <h3>📖 Remember...</h3>
+      <p><span class="arrow">👉</span> Joseph went through prison... before reaching the palace.</p>
+      <p><span class="arrow">👉</span> Abraham had to trust... even without understanding.</p>
+      <p><span class="arrow">👉</span> Job lost everything... before receiving double.</p>
+      <p>And now... you're also being called... to choose.</p>
+    </div>
+
+    <div class="vsl-block">
+      <h3>What Has Been Prepared For You...</h3>
+      <p>Something special was prepared for you.</p>
+      <p>Not just a prayer...</p>
+      <p>Not just a beautiful motivational text...</p>
+      <p class="highlight">It's a Sacred Script: your Divine Manifestation Script.</p>
+      <p><span class="arrow">👉</span> A call to finally break the blocks...</p>
+      <p><span class="arrow">👉</span> A spiritual command to open the paths...</p>
+      <p>And now... all that's left... is your decision.</p>
+    </div>
+
+    <div class="vsl-block">
+      <p>What you'll do now... is a step of faith...</p>
+      <p><span class="arrow">👉</span> A symbolic gesture...</p>
+      <p><span class="arrow">👉</span> A Seed of Faith.</p>
+      <div class="vsl-quote">
+        A gesture that says to the Universe... and to God:<br>
+        "I am ready... and I choose to live the best that the Lord has for me."
+      </div>
+      <p>So now... the decision... Is entirely in your hands.</p>
+    </div>
+
+    <div class="vsl-block" style="text-align:center;">
+      <p>No matter which seed you choose...</p>
+      <p class="highlight">Your Divine Manifestation Script will be created and delivered directly to your email.</p>
+      <p style="margin-top:16px;"><span class="arrow">👇</span> Click... choose your seed...</p>
+      <p><span class="arrow">👉</span> Unlock your Divine Manifestation Script</p>
+    </div>
+
+    <h2 class="seeds-title">Make your choice</h2>
+
+    <div class="seeds-grid">
+      <a class="seed-card" id="seed27" target="_top">
+        <div class="seed-img s27">🌱</div>
+        <div class="seed-btn">This is the life I choose – $27</div>
+      </a>
+      <a class="seed-card" id="seed47" target="_top">
+        <div class="seed-img s47">🌳</div>
+        <div class="seed-btn">This is the life I choose – $47</div>
+      </a>
+      <a class="seed-card" id="seed77" target="_top">
+        <div class="seed-img s77">✨🌳</div>
+        <div class="seed-btn">This is the life I choose – $77</div>
+      </a>
+      <a class="seed-card" id="seed100" target="_top">
+        <div class="seed-img s100">💰✨</div>
+        <div class="seed-btn">This is the life I choose – $100</div>
+      </a>
+    </div>
+    </div>
+
+    <footer class="site-footer">
+      <div>This site is not a part of the Facebook website or Facebook Inc. Additionally, This site is NOT endorsed by Facebook in any way. FACEBOOK is a trademark of FACEBOOK, Inc.</div>
+      <div style="margin-top:12px;">
+        <a href="#">Terms</a> | <a href="#">Privacy</a>
+      </div>
+    </footer>
+  `;
+  ['27','47','77','100'].forEach(function(k){ var a=document.getElementById('seed'+k); if(a && CHECKOUT[k]) a.setAttribute('href', CHECKOUT[k]); });
+  show('finalScreen');
+}
+
+/* START */
+$('startBtn').onclick = ()=>{
+  $('affName').textContent = "Before we continue...";
+  show('affirmation');
+};
+
+$('affBtn').onclick = ()=>{
+  current = 0;
+  show('questionScreen');
+  renderQuestion();
+};
+</script>
+</body>
+</html>
