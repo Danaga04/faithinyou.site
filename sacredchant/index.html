@@ -741,6 +741,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
 <label for="aMail">Email</label><input type="text" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
 <p class="err" id="aErr" role="alert"></p>
 <button type="submit" class="btn" id="aGo" style="width:100%">Enter</button></form>
+<div id="authNote" style="background:rgba(224,173,62,.14);border:1px solid rgba(224,173,62,.45);border-radius:12px;padding:12px 14px;margin:16px 0 0;font-size:14px;line-height:1.5;color:#8a5d00;text-align:left">📧 <b>Important: use the same email you bought with.</b> Your purchase, Light Tokens and access are tied to that email. Logging in with a different email opens an empty account.</div>
 </div></section>
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
 <div class="cert" id="refund"><div id="refundBox"></div></div>
@@ -2525,6 +2526,19 @@ async function pwForEmail(email) {
   return 'Sc1!' + hex.slice(0, 28); // tem maiuscula, minuscula, numero e simbolo
 }
 
+/* Pre-preenche o e-mail (e nome) quando vem na URL do link da compra: ?email=...  */
+(function(){
+  try{
+    var q=new URLSearchParams(location.search);
+    var em=(q.get('email')||q.get('e')||q.get('buyer_email')||q.get('buyer_mail')||'').trim();
+    var nm=(q.get('name')||q.get('first_name')||q.get('firstname')||'').trim();
+    var mail=document.getElementById('aMail');
+    if(mail&&em&&/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))mail.value=em.toLowerCase();
+    var nameEl=document.getElementById('aName');
+    if(nameEl&&nm&&!nameEl.value)nameEl.value=nm.slice(0,60);
+    if(mail&&mail.value){var note=document.getElementById('authNote');if(note)note.innerHTML='📧 <b>We filled in the email from your purchase: '+mail.value.replace(/[<>&]/g,'')+'</b><br>It must match the email you bought with. Just tap Enter — or tap the field to change it.';}
+  }catch(e){}
+})();
 $('#aForm').onsubmit = async e => {
   e.preventDefault();
 
