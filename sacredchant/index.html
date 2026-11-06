@@ -1878,8 +1878,11 @@ const ENTITLE={
  devotional:{store:['words12','miracle','arthritis','diabetes'],mark:false},
  premium:{store:['powerful7','words12','arthritis','diabetes','prosperity','miracle'],mark:true}
 };
-const markUnlocked=()=>!!S.markUnlocked;
-function updateMarkCard(){const el=document.querySelector('.mark-card .mark-free');if(el){el.textContent=markUnlocked()?'3 ✦ / MESSAGE':'SACRED PREMIUM';el.style.color='#8a5d00';el.style.background='rgba(224,173,62,.2)'}}
+function markTrialActive(){return !!S.markTrialStart && (Date.now()-Number(S.markTrialStart) < 48*36e5)}
+function markTrialLeftH(){return Math.max(0,Math.ceil((48*36e5-(Date.now()-Number(S.markTrialStart||0)))/36e5))}
+const markUnlocked=()=>!!S.markUnlocked || markTrialActive();
+function startMarkTrial(){S.markTrialStart=Date.now();S.markTrialUsed=true;save();try{if(sbClient)sbClient.auth.updateUser({data:{sc_mark_trial:S.markTrialStart}}).catch(()=>{})}catch(e){}const lk=$('#lk');if(lk)lk.classList.remove('on');if(typeof updateMarkCard==='function')updateMarkCard();try{toast('Your 48-hour Mark trial has started 🎉')}catch(e){}if(window.openMarkChat)window.openMarkChat()}
+function updateMarkCard(){const el=document.querySelector('.mark-card .mark-free');if(el){el.textContent=markTrialActive()?('FREE · '+markTrialLeftH()+'H LEFT'):(markUnlocked()?'3 ✦ / MESSAGE':'FREE 48H TRIAL');el.style.color='#8a5d00';el.style.background='rgba(224,173,62,.2)'}}
 function applyTier(tier){
  if(!tier||!ENTITLE[tier])return;
  if((TIER_RANK[tier]||0)>(TIER_RANK[S.tier||'none']||0))S.tier=tier;
@@ -2043,10 +2046,17 @@ function mod(id){
  if(id==='mark'){
   if(!markUnlocked()){
    lkCost=0;
-   lkAct=()=>{openBuy('Unlock the chat with Mark with Sacred Premium.')};
-   $('#lkH').textContent='Mark is part of Sacred Premium';
-   $('#lkT').textContent='The chat with Mark, your spiritual companion, is part of the Sacred Premium plan. Unlock it to talk with him anytime (3 ✦ per message).';
-   $('#lkU').hidden=false;$('#lkU').textContent='See Sacred Premium';$('#lkX').textContent='Maybe later';
+   if(!S.markTrialUsed){
+    lkAct=()=>startMarkTrial();
+    $('#lkH').textContent='Meet Mark — free for 48 hours';
+    $('#lkT').textContent='Mark is your spiritual companion: he prays with you, listens, and guides you through your journey. Try the full chat free for 48 hours — no tokens, no charge. After that, it stays with Sacred Premium.';
+    $('#lkU').hidden=false;$('#lkU').textContent='✨ Start my 48-hour free trial';$('#lkX').textContent='Maybe later';
+   }else{
+    lkAct=()=>{openBuy('Unlock the chat with Mark with Sacred Premium.')};
+    $('#lkH').textContent='Mark is part of Sacred Premium';
+    $('#lkT').textContent='Your free trial has ended. Keep talking with Mark anytime, and go deeper in your journey, with Sacred Premium.';
+    $('#lkU').hidden=false;$('#lkU').textContent='See Sacred Premium';$('#lkX').textContent='Maybe later';
+   }
    $('#lk').classList.add('on');return;
   }
   if(window.openMarkChat)window.openMarkChat();return
@@ -2328,6 +2338,7 @@ if (Array.isArray(accUnl)) S.bonusUnl = [...new Set([...(S.bonusUnl || []), ...a
 const accStore = user.user_metadata?.sc_store_owned;
 if (Array.isArray(accStore)) S.storeOwned = [...new Set([...(S.storeOwned || []), ...accStore])];
 if (user.user_metadata?.sc_mark) S.markUnlocked = true;
+if (user.user_metadata?.sc_mark_trial) { S.markTrialStart = Number(user.user_metadata.sc_mark_trial); S.markTrialUsed = true; }
 if (user.user_metadata?.sc_dms) S.dmsTier = Math.max(Number(S.dmsTier)||0, Number(user.user_metadata.sc_dms)||0);
 if (user.user_metadata?.sc_ba && !S.ba) S.ba = user.user_metadata.sc_ba;
 if (user.user_metadata?.sc_tier) applyTier(user.user_metadata.sc_tier);
@@ -3023,7 +3034,8 @@ setInterval(tickOffer, 1000);
   busy = true; const send = $m('markSend'); if (send) send.disabled = true;
   // Mark charges 3 Light Tokens per message. On low balance, spend() opens the buy popup and the message is kept.
   let paid = false;
-  try { await spend(MARK_COST, () => { paid = true }); } catch (e) { console.warn('Mark spend error', e); }
+  if (typeof markTrialActive === 'function' && markTrialActive()) { paid = true; } // 48h trial: mensagens gratuitas
+  else { try { await spend(MARK_COST, () => { paid = true }); } catch (e) { console.warn('Mark spend error', e); } }
   if (!paid) { busy = false; if (send) send.disabled = false; return; }
   history.push({ role: 'user', text, a: [], f: [] });
   const inp = $m('markInput'); if (inp) { inp.value = ''; inp.style.height = 'auto' }
