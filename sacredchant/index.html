@@ -442,6 +442,65 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
 .qz-end{text-align:center;padding:16px 0}
 .qz-end .big{font-size:48px;font-weight:800;color:var(--acc);margin:6px 0}
 .qz-end p{color:var(--mute);margin:0 0 16px}
+/* ===== Blessings Accelerator (sacred-luxury / Hallow) ===== */
+.ba-banner{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:0;border-radius:20px;padding:16px 18px;margin:2px 0 4px;color:#F8F5EF;cursor:pointer;position:relative;overflow:hidden;background:radial-gradient(120% 140% at 85% 10%,#1a2550,#0B1120 60%)}
+.ba-banner .ba-ban-art{position:absolute;right:-18px;top:-18px;width:120px;height:120px;opacity:.5;pointer-events:none}
+.ba-banner .ba-ban-txt{display:flex;flex-direction:column;gap:2px;z-index:1}
+.ba-banner .ba-kicker{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#D4AF37}
+.ba-banner .ba-ban-txt b{font-size:22px;font-weight:800;line-height:1.1;font-family:Georgia,'Times New Roman',serif}
+.ba-banner .ba-sub{font-size:13px;opacity:.85}
+.ba-banner .ba-go{margin-left:auto;z-index:1;flex:none;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#B8912B,#E9CE74);color:#0B1120;display:grid;place-items:center;font-size:20px;box-shadow:0 6px 18px rgba(212,175,55,.45)}
+.ba{position:fixed;inset:0;z-index:30;display:none;background:#0B1120;color:#F8F5EF;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.ba.on{display:block}
+.ba-bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;background:radial-gradient(70% 40% at 50% 0%,rgba(212,175,55,.18),transparent 60%),radial-gradient(60% 40% at 90% 100%,rgba(15,81,50,.35),transparent 60%)}
+.ba-x{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:14px;z-index:3;width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.1);color:#F8F5EF;font-size:16px}
+.ba-prog{position:fixed;top:0;left:0;width:100%;height:3px;background:rgba(255,255,255,.08);z-index:3}
+.ba-prog>div{height:100%;width:0;background:linear-gradient(90deg,#B8912B,#E9CE74);transition:width .4s ease}
+.ba-inner{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:calc(54px + env(safe-area-inset-top,0px)) 22px calc(40px + env(safe-area-inset-bottom,0px));min-height:100vh}
+.ba-eyebrow{text-align:center;font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#D4AF37;margin-bottom:12px}
+.ba-title{font-family:Georgia,'Times New Roman',serif;font-size:32px;line-height:1.15;font-weight:700;text-align:center;margin:0 0 10px}
+.ba-subt{text-align:center;color:#cfc8b8;font-size:16px;line-height:1.5;margin:0 auto 22px;max-width:420px}
+.ba-ring{width:92px;height:92px;margin:0 auto 18px;display:grid;place-items:center}
+.ba-gold{display:block;width:100%;border:0;border-radius:99px;padding:17px;font-weight:800;font-size:18px;color:#0B1120;background:linear-gradient(135deg,#B8912B,#E9CE74 55%,#D4AF37);box-shadow:0 10px 30px rgba(212,175,55,.4);cursor:pointer}
+.ba-gold:disabled{opacity:.35}
+.ba-outline{display:block;width:100%;border:1.5px solid rgba(212,175,55,.55);border-radius:99px;padding:15px;font-weight:700;font-size:16px;color:#F8F5EF;background:transparent;margin-top:10px;cursor:pointer}
+.ba-opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);border-radius:16px;padding:14px 16px;margin-bottom:10px;color:#F8F5EF;font-size:16px;font-weight:600;cursor:pointer}
+.ba-opt .emo{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgba(212,175,55,.14);font-size:18px}
+.ba-opt .ck{margin-left:auto;color:#D4AF37;font-weight:800;opacity:0}
+.ba-opt.sel{border-color:rgba(212,175,55,.7);background:rgba(212,175,55,.12);box-shadow:0 0 0 1px rgba(212,175,55,.3)}
+.ba-opt.sel .ck{opacity:1}
+.ba-field{width:100%;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);border-radius:14px;padding:15px;color:#F8F5EF;font-size:17px;font-family:inherit}
+.ba-field::placeholder{color:#8e8a7e}
+.ba-hint{color:#a8a294;font-size:13px;margin:8px 2px 0}
+.ba-count{text-align:right;color:#a8a294;font-size:12px;margin-top:4px}
+.ba-slider{width:100%;margin:10px 0}
+.ba-num{text-align:center;font-family:Georgia,serif;font-size:56px;color:#D4AF37;font-weight:700;line-height:1}
+.ba-intensity{text-align:center;color:#cfc8b8;margin:2px 0 14px}
+.ba-sel-count{text-align:center;color:#a8a294;font-size:14px;margin:4px 0 12px}
+.ba-star{animation:baSpin 26s linear infinite;filter:drop-shadow(0 0 16px rgba(212,175,55,.5))}
+@keyframes baSpin{to{transform:rotate(360deg)}}
+.ba-proc-msg{text-align:center;font-family:Georgia,serif;font-style:italic;font-size:20px;color:#E9CE74;margin:22px auto 6px;min-height:52px;max-width:360px}
+.ba-check{width:70px;height:70px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;background:rgba(15,81,50,.4);border:2px solid #0F5132;color:#5fe0a0;font-size:34px}
+.ba-card{border:1px solid rgba(212,175,55,.35);background:rgba(212,175,55,.06);border-radius:18px;padding:18px;margin:16px 0}
+.ba-card .r{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:15px}
+.ba-card .r:last-child{border-bottom:0}
+.ba-card .r span:first-child{color:#cfc8b8}
+.ba-card .r span:last-child{font-weight:700;text-align:right}
+.ba-div{text-align:center;font-family:Georgia,serif;font-size:22px;color:#D4AF37;margin:24px 0 14px;position:relative}
+.ba-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.ba-tile{border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px 6px;text-align:center;background:rgba(255,255,255,.03)}
+.ba-tile small{display:block;color:#a8a294;font-size:11px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px}
+.ba-tile b{font-family:Georgia,serif;font-size:19px;color:#D4AF37}
+.ba-code{display:flex;align-items:center;gap:12px;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px 14px;margin-bottom:9px}
+.ba-code .n{flex:none;width:34px;height:34px;border-radius:50%;border:1.5px solid #D4AF37;color:#D4AF37;display:grid;place-items:center;font-family:Georgia,serif;font-weight:700}
+.ba-code .d b{display:block;font-size:15px}
+.ba-code .d span{color:#a8a294;font-size:13px}
+.ba-quote{font-family:Georgia,serif;font-style:italic;font-size:18px;line-height:1.5;color:#E9CE74;text-align:center;margin:22px auto;max-width:440px}
+.ba-prog-line{text-align:center;color:#E9CE74;font-weight:700;margin:0 0 12px}
+.ba-open{margin-left:auto;flex:none;align-self:center;border:0;border-radius:99px;padding:9px 16px;font-weight:800;font-size:14px;color:#0B1120;background:linear-gradient(135deg,#B8912B,#E9CE74);cursor:pointer}
+.ba-code.done{opacity:.72;border-color:rgba(95,224,160,.4)}
+.ba-code.done .n{border-color:#5fe0a0;color:#5fe0a0}
+.ba-code.done .ba-open{background:rgba(95,224,160,.2);color:#5fe0a0}
 </style>
 
 </head>
@@ -498,6 +557,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
    <button type="button" class="btn" id="powBtn">▶ Listen now</button>
   </div>
   <button type="button" class="qz-banner" id="qzBanner"><div class="qz-ban-txt"><span class="qz-kicker">Daily challenge</span><b>Bible Quiz</b><span class="qz-sub">New questions every day · beat the 30-second clock</span></div><span class="qz-play">▶</span></button>
+  <button type="button" class="ba-banner" id="baBanner"><div class="ba-ban-art"><svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true"><g fill="none" stroke="#D4AF37" stroke-width="1.4"><circle cx="60" cy="60" r="52"/><circle cx="60" cy="60" r="40"/><circle cx="60" cy="60" r="28"/></g><path d="M60 24 72 56 106 56 78 76 88 108 60 88 32 108 42 76 14 56 48 56Z" fill="#D4AF37" opacity=".5"/></svg></div><div class="ba-ban-txt"><span class="ba-kicker">Sacred Alignment</span><b>Blessings Accelerator</b><span class="ba-sub">Align your 7 Codes of Solomon · once</span></div><span class="ba-go">✦</span></button>
   <p class="sh">Support &amp; blessings</p><p>Start here, request a prayer, or reach our team.</p>
   <div class="tiles" id="tSup"></div>
   <button type="button" class="mark-card" data-mod="mark" aria-label="Open chat with Mark"><img src="https://i.postimg.cc/8kFQyKv5/bubblen6oy3a5sh6q.avif" alt="Mark" width="88" height="88" loading="lazy"><span class="mark-copy"><strong>Talk with Mark</strong><span>Your spiritual companion for prayer, reflection, and encouragement.</span><span class="mark-free">3 ✦ / MESSAGE</span></span></button>
@@ -634,6 +694,8 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
   <div style="display:flex;gap:10px"><button class="ghost" id="imB" aria-pressed="true">Breath guide on</button><button class="btn" id="imP">Pause</button></div>
  </div>
 </section>
+<div class="cert" id="baRec"><div><p style="font-size:38px">🌟</p><h2>Accelerate your blessings</h2><p style="margin-top:6px">Before you begin on your own, take 2 minutes to align your 7 Codes. We'll build a personal, day-by-day schedule — so you always know <b>exactly which prayer to pray, and when</b>, with one tap.</p><div class="low-actions"><button class="btn gold" id="baRecGo">✦ Align my blessings</button><button class="ghost" id="baRecSkip">Continue on my own</button></div></div></div>
+<div class="ba" id="ba" role="dialog" aria-modal="true" aria-label="Blessings Accelerator"><div class="ba-bg" aria-hidden="true"></div><button class="ba-x" id="baX" aria-label="Close">✕</button><div class="ba-prog"><div id="baProg"></div></div><div class="ba-inner" id="baWrap"></div></div>
 <div class="cert" id="cert"><div><p style="font-size:30px">🕊️</p><h2>Certificate of Practice</h2><p>This certifies that</p><p class="nm" id="cN">Guest</p><p>has kept a daily practice of sacred chant, prayer and reflection with Sacred Chant, with <b id="cS">0</b> days in a row and <b id="cM">0</b> minutes of listening.</p><p class="lab" id="cD" style="margin:10px 0"></p><button class="btn" onclick="print()">Print</button> <button class="ghost" id="cX">Close</button></div></div>
 <section class="auth" id="auth" role="dialog" aria-modal="true" aria-label="Sign in"><div>
 <svg width="120" height="90" viewBox="0 0 120 90" aria-hidden="true"><ellipse cx="60" cy="14" rx="24" ry="7" fill="none" stroke="#e0ad3e" stroke-width="4"/><circle cx="60" cy="44" r="18" fill="#ffe2c4"/><path d="M24 90c3-26 17-34 36-34s33 8 36 34z" fill="#7aa6f5"/></svg>
@@ -786,7 +848,7 @@ const FAQ2=[
   {q:'Why did my token balance go down?', a:`Tokens are spent on actions: opening a module (2 ✦), a chant session (3 ✦), a message to Mark (3 ✦), a Store program (120 ✦), and so on. Nothing is ever charged twice.`},
  ]},
  {g:'Billing, subscription & refunds', items:[
-  {q:'Is my plan a subscription?', a:`Essential renews monthly; Devotional and Sacred Premium (Family) renew once a year. You can cancel anytime before the next renewal.`},
+  {q:'Is this a subscription? Will I be charged again?', a:`No — using the app is free. You are on the free plan: you received 60 Light Tokens at no cost, with no recurring charge and nothing billed automatically. If you ever want more tokens, there are optional plans, but you are only charged if you choose one yourself.`},
   {q:'How do I cancel my subscription?', a:`Your purchase is handled by Digistore24. Use the link in your purchase confirmation email to manage or cancel, or contact us and we will guide you. After cancelling, you keep access until the end of the period you already paid for.`},
   {q:'Can I get a refund?', a:`Yes — purchases are covered by a 30-day money-back guarantee through Digistore24. Just contact support within 30 days of your purchase and we will help.`},
   {q:'What happens to my access if I am refunded?', a:`If a purchase is refunded or charged back, access to the app ends permanently for that account. A refund undoes the purchase, so the access it paid for ends with it.`},
@@ -1000,6 +1062,123 @@ function qzEnd(){
  try{if(!S.days.includes(today())){/* nao conta streak so por quiz */}}catch(e){}
 }
 if($('#qzBanner'))$('#qzBanner').onclick=openQuiz;
+
+/* ===== Blessings Accelerator: quiz de alinhamento (1x por usuario, relatorio congelado) ===== */
+const BA_Q=[
+ {k:'name',type:'text',q:'What is your first name?',ph:'Type your first name…',hint:"Prefer not to say? We'll call you ‘Beloved’."},
+ {k:'birthDate',type:'date',q:'When were you born, {name}?',hint:'Optional — but it makes your timing far more precise.'},
+ {k:'feeling',type:'multi',max:3,q:'How are you feeling right now, {name}?',sub:'Choose up to 3.',o:["Anxious or overwhelmed","Financially blocked","Emotionally drained","Physically in pain","Spiritually disconnected","Lonely or isolated","Stuck in the same cycle","Grateful but ready for more"],ic:["\u{1F630}","\u{1F4B8}","\u{1F4A7}","\u{1F915}","\u{1F54A}️","\u{1F9CD}","\u{1F501}","✨"]},
+ {k:'area',type:'single',q:'Where do you most need a breakthrough, {name}?',o:["Financial abundance","Physical healing","Emotional peace","Family restoration","Marriage or relationships","Purpose and clarity","Protection from negativity","Spiritual connection with God"],ic:["\u{1F4B0}","\u{1FA7A}","\u{1F54A}️","\u{1F46A}","\u{1F49E}","\u{1F9ED}","\u{1F6E1}️","✨"]},
+ {k:'prayer',type:'single',q:'When you pray, what do you feel?',o:["I feel heard, but nothing changes","I feel like my prayers hit the ceiling","I feel peace in the moment, then it fades","I feel nothing at all","I feel something, but I don't know if it's real","I rarely pray anymore"],ic:["\u{1F327}️","\u{1F512}","\u{1F30A}","\u{1F319}","✨","\u{1F342}"]},
+ {k:'urgency',type:'slider',q:'How urgent is this for you?',sub:'1 = not urgent · 10 = desperate for change'},
+ {k:'blocking',type:'multi',max:3,q:'What do you feel is blocking you?',sub:'Choose up to 3.',o:["Old grudges or unforgiveness","Generational patterns in my family","Envy or negative words from others","My own doubts and fear","Financial debts or losses","Health issues that won't go away","Broken relationships","I don't know what's blocking me"],ic:["\u{1F512}","\u{1F501}","\u{1F32C}️","\u{1F327}️","\u{1F4B8}","\u{1FA7A}","\u{1F465}","\u{1F9ED}"]},
+ {k:'others',type:'single',q:'Do you pray for others?',o:["Yes, often","Sometimes","Rarely","Never — I just want more"]},
+ {k:'timeOfDay',type:'single',q:'When do you usually pray, {name}?',o:["Early morning (before sunrise)","Morning (after sunrise)","Midday","Afternoon","Evening (sunset)","Late night (before sleep)","I don't have a set time"],ic:["\u{1F304}","☀️","\u{1F31E}","\u{1F552}","\u{1F307}","\u{1F319}","\u{1F9ED}"]},
+ {k:'minutes',type:'single',q:'How long can you pray each day?',o:["3–5 minutes","5–10 minutes","10–20 minutes","20–30 minutes","More than 30 minutes"]},
+ {k:'intention',type:'textarea',max:300,q:'Is there a specific intention on your heart?',ph:'Write it here. This stays between you and God…'},
+ {k:'ready',type:'ready',q:'Are you ready to align, {name}?',sub:'Your alignment is sealed once — and shown to you from then on.'}
+];
+const BA_N=BA_Q.length, BA_PROC=BA_N+1, BA_CONF=BA_N+2;
+let baStep=0, baAns={}, baMsgTimer=null, baProcTimer=null;
+function baName(){return (baAns.name||'').trim()||'Beloved'}
+function baPersist(){try{localStorage.setItem('sc_ba_prog',JSON.stringify({step:baStep,ans:baAns}))}catch(e){}}
+function baClearProg(){try{localStorage.removeItem('sc_ba_prog')}catch(e){}}
+function baFmtHour(hh){const ap=hh>=12?'PM':'AM';let h=hh%12;if(h===0)h=12;return h+':00 '+ap}
+function baOrd(n){const s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])}
+function baStarPts(cx,cy,R,r,n){let p=[];for(let i=0;i<n*2;i++){const a=-Math.PI/2+i*Math.PI/n,rad=i%2?r:R;p.push((cx+Math.cos(a)*rad).toFixed(1)+','+(cy+Math.sin(a)*rad).toFixed(1))}return p.join(' ')}
+function baBuildReport(ans,todayISO){
+ const anchors=[[1,4],[2,7],[3,12],[4,15],[5,18],[6,21],[2,7]];
+ const ti=(ans.timeOfDayIdx!=null)?ans.timeOfDayIdx:6;const anchor={weekday:anchors[ti][0],hour:anchors[ti][1]};
+ const urg=ans.urgency||5;const fc=(ans.feeling||[]).length;
+ const WD=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+ const MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+ const bestWeekdayIndex=(((anchor.weekday+urg+fc)%7)+7)%7;
+ const birthDay=ans.birthDate?(Number(String(ans.birthDate).slice(8,10))||11):11;
+ const bestDayOfMonth=(((birthDay-1+urg+fc)%28)+28)%28+1;
+ const AMH=[5,6,7,8,9];const hseed=(((urg+fc)%5)+5)%5;
+ const startOffset=1+((urg+fc)%3);
+ const intervalDays=3+(urg%2);
+ const base=todayISO?new Date(todayISO+'T00:00:00Z'):new Date();
+ let first=new Date(base);first.setUTCDate(first.getUTCDate()+startOffset);let tries=0;while(first.getUTCDay()!==bestWeekdayIndex&&tries<7){first.setUTCDate(first.getUTCDate()+1);tries++}
+ const PLAN=[];for(let i=1;i<=7;i++){PLAN.push(['Solomon',i]);PLAN.push(['Jesus',i])}
+ const codes=[];for(let i=0;i<14;i++){const d=new Date(first);d.setUTCDate(d.getUTCDate()+i*intervalDays);const daysAway=Math.round((d-base)/864e5);const pm=PLAN[i];codes.push({step:i+1,code:i+1,module:pm[0],moduleLabel:(pm[0]==='Solomon'?'The 7 Prayers of Solomon':'The 7 Prayers of Jesus'),hebrew:(pm[0]==='Solomon'),prayerNum:pm[1],daysAway:daysAway,dateLabel:WD[d.getUTCDay()]+', '+d.getUTCDate()+' '+MN[d.getUTCMonth()],hour:baFmtHour(AMH[(hseed+i)%5])})}
+ return {bestWeekday:WD[bestWeekdayIndex],bestDayOfMonth:bestDayOfMonth,bestHour:baFmtHour(AMH[hseed]),intervalDays:intervalDays,codes:codes,area:ans.area||'',timeOfDay:ans.timeOfDay||'',minutes:ans.minutes||'',intention:(ans.intention||'').trim(),name:baName()};
+}
+function openBA(){
+ if(S.ba&&S.ba.report){baStep=BA_CONF;$('#ba').classList.add('on');baRender();return}
+ try{const pr=JSON.parse(localStorage.getItem('sc_ba_prog')||'null');if(pr&&pr.ans){baAns=pr.ans;baStep=Math.min(pr.step||0,BA_N)}else{baAns={};baStep=0}}catch(e){baAns={};baStep=0}
+ $('#ba').classList.add('on');baRender();
+}
+function closeBA(){$('#ba').classList.remove('on');clearInterval(baMsgTimer);clearTimeout(baProcTimer)}
+function baSet(s){baStep=s;baPersist();baRender();try{$('#ba').scrollTop=0}catch(e){}}
+function baNext(){baSet(baStep+1)}
+function baRender(){
+ const w=$('#baWrap');if(!w)return;clearInterval(baMsgTimer);
+ const pf=$('#baProg');if(pf)pf.style.width=(baStep>=BA_CONF?100:Math.round(baStep/BA_CONF*100))+'%';
+ if(baStep===0)return baWelcome(w);
+ if(baStep>=1&&baStep<=BA_N)return baQuestion(w,BA_Q[baStep-1]);
+ if(baStep===BA_PROC)return baProcessing(w);
+ return baConfirm(w);
+}
+function baWelcome(w){
+ w.innerHTML='<div class="ba-ring"><svg width="92" height="92" viewBox="0 0 92 92"><circle cx="46" cy="46" r="42" fill="none" stroke="#D4AF37" stroke-width="1.4" opacity=".5"/><polygon points="'+baStarPts(46,46,34,15,7)+'" fill="#D4AF37" opacity=".85"/></svg></div><p class="ba-eyebrow">Sacred Alignment</p><h2 class="ba-title">Blessings Accelerator</h2><p class="ba-subt">Align the 7 Codes of Solomon to your life and unlock blessings up to 12x faster.<br><br>Takes less than 3 minutes. Private. Instant.</p><button type="button" class="ba-gold" id="baBegin">Begin My Alignment</button>';
+ const b=$('#baBegin');if(b)b.onclick=()=>baSet(1);
+}
+function baOptEl(emoji,text,sel,onClick){const b=document.createElement('button');b.type='button';b.className='ba-opt'+(sel?' sel':'');b.innerHTML=(emoji?'<span class="emo">'+emoji+'</span>':'')+'<span>'+text+'</span><span class="ck">✓</span>';b.onclick=onClick;return b}
+function baContinue(fn,disabled){const b=document.createElement('button');b.type='button';b.className='ba-gold';b.style.marginTop='8px';b.textContent='Continue';b.disabled=!!disabled;b.onclick=fn;return b}
+function baQuestion(w,q){
+ w.innerHTML='<p class="ba-eyebrow">Alignment</p><h2 class="ba-title">'+q.q.replace('{name}',baName())+'</h2>'+(q.sub?'<p class="ba-subt">'+q.sub+'</p>':'')+'<div id="baBody"></div>';
+ const body=$('#baBody');
+ if(q.type==='single'){
+  q.o.forEach((opt,i)=>{const sel=(q.k==='timeOfDay'?baAns.timeOfDayIdx===i:baAns[q.k]===opt);body.appendChild(baOptEl(q.ic?q.ic[i]:'',opt,sel,()=>{baAns[q.k]=opt;if(q.k==='timeOfDay')baAns.timeOfDayIdx=i;baPersist();$$('#baBody .ba-opt').forEach(x=>x.classList.remove('sel'));body.children[i].classList.add('sel');setTimeout(baNext,380)}))});
+ }else if(q.type==='multi'){
+  baAns[q.k]=baAns[q.k]||[];
+  q.o.forEach((opt,i)=>{const sel=baAns[q.k].includes(opt);body.appendChild(baOptEl(q.ic?q.ic[i]:'',opt,sel,()=>{let a=baAns[q.k].slice();if(a.includes(opt))a=a.filter(x=>x!==opt);else{if(a.length>=q.max)return;a.push(opt)}baAns[q.k]=a;baPersist();baRender()}))});
+  const c=document.createElement('p');c.className='ba-sel-count';c.textContent=baAns[q.k].length+' of '+q.max+' selected';body.appendChild(c);
+  body.appendChild(baContinue(baNext,baAns[q.k].length<1));
+ }else if(q.type==='text'||q.type==='date'){
+  const inp=document.createElement('input');inp.className='ba-field';inp.type=(q.type==='date'?'date':'text');if(q.ph)inp.placeholder=q.ph;if(baAns[q.k])inp.value=baAns[q.k];inp.oninput=()=>{baAns[q.k]=inp.value;baPersist()};body.appendChild(inp);
+  if(q.hint){const hh=document.createElement('p');hh.className='ba-hint';hh.textContent=q.hint;body.appendChild(hh)}
+  body.appendChild(baContinue(baNext));
+ }else if(q.type==='textarea'){
+  const ta=document.createElement('textarea');ta.className='ba-field';ta.rows=4;ta.maxLength=q.max;if(q.ph)ta.placeholder=q.ph;if(baAns[q.k])ta.value=baAns[q.k];const cnt=document.createElement('p');cnt.className='ba-count';const upd=()=>{cnt.textContent=ta.value.length+'/'+q.max};ta.oninput=()=>{baAns[q.k]=ta.value;baPersist();upd()};body.appendChild(ta);upd();body.appendChild(cnt);body.appendChild(baContinue(baNext));
+ }else if(q.type==='slider'){
+  if(baAns.urgency==null)baAns.urgency=5;const num=document.createElement('div');num.className='ba-num';num.textContent=baAns.urgency;const intens=document.createElement('p');intens.className='ba-intensity';const setI=()=>{const u=baAns.urgency;intens.textContent=u>=9?'Desperate for change':u>=7?'Deeply urgent':u>=4?'Ready for a shift':'Not urgent'};setI();const sl=document.createElement('input');sl.type='range';sl.min=1;sl.max=10;sl.value=baAns.urgency;sl.className='ba-slider';sl.oninput=()=>{baAns.urgency=Number(sl.value);num.textContent=sl.value;setI();baPersist()};body.appendChild(num);body.appendChild(intens);body.appendChild(sl);body.appendChild(baContinue(baNext));
+ }else if(q.type==='ready'){
+  const g=document.createElement('button');g.type='button';g.className='ba-gold';g.textContent='Yes, I am ready.';g.onclick=()=>{baAns.ready='Yes, I am ready.';baNext()};const o=document.createElement('button');o.type='button';o.className='ba-outline';o.textContent="I'm not sure yet.";o.onclick=()=>{baAns.ready="I'm not sure yet.";baNext()};body.appendChild(g);body.appendChild(o);
+ }
+}
+function baProcessing(w){
+ const MSGS=["Reading your answers…","Aligning your 7 Codes of Solomon…","Identifying the best days and hours for your prayers…","Removing spiritual blockages from your path…","Calibrating your blessings accelerator…","Finalizing your personalized alignment…"];
+ w.innerHTML='<div class="ba-ring" style="width:130px;height:130px"><svg width="130" height="130" viewBox="0 0 120 120" class="ba-star"><g fill="none" stroke="#D4AF37" stroke-width="1.6"><circle cx="60" cy="60" r="48"/><circle cx="60" cy="60" r="36"/><polygon points="'+baStarPts(60,60,48,22,7)+'"/></g></svg></div><p class="ba-proc-msg" id="baMsg">'+MSGS[0]+'</p><p class="ba-subt">Please keep this page open.</p>';
+ let i=0;baMsgTimer=setInterval(()=>{i=(i+1)%MSGS.length;const m=$('#baMsg');if(m)m.textContent=MSGS[i]},1800);
+ baProcTimer=setTimeout(()=>{clearInterval(baMsgTimer);if(!S.ba||!S.ba.report)baSeal();baSet(BA_CONF)},5200);
+}
+function baSeal(){const report=baBuildReport(baAns,ymd(new Date()));S.ba={answers:baAns,report:report,at:Date.now()};save();baClearProg();try{if(sbClient)sbClient.auth.updateUser({data:{sc_ba:S.ba}}).catch(()=>{})}catch(e){}}
+function baRow(k,v){return '<div class="r"><span>'+k+'</span><span>'+String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</span></div>'}
+function baConfirm(w){
+ const rep=(S.ba&&S.ba.report)||baBuildReport(baAns,ymd(new Date()));const nm=rep.name||'Beloved';
+ let rows='';if(rep.area)rows+=baRow('Acceleration Focus',rep.area);if(rep.timeOfDay)rows+=baRow('Best Prayer Window',rep.timeOfDay);if(rep.minutes)rows+=baRow('Daily Commitment',rep.minutes);if(rep.intention)rows+=baRow('Your Intention',rep.intention);
+ const card=rows?'<div class="ba-card">'+rows+'</div>':'';
+ const baDone=(S.ba&&S.ba.done)||[];let codes='';rep.codes.forEach(c=>{const isDone=baDone.includes(c.step);const mod=c.moduleLabel||('Code '+(c.code||''));const pn=c.prayerNum?(' · Prayer '+c.prayerNum+(c.hebrew?' (in Hebrew)':'')):'';const when=c.daysAway<=0?'today':'in '+c.daysAway+' day'+(c.daysAway===1?'':'s');codes+='<div class="ba-code'+(isDone?' done':'')+'"><span class="n">'+(isDone?'✓':(c.step||c.code))+'</span><span class="d"><b>'+c.dateLabel+' · '+c.hour+'</b><span><b style="color:#E9CE74">'+mod+'</b>'+pn+' · '+when+'</span></span><button type="button" class="ba-open" data-bastep="'+c.step+'" data-bamod="'+c.module+'" data-bap="'+c.prayerNum+'">'+(isDone?'Done ✓':'Open')+'</button></div>'});const baProgLine='<p class="ba-prog-line">'+baDone.length+' of 14 completed</p>';
+ w.innerHTML='<div class="ba-check">✓</div><p class="ba-eyebrow">Alignment Complete</p><h2 class="ba-title">Your Codes Have Been Aligned, <span style="color:#D4AF37">'+nm+'</span>.</h2><p class="ba-subt">Your personal 14-prayer plan has been calibrated to your life, your timing and your intention — the 7 Prayers of Solomon (in Hebrew) and the 7 Prayers of Jesus. This alignment is sealed — it will never change.</p>'+card+'<div class="ba-div">Your Sacred Timing</div><div class="ba-grid3"><div class="ba-tile"><small>Best Day</small><b>'+rep.bestWeekday+'</b></div><div class="ba-tile"><small>Best Date</small><b>the '+baOrd(rep.bestDayOfMonth)+'</b></div><div class="ba-tile"><small>Best Hour</small><b>'+rep.bestHour+'</b></div></div><div class="ba-div" style="font-size:18px">Your 14 Prayers · Personal Sequence</div><p class="ba-subt" style="margin-bottom:14px">Follow this exact order. Each line tells you the day, the time (early morning), and exactly which prayer to open — the 7 Prayers of Solomon (in Hebrew) and the 7 Prayers of Jesus. On that day, open that module and tap the numbered prayer. Just tap <b>Open</b> on each line to go straight to it.</p>'+baProgLine+codes+'<p class="ba-subt" style="margin-top:14px">If you fall behind, resume on the '+baOrd(rep.bestDayOfMonth)+' of the following month at '+rep.bestHour+'.</p><p class="ba-quote">“Your prayers will no longer hit the ceiling. They will arrive. Your blessings will no longer come in halves. They will come in full.”</p><button type="button" class="ba-gold" id="baDone">Begin my practice</button>';
+ const d=$('#baDone');if(d)d.onclick=()=>{closeBA();go('today')};
+ $$('#baWrap [data-bastep]').forEach(btn=>{btn.onclick=()=>baOpenPrayer(btn.dataset.bamod,Number(btn.dataset.bap),Number(btn.dataset.bastep))});
+}
+function baOpenPrayer(module,prayerNum,step){
+ const idx=Math.max(0,Math.min(6,(Number(prayerNum)||1)-1));
+ if(S.ba){S.ba.done=S.ba.done||[];if(!S.ba.done.includes(step)){S.ba.done.push(step);save();try{if(sbClient)sbClient.auth.updateUser({data:{sc_ba:S.ba}}).catch(()=>{})}catch(e){}}}
+ closeBA();baRecDismissed=true;
+ if(module==='Jesus'){if(!S.jesStart){S.jesStart=Date.now();save()}jesClick(idx)}
+ else{if(!S.solStart){S.solStart=Date.now();save()}dayClick(idx)}
+}
+/* Popup que recomenda alinhar as bencaos antes de orar por conta propria */
+let baRecDismissed=false, baRecCont=null;
+function baRecommend(onCont){baRecCont=onCont||null;const r=$('#baRec');if(r)r.classList.add('on')}
+if($('#baRecGo'))$('#baRecGo').onclick=()=>{$('#baRec').classList.remove('on');baRecDismissed=true;baRecCont=null;openBA()};
+if($('#baRecSkip'))$('#baRecSkip').onclick=()=>{$('#baRec').classList.remove('on');baRecDismissed=true;const c=baRecCont;baRecCont=null;if(c)c()};
+if($('#baBanner'))$('#baBanner').onclick=openBA;
+if($('#baX'))$('#baX').onclick=closeBA;
 
 function go(t){if(t!=='vid')$('#vBox').innerHTML='';if(t!=='web'&&$('#wBox'))$('#wBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='me'){if(typeof renderBilling==='function')renderBilling();if(typeof renderGrowth==='function')renderGrowth()}if(t==='today'&&typeof renderToday==='function')renderToday();if(t==='chants'&&typeof renderChants==='function')renderChants();scrollTo(0,0)}
 $$('.tab').forEach(b=>b.onclick=()=>access(b.dataset.t));
@@ -1631,7 +1810,7 @@ const FAQ=`<h2 class="h" style="font-size:20px">Good to know</h2>
 <h3>1. How do I add the app to my phone?</h3><p>Go back to the home screen and follow the step-by-step guide for iPhone. On Android, open the browser menu and choose Install app or Add to Home screen.</p>
 <h3>2. How long does my money-back guarantee last?</h3><p>You have 60 days to ask for a full refund. Contact our support team and we will take care of it. Contacting support is usually the fastest way to get your money back.</p>
 <h3>3. How do I start listening to the prayers?</h3><p>We suggest one guided prayer a day, ideally first thing in the morning. Follow each prayer at your own pace.</p>
-<h3>4. Is this a subscription?</h3><p>Yes. The Essential plan is billed monthly, and the Devotional and Family (Premium) plans are billed once a year. Your Light Tokens are added with each billing, and your unlocks stay active for the whole period. You can cancel anytime through our support chat.</p>
+<h3>4. Is this a subscription?</h3><p><b>No.</b> Using the app is <b>free</b> — you are on the free plan. You received <b>60 Light Tokens at no cost</b>, with <b>no recurring charge</b> and nothing billed automatically. If you ever want more tokens, there are optional plans, but you are only charged if you choose one yourself. You can always reach us through the support chat.</p>
 <p style="margin:16px 0 8px">Need help? Our support team is here for you.</p><p><button type="button" class="btn" data-open-support>Contact support</button></p>`;
 const tile=(attr,src,label,cost,lock,dim)=>`<button class="tile${dim?' dim':''}" ${attr} aria-label="${label}">${cost?'<span class="cs">'+cost+' ✦</span>':''}<img src="${src}" alt="${label}" loading="lazy" decoding="async" width="400" height="400" onload="this.parentNode.classList.add('ld')" onerror="this.parentNode.classList.add('ld')">${lock||''}</button>`;
 const prayOK=()=>!!(S.prayUnlocked||S.prayDone);
@@ -1855,8 +2034,11 @@ function mod(id){
  if(id==='support'){if(window.openSupportPanel)window.openSupportPanel();return}
  if(id==='start')return openPaid('start',()=>showVid(VID.start,'Start here','',FAQ,'home'));
  if(id==='pray')return prayOpen();
- if(id==='jesus'){if(!S.jesStart){S.jesStart=Date.now();save()}return jesPage()}
- if(id==='solomon')return openPaid('solomon',()=>{if(!S.solStart){S.solStart=Date.now();save()}solPage()})}
+ if(id==='jesus'||id==='solomon'){
+  const doOpen=()=>{if(id==='jesus'){if(!S.jesStart){S.jesStart=Date.now();save()}return jesPage()}return openPaid('solomon',()=>{if(!S.solStart){S.solStart=Date.now();save()}solPage()})};
+  if((!S.ba||!S.ba.report)&&!baRecDismissed&&typeof baRecommend==='function')return baRecommend(doOpen);
+  return doOpen();
+ }}
 let vBackTo='home',sdkOk=false;
 function showVid(id,title,top,bottom,back){vBackTo=back||'home';$('#vT').textContent=title;$('#vTop').innerHTML=top||'';$('#vTx').innerHTML=bottom||'';
  if(!sdkOk){sdkOk=true;const s=document.createElement('script');s.src='https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js';s.async=true;document.head.appendChild(s)}
@@ -1914,11 +2096,9 @@ function obShowWelcome(){
  $('#obTitle').textContent="You're in — welcome!";
  $('#obProgress').style.width='8%';
  $('#obBody').innerHTML='<div class="ob-reason">'
-  +'<b>Your prayers are ready right now.</b><br>The 7 Prayers of Solomon and the 7 Prayers of Jesus are open for you — tap and begin. The app also has bonus prayers and a Store you can open with Light Tokens.<br><br>'
-  +'<b>No App Store needed.</b><br>Sacred Chant is a web app — there is nothing to download. To keep it handy, add it to your home screen. The <b>Home</b> page shows you how, in two taps.<br><br>'
-  +'<b>Where are your prayers?</b><br>On the <b>Home</b> page: the 7 Prayers of Solomon, the 7 Prayers of Jesus, and more. Tap one to open it.<br><br>'
-  +'<b>Watch or read.</b><br>Each prayer plays as a short video — press play and turn your volume up. Prefer reading? The <b>Today</b> page has a written prayer every day, and in <b>Profile</b> you can make all the text bigger.<br><br>'
-  +'<b>About your plan.</b><br>It renews automatically (monthly or yearly), you can cancel anytime, and there is a 30-day money-back guarantee.'
+  +'<b>Everything is ready right now.</b><br>Your prayers are open on the <b>Home</b> page — just tap one and begin.<br><br>'
+  +'<b>No App Store needed.</b><br>Sacred Chant is a web app. To keep it handy, add it to your home screen — the Home page shows you how.<br><br>'
+  +'<b>You are on the FREE plan.</b><br>You received <b>60 Light Tokens for free</b> — at no cost, and with <b>no recurring charge</b>. Nothing is ever billed automatically. (If you ever want more tokens, there are optional plans — but you are only charged if you choose one yourself.)'
   +'</div><button type="button" class="ob-primary" id="obWelcomeGo">Let\'s begin</button>';
  $('#obWelcomeGo').onclick=()=>{obQuestion=0;obRenderQuestion()};
 }
@@ -1950,20 +2130,18 @@ function obReasonCopy(){
 }
 function obShowReason(){
  obStage='reason';
- const r=obReasonCopy();
- $('#obTop').textContent='YOUR PERSONAL START';
- $('#obTitle').textContent='Why begin with the 7 Prayers of Solomon?';
+ $('#obTop').textContent='BEFORE YOU BEGIN';
+ $('#obTitle').textContent='One important message first';
  $('#obProgress').style.width='100%';
- $('#obBody').innerHTML='<p class="ob-copy">Your answers point toward a simple practice you can return to each day.</p><div class="ob-reason"><b>Why this may suit you:</b><br>'+r.personal+' '+r.skill+' '+r.needText+'<br><br><b>Why these seven prayers?</b> They give you a clear seven-day path instead of asking you to figure out where to begin. Start with Day 1 and take one prayer per day, in the morning or before bed. This is a spiritual practice for reflection and consistency, not a promise of specific financial or life outcomes.</div><button type="button" class="ob-primary" id="obContinue">Show me how it works</button>';
+ $('#obBody').innerHTML='<p class="ob-copy">Before you explore the app, there is a short, important welcome message just for you.</p><div class="ob-reason">It is quick — only a minute or two. It shows you how everything works and how to get the most out of your prayers. Please watch it before you start; it makes everything after it simple and clear.</div><button type="button" class="ob-primary" id="obContinue">Show me how it works</button>';
  $('#obContinue').onclick=obShowTutorial;
 }
 function obShowTutorial(){
  obStage='tutorial';
  $('#obTop').textContent='A QUICK, SIMPLE GUIDE';
- $('#obTitle').textContent='Your first prayer is easy';
+ $('#obTitle').textContent='Start with the welcome video';
  $('#obProgress').style.width='100%';
- const timing=obAnswers[1]||'In the morning';
- $('#obBody').innerHTML='<p class="ob-copy">You do not need to know how to use every part of the app. Just follow these steps.</p><div class="ob-step"><span class="ob-number">1</span><span><b>Tap the blue button below.</b> It opens the first of the 7 Prayers of Solomon.</span></div><div class="ob-step"><span class="ob-number">2</span><span><b>Press play and listen.</b> Turn up your phone volume. Sit comfortably and follow along quietly.</span></div><div class="ob-step"><span class="ob-number">3</span><span><b>Return tomorrow.</b> Try one prayer each day, '+(timing==='Before going to sleep'?'before going to sleep':timing==='Either time works for me'?'in the morning or before bed':'in the morning')+'. You can choose the time that works best for you.</span></div><p class="ob-note">You can take your time. There is no need to buy anything to begin.</p><button type="button" class="ob-primary" id="obStartPrayer">Start Day 1 — 7 Prayers of Solomon</button>';
+ $('#obBody').innerHTML='<p class="ob-copy">You do not need to know how to use every part of the app. Just follow these steps.</p><div class="ob-step"><span class="ob-number">1</span><span><b>Tap the blue button below.</b> It opens a short welcome video (Start here).</span></div><div class="ob-step"><span class="ob-number">2</span><span><b>Press play and watch.</b> Turn up your phone volume and watch it to the end — it is quick.</span></div><div class="ob-step"><span class="ob-number">3</span><span><b>Then explore freely.</b> After the video, the whole app is open for you. Take your time.</span></div><p class="ob-note">There is no cost, and nothing is ever charged automatically.</p><button type="button" class="ob-primary" id="obStartPrayer">Watch the welcome video</button>';
  $('#obStartPrayer').onclick=obFinishAndStart;
 }
 function obFinishAndStart(){
@@ -2131,6 +2309,7 @@ const accStore = user.user_metadata?.sc_store_owned;
 if (Array.isArray(accStore)) S.storeOwned = [...new Set([...(S.storeOwned || []), ...accStore])];
 if (user.user_metadata?.sc_mark) S.markUnlocked = true;
 if (user.user_metadata?.sc_dms) S.dmsTier = Math.max(Number(S.dmsTier)||0, Number(user.user_metadata.sc_dms)||0);
+if (user.user_metadata?.sc_ba && !S.ba) S.ba = user.user_metadata.sc_ba;
 if (user.user_metadata?.sc_tier) applyTier(user.user_metadata.sc_tier);
 if (user.user_metadata?.sc_plan_id) S.planId = user.user_metadata.sc_plan_id;
 if (user.user_metadata?.sc_plan_at) S.planAt = Number(user.user_metadata.sc_plan_at) || S.planAt;
