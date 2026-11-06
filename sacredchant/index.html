@@ -399,7 +399,10 @@ body.big .dms-read li{font-size:18px}
 .vinyl::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(120% 70% at 30% 20%,rgba(255,255,255,.14),transparent 55%);pointer-events:none}
 .vinyl.paused{animation-play-state:paused}
 @keyframes vspin{to{transform:rotate(360deg)}}
-.vlabel{width:42%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-size:clamp(30px,10vw,42px);background:var(--vg,linear-gradient(135deg,#7aa6f5,#4378de));box-shadow:0 0 0 7px rgba(0,0,0,.35),0 4px 14px rgba(0,0,0,.45);z-index:1}
+.vlabel{width:42%;aspect-ratio:1;border-radius:50%;overflow:hidden;display:grid;place-items:center;font-size:clamp(30px,10vw,42px);background:var(--vg,linear-gradient(135deg,#7aa6f5,#4378de));box-shadow:0 0 0 7px rgba(0,0,0,.35),0 4px 14px rgba(0,0,0,.45);z-index:1}
+.vlabel svg{width:100%;height:100%;display:block}
+.cov{flex:none;width:52px;height:52px;border-radius:13px;overflow:hidden;display:block;box-shadow:0 2px 9px rgba(30,50,100,.18)}
+.cov svg{width:100%;height:100%;display:block}
 .vhole{position:absolute;width:13px;height:13px;border-radius:50%;background:#0a0817;box-shadow:inset 0 0 0 2px rgba(255,255,255,.3);z-index:2}
 .breathcap{font-size:13px;letter-spacing:.16em;text-transform:uppercase;opacity:.7;min-height:17px;margin:0}
 /* ===== Chants: minutos ouvidos ===== */
@@ -739,7 +742,33 @@ function blessAct(kind){
  });
 }
 document.addEventListener('click',e=>{const bl=e.target.closest('[data-bless]');if(bl)blessAct(bl.dataset.bless)});
-function row(c){return `<button class="item" data-id="${c.id}"><span class="ic" style="--g:${c.g}">${c.e}</span><span><b>${c.n}</b><span>${c.tag}</span></span><span style="margin-left:auto;color:var(--acc);font-size:22px">▶</span></button>`}
+/* ===== Capas geradas estilo Hallow (SVG) para cada chant ===== */
+function gcolors(c){const m=(c.g||'').match(/#([0-9a-fA-F]{6})/g)||['#7aa6f5','#4378de'];return [m[0]||'#7aa6f5', m[1]||m[0]||'#4378de']}
+const COVER_MOTIF={love:'glow',abun:'sunrise',heal:'horizon',morn:'sunrise',mara:'dove',kyrie:'cross',allel:'rays',abba:'glow',med:'night',nw:'waves',nb:'birds',nf:'mountains'};
+function cvRays(cx,cy,n,len,col,op){let r='';for(let i=0;i<n;i++){const ang=(i/n)*Math.PI*2;const x1=cx+Math.cos(ang)*12,y1=cy+Math.sin(ang)*12,x2=cx+Math.cos(ang)*len,y2=cy+Math.sin(ang)*len;r+='<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke="'+col+'" stroke-width="3" stroke-linecap="round" opacity="'+op+'"/>'}return r}
+function cvMotif(m){
+ switch(m){
+  case 'sunrise': return cvRays(60,70,12,46,'#fff',.5)+'<circle cx="60" cy="70" r="17" fill="#fff" opacity=".92"/><path d="M-4 92 Q40 76 78 88 T124 90 V124 H-4Z" fill="rgba(10,20,50,.26)"/><path d="M-4 104 Q50 90 124 102 V124 H-4Z" fill="rgba(10,20,50,.4)"/>';
+  case 'horizon': return '<circle cx="60" cy="58" r="15" fill="#fff" opacity=".85"/><rect x="0" y="80" width="120" height="44" fill="rgba(255,255,255,.14)"/><rect x="44" y="80" width="32" height="44" fill="rgba(255,255,255,.22)"/>';
+  case 'glow': return cvRays(60,54,16,50,'#fff',.35)+'<circle cx="60" cy="54" r="30" fill="#fff" opacity=".28"/><circle cx="60" cy="54" r="17" fill="#fff" opacity=".6"/><circle cx="60" cy="54" r="8" fill="#fff" opacity=".95"/>';
+  case 'dove': return cvRays(60,50,14,52,'#fff',.28)+'<path d="M40 64 C44 54 54 50 64 52 C60 48 64 42 72 42 C68 48 70 54 68 58 C78 56 86 60 90 68 C80 66 74 68 70 72 C66 80 56 82 50 78 C54 74 54 70 52 68 C46 70 42 68 40 64 Z" fill="#fff" opacity=".95"/>';
+  case 'cross': return cvRays(60,56,16,52,'#fff',.4)+'<rect x="56.5" y="32" width="7" height="52" rx="3" fill="#fff" opacity=".96"/><rect x="44" y="48" width="32" height="7" rx="3" fill="#fff" opacity=".96"/>';
+  case 'rays': return cvRays(60,48,20,56,'#fff',.5)+'<circle cx="60" cy="48" r="12" fill="#fff" opacity=".95"/>';
+  case 'night': return '<rect width="120" height="120" fill="rgba(6,8,24,.4)"/><path d="M74 40 a20 20 0 1 0 6 34 a16 16 0 1 1 -6 -34 Z" fill="#fff" opacity=".92"/><circle cx="34" cy="40" r="1.6" fill="#fff"/><circle cx="46" cy="30" r="1.2" fill="#fff"/><circle cx="30" cy="66" r="1.3" fill="#fff"/><circle cx="52" cy="78" r="1.1" fill="#fff"/><circle cx="90" cy="86" r="1.4" fill="#fff"/><circle cx="24" cy="52" r="1" fill="#fff"/>';
+  case 'waves': return '<path d="M0 60 Q30 52 60 60 T120 60 V124 H0Z" fill="rgba(255,255,255,.18)"/><path d="M0 76 Q30 68 60 76 T120 76 V124 H0Z" fill="rgba(255,255,255,.22)"/><path d="M0 92 Q30 84 60 92 T120 92 V124 H0Z" fill="rgba(10,20,50,.22)"/>';
+  case 'birds': return cvRays(60,66,12,40,'#fff',.45)+'<circle cx="60" cy="66" r="14" fill="#fff" opacity=".9"/><path d="M-4 94 Q44 80 80 90 T124 92 V124 H-4Z" fill="rgba(10,20,50,.3)"/><path d="M24 40 q6 -6 12 0 q6 -6 12 0" fill="none" stroke="rgba(10,20,50,.55)" stroke-width="2.4" stroke-linecap="round"/><path d="M70 30 q5 -5 10 0 q5 -5 10 0" fill="none" stroke="rgba(10,20,50,.5)" stroke-width="2" stroke-linecap="round"/>';
+  case 'mountains': return '<circle cx="78" cy="40" r="12" fill="#fff" opacity=".85"/><path d="M-4 96 L30 60 L54 92 Z" fill="rgba(10,20,50,.34)"/><path d="M40 98 L78 54 L120 98 Z" fill="rgba(10,20,50,.46)"/><path d="M-4 98 L120 98 V124 H-4Z" fill="rgba(10,20,50,.5)"/>';
+  default: return '';
+ }
+}
+function coverSVG(c){
+ const cc=gcolors(c); const a=cc[0], b=cc[1];
+ const motif=COVER_MOTIF[c.id]||'glow';
+ const uid='cv'+c.id;
+ const defs='<defs><linearGradient id="'+uid+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+b+'"/><stop offset="1" stop-color="'+a+'"/></linearGradient><radialGradient id="'+uid+'g" cx="50%" cy="34%" r="62%"><stop offset="0" stop-color="#ffffff" stop-opacity=".55"/><stop offset="55%" stop-color="#ffffff" stop-opacity=".1"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></radialGradient></defs>';
+ return '<svg viewBox="0 0 120 120" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">'+defs+'<rect width="120" height="120" fill="url(#'+uid+')"/><rect width="120" height="120" fill="url(#'+uid+'g)"/>'+cvMotif(motif)+'</svg>';
+}
+function row(c){return `<button class="item" data-id="${c.id}"><span class="cov">${coverSVG(c)}</span><span><b>${c.n}</b><span>${c.tag}</span></span><span style="margin-left:auto;color:var(--acc);font-size:22px">▶</span></button>`}
 $('#lM').innerHTML=CH.filter(c=>c.k=='m').map(row).join('');$('#lD').innerHTML=CH.filter(c=>c.k=='d').map(row).join('');$('#lN').innerHTML=CH.filter(c=>c.k=='n').map(row).join('');
 $$('.item').forEach(b=>b.onclick=()=>play(CH.find(c=>c.id===b.dataset.id)));
 /* ===== FAQ2 (Home mostra o grupo "por que abre por dia"; Profile mostra tudo) ===== */
@@ -1319,7 +1348,7 @@ function synth(c){try{const a=ctx(),m=a.createGain();m.gain.value=0;m.gain.linea
  if(c.bell){tone(392,6,.12);bell=setInterval(()=>{if(!paused)tone(392,6,.12)},25000)}}catch(e){}}
 function startAudio(c){if(c.src){au=new Audio(c.src);au.loop=true;au.onerror=()=>synth(c);au.play().catch(()=>synth(c))}else synth(c)}
 function stopAudio(){clearInterval(chirp);clearInterval(bell);if(au){au.pause();au=null}try{nodes.m&&nodes.m.gain.linearRampToValueAtTime(0,ac.currentTime+.6);const n=nodes;nodes=[];setTimeout(()=>n.forEach(o=>{try{o.stop()}catch(e){}}),700)}catch(e){}}
-function open(c){cur=c;secs=0;paused=false;$('#imTag').textContent=c.tag;$('#imName').textContent=c.n;$('#imM').textContent=c.m;$('#imP').textContent='Pause';const vl=$('#vlabel');if(vl){vl.style.setProperty('--vg',c.g);const ve=$('#vemoji');if(ve)ve.textContent=c.e}const vn=$('#vinyl');if(vn)vn.classList.remove('paused');$('#im').classList.add('on');startAudio(c);clearInterval(tick);tick=setInterval(step,1000);step(1)}
+function open(c){cur=c;secs=0;paused=false;$('#imTag').textContent=c.tag;$('#imName').textContent=c.n;$('#imM').textContent=c.m;$('#imP').textContent='Pause';const vl=$('#vlabel');if(vl){vl.style.setProperty('--vg',c.g);vl.innerHTML=coverSVG(c)}const vn=$('#vinyl');if(vn)vn.classList.remove('paused');$('#im').classList.add('on');startAudio(c);clearInterval(tick);tick=setInterval(step,1000);step(1)}
 function step(f){if(!f&&!paused)secs++;$('#imClock').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0')+(limit?' / '+String(limit/60).padStart(2,'0')+':00':'');$('#orbL').textContent=guide?(secs%8<4?'Inhale':'Exhale'):'';if(limit&&secs>=limit)close(1)}
 function close(done){clearInterval(tick);stopAudio();$('#im').classList.remove('on');if(secs>=30){S.min+=secs/60;if(!S.days.includes(today()))S.days.push(today());save();render();if(done)toast('Session complete')}}
 $('#imX').onclick=()=>close(0);
