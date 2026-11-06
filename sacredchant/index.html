@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> 
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="preconnect" href="https://i.postimg.cc" crossorigin>
@@ -1128,7 +1128,10 @@ const BA_FOCUS=[
  {theme:'Generosity & Blessing Others',verse:'“Give, and it shall be given unto you; good measure... shall men give into your bosom.” — Luke 6:38',title:'A Prayer to Be a Blessing',prayer:"Father, make me a channel of Your kindness today.\nShow me someone to encourage, to help, to pray for.\nLet my words lift and not tear down.\nAs You have been generous to me, make me generous to others.\nBless me, so that I can be a blessing. Amen."},
  {theme:'Renewal & New Beginnings',verse:'“Behold, I make all things new.” — Revelation 21:5',title:'A Prayer for a Fresh Start',prayer:"Lord, thank You that Your mercies are new every morning.\nWhatever I got wrong before, I begin again with You today.\nBreathe fresh purpose into my days and fresh hope into my heart.\nLet this new month be a new chapter.\nI step forward with You. Amen."}
 ];
-const BA_CYCLE_DAYS=28;
+const BA_CYCLE_DAYS=33;
+/* Cronograma com sensação de progresso: orações juntas nos primeiros dias (1 por dia),
+   depois os intervalos crescem. Offsets em dias a partir de HOJE (começa já). */
+const BA_OFFSETS=[0,1,2,3,4,6,8,10,13,16,19,23,27,31];
 let baStep=0, baAns={}, baMsgTimer=null, baProcTimer=null, baRenewing=false;
 function baSyncBa(){try{if(sbClient)sbClient.auth.updateUser({data:{sc_ba:S.ba}}).catch(()=>{})}catch(e){}}
 function baCycleNum(){return (S.ba&&S.ba.cycle)||1}
@@ -1152,13 +1155,10 @@ function baBuildReport(ans,todayISO){
  const birthDay=ans.birthDate?(Number(String(ans.birthDate).slice(8,10))||11):11;
  const bestDayOfMonth=(((birthDay-1+urg+fc)%28)+28)%28+1;
  const AMH=[5,6,7,8,9];const hseed=(((urg+fc)%5)+5)%5;
- const startOffset=1+((urg+fc)%3);
- const intervalDays=2;
  const base=todayISO?new Date(todayISO+'T00:00:00Z'):new Date();
- let first=new Date(base);first.setUTCDate(first.getUTCDate()+startOffset);let tries=0;while(first.getUTCDay()!==bestWeekdayIndex&&tries<7){first.setUTCDate(first.getUTCDate()+1);tries++}
  const PLAN=[];for(let i=1;i<=7;i++){PLAN.push(['Solomon',i]);PLAN.push(['Jesus',i])}
- const codes=[];for(let i=0;i<14;i++){const d=new Date(first);d.setUTCDate(d.getUTCDate()+i*intervalDays);const daysAway=Math.round((d-base)/864e5);const pm=PLAN[i];codes.push({step:i+1,code:i+1,module:pm[0],moduleLabel:(pm[0]==='Solomon'?'The 7 Prayers of Solomon':'The 7 Prayers of Jesus'),hebrew:(pm[0]==='Solomon'),prayerNum:pm[1],daysAway:daysAway,dateLabel:WD[d.getUTCDay()]+', '+d.getUTCDate()+' '+MN[d.getUTCMonth()],iso:d.toISOString().slice(0,10),hour:baFmtHour(AMH[(hseed+i)%5])})}
- return {bestWeekday:WD[bestWeekdayIndex],bestDayOfMonth:bestDayOfMonth,bestHour:baFmtHour(AMH[hseed]),intervalDays:intervalDays,codes:codes,area:ans.area||'',timeOfDay:ans.timeOfDay||'',minutes:ans.minutes||'',intention:(ans.intention||'').trim(),name:baName()};
+ const codes=[];for(let i=0;i<14;i++){const off=BA_OFFSETS[i];const d=new Date(base);d.setUTCDate(d.getUTCDate()+off);const pm=PLAN[i];codes.push({step:i+1,code:i+1,module:pm[0],moduleLabel:(pm[0]==='Solomon'?'The 7 Prayers of Solomon':'The 7 Prayers of Jesus'),hebrew:(pm[0]==='Solomon'),prayerNum:pm[1],daysAway:off,dateLabel:WD[d.getUTCDay()]+', '+d.getUTCDate()+' '+MN[d.getUTCMonth()],iso:d.toISOString().slice(0,10),hour:baFmtHour(AMH[(hseed+i)%5])})}
+ return {bestWeekday:WD[bestWeekdayIndex],bestDayOfMonth:bestDayOfMonth,bestHour:baFmtHour(AMH[hseed]),intervalDays:1,codes:codes,area:ans.area||'',timeOfDay:ans.timeOfDay||'',minutes:ans.minutes||'',intention:(ans.intention||'').trim(),name:baName()};
 }
 function openBA(){
  baRenewing=false;baMigrate();
@@ -1182,9 +1182,9 @@ function baRender(){
 function baWelcome(w){
  const ring='<div class="ba-ring"><svg width="92" height="92" viewBox="0 0 92 92"><circle cx="46" cy="46" r="42" fill="none" stroke="#D4AF37" stroke-width="1.4" opacity=".5"/><polygon points="'+baStarPts(46,46,34,15,7)+'" fill="#D4AF37" opacity=".85"/></svg></div>';
  if(baRenewing){
-  w.innerHTML=ring+'<p class="ba-eyebrow">A New Month</p><h2 class="ba-title">Re-align for the Month Ahead</h2><p class="ba-subt">A fresh 28-day path begins now. Take a minute to re-align the 7 Codes to where your life is <i>today</i> — your focus, your timing, your intention. Your last answers are kept, so just tap through.</p><button type="button" class="ba-gold" id="baBegin">Begin My Re-Alignment</button>';
+  w.innerHTML=ring+'<p class="ba-eyebrow">A New Month</p><h2 class="ba-title">Re-align for the Month Ahead</h2><p class="ba-subt">A fresh month of prayer begins now. Take a minute to re-align the 7 Codes to where your life is <i>today</i> — your focus, your timing, your intention. Your last answers are kept, so just tap through.</p><button type="button" class="ba-gold" id="baBegin">Begin My Re-Alignment</button>';
  }else{
-  w.innerHTML=ring+'<p class="ba-eyebrow">Sacred Alignment</p><h2 class="ba-title">Blessings Accelerator</h2><p class="ba-subt">Align the 7 Codes of Solomon to your life, and receive a personal 28-day path of prayer — renewed with a new Sacred Focus every month.<br><br>Takes less than 3 minutes. Private. Instant.</p><button type="button" class="ba-gold" id="baBegin">Begin My Alignment</button>';
+  w.innerHTML=ring+'<p class="ba-eyebrow">Sacred Alignment</p><h2 class="ba-title">Blessings Accelerator</h2><p class="ba-subt">Align the 7 Codes of Solomon to your life, and receive a personal monthly path of prayer — starting today, and renewed with a new Sacred Focus every month.<br><br>Takes less than 3 minutes. Private. Instant.</p><button type="button" class="ba-gold" id="baBegin">Begin My Alignment</button>';
  }
  const b=$('#baBegin');if(b)b.onclick=()=>baSet(1);
 }
@@ -1249,8 +1249,8 @@ function baConfirm(w){
  const baProgLine='<p class="ba-prog-line">'+baDone.length+' of 14 this month · Month '+cyc+'</p>';
  let baStatus='';{const nd=rep.codes.filter(c=>!baDone.includes(c.step)).slice().sort((a,b)=>(a.iso||'')<(b.iso||'')?-1:1);if(!nd.length){baStatus='<div class="ba-status calm">You have completed all 14 prayers this month. 🙏</div>'}else{const nx=nd[0],ld=baLiveDays(nx),lbl=(nx.moduleLabel||'')+(nx.prayerNum?' · Prayer '+nx.prayerNum:'');if(ld===0)baStatus='<div class="ba-status urgent">🔴 Today is the day — open '+lbl+' now.</div>';else if(ld<0)baStatus='<div class="ba-status urgent">🔴 A prayer has been waiting since '+nx.dateLabel+' — open it when you can.</div>';else baStatus='<div class="ba-status calm">You don\'t need to pray today. Your next prayer is '+nx.dateLabel+' (in '+ld+' day'+(ld===1?'':'s')+'). You can get ahead if you wish, but each prayer has the most effect on its own day.</div>'}}
  let renewCard='';
- if(cycleComplete){renewCard='<div class="ba-renew"><h3>✨ Month '+cyc+' complete</h3><p>You prayed <b>'+baDone.length+' of 14</b> this month'+(((S.ba&&S.ba.focusDone)||[]).includes(cyc)?' and received this month’s Sacred Focus':'')+'. A new 28-day path and a new Sacred Focus are ready for you. Re-align to where your life is now.</p><button type="button" class="ba-gold" id="baRenewBtn">Begin next month’s alignment</button></div>'}
- w.innerHTML='<div class="ba-check">✓</div><p class="ba-eyebrow">Month '+cyc+' · Your Alignment</p><h2 class="ba-title">Your Codes Are Aligned, <span style="color:#D4AF37">'+nm+'</span>.</h2><p class="ba-subt">Your personal 28-day plan is calibrated to your life, your timing and your intention — the 7 Prayers of Solomon (in Hebrew) and the 7 Prayers of Jesus. Each new month you re-align, so your prayers follow where your life is now.</p>'+renewCard+focusCard+card+'<div class="ba-div">Your Sacred Timing</div><div class="ba-grid3"><div class="ba-tile"><small>Best Day</small><b>'+rep.bestWeekday+'</b></div><div class="ba-tile"><small>Best Date</small><b>the '+baOrd(rep.bestDayOfMonth)+'</b></div><div class="ba-tile"><small>Best Hour</small><b>'+rep.bestHour+'</b></div></div><div class="ba-div" style="font-size:18px">Your 14 Prayers · This Month</div><p class="ba-subt" style="margin-bottom:14px">Follow this exact order. Each line tells you the day, the time (early morning), and exactly which prayer to open — the 7 Prayers of Solomon (in Hebrew) and the 7 Prayers of Jesus. On that day, open that module and tap the numbered prayer. Just tap <b>Open</b> on each line to go straight to it.</p>'+baStatus+baProgLine+codes+'<p class="ba-subt" style="margin-top:14px">When these 14 are complete — or at the end of the month — a new month opens with a fresh Sacred Focus and you re-align.</p><p class="ba-quote">“Your prayers will no longer hit the ceiling. They will arrive. Your blessings will no longer come in halves. They will come in full.”</p><button type="button" class="ba-gold" id="baDone">Begin my practice</button>';
+ if(cycleComplete){renewCard='<div class="ba-renew"><h3>✨ Month '+cyc+' complete</h3><p>You prayed <b>'+baDone.length+' of 14</b> this month'+(((S.ba&&S.ba.focusDone)||[]).includes(cyc)?' and received this month’s Sacred Focus':'')+'. A new month of prayer and a new Sacred Focus are ready for you. Re-align to where your life is now.</p><button type="button" class="ba-gold" id="baRenewBtn">Begin next month’s alignment</button></div>'}
+ w.innerHTML='<div class="ba-check">✓</div><p class="ba-eyebrow">Month '+cyc+' · Your Alignment</p><h2 class="ba-title">Your Codes Are Aligned, <span style="color:#D4AF37">'+nm+'</span>.</h2><p class="ba-subt">Your personal plan for this month is calibrated to your life, your timing and your intention — the 7 Prayers of Solomon (in Hebrew) and the 7 Prayers of Jesus. Each new month you re-align, so your prayers follow where your life is now.</p>'+renewCard+focusCard+card+'<div class="ba-div">Your Sacred Timing</div><div class="ba-grid3"><div class="ba-tile"><small>Best Day</small><b>'+rep.bestWeekday+'</b></div><div class="ba-tile"><small>Best Date</small><b>the '+baOrd(rep.bestDayOfMonth)+'</b></div><div class="ba-tile"><small>Best Hour</small><b>'+rep.bestHour+'</b></div></div><div class="ba-div" style="font-size:18px">Your 14 Prayers · This Month</div><p class="ba-subt" style="margin-bottom:14px">Follow this exact order. Each line tells you the day, the time (early morning), and exactly which prayer to open — the 7 Prayers of Solomon (in Hebrew) and the 7 Prayers of Jesus. On that day, open that module and tap the numbered prayer. Just tap <b>Open</b> on each line to go straight to it.</p>'+baStatus+baProgLine+codes+'<p class="ba-subt" style="margin-top:14px">When these 14 are complete — or at the end of the month — a new month opens with a fresh Sacred Focus and you re-align.</p><p class="ba-quote">“Your prayers will no longer hit the ceiling. They will arrive. Your blessings will no longer come in halves. They will come in full.”</p><button type="button" class="ba-gold" id="baDone">Begin my practice</button>';
  const d=$('#baDone');if(d)d.onclick=()=>{closeBA();go('today')};
  const fo=$('#baFocusOpen');if(fo)fo.onclick=()=>{baStep=BA_FOCUS_VIEW;baRender()};
  const rb=$('#baRenewBtn');if(rb)rb.onclick=()=>startBaRenew();
