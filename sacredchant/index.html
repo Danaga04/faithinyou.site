@@ -510,6 +510,15 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
 .ba-code .d span{color:#a8a294;font-size:13px}
 .ba-quote{font-family:Georgia,serif;font-style:italic;font-size:18px;line-height:1.5;color:#E9CE74;text-align:center;margin:22px auto;max-width:440px}
 .ba-prog-line{text-align:center;color:#E9CE74;font-weight:700;margin:0 0 12px}
+.ba-focus{border:1px solid rgba(212,175,55,.5);background:linear-gradient(160deg,rgba(212,175,55,.14),rgba(212,175,55,.03));border-radius:18px;padding:16px;margin:16px 0}
+.ba-focus .nw{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;color:#0B1120;background:#E9CE74;border-radius:99px;padding:3px 10px;margin-bottom:9px}
+.ba-focus h4{margin:0 0 6px;font-family:Georgia,serif;font-size:19px;color:#E9CE74;line-height:1.3}
+.ba-focus>p{color:#cfc8b8;font-size:14px;line-height:1.5;margin:4px 0 13px;font-style:italic}
+.ba-focus-read{text-align:left;margin:18px 0 22px;color:#ece6d8;font-size:17px;line-height:1.75}
+.ba-focus-read p{margin:0 0 15px}
+.ba-renew{border:1px solid rgba(95,224,160,.5);background:rgba(95,224,160,.08);border-radius:18px;padding:18px 16px;margin:0 0 18px;text-align:center}
+.ba-renew h3{margin:0 0 7px;color:#9ff0c6;font-size:19px}
+.ba-renew p{color:#cfe8da;font-size:14px;line-height:1.55;margin:4px 0 14px}
 .ba-open{margin-left:auto;flex:none;align-self:center;border:0;border-radius:99px;padding:9px 16px;font-weight:800;font-size:14px;color:#0B1120;background:linear-gradient(135deg,#B8912B,#E9CE74);cursor:pointer}
 .ba-code.done{opacity:.72;border-color:rgba(95,224,160,.4)}
 .ba-code.done .n{border-color:#5fe0a0;color:#5fe0a0}
@@ -581,7 +590,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
    <button type="button" class="btn" id="powBtn">▶ Listen now</button>
   </div>
   <button type="button" class="qz-banner" id="qzBanner"><div class="qz-ban-txt"><span class="qz-kicker">Daily challenge</span><b>Bible Quiz</b><span class="qz-sub">New questions every day · beat the 30-second clock</span></div><span class="qz-play">▶</span></button>
-  <button type="button" class="ba-banner" id="baBanner"><div class="ba-ban-art"><svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true"><g fill="none" stroke="#D4AF37" stroke-width="1.4"><circle cx="60" cy="60" r="52"/><circle cx="60" cy="60" r="40"/><circle cx="60" cy="60" r="28"/></g><path d="M60 24 72 56 106 56 78 76 88 108 60 88 32 108 42 76 14 56 48 56Z" fill="#D4AF37" opacity=".5"/></svg></div><div class="ba-ban-txt"><span class="ba-kicker">Sacred Alignment</span><b>Blessings Accelerator</b><span class="ba-sub">Align your 7 Codes of Solomon · once</span></div><span class="ba-go">✦</span></button>
+  <button type="button" class="ba-banner" id="baBanner"><div class="ba-ban-art"><svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true"><g fill="none" stroke="#D4AF37" stroke-width="1.4"><circle cx="60" cy="60" r="52"/><circle cx="60" cy="60" r="40"/><circle cx="60" cy="60" r="28"/></g><path d="M60 24 72 56 106 56 78 76 88 108 60 88 32 108 42 76 14 56 48 56Z" fill="#D4AF37" opacity=".5"/></svg></div><div class="ba-ban-txt"><span class="ba-kicker">Sacred Alignment</span><b>Blessings Accelerator</b><span class="ba-sub">Your monthly path · re-aligned every month</span></div><span class="ba-go">✦</span></button>
   <p class="sh">Support &amp; blessings</p><p>Start here, request a prayer, or reach our team.</p>
   <div class="tiles" id="tSup"></div>
   <button type="button" class="mark-card" data-mod="mark" aria-label="Open chat with Mark"><img src="https://i.postimg.cc/8kFQyKv5/bubblen6oy3a5sh6q.avif" alt="Mark" width="88" height="88" loading="lazy"><span class="mark-copy"><strong>Talk with Mark</strong><span>Your spiritual companion for prayer, reflection, and encouragement.</span><span class="mark-free">3 ✦ / MESSAGE</span></span></button>
@@ -965,8 +974,7 @@ function renderDmsHome(){
   el.innerHTML='<p class="sh">Your Divine Manifestation Script</p><div class="pow"><span class="theme">Your Script</span><p class="lab">Divine Manifestation Script</p><h3>'+DMS_TITLES[t]+'</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Your sacred script is ready. Read it aloud, slowly, over your life.</p><button type="button" class="btn gold" id="dmsOpen">\u{1F4D6} Open my Script</button></div>';
   const b=$('#dmsOpen');if(b)b.onclick=openDms;
  }else{
-  el.innerHTML='<p class="sh">Divine Manifestation Script</p><div class="pow"><span class="theme">New</span><p class="lab">Your sacred script</p><h3>A declaration written for you</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Take the short journey of faith, and receive a personalized Script to read aloud over your life. It opens right here.</p><button type="button" class="btn gold" id="dmsStart">✦ Begin your journey</button></div>';
-  const b=$('#dmsStart');if(b)b.onclick=openFlourish;
+  el.innerHTML='';
  }
 }
 function openFlourish(){const f=$('#flourishFrame');if(f&&!f.getAttribute('src'))f.setAttribute('src','flourish.html');go('flourish');}
@@ -1102,10 +1110,32 @@ const BA_Q=[
  {k:'timeOfDay',type:'single',q:'When do you usually pray, {name}?',o:["Early morning (before sunrise)","Morning (after sunrise)","Midday","Afternoon","Evening (sunset)","Late night (before sleep)","I don't have a set time"],ic:["\u{1F304}","☀️","\u{1F31E}","\u{1F552}","\u{1F307}","\u{1F319}","\u{1F9ED}"]},
  {k:'minutes',type:'single',q:'How long can you pray each day?',o:["3–5 minutes","5–10 minutes","10–20 minutes","20–30 minutes","More than 30 minutes"]},
  {k:'intention',type:'textarea',max:300,q:'Is there a specific intention on your heart?',ph:'Write it here. This stays between you and God…'},
- {k:'ready',type:'ready',q:'Are you ready to align, {name}?',sub:'Your alignment is sealed once — and shown to you from then on.'}
+ {k:'ready',type:'ready',q:'Are you ready to align, {name}?',sub:'Your alignment guides your prayers for the month ahead.'}
 ];
-const BA_N=BA_Q.length, BA_PROC=BA_N+1, BA_CONF=BA_N+2;
-let baStep=0, baAns={}, baMsgTimer=null, baProcTimer=null;
+const BA_N=BA_Q.length, BA_PROC=BA_N+1, BA_CONF=BA_N+2, BA_FOCUS_VIEW=BA_N+3;
+/* Monthly Sacred Focus — a new written prayer/declaration each month. Cycle N uses BA_FOCUS[(N-1)%12]. */
+const BA_FOCUS=[
+ {theme:'Provision & Abundance',verse:'“And my God shall supply all your need according to his riches in glory by Christ Jesus.” — Philippians 4:19',title:'A Declaration of Provision',prayer:"Father, I thank You that You are my provider, and that every good gift comes from Your hand.\nWhere I have worried about tomorrow, I give that worry to You today.\nOpen honest doors for me, and give me wisdom to walk through them.\nLet my work be blessed, my needs be met, and my hands be generous to others.\nI trust You, not in fear, but in peace. Amen."},
+ {theme:'Healing & Strength',verse:'“Heal me, O Lord, and I shall be healed; save me, and I shall be saved.” — Jeremiah 17:14',title:'A Prayer for Healing',prayer:"Lord, You are near to me in my body and in my spirit.\nTouch what hurts, steady what is weak, and renew my strength day by day.\nGive wisdom to those who care for me, and patience to me as I heal.\nWhere I cannot see the way forward, carry me.\nI rest in Your care today. Amen."},
+ {theme:'Peace Over Anxiety',verse:'“Be careful for nothing; but in every thing by prayer... let your requests be made known unto God.” — Philippians 4:6',title:'A Prayer for Peace',prayer:"Father, I bring You the thoughts that race and the fears that whisper.\nQuiet my mind, slow my breath, and settle my heart.\nRemind me that I am held, that I am not alone, and that this day has enough grace for it.\nLet Your peace guard me, deeper than any worry.\nTonight I will lie down and sleep, for You keep me. Amen."},
+ {theme:'Family Restoration',verse:'“As for me and my house, we will serve the Lord.” — Joshua 24:15',title:'A Prayer for My Family',prayer:"Lord, I lift up each person in my family by name before You.\nWhere there is distance, build a bridge. Where there is hurt, bring gentleness.\nGive me patience to listen and courage to forgive.\nProtect our home, and let love be the language we speak.\nKnit us together in You. Amen."},
+ {theme:'Guidance & Purpose',verse:'“Trust in the Lord with all thine heart... and he shall direct thy paths.” — Proverbs 3:5-6',title:'A Prayer for Direction',prayer:"Father, I don't need to see the whole road — just the next faithful step.\nMake my path clear, and give me peace about the choice before me.\nClose the doors that would harm me, and open the ones that lead to life.\nHelp me to live on purpose, for You and for others.\nLead me, and I will follow. Amen."},
+ {theme:'Protection',verse:'“The Lord is my rock, and my fortress, and my deliverer.” — Psalm 18:2',title:'A Prayer of Protection',prayer:"Lord, be my shield today, over my mind, my home, and the ones I love.\nGuard me from harm seen and unseen, and from words meant to wound.\nLet no fear rule me, for You are with me.\nSurround my coming in and my going out with Your peace.\nI am safe in You. Amen."},
+ {theme:'Gratitude',verse:'“O give thanks unto the Lord; for he is good: for his mercy endureth for ever.” — Psalm 107:1',title:'A Prayer of Thanksgiving',prayer:"Father, before I ask for anything, I want to thank You.\nFor breath, for this day, for the small mercies I often miss.\nFor the people who love me and the lessons that shaped me.\nOpen my eyes to see Your goodness all around.\nA grateful heart is my offering today. Amen."},
+ {theme:'Forgiveness & Freedom',verse:'“If the Son therefore shall make you free, ye shall be free indeed.” — John 8:36',title:'A Prayer to Let Go',prayer:"Lord, I have carried this long enough.\nI choose today to release the grudge, the regret, the weight I was never meant to hold.\nForgive me where I have failed, and help me forgive as I have been forgiven.\nTrade my bitterness for peace, and my chains for freedom.\nI walk lighter today. Amen."},
+ {theme:'Faith for Breakthrough',verse:'“Now faith is the substance of things hoped for, the evidence of things not seen.” — Hebrews 11:1',title:'A Prayer of Faith',prayer:"Father, I believe, and I ask You to help my unbelief.\nWhere I have grown tired of waiting, renew my hope.\nI thank You in advance for what I cannot yet see.\nMy prayers do not hit the ceiling — they reach Your heart.\nI stand in faith today. Amen."},
+ {theme:'Patience & Trust',verse:'“They that wait upon the Lord shall renew their strength.” — Isaiah 40:31',title:'A Prayer for the Waiting',prayer:"Lord, teach me to wait well, without anxiety and without giving up.\nUse this season to grow something good in me.\nQuiet my need to rush, and help me trust Your timing.\nYou have never been late, and You will not start now.\nI wait on You with hope. Amen."},
+ {theme:'Generosity & Blessing Others',verse:'“Give, and it shall be given unto you; good measure... shall men give into your bosom.” — Luke 6:38',title:'A Prayer to Be a Blessing',prayer:"Father, make me a channel of Your kindness today.\nShow me someone to encourage, to help, to pray for.\nLet my words lift and not tear down.\nAs You have been generous to me, make me generous to others.\nBless me, so that I can be a blessing. Amen."},
+ {theme:'Renewal & New Beginnings',verse:'“Behold, I make all things new.” — Revelation 21:5',title:'A Prayer for a Fresh Start',prayer:"Lord, thank You that Your mercies are new every morning.\nWhatever I got wrong before, I begin again with You today.\nBreathe fresh purpose into my days and fresh hope into my heart.\nLet this new month be a new chapter.\nI step forward with You. Amen."}
+];
+const BA_CYCLE_DAYS=28;
+let baStep=0, baAns={}, baMsgTimer=null, baProcTimer=null, baRenewing=false;
+function baSyncBa(){try{if(sbClient)sbClient.auth.updateUser({data:{sc_ba:S.ba}}).catch(()=>{})}catch(e){}}
+function baCycleNum(){return (S.ba&&S.ba.cycle)||1}
+function baFocusCur(){return BA_FOCUS[(baCycleNum()-1)%BA_FOCUS.length]}
+function baCycleStartISO(){if(S.ba&&S.ba.cycleStart)return S.ba.cycleStart;const t=(S.ba&&S.ba.at)?new Date(S.ba.at):new Date();return ymd(t)}
+function baDaysInto(){return Math.round((Date.parse(ymd(new Date())+'T00:00:00Z')-Date.parse(baCycleStartISO()+'T00:00:00Z'))/864e5)}
+function baMigrate(){if(S.ba&&S.ba.report){if(S.ba.cycle==null)S.ba.cycle=1;if(!S.ba.cycleStart)S.ba.cycleStart=ymd(new Date(S.ba.at||Date.now()));if(!Array.isArray(S.ba.history))S.ba.history=[];if(!Array.isArray(S.ba.done))S.ba.done=[];if(!Array.isArray(S.ba.focusDone))S.ba.focusDone=[]}}
 function baName(){return (baAns.name||'').trim()||'Beloved'}
 function baPersist(){try{localStorage.setItem('sc_ba_prog',JSON.stringify({step:baStep,ans:baAns}))}catch(e){}}
 function baClearProg(){try{localStorage.removeItem('sc_ba_prog')}catch(e){}}
@@ -1123,7 +1153,7 @@ function baBuildReport(ans,todayISO){
  const bestDayOfMonth=(((birthDay-1+urg+fc)%28)+28)%28+1;
  const AMH=[5,6,7,8,9];const hseed=(((urg+fc)%5)+5)%5;
  const startOffset=1+((urg+fc)%3);
- const intervalDays=3+(urg%2);
+ const intervalDays=2;
  const base=todayISO?new Date(todayISO+'T00:00:00Z'):new Date();
  let first=new Date(base);first.setUTCDate(first.getUTCDate()+startOffset);let tries=0;while(first.getUTCDay()!==bestWeekdayIndex&&tries<7){first.setUTCDate(first.getUTCDate()+1);tries++}
  const PLAN=[];for(let i=1;i<=7;i++){PLAN.push(['Solomon',i]);PLAN.push(['Jesus',i])}
@@ -1131,10 +1161,12 @@ function baBuildReport(ans,todayISO){
  return {bestWeekday:WD[bestWeekdayIndex],bestDayOfMonth:bestDayOfMonth,bestHour:baFmtHour(AMH[hseed]),intervalDays:intervalDays,codes:codes,area:ans.area||'',timeOfDay:ans.timeOfDay||'',minutes:ans.minutes||'',intention:(ans.intention||'').trim(),name:baName()};
 }
 function openBA(){
+ baRenewing=false;baMigrate();
  if(S.ba&&S.ba.report){baStep=BA_CONF;$('#ba').classList.add('on');baRender();return}
  try{const pr=JSON.parse(localStorage.getItem('sc_ba_prog')||'null');if(pr&&pr.ans){baAns=pr.ans;baStep=Math.min(pr.step||0,BA_N)}else{baAns={};baStep=0}}catch(e){baAns={};baStep=0}
  $('#ba').classList.add('on');baRender();
 }
+function startBaRenew(){baRenewing=true;baAns=Object.assign({},(S.ba&&S.ba.answers)||{});baClearProg();baStep=0;$('#ba').classList.add('on');baRender();try{$('#ba').scrollTop=0}catch(e){}}
 function closeBA(){$('#ba').classList.remove('on');clearInterval(baMsgTimer);clearTimeout(baProcTimer)}
 function baSet(s){baStep=s;baPersist();baRender();try{$('#ba').scrollTop=0}catch(e){}}
 function baNext(){baSet(baStep+1)}
@@ -1144,10 +1176,16 @@ function baRender(){
  if(baStep===0)return baWelcome(w);
  if(baStep>=1&&baStep<=BA_N)return baQuestion(w,BA_Q[baStep-1]);
  if(baStep===BA_PROC)return baProcessing(w);
+ if(baStep===BA_FOCUS_VIEW)return baShowFocus(w);
  return baConfirm(w);
 }
 function baWelcome(w){
- w.innerHTML='<div class="ba-ring"><svg width="92" height="92" viewBox="0 0 92 92"><circle cx="46" cy="46" r="42" fill="none" stroke="#D4AF37" stroke-width="1.4" opacity=".5"/><polygon points="'+baStarPts(46,46,34,15,7)+'" fill="#D4AF37" opacity=".85"/></svg></div><p class="ba-eyebrow">Sacred Alignment</p><h2 class="ba-title">Blessings Accelerator</h2><p class="ba-subt">Align the 7 Codes of Solomon to your life and unlock blessings up to 12x faster.<br><br>Takes less than 3 minutes. Private. Instant.</p><button type="button" class="ba-gold" id="baBegin">Begin My Alignment</button>';
+ const ring='<div class="ba-ring"><svg width="92" height="92" viewBox="0 0 92 92"><circle cx="46" cy="46" r="42" fill="none" stroke="#D4AF37" stroke-width="1.4" opacity=".5"/><polygon points="'+baStarPts(46,46,34,15,7)+'" fill="#D4AF37" opacity=".85"/></svg></div>';
+ if(baRenewing){
+  w.innerHTML=ring+'<p class="ba-eyebrow">A New Month</p><h2 class="ba-title">Re-align for the Month Ahead</h2><p class="ba-subt">A fresh 28-day path begins now. Take a minute to re-align the 7 Codes to where your life is <i>today</i> — your focus, your timing, your intention. Your last answers are kept, so just tap through.</p><button type="button" class="ba-gold" id="baBegin">Begin My Re-Alignment</button>';
+ }else{
+  w.innerHTML=ring+'<p class="ba-eyebrow">Sacred Alignment</p><h2 class="ba-title">Blessings Accelerator</h2><p class="ba-subt">Align the 7 Codes of Solomon to your life, and receive a personal 28-day path of prayer — renewed with a new Sacred Focus every month.<br><br>Takes less than 3 minutes. Private. Instant.</p><button type="button" class="ba-gold" id="baBegin">Begin My Alignment</button>';
+ }
  const b=$('#baBegin');if(b)b.onclick=()=>baSet(1);
 }
 function baOptEl(emoji,text,sel,onClick){const b=document.createElement('button');b.type='button';b.className='ba-opt'+(sel?' sel':'');b.innerHTML=(emoji?'<span class="emo">'+emoji+'</span>':'')+'<span>'+text+'</span><span class="ck">✓</span>';b.onclick=onClick;return b}
@@ -1178,21 +1216,53 @@ function baProcessing(w){
  const MSGS=["Reading your answers…","Aligning your 7 Codes of Solomon…","Identifying the best days and hours for your prayers…","Removing spiritual blockages from your path…","Calibrating your blessings accelerator…","Finalizing your personalized alignment…"];
  w.innerHTML='<div class="ba-ring" style="width:130px;height:130px"><svg width="130" height="130" viewBox="0 0 120 120" class="ba-star"><g fill="none" stroke="#D4AF37" stroke-width="1.6"><circle cx="60" cy="60" r="48"/><circle cx="60" cy="60" r="36"/><polygon points="'+baStarPts(60,60,48,22,7)+'"/></g></svg></div><p class="ba-proc-msg" id="baMsg">'+MSGS[0]+'</p><p class="ba-subt">Please keep this page open.</p>';
  let i=0;baMsgTimer=setInterval(()=>{i=(i+1)%MSGS.length;const m=$('#baMsg');if(m)m.textContent=MSGS[i]},1800);
- baProcTimer=setTimeout(()=>{clearInterval(baMsgTimer);if(!S.ba||!S.ba.report)baSeal();baSet(BA_CONF)},5200);
+ baProcTimer=setTimeout(()=>{clearInterval(baMsgTimer);if(baRenewing||!S.ba||!S.ba.report)baSeal();baSet(BA_CONF)},5200);
 }
-function baSeal(){const report=baBuildReport(baAns,ymd(new Date()));S.ba={answers:baAns,report:report,at:Date.now()};save();baClearProg();try{if(sbClient)sbClient.auth.updateUser({data:{sc_ba:S.ba}}).catch(()=>{})}catch(e){}}
+function baSeal(){
+ const nowISO=ymd(new Date());
+ const report=baBuildReport(baAns,nowISO);
+ const prev=(S.ba&&S.ba.report)?S.ba:null;
+ let cycle=1,history=(prev&&prev.history)||[];
+ if(baRenewing&&prev){
+  const fdone=(prev.done||[]).length;
+  const pf=BA_FOCUS[((prev.cycle||1)-1)%BA_FOCUS.length]||{};
+  history=history.concat([{cycle:prev.cycle||1,focus:pf.theme||'',completed:fdone,start:prev.cycleStart||'',end:nowISO}]);
+  cycle=(prev.cycle||1)+1;
+ }
+ S.ba={answers:baAns,report:report,at:Date.now(),cycle:cycle,cycleStart:nowISO,done:[],focusDone:[],history:history};
+ baRenewing=false;
+ save();baClearProg();baSyncBa();
+}
 function baRow(k,v){return '<div class="r"><span>'+k+'</span><span>'+String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</span></div>'}
 function baConfirm(w){
+ baMigrate();
  const rep=(S.ba&&S.ba.report)||baBuildReport(baAns,ymd(new Date()));const nm=rep.name||'Beloved';
+ const cyc=baCycleNum(),foc=baFocusCur(),daysInto=baDaysInto();
  let rows='';if(rep.area)rows+=baRow('Acceleration Focus',rep.area);if(rep.timeOfDay)rows+=baRow('Best Prayer Window',rep.timeOfDay);if(rep.minutes)rows+=baRow('Daily Commitment',rep.minutes);if(rep.intention)rows+=baRow('Your Intention',rep.intention);
  const card=rows?'<div class="ba-card">'+rows+'</div>':'';
  const baDone=(S.ba&&S.ba.done)||[];
+ const allDone=baDone.length>=14;
+ const cycleComplete=allDone||daysInto>=BA_CYCLE_DAYS;
+ const focDone=((S.ba&&S.ba.focusDone)||[]).includes(cyc);
+ const focusCard='<div class="ba-focus"><span class="nw">NEW THIS MONTH</span><h4>This Month’s Sacred Focus · '+foc.theme+'</h4><p>'+foc.verse+'</p><button type="button" class="ba-gold" id="baFocusOpen" style="font-size:16px;padding:13px">'+(focDone?'Read this month’s prayer again':'Open this month’s prayer')+'</button></div>';
  let codes='';rep.codes.forEach(c=>{const isDone=baDone.includes(c.step);const ld=baLiveDays(c);const isToday=(ld===0)&&!isDone;const overdue=(ld<0)&&!isDone;const mod=c.moduleLabel||('Code '+(c.code||''));const pn=c.prayerNum?(' · Prayer '+c.prayerNum+(c.hebrew?' (in Hebrew)':'')):'';const when=isDone?'done':(ld===0?'today':(ld<0?(Math.abs(ld)+' day'+(Math.abs(ld)===1?'':'s')+' ago'):'in '+ld+' day'+(ld===1?'':'s')));const cls='ba-code'+(isDone?' done':'')+(isToday?' today':'')+(overdue?' overdue':'');const badge=isToday?'<span class="ba-today-badge">TODAY</span>':'';const btnLabel=isDone?'Done ✓':(isToday?'Pray now':(overdue?'Open':'Open'));codes+='<div class="'+cls+'"><span class="n">'+(isDone?'✓':(c.step||c.code))+'</span><span class="d"><b>'+c.dateLabel+' · '+c.hour+badge+'</b><span><b style="color:#E9CE74">'+mod+'</b>'+pn+' · '+when+'</span></span><button type="button" class="ba-open" data-bastep="'+c.step+'" data-bamod="'+c.module+'" data-bap="'+c.prayerNum+'" data-baiso="'+(c.iso||'')+'" data-balabel="'+String(c.dateLabel).replace(/"/g,'&quot;')+'">'+btnLabel+'</button></div>'});
- const baProgLine='<p class="ba-prog-line">'+baDone.length+' of 14 completed</p>';
- let baStatus='';{const nd=rep.codes.filter(c=>!baDone.includes(c.step)).slice().sort((a,b)=>(a.iso||'')<(b.iso||'')?-1:1);if(!nd.length){baStatus='<div class="ba-status calm">You have completed all 14 prayers. 🙏</div>'}else{const nx=nd[0],ld=baLiveDays(nx),lbl=(nx.moduleLabel||'')+(nx.prayerNum?' · Prayer '+nx.prayerNum:'');if(ld===0)baStatus='<div class="ba-status urgent">🔴 Today is the day — open '+lbl+' now.</div>';else if(ld<0)baStatus='<div class="ba-status urgent">🔴 A prayer has been waiting since '+nx.dateLabel+' — open it when you can.</div>';else baStatus='<div class="ba-status calm">You don\'t need to pray today. Your next prayer is '+nx.dateLabel+' (in '+ld+' day'+(ld===1?'':'s')+'). You can get ahead if you wish, but each prayer has the most effect on its own day.</div>'}}
- w.innerHTML='<div class="ba-check">✓</div><p class="ba-eyebrow">Alignment Complete</p><h2 class="ba-title">Your Codes Have Been Aligned, <span style="color:#D4AF37">'+nm+'</span>.</h2><p class="ba-subt">Your personal 14-prayer plan has been calibrated to your life, your timing and your intention — the 7 Prayers of Solomon (in Hebrew) and the 7 Prayers of Jesus. This alignment is sealed — it will never change.</p>'+card+'<div class="ba-div">Your Sacred Timing</div><div class="ba-grid3"><div class="ba-tile"><small>Best Day</small><b>'+rep.bestWeekday+'</b></div><div class="ba-tile"><small>Best Date</small><b>the '+baOrd(rep.bestDayOfMonth)+'</b></div><div class="ba-tile"><small>Best Hour</small><b>'+rep.bestHour+'</b></div></div><div class="ba-div" style="font-size:18px">Your 14 Prayers · Personal Sequence</div><p class="ba-subt" style="margin-bottom:14px">Follow this exact order. Each line tells you the day, the time (early morning), and exactly which prayer to open — the 7 Prayers of Solomon (in Hebrew) and the 7 Prayers of Jesus. On that day, open that module and tap the numbered prayer. Just tap <b>Open</b> on each line to go straight to it.</p>'+baStatus+baProgLine+codes+'<p class="ba-subt" style="margin-top:14px">If you fall behind, resume on the '+baOrd(rep.bestDayOfMonth)+' of the following month at '+rep.bestHour+'.</p><p class="ba-quote">“Your prayers will no longer hit the ceiling. They will arrive. Your blessings will no longer come in halves. They will come in full.”</p><button type="button" class="ba-gold" id="baDone">Begin my practice</button>';
+ const baProgLine='<p class="ba-prog-line">'+baDone.length+' of 14 this month · Month '+cyc+'</p>';
+ let baStatus='';{const nd=rep.codes.filter(c=>!baDone.includes(c.step)).slice().sort((a,b)=>(a.iso||'')<(b.iso||'')?-1:1);if(!nd.length){baStatus='<div class="ba-status calm">You have completed all 14 prayers this month. 🙏</div>'}else{const nx=nd[0],ld=baLiveDays(nx),lbl=(nx.moduleLabel||'')+(nx.prayerNum?' · Prayer '+nx.prayerNum:'');if(ld===0)baStatus='<div class="ba-status urgent">🔴 Today is the day — open '+lbl+' now.</div>';else if(ld<0)baStatus='<div class="ba-status urgent">🔴 A prayer has been waiting since '+nx.dateLabel+' — open it when you can.</div>';else baStatus='<div class="ba-status calm">You don\'t need to pray today. Your next prayer is '+nx.dateLabel+' (in '+ld+' day'+(ld===1?'':'s')+'). You can get ahead if you wish, but each prayer has the most effect on its own day.</div>'}}
+ let renewCard='';
+ if(cycleComplete){renewCard='<div class="ba-renew"><h3>✨ Month '+cyc+' complete</h3><p>You prayed <b>'+baDone.length+' of 14</b> this month'+(((S.ba&&S.ba.focusDone)||[]).includes(cyc)?' and received this month’s Sacred Focus':'')+'. A new 28-day path and a new Sacred Focus are ready for you. Re-align to where your life is now.</p><button type="button" class="ba-gold" id="baRenewBtn">Begin next month’s alignment</button></div>'}
+ w.innerHTML='<div class="ba-check">✓</div><p class="ba-eyebrow">Month '+cyc+' · Your Alignment</p><h2 class="ba-title">Your Codes Are Aligned, <span style="color:#D4AF37">'+nm+'</span>.</h2><p class="ba-subt">Your personal 28-day plan is calibrated to your life, your timing and your intention — the 7 Prayers of Solomon (in Hebrew) and the 7 Prayers of Jesus. Each new month you re-align, so your prayers follow where your life is now.</p>'+renewCard+focusCard+card+'<div class="ba-div">Your Sacred Timing</div><div class="ba-grid3"><div class="ba-tile"><small>Best Day</small><b>'+rep.bestWeekday+'</b></div><div class="ba-tile"><small>Best Date</small><b>the '+baOrd(rep.bestDayOfMonth)+'</b></div><div class="ba-tile"><small>Best Hour</small><b>'+rep.bestHour+'</b></div></div><div class="ba-div" style="font-size:18px">Your 14 Prayers · This Month</div><p class="ba-subt" style="margin-bottom:14px">Follow this exact order. Each line tells you the day, the time (early morning), and exactly which prayer to open — the 7 Prayers of Solomon (in Hebrew) and the 7 Prayers of Jesus. On that day, open that module and tap the numbered prayer. Just tap <b>Open</b> on each line to go straight to it.</p>'+baStatus+baProgLine+codes+'<p class="ba-subt" style="margin-top:14px">When these 14 are complete — or at the end of the month — a new month opens with a fresh Sacred Focus and you re-align.</p><p class="ba-quote">“Your prayers will no longer hit the ceiling. They will arrive. Your blessings will no longer come in halves. They will come in full.”</p><button type="button" class="ba-gold" id="baDone">Begin my practice</button>';
  const d=$('#baDone');if(d)d.onclick=()=>{closeBA();go('today')};
+ const fo=$('#baFocusOpen');if(fo)fo.onclick=()=>{baStep=BA_FOCUS_VIEW;baRender()};
+ const rb=$('#baRenewBtn');if(rb)rb.onclick=()=>startBaRenew();
  $$('#baWrap [data-bastep]').forEach(btn=>{btn.onclick=()=>{const step=Number(btn.dataset.bastep),mod=btn.dataset.bamod,pn=Number(btn.dataset.bap),iso=btn.dataset.baiso,lbl=btn.dataset.balabel||'';const done=((S.ba&&S.ba.done)||[]).includes(step);const ld=iso?Math.round((Date.parse(iso+'T00:00:00Z')-Date.parse(ymd(new Date())+'T00:00:00Z'))/864e5):0;if(ld>0&&!done)return baEarlyAsk(lbl,ld,()=>baOpenPrayer(mod,pn,step));baOpenPrayer(mod,pn,step)}});
+}
+function baShowFocus(w){
+ baMigrate();const f=baFocusCur(),cyc=baCycleNum();
+ const txt=String(f.prayer||'').split('\n').map(x=>x.trim()).filter(Boolean).map(x=>'<p>'+x.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</p>').join('');
+ w.innerHTML='<p class="ba-eyebrow">This Month · Month '+cyc+'</p><h2 class="ba-title">'+f.title+'</h2><p class="ba-quote" style="margin:6px auto 10px">'+f.verse+'</p><div class="ba-focus-read">'+txt+'</div><button type="button" class="ba-gold" id="baFocusDone">I have prayed this 🙏</button><button type="button" class="ba-outline" id="baFocusBack">Back to my plan</button>';
+ const dn=$('#baFocusDone');if(dn)dn.onclick=()=>{try{S.ba.focusDone=S.ba.focusDone||[];if(!S.ba.focusDone.includes(cyc)){S.ba.focusDone.push(cyc);save();baSyncBa()}}catch(e){}baStep=BA_CONF;baRender()};
+ const bk=$('#baFocusBack');if(bk)bk.onclick=()=>{baStep=BA_CONF;baRender()};
+ try{$('#ba').scrollTop=0}catch(e){}
 }
 function baLiveDays(c){if(!c||!c.iso)return (c&&c.daysAway!=null?c.daysAway:0);return Math.round((Date.parse(c.iso+'T00:00:00Z')-Date.parse(ymd(new Date())+'T00:00:00Z'))/864e5)}
 let baEarlyYes=null;
