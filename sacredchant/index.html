@@ -744,6 +744,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
 </div></section>
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
 <div class="cert" id="refund"><div id="refundBox"></div></div>
+<div class="cert" id="baLock"><div><p style="font-size:40px">✦</p><h2>Blessings Accelerator</h2><p style="margin-top:8px">This is a monthly guided path: a personal 28-day sequence of the 7 Prayers of Solomon and the 7 Prayers of Jesus, re-aligned to your life every month, with a new Sacred Focus prayer each month and your daily "pray this today".</p><p style="margin-top:8px;font-weight:600">It's part of the Blessings Accelerator subscription.</p><div class="low-actions"><button class="btn gold" id="baLockBuy">Unlock Blessings Accelerator</button><button class="ghost" id="baLockX">Maybe later</button></div></div></div>
 <div id="a2hs" role="dialog" aria-modal="true" aria-label="Add to home screen"><div class="sheet" id="a2hsBody"></div></div>
 <div class="buy" id="buy" hidden role="dialog" aria-modal="true" aria-labelledby="buyT"><div class="buy__box" id="buyBox" tabindex="-1">
  <button type="button" class="buy__x" id="buyX" aria-label="Close">✕</button>
@@ -1129,7 +1130,21 @@ const BA_FOCUS=[
  {theme:'Renewal & New Beginnings',verse:'“Behold, I make all things new.” — Revelation 21:5',title:'A Prayer for a Fresh Start',prayer:"Lord, thank You that Your mercies are new every morning.\nWhatever I got wrong before, I begin again with You today.\nBreathe fresh purpose into my days and fresh hope into my heart.\nLet this new month be a new chapter.\nI step forward with You. Amen."}
 ];
 const BA_CYCLE_DAYS=28;
+/* Link de checkout do upsell Blessings Accelerator ($67/mês, produto 680706). */
+const BA_SUB_URL='https://www.checkout-ds24.com/product/680706';
 let baStep=0, baAns={}, baMsgTimer=null, baProcTimer=null, baRenewing=false;
+/* Assinatura: S.baSub === false => servidor confirmou que NAO tem assinatura ativa (trava).
+   true => ativa. undefined/null => desconhecido ou falha de rede => libera (fail-open, nao tranca pagante). */
+function baSubLocked(){return S.baSub===false}
+async function syncBaSub(){try{if(!sbClient)return;const {data,error}=await sbClient.rpc('sc_ba_active');if(!error)S.baSub=(data===true);save()}catch(e){/* rede: mantem estado, nao tranca */}}
+function openBaGate(){if(baSubLocked())return openBaLock();openBA()}
+function openBaLock(){
+ const r=$('#baLock');if(!r)return openBA();
+ const btn=$('#baLockBuy');
+ if(btn){if(BA_SUB_URL){btn.textContent='Unlock Blessings Accelerator';btn.onclick=()=>{try{window.top.location.href=BA_SUB_URL}catch(e){location.href=BA_SUB_URL}}}else{btn.textContent='See how to unlock';btn.onclick=()=>{r.classList.remove('on');if(window.openSupportPanel)window.openSupportPanel()}}}
+ const x=$('#baLockX');if(x)x.onclick=()=>r.classList.remove('on');
+ r.classList.add('on');
+}
 function baSyncBa(){try{if(sbClient)sbClient.auth.updateUser({data:{sc_ba:S.ba}}).catch(()=>{})}catch(e){}}
 function baCycleNum(){return (S.ba&&S.ba.cycle)||1}
 function baFocusCur(){return BA_FOCUS[(baCycleNum()-1)%BA_FOCUS.length]}
@@ -1278,10 +1293,10 @@ function baOpenPrayer(module,prayerNum,step){
 }
 /* Popup que recomenda alinhar as bencaos antes de orar por conta propria */
 let baRecDismissed=false, baRecCont=null;
-function baRecommend(onCont){baRecCont=onCont||null;const r=$('#baRec');if(r)r.classList.add('on')}
-if($('#baRecGo'))$('#baRecGo').onclick=()=>{$('#baRec').classList.remove('on');baRecDismissed=true;baRecCont=null;openBA()};
+function baRecommend(onCont){if(baSubLocked()){baRecDismissed=true;return onCont&&onCont()}baRecCont=onCont||null;const r=$('#baRec');if(r)r.classList.add('on')}
+if($('#baRecGo'))$('#baRecGo').onclick=()=>{$('#baRec').classList.remove('on');baRecDismissed=true;baRecCont=null;openBaGate()};
 if($('#baRecSkip'))$('#baRecSkip').onclick=()=>{$('#baRec').classList.remove('on');baRecDismissed=true;const c=baRecCont;baRecCont=null;if(c)c()};
-if($('#baBanner'))$('#baBanner').onclick=openBA;
+if($('#baBanner'))$('#baBanner').onclick=openBaGate;
 if($('#baX'))$('#baX').onclick=closeBA;
 
 function go(t){if(t!=='vid')$('#vBox').innerHTML='';if(t!=='web'&&$('#wBox'))$('#wBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='me'){if(typeof renderBilling==='function')renderBilling();if(typeof renderGrowth==='function')renderGrowth()}if(t==='today'&&typeof renderToday==='function')renderToday();if(t==='chants'&&typeof renderChants==='function')renderChants();scrollTo(0,0)}
@@ -2508,6 +2523,7 @@ setTimeout(async () => {
   await syncDailyLightStatus();
   await refreshTier();
   await syncDmsTier();
+  await syncBaSub();
 }, 0);
             scheduleNotif();
             nUpd();
