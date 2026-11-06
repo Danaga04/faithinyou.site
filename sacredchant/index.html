@@ -746,6 +746,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
 </div></section>
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
 <div class="cert" id="refund"><div id="refundBox"></div></div>
+<div class="cert" id="remind"><div><p style="font-size:40px">🔔</p><h2>A gentle daily reminder</h2><p style="margin-top:8px">Beautiful — you've prayed today. Would you like a soft daily nudge to come back, at a time you choose? No spam, and you can turn it off anytime.</p><div style="margin:16px 0 4px;text-align:left"><label for="remindHour" style="font-weight:700;font-size:14px;display:block;margin-bottom:6px">Remind me at</label><select id="remindHour" style="width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-size:16px"><option value="6">6:00 AM</option><option value="7">7:00 AM</option><option value="8" selected>8:00 AM</option><option value="9">9:00 AM</option><option value="12">12:00 PM</option><option value="18">6:00 PM</option><option value="20">8:00 PM</option><option value="21">9:00 PM</option></select></div><div class="low-actions"><button class="btn gold" id="remindYes">Yes, remind me daily</button><button class="ghost" id="remindNo">Not now</button></div></div></div>
 <div id="a2hs" role="dialog" aria-modal="true" aria-label="Add to home screen"><div class="sheet" id="a2hsBody"></div></div>
 <div class="buy" id="buy" hidden role="dialog" aria-modal="true" aria-labelledby="buyT"><div class="buy__box" id="buyBox" tabindex="-1">
  <button type="button" class="buy__x" id="buyX" aria-label="Close">✕</button>
@@ -1274,6 +1275,7 @@ if($('#baEarlySkip'))$('#baEarlySkip').onclick=()=>{$('#baEarly').classList.remo
 function baOpenPrayer(module,prayerNum,step){
  const idx=Math.max(0,Math.min(6,(Number(prayerNum)||1)-1));
  if(S.ba){S.ba.done=S.ba.done||[];if(!S.ba.done.includes(step)){S.ba.done.push(step);save();try{if(sbClient)sbClient.auth.updateUser({data:{sc_ba:S.ba}}).catch(()=>{})}catch(e){}}}
+ maybeAskRemind();
  closeBA();baRecDismissed=true;
  if(module==='Jesus'){if(!S.jesStart){S.jesStart=Date.now();save()}jesClick(idx)}
  else{if(!S.solStart){S.solStart=Date.now();save()}dayClick(idx)}
@@ -1695,7 +1697,7 @@ function startAudio(c){if(c.src){au=new Audio(c.src);au.loop=true;au.onerror=()=
 function stopAudio(){clearInterval(chirp);clearInterval(bell);if(au){au.pause();au=null}try{nodes.m&&nodes.m.gain.linearRampToValueAtTime(0,ac.currentTime+.6);const n=nodes;nodes=[];setTimeout(()=>n.forEach(o=>{try{o.stop()}catch(e){}}),700)}catch(e){}}
 function open(c){cur=c;secs=0;paused=false;$('#imTag').textContent=c.tag;$('#imName').textContent=c.n;$('#imM').textContent=c.m;$('#imP').textContent='Pause';const vl=$('#vlabel');if(vl){vl.style.setProperty('--vg',c.g);vl.innerHTML=coverSVG(c)}const vn=$('#vinyl');if(vn)vn.classList.remove('paused');$('#im').classList.add('on');startAudio(c);clearInterval(tick);tick=setInterval(step,1000);step(1)}
 function step(f){if(!f&&!paused)secs++;$('#imClock').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0')+(limit?' / '+String(limit/60).padStart(2,'0')+':00':'');$('#orbL').textContent=guide?(secs%8<4?'Inhale':'Exhale'):'';if(limit&&secs>=limit)close(1)}
-function close(done){clearInterval(tick);stopAudio();$('#im').classList.remove('on');if(secs>=30){S.min+=secs/60;if(!S.days.includes(today()))S.days.push(today());save();render();if(done)toast('Session complete')}}
+function close(done){clearInterval(tick);stopAudio();$('#im').classList.remove('on');if(secs>=30){S.min+=secs/60;if(!S.days.includes(today()))S.days.push(today());save();render();if(done)toast('Session complete');maybeAskRemind()}}
 $('#imX').onclick=()=>close(0);
 $('#imP').onclick=()=>{paused=!paused;$('#imP').textContent=paused?'Resume':'Pause';const vn=$('#vinyl');if(vn)vn.classList.toggle('paused',paused);try{if(au)paused?au.pause():au.play();else paused?ac.suspend():ac.resume()}catch(e){}};
 $('#imB').onclick=()=>{guide=!guide;$('#imB').setAttribute('aria-pressed',guide);$('#imB').textContent='Breath guide '+(guide?'on':'off');$('#im').classList.toggle('calm',!guide)};
@@ -1855,7 +1857,7 @@ function renderToday(){
  $('#tdTokens').disabled=!canOffer();
 }
 function tdMark(step){const r=tdState();if(r[step])return;r[step]=true;
- if(r.verse&&r.prayer&&r.chant&&S.tdCredited!==today()){S.tdCredited=today();if(!S.days.includes(today()))S.days.push(today());toast('Today complete 🙏 — your streak grew')}
+ if(r.verse&&r.prayer&&r.chant&&S.tdCredited!==today()){S.tdCredited=today();if(!S.days.includes(today()))S.days.push(today());toast('Today complete 🙏 — your streak grew');maybeAskRemind()}
  save();renderToday();if(typeof renderGrowth==='function')renderGrowth();
 }
 if($('#tdVerseMark'))$('#tdVerseMark').onclick=()=>tdMark('verse');
@@ -1870,7 +1872,17 @@ setInterval(tickOffer,1000);
 function notifyReady(){try{if(Notification.permission!=='granted')return;const o={body:'Your light is ready. Come back and claim +10 ✦.',icon:'icon-192.png'};if(navigator.serviceWorker&&navigator.serviceWorker.controller)navigator.serviceWorker.ready.then(r=>r.showNotification('Sacred Chant',o));else new Notification('Sacred Chant',o)}catch(e){}}
 let nt;function scheduleNotif(){clearTimeout(nt);const w=DAY-(Date.now()-(S.lastTs||0));if(w>0)nt=setTimeout(()=>{notifyReady();toast('Your +10 ✦ is ready')},w)}
 function nUpd(){const e=$('#nSt'),b=$('#nBtn');if(!('Notification' in window)){e.textContent='Notifications are not supported on this browser.';b.hidden=true;return}const p=Notification.permission;b.hidden=p!=='default';e.textContent=p==='granted'?'Reminders are on.':p==='denied'?'Blocked. Turn them on in your browser settings.':''}
-$('#nBtn').onclick=()=>{try{Notification.requestPermission().then(()=>{nUpd();scheduleNotif()})}catch(e){}};
+$('#nBtn').onclick=()=>{try{Notification.requestPermission().then(()=>{nUpd();scheduleNotif();remindNext()})}catch(e){}};
+
+/* Lembrete diário no momento certo (estilo Calm): pedido logo após a 1ª oração concluída.
+   Tom gentil (nada punitivo). Notificação local do próprio aparelho — sem e-mail/SMS. */
+let remindTimer;
+function showDailyReminder(){try{if(!('Notification'in window)||Notification.permission!=='granted')return;const o={body:'Your prayer for today is ready. 🙏',icon:'icon-192.png',tag:'sc-daily'};if(navigator.serviceWorker&&navigator.serviceWorker.controller)navigator.serviceWorker.ready.then(r=>r.showNotification('Sacred Chant',o));else new Notification('Sacred Chant',o)}catch(e){}}
+function remindNext(){clearTimeout(remindTimer);if(!S.remindOn)return;if(!('Notification'in window)||Notification.permission!=='granted')return;const h=Number(S.remindHour);if(isNaN(h))return;const now=new Date();const t=new Date();t.setHours(h,0,0,0);if(t<=now)t.setDate(t.getDate()+1);remindTimer=setTimeout(()=>{showDailyReminder();remindNext()},Math.min(t-now,2147483646))}
+function maybeAskRemind(){try{if(S.remindAsked||S.remindOn)return;if(!('Notification'in window))return;if(Notification.permission==='denied'){S.remindAsked=true;save();return}setTimeout(openRemind,900)}catch(e){}}
+function openRemind(){if(S.remindAsked||S.remindOn||!$('#remind'))return;const sel=$('#remindHour');if(sel){let def=8;try{const c=S.ba&&S.ba.report&&S.ba.report.codes&&S.ba.report.codes[0];const m=c&&/(\d+):(\d+)\s*(AM|PM)/i.exec(c.hour||'');if(m){let hh=Number(m[1])%12;if(/pm/i.test(m[3]))hh+=12;def=hh}}catch(e){}sel.value=String(def)}$('#remind').classList.add('on')}
+if($('#remindYes'))$('#remindYes').onclick=()=>{S.remindHour=Number(($('#remindHour')||{}).value)||8;const fin=()=>{S.remindAsked=true;S.remindOn=(('Notification'in window)&&Notification.permission==='granted');save();$('#remind').classList.remove('on');remindNext();try{nUpd()}catch(e){}toast(S.remindOn?'Daily reminder set 🔔':'Allow notifications in your browser to get reminders')};try{if(('Notification'in window)&&Notification.permission==='default')Notification.requestPermission().then(fin);else fin()}catch(e){fin()}};
+if($('#remindNo'))$('#remindNo').onclick=()=>{S.remindAsked=true;save();$('#remind').classList.remove('on')};
 /* instalar */
 let dip=null;
 const isiOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
@@ -2367,6 +2379,7 @@ async function claimPendingDigistoreOrders() {
          save();
          render();
          scheduleNotif();
+         remindNext();
        }
      }
    } catch (err) {
@@ -2512,6 +2525,7 @@ setTimeout(async () => {
   await syncDmsTier();
 }, 0);
             scheduleNotif();
+            remindNext();
             nUpd();
             toast('Welcome' + (S.name ? ', ' + S.name : ''));
             setTimeout(() => maybeStartOnboarding(user), 300);
