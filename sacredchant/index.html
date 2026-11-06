@@ -114,6 +114,19 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .angel.flap{filter:drop-shadow(0 0 34px rgba(255,214,110,1)) drop-shadow(0 0 10px rgba(255,255,255,.9))}
 @keyframes fl{50%{transform:rotate(-26deg) scaleY(.9)}}@keyframes fr{50%{transform:rotate(26deg) scaleY(.9)}}
 .low-actions{display:grid;gap:10px;margin-top:16px}.btn[hidden],.ghost[hidden]{display:none!important}
+.plan-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.plan-actions>button{flex:1 1 150px}
+.ghost.red{border-color:#d9534f;color:#d9534f}
+.btn.red{background:linear-gradient(135deg,#e26b67,#d9534f);color:#fff;box-shadow:0 10px 24px rgba(217,83,79,.32)}
+.rf-warn{font-size:52px;line-height:1;margin-bottom:4px}
+.rf-stats{margin:14px 0 4px;text-align:left}
+.rf-stat{display:flex;justify-content:space-between;gap:12px;background:rgba(67,120,222,.08);border:1px solid rgba(67,120,222,.2);border-radius:12px;padding:9px 14px;margin:7px 0;font-size:15px}
+.rf-stat b{color:#4378de;font-weight:800}
+.rf-gift{background:linear-gradient(160deg,#fffaf0,#eef4ff);border:2px solid #e0ad3e;border-radius:14px;padding:14px 16px;margin:16px 0 6px;text-align:left}
+.rf-gift h4{margin:0 0 6px;font-size:16px;color:#8a5d00}
+.rf-gift ul{margin:6px 0 0;padding-left:20px;font-size:14px;line-height:1.55}
+.rf-note{font-size:13px;color:#8a5d00;background:rgba(224,173,62,.16);border:1px solid rgba(224,173,62,.4);border-radius:12px;padding:11px 13px;margin-top:12px;text-align:left}
+.rf-warnbox{font-size:14px;color:#8a3a36;background:rgba(217,83,79,.1);border:1px solid rgba(217,83,79,.35);border-radius:12px;padding:12px 14px;margin:12px 0;text-align:left;line-height:1.5}
+.rf-warnbox b{color:#b43b36}
 #banned{display:none;position:fixed;inset:0;z-index:999;background:linear-gradient(160deg,#1a1026,#2a0d12);color:#fff;padding:28px;place-items:center;text-align:center}#banned.on{display:grid}#banned .bwrap{max-width:360px}#banned .bang{font-size:52px}#banned h2{font-size:24px;margin:10px 0 6px}#banned p{color:#e9d9dd;font-size:15px;line-height:1.5;margin-top:8px}#banned .bsub{color:#b89aa2;font-size:13px}#banned button{margin-top:20px;background:#fff;color:#2a0d12;border:0;border-radius:99px;padding:13px 26px;font-weight:700}
 .auth-help{text-align:right;font-size:14px;font-weight:700;color:var(--ink);margin:26px 64px 70px 0;line-height:1.45}
 .auth-arrow{display:inline-block;font-size:30px;line-height:1;color:#f5c400;vertical-align:middle;animation:authArrow 1.3s ease-in-out infinite}
@@ -674,7 +687,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
   <div class="card bill"><h3>My subscription</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Your plan, status and next payment.</p>
    <div id="billBody"></div>
    <p class="bill-note">Light Tokens can take up to 1 minute to appear after a purchase. To manage or cancel your plan, <button type="button" class="lnk" data-open-support>contact us</button>.</p>
-   <div style="margin-top:12px"><button type="button" class="ghost" data-open-support>Manage or cancel my plan</button></div>
+   <div class="plan-actions"><button type="button" class="ghost" data-open-support>Manage or cancel my plan</button><button type="button" class="ghost red" id="refundBtn">Request a refund</button></div>
   </div>
   <div class="card"><h3>Certificate of practice</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">A keepsake with your name and your days of practice. Print it or save it as a PDF.</p><button class="ghost" id="cOpen">View certificate</button></div>
   <div class="card"><h3>Reminders</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Get a notification when your next +10 ✦ is ready, 24 hours after you claim your Free tokens.</p><button class="ghost" id="nBtn">Enable notifications</button><p class="lab" id="nSt"></p></div>
@@ -721,6 +734,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
 <button type="submit" class="btn" id="aGo" style="width:100%">Enter</button></form>
 </div></section>
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
+<div class="cert" id="refund"><div id="refundBox"></div></div>
 <div id="a2hs" role="dialog" aria-modal="true" aria-label="Add to home screen"><div class="sheet" id="a2hsBody"></div></div>
 <div class="buy" id="buy" hidden role="dialog" aria-modal="true" aria-labelledby="buyT"><div class="buy__box" id="buyBox" tabindex="-1">
  <button type="button" class="buy__x" id="buyX" aria-label="Close">✕</button>
@@ -1374,7 +1388,7 @@ $('#offer').onclick = async () => {
   plusFloat();
   toast('+10 light added!');
 };
-document.addEventListener('click',e=>{if(e.target.closest('[data-open-support]')){e.preventDefault();if(window.openSupportPanel)window.openSupportPanel()}});
+document.addEventListener('click',e=>{if(e.target.closest('[data-open-support]')){e.preventDefault();if(window.openSupportPanel)window.openSupportPanel()}if(e.target.closest('#refundBtn')){e.preventDefault();openRefund()}});
 $('#nSave').onclick=()=>{S.name=$('#nIn').value.trim();save();render();toast('Saved')};
 $('#reset').onclick=()=>{if(confirm('Reset all progress on this device?')){S={name:S.name,light:10,min:0,days:[],last:'',lastTs:0,vow:null,unl:null};save();render()}};
 $('#cOpen').onclick=()=>{$('#cN').textContent=S.name||'Guest';$('#cS').textContent=streak();$('#cM').textContent=Math.round(S.min);$('#cD').textContent=new Date().toLocaleDateString('en',{dateStyle:'long'});$('#cert').classList.add('on')};
@@ -1481,6 +1495,66 @@ function noLight(n){
     :"You're running low on Light Tokens. Choose a plan to continue your Sacred Chant journey.");
 }
 $('#lightBtn').onclick=()=>openBuy();
+
+/* ===== Refund — retention (save) flow. Honest: the refund path stays open and works. ===== */
+const REFUND_EMAIL='danagapreto@gmail.com';
+function refundDaysWith(){const f=Number(S.firstSeen)||(typeof mileStart!=='undefined'&&mileStart)||Date.now();return Math.max(1,Math.floor((Date.now()-f)/DAY)+1)}
+function refundLockedCount(){let n=0;
+ try{BONUS.forEach(b=>{if(b.cost&&!bonusOK(b.id))n++})}catch(e){}
+ try{STORE.forEach(s=>{if(!storeOK(s.id))n++})}catch(e){}
+ try{MILES.forEach(m=>{if(!mileOK(m))n++})}catch(e){}
+ try{if(!markUnlocked())n++}catch(e){}
+ return n}
+function closeRefund(){const r=$('#refund');if(r)r.classList.remove('on')}
+function openRefund(){
+ const days=refundDaysWith(),st=(typeof streak==='function'?streak():0),mins=Math.round(Number(S.min)||0),locked=refundLockedCount();
+ const giftAvail=(()=>{try{return ['acutis','raphael'].some(id=>!(S.bonusUnl||[]).includes(id))}catch(e){return true}})();
+ const box=$('#refundBox');if(!box)return;
+ box.innerHTML=
+  '<p class="rf-warn">⚠️</p>'+
+  '<h2>Before you go…</h2>'+
+  '<p style="margin-top:6px">We never want to stand between you and your money. But first — look at how far you\'ve already come:</p>'+
+  '<div class="rf-stats">'+
+   '<div class="rf-stat"><span>Days with Sacred Chant</span><b>'+days+'</b></div>'+
+   (st>0?'<div class="rf-stat"><span>Your prayer streak</span><b>'+st+' day'+(st===1?'':'s')+'</b></div>':'')+
+   (mins>0?'<div class="rf-stat"><span>Minutes in prayer</span><b>'+mins+'</b></div>':'')+
+   (locked>0?'<div class="rf-stat"><span>Prayers &amp; programs still waiting for you</span><b>'+locked+'</b></div>':'')+
+  '</div>'+
+  (giftAvail?
+   '<div class="rf-gift"><h4>🎁 A gift to say thank you</h4><p style="margin:0;font-size:14px">If you stay, we\'ll unlock, right now and yours forever:</p><ul><li><b>Carlos Acutis Prayer</b> (normally 10 ✦)</li><li><b>Prayer of Archangel Raphael</b> (normally 10 ✦)</li><li>Your next <b>+10 Light Tokens</b>, ready to claim today</li></ul></div>'
+   :'<div class="rf-gift"><h4>🎁 Still here for you</h4><p style="margin:0;font-size:14px">Your +10 Light Tokens are ready to claim today, and Mark can pray with you free for 48 hours whenever you like.</p></div>')+
+  '<div class="low-actions"><button class="btn gold" id="refStay">Keep my access'+(giftAvail?' & claim my gift':'')+'</button><button class="ghost red" id="refGo">No, I still want a refund</button></div>';
+ $('#refStay').onclick=refundStay;
+ $('#refGo').onclick=refundStep2;
+ $('#refund').classList.add('on');
+}
+function refundStay(){
+ let got=[];
+ try{S.bonusUnl=S.bonusUnl||[];['acutis','raphael'].forEach(id=>{if(!S.bonusUnl.includes(id)){S.bonusUnl.push(id);got.push(id)}})}catch(e){}
+ try{S.lastTs=0}catch(e){}
+ save();try{syncUnlocks()}catch(e){}
+ try{if(typeof homeTiles==='function')homeTiles()}catch(e){}
+ try{if(typeof render==='function')render()}catch(e){}
+ closeRefund();
+ try{toast(got.length?'A gift for you 🎁 — enjoy your new prayers':'Glad you\'re staying 🙏')}catch(e){}
+ try{go('home')}catch(e){}
+}
+function refundStep2(){
+ const email=(S.email||'').trim();
+ const subject=encodeURIComponent('Refund request — Sacred Chant');
+ const body=encodeURIComponent('Hello,\n\nI would like to request a refund for my Sacred Chant purchase.\n\nAccount email: '+(email||'(please add the email you bought with)')+'\nReason for the refund:\n\nThank you.');
+ const mailto='mailto:'+REFUND_EMAIL+'?subject='+subject+'&body='+body;
+ const box=$('#refundBox');if(!box)return;
+ box.innerHTML=
+  '<p class="rf-warn">⚠️</p>'+
+  '<h2>Are you sure?</h2>'+
+  '<div class="rf-warnbox">A refund <b>undoes your purchase</b>, so the access it paid for ends with it. Once your refund is processed, <b>this account is closed permanently</b> and can\'t be reopened — your prayers, streak, tokens and unlocks all go with it.</div>'+
+  '<p style="font-size:14px;margin:8px 0">Our team is happy to help, and purchases are covered by our money-back guarantee. To request your refund, send us a message and we\'ll take care of it'+((S.email)?' (we\'ll use <b>'+S.email+'</b>)':'')+':</p>'+
+  '<div class="low-actions"><a class="btn red" href="'+mailto+'" id="refMail">Email support to request my refund</a><button class="btn gold" id="refBack">Keep my access instead</button></div>';
+ $('#refBack').onclick=()=>openRefund();
+ const rm=$('#refMail');if(rm)rm.addEventListener('click',()=>{try{toast('Opening your email…')}catch(e){}});
+ $('#refund').classList.add('on');
+}
 $('#buyX').onclick=closeBuy;
 $('#buy').addEventListener('click',e=>{if(e.target===$('#buy'))closeBuy()});
 $('#buyOffer').onclick=()=>{closeBuy();go('home');setTimeout(()=>$('#offer').click(),300)};
