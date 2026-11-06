@@ -383,6 +383,62 @@ body.big .dms-read li{font-size:18px}
 .bless-result{margin-top:12px;background:rgba(224,173,62,.12);border:1px solid rgba(224,173,62,.4);border-radius:14px;padding:12px 14px}
 .bless-text{font-size:15.5px;line-height:1.6;color:var(--ink)}
 .streak-card .freeze-note{display:block;font-size:12.5px;color:var(--mute);margin-top:4px}
+/* ===== Player de vinil (Spotify/Hallow) ===== */
+.im{background:radial-gradient(90% 60% at 50% 28%,#2b2456,#15102e 58%,#0a0817)!important}
+.im,.im *{color:#f2eefb}
+.im #imClock{opacity:.8;font-weight:700}
+.im .x{background:rgba(255,255,255,.14);color:#f2eefb}
+.im .sheet button{color:#eae6f6;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22)}
+.im .sheet button.on{background:#fff;color:#1c2a4a;border-color:#fff}
+.im .ghost{border-color:rgba(255,255,255,.45);color:#f2eefb;background:transparent}
+.player{display:grid;gap:14px;justify-items:center}
+.vinyl{position:relative;width:min(70vw,250px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;
+ background:radial-gradient(circle at 50% 50%,#1b1b22 0 29%,#0b0b0f 29.5%),repeating-radial-gradient(circle at 50% 50%,rgba(255,255,255,.05) 0 1px,transparent 1px 4px);
+ box-shadow:0 22px 50px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.05),inset 0 0 44px rgba(0,0,0,.65);
+ animation:vspin 5.5s linear infinite}
+.vinyl::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(120% 70% at 30% 20%,rgba(255,255,255,.14),transparent 55%);pointer-events:none}
+.vinyl.paused{animation-play-state:paused}
+@keyframes vspin{to{transform:rotate(360deg)}}
+.vlabel{width:42%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-size:clamp(30px,10vw,42px);background:var(--vg,linear-gradient(135deg,#7aa6f5,#4378de));box-shadow:0 0 0 7px rgba(0,0,0,.35),0 4px 14px rgba(0,0,0,.45);z-index:1}
+.vhole{position:absolute;width:13px;height:13px;border-radius:50%;background:#0a0817;box-shadow:inset 0 0 0 2px rgba(255,255,255,.3);z-index:2}
+.breathcap{font-size:13px;letter-spacing:.16em;text-transform:uppercase;opacity:.7;min-height:17px;margin:0}
+/* ===== Chants: minutos ouvidos ===== */
+.ch-head{display:flex;gap:12px;margin:2px 0 16px}
+.ch-head>div{flex:1;border-radius:18px;padding:16px 12px;text-align:center;color:#fff}
+.ch-head .cm1{background:linear-gradient(145deg,#4b3fa0,#4378de)}
+.ch-head .cm2{background:linear-gradient(145deg,#1f7a52,#36b37e)}
+.ch-head b{display:block;font-size:30px;font-weight:800;line-height:1}
+.ch-head span{font-size:13px;opacity:.9}
+body.big .ch-head b{font-size:34px}
+/* ===== Banner do quiz biblico (Home) ===== */
+.qz-banner{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:0;border-radius:20px;padding:18px 18px;margin:2px 0 4px;color:#fff;cursor:pointer;position:relative;overflow:hidden;background:linear-gradient(135deg,#3b2f7a,#5a3fb0 55%,#8a5ed0)}
+.qz-banner::after{content:"✝";position:absolute;right:-6px;top:-14px;font-size:120px;opacity:.14;transform:rotate(12deg);line-height:1}
+.qz-banner .qz-ban-txt{display:flex;flex-direction:column;gap:2px;z-index:1}
+.qz-banner .qz-kicker{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+.qz-banner .qz-ban-txt b{font-size:24px;font-weight:800;line-height:1.1}
+.qz-banner .qz-sub{font-size:13px;opacity:.9}
+.qz-banner .qz-play{margin-left:auto;z-index:1;flex:none;width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.22);display:grid;place-items:center;font-size:22px}
+/* ===== Tela do quiz ===== */
+.qz-top{display:flex;justify-content:space-between;align-items:center;margin:2px 0 10px}
+.qz-count{font-weight:800;color:var(--acc)}
+.qz-score{font-weight:800;color:var(--mute)}
+.qz-time{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.qz-time .n{font-weight:800;font-size:16px;min-width:30px}
+.qz-time .n.low{color:#d9342b}
+.qz-bar{flex:1;height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+.qz-fill{height:100%;width:100%;background:linear-gradient(90deg,#4378de,#7aa6f5);transition:width 1s linear}
+.qz-fill.low{background:linear-gradient(90deg,#e0652b,#d9342b)}
+.qz-q{font-size:22px;font-weight:800;line-height:1.3;margin:6px 0 18px}
+.qz-opt{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:15px 16px;margin-bottom:11px;font-size:17px;font-weight:600;color:var(--ink)}
+.qz-opt .mk{margin-left:auto;font-weight:800}
+.qz-opt.correct{background:#e6f7ec;border-color:#2f8f57;color:#1c6b3f}
+.qz-opt.wrong{background:#fdeaea;border-color:#d9342b;color:#a51f1f}
+.qz-opt:disabled{opacity:1}
+body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
+.qz-next{display:block;width:100%;margin-top:6px}
+.qz-end{text-align:center;padding:16px 0}
+.qz-end .big{font-size:48px;font-weight:800;color:var(--acc);margin:6px 0}
+.qz-end p{color:var(--mute);margin:0 0 16px}
 </style>
 
 </head>
@@ -438,6 +494,7 @@ body.big .dms-read li{font-size:18px}
    <p class="lab" id="powSub" style="font-weight:500;margin:4px 0 10px">A new prayer to carry you through the week. Free to listen.</p>
    <button type="button" class="btn" id="powBtn">▶ Listen now</button>
   </div>
+  <button type="button" class="qz-banner" id="qzBanner"><div class="qz-ban-txt"><span class="qz-kicker">Daily challenge</span><b>Bible Quiz</b><span class="qz-sub">New questions every day · beat the 30-second clock</span></div><span class="qz-play">▶</span></button>
   <p class="sh">Support &amp; blessings</p><p>Start here, request a prayer, or reach our team.</p>
   <div class="tiles" id="tSup"></div>
   <button type="button" class="mark-card" data-mod="mark" aria-label="Open chat with Mark"><img src="https://i.postimg.cc/8kFQyKv5/bubblen6oy3a5sh6q.avif" alt="Mark" width="88" height="88" loading="lazy"><span class="mark-copy"><strong>Talk with Mark</strong><span>Your spiritual companion for prayer, reflection, and encouragement.</span><span class="mark-free">3 ✦ / MESSAGE</span></span></button>
@@ -487,6 +544,7 @@ body.big .dms-read li{font-size:18px}
  <section class="screen" id="s-vid"><button class="back" id="vBack">← Back</button><h2 class="h" id="vT"></h2><div id="vTop"></div><div class="vidb" id="vBox"></div><div class="faq" id="vTx"></div></section>
  <section class="screen" id="s-pray"><button class="back" data-back>← Back</button><div id="pBody"></div></section>
  <section class="screen" id="s-dms"><button class="back" data-back>← Back</button><div id="dmsBody"></div></section>
+ <section class="screen" id="s-quiz"><button class="back" data-back>← Back</button><h2 class="h">Bible Quiz</h2><div id="qzWrap"></div></section>
  <section class="screen" id="s-flourish"><button class="back" data-back>← Back</button><iframe id="flourishFrame" title="Divine Manifestation Script" style="width:100%;height:calc(100vh - 150px);min-height:520px;border:0;border-radius:14px;background:#0a0805"></iframe></section>
  <section class="screen" id="s-jes"><button class="back" data-back>← Back</button><h2 class="h">7 Prayers of Jesus</h2><p class="intro">Guided by Mark. All seven prayers are open — tap any day to begin. You can take one a day, or go at your own pace.</p><div class="tiles" id="jDays"></div></section>
  <section class="screen" id="s-store"><h2 class="h">Store</h2><p class="intro">Exclusive prayers and programs you can unlock with your Light Tokens.</p><div class="storeHead"><span class="e" aria-hidden="true">✦</span><div><b>Each product costs 120 ✦</b><span>Unlock it once and it stays yours forever, here and on your Home screen.</span></div></div><div class="tiles" id="tStore"></div></section>
@@ -521,6 +579,7 @@ body.big .dms-read li{font-size:18px}
  
 <section class="screen" id="s-chants">
   <h2 class="h">Chants &amp; sounds</h2>
+  <div class="ch-head"><div class="cm1"><b id="chMin">0</b><span>minutes listened</span></div><div class="cm2"><b id="chStreak">0</b><span>day streak</span></div></div>
   <div class="hp" role="note"><span class="e" aria-hidden="true">🎧</span><div><b>Headphones required</b><span>These sounds are made to be heard with headphones. You will get much better results, so please put them on before you press play.</span></div></div>
   <p class="intro">Choose a recording, settle into your breath and let it accompany your prayer.</p>
   <p class="sec">Sacred mantras</p><div id="lM"></div>
@@ -566,7 +625,7 @@ body.big .dms-read li{font-size:18px}
 <section class="im" id="im" role="dialog" aria-modal="true" aria-label="Chant session">
  <button class="x" id="imX" aria-label="Close">✕</button>
  <div><p style="font-weight:600" id="imTag"></p><h2 id="imName" style="font-size:24px;font-weight:800"></h2><p id="imClock">00:00</p></div>
- <div><div class="orb" id="orb"><span id="orbL">Inhale</span></div><p class="mantra" id="imM"></p></div>
+ <div class="player"><div class="vinyl" id="vinyl"><div class="vlabel" id="vlabel"><span id="vemoji">🎵</span></div><span class="vhole"></span></div><p class="breathcap" id="orbL">Inhale</p><p class="mantra" id="imM"></p></div>
  <div style="display:grid;gap:14px;justify-items:center">
   <div class="sheet" id="imLen"><button data-m="3" class="on">3 min</button><button data-m="5">5</button><button data-m="10">10</button><button data-m="0">Open</button></div>
   <div style="display:flex;gap:10px"><button class="ghost" id="imB" aria-pressed="true">Breath guide on</button><button class="btn" id="imP">Pause</button></div>
@@ -755,15 +814,33 @@ const DMS={
  100:[_dOpen,_dIdentity,_dDecl,_dBreak,_dHeal,_dFamily,_dBlocks,_dChoose,_dVision,_dPros,_dFaith,_dRit7,_dDay21,_dCons,_dLeg,_dSeal]
 };
 let dmsPending=0;
-try{const _dp=new URLSearchParams(location.search).get('dms');if(_dp&&DMS[Number(_dp)])dmsPending=Number(_dp);}catch(e){}
+try{
+ const _q=new URLSearchParams(location.search);
+ const _dp=_q.get('dms');
+ if(_dp&&DMS[Number(_dp)])dmsPending=Number(_dp);                                   // ?dms=77 explicito
+ else if(_q.get('dms_paid')==='1'||_q.get('paid')==='1'){                           // voltou da compra -> le o plano que o cliente escolheu no funil
+   const _ch=Number(localStorage.getItem('sc_dms_chosen'));
+   if(DMS[_ch])dmsPending=_ch;
+ }
+}catch(e){}
 function dmsTier(){return Number(S.dmsTier)||0}
 function applyDmsPending(){
  if(!dmsPending)return;
  S.dmsTier=Math.max(dmsTier(),dmsPending);save();dmsPending=0;
+ try{localStorage.removeItem('sc_dms_chosen');localStorage.removeItem('sc_dms_chosen_at')}catch(e){}
  try{if(sbClient)sbClient.auth.updateUser({data:{sc_dms:S.dmsTier}}).catch(()=>{})}catch(e){}
  if(typeof renderDmsHome==='function')renderDmsHome();
  toast('Your Divine Manifestation Script is ready ✦');
  setTimeout(openDms,600);
+}
+async function syncDmsTier(){
+ try{
+  const client=await getSupabase();
+  const {data,error}=await client.rpc('sc_dms_tier');
+  if(error)throw error;
+  const t=Number(data)||0;
+  if(t>dmsTier()){S.dmsTier=t;save();if(typeof renderDmsHome==='function')renderDmsHome();toast('Your Divine Manifestation Script is ready ✦')}
+ }catch(e){console.warn('Could not sync Divine Manifestation Script access:',e&&e.message||e)}
 }
 function renderDmsHome(){
  const el=$('#dmsHome');if(!el)return;const t=dmsTier();
@@ -782,7 +859,120 @@ function openDms(){
  body.innerHTML='<div class="dms-read"><div class="dms-hero"><div class="k">Divine Manifestation Script</div><h2>'+DMS_TITLES[t]+'</h2></div>'+DMS[t].join('')+'</div>';
  go('dms');
 }
-function go(t){if(t!=='vid')$('#vBox').innerHTML='';if(t!=='web'&&$('#wBox'))$('#wBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='me'){if(typeof renderBilling==='function')renderBilling();if(typeof renderGrowth==='function')renderGrowth()}if(t==='today'&&typeof renderToday==='function')renderToday();scrollTo(0,0)}
+/* ===== Chants: minutos ouvidos ===== */
+function renderChants(){const m=$('#chMin');if(m)m.textContent=Math.round(S.min||0);const s=$('#chStreak');if(s)s.textContent=streak()}
+
+/* ===== Quiz biblico (Home) — muitas perguntas, rotacao diaria, verde/vermelho, 30s ===== */
+const QUIZ=[
+{q:"Who built the ark?",o:["Noah","Moses","Abraham","David"],a:0},
+{q:"How many days and nights did it rain during the flood?",o:["7","40","100","12"],a:1},
+{q:"Who was swallowed by a great fish?",o:["Jonah","Job","Jonathan","Jude"],a:0},
+{q:"Who led the Israelites out of Egypt?",o:["Joshua","Aaron","Moses","Caleb"],a:2},
+{q:"On what were the Ten Commandments written?",o:["Scrolls","Stone tablets","Papyrus","Wood"],a:1},
+{q:"Who was the first man?",o:["Cain","Adam","Enoch","Seth"],a:1},
+{q:"In what garden did Adam and Eve live?",o:["Gethsemane","Eden","Babylon","Zion"],a:1},
+{q:"Who killed the giant Goliath?",o:["Saul","Samson","David","Jonathan"],a:2},
+{q:"What did David use to defeat Goliath?",o:["A sword","A spear","A sling and stone","A bow"],a:2},
+{q:"Whose strength was in his hair?",o:["Samson","Elijah","Gideon","Absalom"],a:0},
+{q:"Who interpreted Pharaoh's dreams?",o:["Daniel","Joseph","Moses","Aaron"],a:1},
+{q:"What did Jacob give Joseph?",o:["A ring","A sword","A coat of many colors","A field"],a:2},
+{q:"Who was thrown into the lions' den?",o:["Daniel","Shadrach","David","Jeremiah"],a:0},
+{q:"How many apostles did Jesus choose?",o:["7","10","12","24"],a:2},
+{q:"Who betrayed Jesus?",o:["Peter","Thomas","Judas Iscariot","John"],a:2},
+{q:"For how many pieces of silver was Jesus betrayed?",o:["10","30","50","100"],a:1},
+{q:"Who denied Jesus three times?",o:["Peter","Andrew","Philip","James"],a:0},
+{q:"In what town was Jesus born?",o:["Nazareth","Jerusalem","Bethlehem","Capernaum"],a:2},
+{q:"Who was the mother of Jesus?",o:["Martha","Mary","Elizabeth","Ruth"],a:1},
+{q:"What did the wise men follow to find Jesus?",o:["A map","A star","An angel","A dream"],a:1},
+{q:"Who baptized Jesus?",o:["Peter","John the Baptist","Paul","Elijah"],a:1},
+{q:"In what river was Jesus baptized?",o:["Nile","Euphrates","Jordan","Tigris"],a:2},
+{q:"How many days did Jesus fast in the wilderness?",o:["3","40","7","12"],a:1},
+{q:"What was Jesus' first recorded miracle?",o:["Healing a leper","Water into wine","Walking on water","Feeding 5,000"],a:1},
+{q:"How many loaves fed the five thousand?",o:["2","5","7","12"],a:1},
+{q:"Who walked on water toward Jesus, then began to sink?",o:["John","Peter","James","Andrew"],a:1},
+{q:"Whom did Jesus raise after four days in the tomb?",o:["Lazarus","Jairus' daughter","The widow's son","Stephen"],a:0},
+{q:"On what animal did Jesus ride into Jerusalem?",o:["A horse","A camel","A donkey","An ox"],a:2},
+{q:"Who helped carry Jesus' cross?",o:["Simon of Cyrene","Nicodemus","Joseph of Arimathea","Barabbas"],a:0},
+{q:"On which day did Jesus rise from the dead?",o:["The first","The second","The third","The seventh"],a:2},
+{q:"Who first saw the risen Jesus?",o:["Peter","Mary Magdalene","John","Thomas"],a:1},
+{q:"What is the first book of the Bible?",o:["Exodus","Genesis","Psalms","John"],a:1},
+{q:"What is the last book of the Bible?",o:["Acts","Jude","Revelation","Malachi"],a:2},
+{q:"How many books are in the Bible?",o:["27","39","66","72"],a:2},
+{q:"Which is the shortest verse in the Bible (KJV)?",o:["\"Jesus wept.\"","\"Pray always.\"","\"God is love.\"","\"Rejoice evermore.\""],a:0},
+{q:"Who wrote many of the Psalms?",o:["Solomon","David","Moses","Isaiah"],a:1},
+{q:"Who was known as the wisest king of Israel?",o:["David","Saul","Solomon","Hezekiah"],a:2},
+{q:"Who built the first temple in Jerusalem?",o:["David","Solomon","Nehemiah","Ezra"],a:1},
+{q:"What did God create on the first day?",o:["Animals","Light","The sea","Man"],a:1},
+{q:"On which day did God rest from creation?",o:["The fifth","The sixth","The seventh","The third"],a:2},
+{q:"What sign did God give Noah after the flood?",o:["A dove","A rainbow","A star","A fire"],a:1},
+{q:"Whom did Abraham almost sacrifice in obedience to God?",o:["Ishmael","Isaac","Jacob","Lot"],a:1},
+{q:"What was Jacob's name changed to?",o:["Israel","Edom","Judah","Abram"],a:0},
+{q:"How many sons did Jacob have?",o:["7","10","12","14"],a:2},
+{q:"What was the last plague on Egypt?",o:["Locusts","Darkness","Death of the firstborn","Hail"],a:2},
+{q:"Which sea did Moses part for Israel to cross?",o:["Dead Sea","Red Sea","Sea of Galilee","Mediterranean"],a:1},
+{q:"What food did God provide Israel in the wilderness?",o:["Bread of kings","Manna","Fish","Honey cakes"],a:1},
+{q:"Who led Israel after Moses died?",o:["Caleb","Aaron","Joshua","Gideon"],a:2},
+{q:"Whose walls fell after Israel marched around the city?",o:["Jericho","Ai","Babylon","Jerusalem"],a:0},
+{q:"Who anointed David as king?",o:["Nathan","Samuel","Eli","Elijah"],a:1},
+{q:"Which prophet was taken to heaven in a chariot of fire?",o:["Elisha","Elijah","Enoch","Moses"],a:1},
+{q:"Which queen visited Solomon to test his wisdom?",o:["Esther","Jezebel","Queen of Sheba","Bathsheba"],a:2},
+{q:"Who wrote most of the New Testament letters (epistles)?",o:["Peter","Paul","John","James"],a:1},
+{q:"What was Paul's name before his conversion?",o:["Silas","Saul","Simon","Stephen"],a:1},
+{q:"On the road to which city was Paul converted?",o:["Rome","Antioch","Damascus","Corinth"],a:2},
+{q:"Which disciple doubted until he saw Jesus' wounds?",o:["Thomas","Philip","Matthew","Bartholomew"],a:0},
+{q:"What came upon the disciples at Pentecost?",o:["A great wind only","The Holy Spirit","An earthquake","A bright cloud"],a:1},
+{q:"In which garden did Jesus pray before His arrest?",o:["Eden","Gethsemane","Olives of Bethany","Siloam"],a:1},
+{q:"How many people were saved on Noah's ark?",o:["4","6","8","10"],a:2},
+{q:"According to Jesus, what is the greatest commandment?",o:["Honor your parents","Love God with all your heart","Do not steal","Keep the Sabbath"],a:1},
+{q:"Who is called the Good Shepherd?",o:["Moses","David","Jesus","Peter"],a:2},
+{q:"Who wrote the book of Revelation?",o:["Paul","John","Luke","Peter"],a:1},
+{q:"How many years did the Israelites wander in the wilderness?",o:["7","40","12","70"],a:1},
+{q:"Who was the father of John the Baptist?",o:["Zacharias","Joseph","Simeon","Eli"],a:0},
+{q:"Which disciple was a tax collector before following Jesus?",o:["Matthew","Luke","Mark","Nathanael"],a:0},
+{q:"What did Jesus say He is: the way, the truth, and the...?",o:["Light","Life","Word","Bread"],a:1},
+{q:"Who was the Roman governor who sentenced Jesus?",o:["Herod","Caesar","Pontius Pilate","Felix"],a:2},
+{q:"What was written above Jesus on the cross?",o:["Son of God","King of the Jews","The Messiah","Crucified"],a:1},
+{q:"How many commandments did God give Moses?",o:["5","7","10","12"],a:2},
+{q:"Who was the first martyr of the church?",o:["Stephen","James","Paul","Peter"],a:0},
+{q:"What fruit of the Spirit is listed first in Galatians?",o:["Peace","Joy","Love","Patience"],a:2},
+{q:"Which book comes right after the four Gospels?",o:["Romans","Acts","Revelation","Hebrews"],a:1},
+{q:"Who was the mother of Samuel?",o:["Hannah","Ruth","Naomi","Rachel"],a:0},
+{q:"Which disciple is called 'the beloved'?",o:["Peter","John","James","Andrew"],a:1}
+];
+let qzSet=[],qzI=0,qzScore=0,qzLeft=30,qzTimer=null,qzAnswered=false;
+function qzDailySet(n){const d=new Date();const day=Math.floor((d.getTime()-d.getTimezoneOffset()*6e4)/DAY);const start=((day%QUIZ.length)+QUIZ.length)%QUIZ.length;const set=[];for(let i=0;i<n;i++)set.push(QUIZ[(start+i)%QUIZ.length]);return set}
+function openQuiz(){qzSet=qzDailySet(7);qzI=0;qzScore=0;go('quiz');qzRenderQ()}
+function qzClearTimer(){if(qzTimer){clearInterval(qzTimer);qzTimer=null}}
+function qzRenderQ(){
+ qzAnswered=false;qzLeft=30;qzClearTimer();
+ const q=qzSet[qzI];const w=$('#qzWrap');if(!w)return;
+ w.innerHTML='<div class="qz-top"><span class="qz-count">Question '+(qzI+1)+' / '+qzSet.length+'</span><span class="qz-score">Score: '+qzScore+'</span></div>'
+  +'<div class="qz-time"><span class="n" id="qzN">30</span><div class="qz-bar"><div class="qz-fill" id="qzFill"></div></div></div>'
+  +'<p class="qz-q">'+q.q+'</p><div id="qzOpts"></div><div id="qzNextWrap"></div>';
+ const ob=$('#qzOpts');
+ q.o.forEach((opt,i)=>{const b=document.createElement('button');b.className='qz-opt';b.type='button';b.innerHTML='<span>'+opt+'</span><span class="mk"></span>';b.onclick=()=>qzPick(i);ob.appendChild(b)});
+ qzTimer=setInterval(()=>{qzLeft--;const n=$('#qzN'),f=$('#qzFill');if(n)n.textContent=qzLeft;if(f)f.style.width=Math.max(0,qzLeft/30*100)+'%';if(qzLeft<=10){if(n)n.classList.add('low');if(f)f.classList.add('low')}if(qzLeft<=0){qzReveal(-1)}},1000);
+}
+function qzReveal(picked){
+ if(qzAnswered)return;qzAnswered=true;qzClearTimer();
+ const q=qzSet[qzI];const btns=$$('#qzOpts .qz-opt');
+ btns.forEach((b,i)=>{b.disabled=true;const mk=b.querySelector('.mk');if(i===q.a){b.classList.add('correct');if(mk)mk.textContent='✓'}else if(i===picked){b.classList.add('wrong');if(mk)mk.textContent='✗'}});
+ if(picked===q.a)qzScore++;
+ const sc=$('.qz-score');if(sc)sc.textContent='Score: '+qzScore;
+ const nw=$('#qzNextWrap');if(nw){const last=qzI>=qzSet.length-1;nw.innerHTML='<button type="button" class="btn qz-next" id="qzNext">'+(last?'See result':'Next question')+'</button>';$('#qzNext').onclick=qzNext}
+}
+function qzPick(i){qzReveal(i)}
+function qzNext(){qzI++;if(qzI>=qzSet.length)qzEnd();else qzRenderQ()}
+function qzEnd(){
+ qzClearTimer();const w=$('#qzWrap');if(!w)return;const total=qzSet.length;
+ let msg='Well done!';if(qzScore===total)msg='Perfect! A true scholar of the Word.';else if(qzScore>=Math.ceil(total*0.6))msg='Great job — keep growing in the Word.';else msg='Keep going — every day is a new chance to learn.';
+ w.innerHTML='<div class="qz-end"><p style="font-size:40px;margin:0">🏆</p><div class="big">'+qzScore+' / '+total+'</div><p>'+msg+'</p><button type="button" class="btn" id="qzAgain">Play again</button><div style="height:10px"></div><button type="button" class="ghost" id="qzDone">Back to Home</button></div>';
+ $('#qzAgain').onclick=openQuiz;$('#qzDone').onclick=()=>go('home');
+ try{if(!S.days.includes(today())){/* nao conta streak so por quiz */}}catch(e){}
+}
+if($('#qzBanner'))$('#qzBanner').onclick=openQuiz;
+
+function go(t){if(t!=='vid')$('#vBox').innerHTML='';if(t!=='web'&&$('#wBox'))$('#wBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='me'){if(typeof renderBilling==='function')renderBilling();if(typeof renderGrowth==='function')renderGrowth()}if(t==='today'&&typeof renderToday==='function')renderToday();if(t==='chants'&&typeof renderChants==='function')renderChants();scrollTo(0,0)}
 $$('.tab').forEach(b=>b.onclick=()=>access(b.dataset.t));
 function render(){
  const h=new Date().getHours();$('#greet').textContent=h<12?'This morning':h<18?'This afternoon':'Tonight';
@@ -1129,11 +1319,11 @@ function synth(c){try{const a=ctx(),m=a.createGain();m.gain.value=0;m.gain.linea
  if(c.bell){tone(392,6,.12);bell=setInterval(()=>{if(!paused)tone(392,6,.12)},25000)}}catch(e){}}
 function startAudio(c){if(c.src){au=new Audio(c.src);au.loop=true;au.onerror=()=>synth(c);au.play().catch(()=>synth(c))}else synth(c)}
 function stopAudio(){clearInterval(chirp);clearInterval(bell);if(au){au.pause();au=null}try{nodes.m&&nodes.m.gain.linearRampToValueAtTime(0,ac.currentTime+.6);const n=nodes;nodes=[];setTimeout(()=>n.forEach(o=>{try{o.stop()}catch(e){}}),700)}catch(e){}}
-function open(c){cur=c;secs=0;paused=false;$('#imTag').textContent=c.tag;$('#imName').textContent=c.n;$('#imM').textContent=c.m;$('#imP').textContent='Pause';$('#im').classList.add('on');startAudio(c);clearInterval(tick);tick=setInterval(step,1000);step(1)}
+function open(c){cur=c;secs=0;paused=false;$('#imTag').textContent=c.tag;$('#imName').textContent=c.n;$('#imM').textContent=c.m;$('#imP').textContent='Pause';const vl=$('#vlabel');if(vl){vl.style.setProperty('--vg',c.g);const ve=$('#vemoji');if(ve)ve.textContent=c.e}const vn=$('#vinyl');if(vn)vn.classList.remove('paused');$('#im').classList.add('on');startAudio(c);clearInterval(tick);tick=setInterval(step,1000);step(1)}
 function step(f){if(!f&&!paused)secs++;$('#imClock').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0')+(limit?' / '+String(limit/60).padStart(2,'0')+':00':'');$('#orbL').textContent=guide?(secs%8<4?'Inhale':'Exhale'):'';if(limit&&secs>=limit)close(1)}
 function close(done){clearInterval(tick);stopAudio();$('#im').classList.remove('on');if(secs>=30){S.min+=secs/60;if(!S.days.includes(today()))S.days.push(today());save();render();if(done)toast('Session complete')}}
 $('#imX').onclick=()=>close(0);
-$('#imP').onclick=()=>{paused=!paused;$('#imP').textContent=paused?'Resume':'Pause';$('#orb').style.animationPlayState=paused?'paused':'running';try{if(au)paused?au.pause():au.play();else paused?ac.suspend():ac.resume()}catch(e){}};
+$('#imP').onclick=()=>{paused=!paused;$('#imP').textContent=paused?'Resume':'Pause';const vn=$('#vinyl');if(vn)vn.classList.toggle('paused',paused);try{if(au)paused?au.pause():au.play();else paused?ac.suspend():ac.resume()}catch(e){}};
 $('#imB').onclick=()=>{guide=!guide;$('#imB').setAttribute('aria-pressed',guide);$('#imB').textContent='Breath guide '+(guide?'on':'off');$('#im').classList.toggle('calm',!guide)};
 $$('#imLen button').forEach(b=>b.onclick=()=>{limit=+b.dataset.m*60;$$('#imLen button').forEach(x=>x.classList.toggle('on',x===b))});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#im').classList.contains('on')&&$('#buy').hidden)close(0)});
@@ -1934,6 +2124,7 @@ setTimeout(async () => {
   await syncLightBalance();
   await syncDailyLightStatus();
   await refreshTier();
+  await syncDmsTier();
 }, 0);
             scheduleNotif();
             nUpd();
