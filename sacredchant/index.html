@@ -347,16 +347,16 @@ body.on-mark #supportFab{display:none}
 .startkit .sk-s{color:var(--mute);font-size:15px;margin:0 0 14px}
 .sk-btn{display:block;width:100%;text-align:center;background:linear-gradient(135deg,var(--acc2),var(--acc));color:#fff;font-weight:800;font-size:17px;border:0;border-radius:14px;padding:15px;margin:0 0 10px;box-shadow:0 8px 20px rgba(67,120,222,.28);cursor:pointer}
 .sk-note{color:#2f8f57;font-size:14px;font-weight:700;margin:12px 0 0;text-align:center;line-height:1.45}
-#uqBox .uq-eyebrow{color:var(--acc);font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase;margin:0 0 8px}
-#uqBox .uq-q{font-size:21px;line-height:1.3;margin:0 0 18px;color:var(--ink)}
+#uqBox .uq-eyebrow{color:#4378de;font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase;margin:0 0 8px}
+#uqBox .uq-q{font-size:21px;line-height:1.3;margin:0 0 18px;color:#1c2a4a}
 #uqBox .uq-opts{display:grid;gap:10px}
-#uqBox .uq-opt{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;font-size:16px;color:var(--ink);cursor:pointer;font-weight:600}
-#uqBox .uq-opt:hover{border-color:var(--acc)}
-#uqBox .uq-reason{text-align:left;background:linear-gradient(160deg,rgba(224,173,62,.14),rgba(67,120,222,.06));border:1px solid rgba(224,173,62,.4);border-radius:14px;padding:15px 16px;margin:8px 0 12px;font-size:15.5px;line-height:1.6;color:var(--ink)}
-#uqBox .uq-proof{text-align:left;font-size:14px;line-height:1.55;color:var(--mute);margin:0 0 6px}
+#uqBox .uq-opt{display:block;width:100%;text-align:left;background:#ffffff;border:1.5px solid rgba(110,145,215,.4);border-radius:14px;padding:14px 16px;font-size:16px;color:#1c2a4a;cursor:pointer;font-weight:600}
+#uqBox .uq-opt:hover{border-color:#4378de;background:#f4f8ff}
+#uqBox .uq-reason{text-align:left;background:linear-gradient(160deg,rgba(224,173,62,.16),rgba(67,120,222,.07));border:1px solid rgba(224,173,62,.45);border-radius:14px;padding:15px 16px;margin:8px 0 12px;font-size:15.5px;line-height:1.6;color:#1c2a4a}
+#uqBox .uq-proof{text-align:left;font-size:14px;line-height:1.55;color:#5a6c91;margin:0 0 6px}
 #uqBox .uq-prog{display:flex;gap:6px;justify-content:center;margin:14px 0 0}
-#uqBox .uq-prog i{width:8px;height:8px;border-radius:50%;background:var(--line)}
-#uqBox .uq-prog i.on{background:var(--acc)}
+#uqBox .uq-prog i{width:8px;height:8px;border-radius:50%;background:rgba(110,145,215,.4)}
+#uqBox .uq-prog i.on{background:#4378de}
 .bill-renew{background:rgba(224,173,62,.14);border:1px solid rgba(224,173,62,.45);border-radius:12px;padding:11px 13px;margin:0 0 10px;font-size:13.5px;line-height:1.5;color:var(--ink)}
 .bill-sum{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
 .bill-sum-t{font-weight:700;font-size:14px;margin:0 0 10px;color:var(--ink)}
@@ -796,7 +796,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
 <div class="cert" id="refund"><div id="refundBox"></div></div>
 <div class="cert" id="uq"><div id="uqBox"></div></div>
-<div class="cert" id="remind"><div><p style="font-size:40px">🔔</p><h2>A gentle daily reminder</h2><p style="margin-top:8px">Beautiful — you've prayed today. Would you like a soft daily nudge to come back, at a time you choose? No spam, and you can turn it off anytime.</p><div style="margin:16px 0 4px;text-align:left"><label for="remindHour" style="font-weight:700;font-size:14px;display:block;margin-bottom:6px">Remind me at</label><select id="remindHour" style="width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-size:16px"><option value="6">6:00 AM</option><option value="7">7:00 AM</option><option value="8" selected>8:00 AM</option><option value="9">9:00 AM</option><option value="12">12:00 PM</option><option value="18">6:00 PM</option><option value="20">8:00 PM</option><option value="21">9:00 PM</option></select></div><div class="low-actions"><button class="btn gold" id="remindYes">Yes, remind me daily</button><button class="ghost" id="remindNo">Not now</button></div></div></div>
+<div class="cert" id="remind"><div><p style="font-size:40px">🔔</p><h2>A gentle daily reminder</h2><p style="margin-top:8px">Beautiful — you've prayed today. Would you like a soft daily nudge to come back, at a time you choose? No spam, and you can turn it off anytime.</p><div style="margin:16px 0 4px;text-align:left"><label for="remindHour" style="font-weight:700;font-size:14px;display:block;margin-bottom:6px">Remind me at</label><select id="remindHour" style="width:100%;padding:12px;border-radius:12px;border:1.5px solid rgba(110,145,215,.4);background:#ffffff;color:#1c2a4a;font-size:16px"><option value="6">6:00 AM</option><option value="7">7:00 AM</option><option value="8" selected>8:00 AM</option><option value="9">9:00 AM</option><option value="12">12:00 PM</option><option value="18">6:00 PM</option><option value="20">8:00 PM</option><option value="21">9:00 PM</option></select></div><div class="low-actions"><button class="btn gold" id="remindYes">Yes, remind me daily</button><button class="ghost" id="remindNo">Not now</button></div></div></div>
 <div id="a2hs" role="dialog" aria-modal="true" aria-label="Add to home screen"><div class="sheet" id="a2hsBody"></div></div>
 <div class="buy" id="buy" hidden role="dialog" aria-modal="true" aria-labelledby="buyT"><div class="buy__box" id="buyBox" tabindex="-1">
  <button type="button" class="buy__x" id="buyX" aria-label="Close">✕</button>
