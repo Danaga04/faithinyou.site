@@ -334,6 +334,11 @@ body.on-mark #supportFab{display:none}
 .bill .bill-row b.ok{color:#2f8f57}
 .bill-note{font-size:12.5px;color:var(--mute);margin-top:12px;line-height:1.45}
 .bill-note .lnk{color:var(--acc);font-weight:700;text-decoration:underline;padding:0;font-size:inherit}
+.startkit{background:linear-gradient(160deg,rgba(224,173,62,.16),rgba(67,120,222,.07));border:2px solid rgba(224,173,62,.5);border-radius:20px;padding:18px 16px;margin:16px 0}
+.startkit .sk-t{font-size:20px;font-weight:800;margin:0 0 2px;color:var(--ink)}
+.startkit .sk-s{color:var(--mute);font-size:15px;margin:0 0 14px}
+.sk-btn{display:block;width:100%;text-align:center;background:linear-gradient(135deg,var(--acc2),var(--acc));color:#fff;font-weight:800;font-size:17px;border:0;border-radius:14px;padding:15px;margin:0 0 10px;box-shadow:0 8px 20px rgba(67,120,222,.28);cursor:pointer}
+.sk-note{color:#2f8f57;font-size:14px;font-weight:700;margin:12px 0 0;text-align:center;line-height:1.45}
 .bill-renew{background:rgba(224,173,62,.14);border:1px solid rgba(224,173,62,.45);border-radius:12px;padding:11px 13px;margin:0 0 10px;font-size:13.5px;line-height:1.5;color:var(--ink)}
 .bill-sum{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
 .bill-sum-t{font-weight:700;font-size:14px;margin:0 0 10px;color:var(--ink)}
@@ -598,6 +603,13 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
    <p>A few quiet minutes of chant, prayer and breath.</p>
    <p style="margin-top:16px"><button class="btn gold" id="offer">✦ Free tokens</button></p>
   </div>
+  <div class="startkit" id="startKit">
+   <p class="sk-t">🙏 Start here — your prayers</p>
+   <p class="sk-s">These are yours, ready right now. Just tap one to begin.</p>
+   <button type="button" class="sk-btn" id="skSol">▶ Open the 7 Prayers of Solomon</button>
+   <button type="button" class="sk-btn" id="skJes">▶ Open the 7 Prayers of Jesus</button>
+   <p class="sk-note">✓ Your prayers stay here forever, saved to your email — you never lose them.</p>
+  </div>
   <div class="streak-card" id="streakCard">
    <span class="streak-flame" aria-hidden="true">🔥</span>
    <div style="flex:1"><div><span class="n" id="stkN">0</span> <span id="stkLbl">days</span> in a row</div><div class="sub" id="stkNext"></div></div>
@@ -719,6 +731,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
   </div>
   <div class="card"><h3>Certificate of practice</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">A keepsake with your name and your days of practice. Print it or save it as a PDF.</p><button class="ghost" id="cOpen">View certificate</button></div>
   <div class="card"><h3>Reminders</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Get a notification when your next +10 ✦ is ready, 24 hours after you claim your Free tokens.</p><button class="ghost" id="nBtn">Enable notifications</button><p class="lab" id="nSt"></p></div>
+  <div class="card"><h3>📲 Add to your home screen</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Keep Sacred Chant one tap away, like any app on your phone.</p><button class="ghost" id="installBtn2">Show me how</button></div>
   <div class="faqx">
    <h3 class="faqx-t">Questions &amp; answers</h3>
    <p class="faqx-hint">Tap a question to read the answer.</p>
@@ -916,6 +929,7 @@ const FAQ2=[
   {q:'How do I cancel my subscription?', a:`Your purchase is handled by Digistore24. Use the link in your purchase confirmation email to manage or cancel, or contact us and we will guide you. After cancelling, you keep access until the end of the period you already paid for.`},
   {q:'Can I get a refund?', a:`Yes — purchases are covered by a 30-day money-back guarantee through Digistore24. Just contact support within 30 days of your purchase and we will help.`},
   {q:'What happens to my access if I am refunded?', a:`If a purchase is refunded or charged back, access to the app ends permanently for that account. A refund undoes the purchase, so the access it paid for ends with it.`},
+  {q:'What will I see on my bank or card statement?', a:`Your payment is handled by Digistore24, so the charge appears as <b>Digistore24</b> (it may read "DIGISTORE24" or "DS24 Inc") — not "Sacred Chant". Your emailed receipt will say Sacred Chant. If you bought more than one item, each one can show as its own Digistore24 line. If a charge looks unfamiliar, it is us — just contact support with the email you used.`},
   {q:'I was charged but did not get my tokens — what do I do?', a:`Tokens can take up to a minute to arrive after a confirmed purchase. If they still have not appeared, contact support with the email you used at checkout and we will sort it out.`},
   {q:'Do I need to buy with the same email I log in with?', a:`Yes, please use the same email at checkout and in the app, so your tokens and your plan land in the right account.`},
  ]},
@@ -1976,6 +1990,7 @@ function a2Render(){
  const lt=$('#a2later');if(lt)lt.onclick=a2Close;
 }
 function a2Open(){if(isStandalone()||!$('#a2hs'))return;a2Render();$('#a2hs').classList.add('on')}
+if($('#installBtn2'))$('#installBtn2').onclick=()=>{if(isStandalone()){toast('It\'s already on your home screen 🙏');return}if(!$('#a2hs'))return;a2Render();$('#a2hs').classList.add('on')};
 function a2Close(){const s=$('#a2hs');if(s)s.classList.remove('on');S.a2At=Date.now();save()}
 function maybeA2(){
  if(isStandalone())return;
@@ -2161,7 +2176,8 @@ function renderBilling(){
   '<div class="bill-row"><span>Light Tokens</span><b>'+Number(pl.tokens).toLocaleString('en-US')+' / '+(per||'period')+'</b></div>'+
   (S.planAt?'<div class="bill-row"><span>Started</span><b>'+fmtBillDate(new Date(Number(S.planAt)))+'</b></div>':'')+
   '<div class="bill-row"><span>Next payment</span><b>'+fmtBillDate(np)+'</b></div>'+
-  '<div class="bill-row"><span>On your statement</span><b>DIGISTORE24 / Sacred Chant</b></div>'+
+  '<div class="bill-row"><span>On your statement</span><b>Digistore24 (DS24 Inc)</b></div>'+
+  '<div class="bill-note" style="margin-top:4px">Charged by Digistore24 — your statement shows Digistore24, not "Sacred Chant". Your receipt says Sacred Chant.</div>'+
   summary;
 }
 async function refreshTier(){
@@ -2250,6 +2266,13 @@ function jesClick(i){if(jesOpen(i))return showVid(JDAYS[i][1],'Day '+(i+1)+' · 
  $('#lkU').textContent='Unlock now · '+JES_COST+' ✦';$('#lkX').textContent='Wait for it';
  $('#lk').classList.add('on')}
 function openPaid(id,cb){if(!S.unl||S.unl.d!==today())S.unl={d:today(),ids:[]};if(S.unl.ids.includes(id))return cb();spend(2,()=>{S.unl.ids.push(id);save();cb()})}
+/* "Start here" na Home: abre as orações DIRETO, sem o popup de recomendação (findability p/ quem não acha). */
+function openPrayersDirect(which){
+ if(which==='jesus'){if(!S.jesStart){S.jesStart=Date.now();save()}return jesPage()}
+ return openPaid('solomon',()=>{if(!S.solStart){S.solStart=Date.now();save()}solPage()});
+}
+if($('#skSol'))$('#skSol').onclick=()=>openPrayersDirect('solomon');
+if($('#skJes'))$('#skJes').onclick=()=>openPrayersDirect('jesus');
 function mod(id){
  if(id==='mark'){
   if(!markUnlocked()){
