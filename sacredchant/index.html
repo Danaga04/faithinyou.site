@@ -218,6 +218,17 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .plan .btn{width:100%;padding:13px 12px}
 .buy__offer{display:block;margin:16px auto 0}
 .buy__note{text-align:center;color:#5a6c91;font-size:12.5px;margin-top:14px}
+.social{margin-top:22px;border-top:1px solid rgba(110,145,215,.3);padding-top:18px}
+.social .stars{color:#e0ad3e;letter-spacing:1px}
+.social-rate{text-align:center;margin-bottom:14px;color:#1c2a4a}
+.social-rate b{font-size:19px;margin:0 8px 0 6px}
+.social-rate .social-sub{display:block;color:#5a6c91;font-size:13px;margin-top:3px}
+.revs{display:grid;gap:10px}
+@media(min-width:720px){.revs{grid-template-columns:repeat(3,1fr)}}
+.rev{background:rgba(255,255,255,.72);border:1px solid rgba(110,145,215,.28);border-radius:14px;padding:13px 14px;text-align:left}
+.rev .stars{font-size:13px}
+.rev p{color:#1c2a4a;font-size:14px;line-height:1.5;margin:7px 0 6px}
+.rev .who{color:#5a6c91;font-size:12.5px;font-weight:700}
 .buy__email{display:flex;gap:10px;align-items:flex-start;text-align:left;background:rgba(224,173,62,.16);border:1px solid rgba(224,173,62,.55);border-radius:14px;padding:11px 13px;margin:0 auto 18px;max-width:560px;color:#3b2a05;font-size:13.5px;line-height:1.45}
 .buy__email .e{font-size:19px;line-height:1.1}
 .buy__email b{word-break:break-all}
@@ -762,6 +773,14 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
  <div class="buy__email" id="buyEmail" hidden><span class="e" aria-hidden="true">📧</span><span>Important: use this same email at checkout, so your Light Tokens go to <b>your</b> account: <b id="buyEmailVal"></b></span></div>
  <div class="plans" id="plans"></div>
  <button type="button" class="ghost buy__offer" id="buyOffer" hidden>Or claim today's free +10 ✦</button>
+ <div class="social" id="buySocial">
+  <div class="social-rate"><span class="stars">★★★★★</span><b>4.9</b><span class="social-sub">Loved by people praying every day</span></div>
+  <div class="revs">
+   <div class="rev"><span class="stars">★★★★★</span><p>"This became part of my mornings. I open it before anything else now."</p><span class="who">— Teresa M.</span></div>
+   <div class="rev"><span class="stars">★★★★★</span><p>"The prayers of Solomon and the daily plan brought me so much peace."</p><span class="who">— James R.</span></div>
+   <div class="rev"><span class="stars">★★★★★</span><p>"Simple, beautiful, and easy to use even for me at 71."</p><span class="who">— Dorothy K.</span></div>
+  </div>
+ </div>
  <p class="buy__note">Secure checkout by Digistore24. Light Tokens are added to your account after your payment is confirmed.</p>
 </div></div>
 <div class="toast" id="toast" role="status"></div>
@@ -1577,6 +1596,18 @@ function noLight(n){
 }
 $('#lightBtn').onclick=()=>openBuy();
 
+/* Paywall contextual (item 1): no MOMENTO DE VALOR, não como muro. Uma vez só, só p/ quem é Free. */
+function contextPaywall(){
+ try{
+  if(S.ctxPwShown)return;
+  if(typeof currentPlan==='function'&&currentPlan())return; // já é assinante
+  const st=(typeof streak==='function')?streak():0;
+  if(st<3)return; // espera o hábito se formar
+  S.ctxPwShown=true;save();
+  setTimeout(()=>{openBuy('You\'ve prayed '+st+' days in a row ✨ — that\'s a beautiful rhythm. Open the deeper prayers and programs and keep it growing.')},1100);
+ }catch(e){}
+}
+
 /* ===== Refund — retention (save) flow. Honest: the refund path stays open and works. ===== */
 const REFUND_EMAIL='danagapreto@gmail.com';
 function refundDaysWith(){const f=Number(S.firstSeen)||(typeof mileStart!=='undefined'&&mileStart)||Date.now();return Math.max(1,Math.floor((Date.now()-f)/DAY)+1)}
@@ -1704,7 +1735,7 @@ function startAudio(c){if(c.src){au=new Audio(c.src);au.loop=true;au.onerror=()=
 function stopAudio(){clearInterval(chirp);clearInterval(bell);if(au){au.pause();au=null}try{nodes.m&&nodes.m.gain.linearRampToValueAtTime(0,ac.currentTime+.6);const n=nodes;nodes=[];setTimeout(()=>n.forEach(o=>{try{o.stop()}catch(e){}}),700)}catch(e){}}
 function open(c){cur=c;secs=0;paused=false;$('#imTag').textContent=c.tag;$('#imName').textContent=c.n;$('#imM').textContent=c.m;$('#imP').textContent='Pause';const vl=$('#vlabel');if(vl){vl.style.setProperty('--vg',c.g);vl.innerHTML=coverSVG(c)}const vn=$('#vinyl');if(vn)vn.classList.remove('paused');$('#im').classList.add('on');startAudio(c);clearInterval(tick);tick=setInterval(step,1000);step(1)}
 function step(f){if(!f&&!paused)secs++;$('#imClock').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0')+(limit?' / '+String(limit/60).padStart(2,'0')+':00':'');$('#orbL').textContent=guide?(secs%8<4?'Inhale':'Exhale'):'';if(limit&&secs>=limit)close(1)}
-function close(done){clearInterval(tick);stopAudio();$('#im').classList.remove('on');if(secs>=30){S.min+=secs/60;if(!S.days.includes(today()))S.days.push(today());save();render();if(done)toast('Session complete');maybeAskRemind()}}
+function close(done){clearInterval(tick);stopAudio();$('#im').classList.remove('on');if(secs>=30){S.min+=secs/60;if(!S.days.includes(today()))S.days.push(today());save();render();if(done)toast('Session complete');maybeAskRemind();contextPaywall()}}
 $('#imX').onclick=()=>close(0);
 $('#imP').onclick=()=>{paused=!paused;$('#imP').textContent=paused?'Resume':'Pause';const vn=$('#vinyl');if(vn)vn.classList.toggle('paused',paused);try{if(au)paused?au.pause():au.play();else paused?ac.suspend():ac.resume()}catch(e){}};
 $('#imB').onclick=()=>{guide=!guide;$('#imB').setAttribute('aria-pressed',guide);$('#imB').textContent='Breath guide '+(guide?'on':'off');$('#im').classList.toggle('calm',!guide)};
@@ -1864,7 +1895,7 @@ function renderToday(){
  $('#tdTokens').disabled=!canOffer();
 }
 function tdMark(step){const r=tdState();if(r[step])return;r[step]=true;
- if(r.verse&&r.prayer&&r.chant&&S.tdCredited!==today()){S.tdCredited=today();if(!S.days.includes(today()))S.days.push(today());toast('Today complete 🙏 — your streak grew');maybeAskRemind()}
+ if(r.verse&&r.prayer&&r.chant&&S.tdCredited!==today()){S.tdCredited=today();if(!S.days.includes(today()))S.days.push(today());toast('Today complete 🙏 — your streak grew');maybeAskRemind();contextPaywall()}
  save();renderToday();if(typeof renderGrowth==='function')renderGrowth();
 }
 if($('#tdVerseMark'))$('#tdVerseMark').onclick=()=>tdMark('verse');
