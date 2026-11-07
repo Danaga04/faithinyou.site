@@ -323,6 +323,13 @@ body.on-mark #supportFab{display:none}
 .bill .bill-row b.ok{color:#2f8f57}
 .bill-note{font-size:12.5px;color:var(--mute);margin-top:12px;line-height:1.45}
 .bill-note .lnk{color:var(--acc);font-weight:700;text-decoration:underline;padding:0;font-size:inherit}
+.bill-renew{background:rgba(224,173,62,.14);border:1px solid rgba(224,173,62,.45);border-radius:12px;padding:11px 13px;margin:0 0 10px;font-size:13.5px;line-height:1.5;color:var(--ink)}
+.bill-sum{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+.bill-sum-t{font-weight:700;font-size:14px;margin:0 0 10px;color:var(--ink)}
+.bill-sum-row{display:flex;gap:10px;text-align:center}
+.bill-sum-row>div{flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 6px}
+.bill-sum-row b{display:block;font-size:22px;color:var(--acc);line-height:1.1}
+.bill-sum-row small{color:var(--mute);font-size:11.5px}
 /* email da conta (so leitura + copiar) */
 .acct-mail{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:11px 13px;margin-top:4px}
 .acct-mail .em{flex:1;min-width:0;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -2106,13 +2113,25 @@ function renderBilling(){
   return;
  }
  const per=billPeriod(pl),np=nextPaymentDate();
+ // (2) aviso de renovação quando faltam <= 5 dias para a próxima cobrança
+ let renew='';
+ if(np&&per){const days=Math.ceil((np.getTime()-Date.now())/864e5);
+  if(days>=0&&days<=5){renew='<div class="bill-renew">🔔 Your plan renews '+(days===0?'today':(days===1?'tomorrow':'in '+days+' days'))+' ('+fmtBillDate(np)+'), '+pl.price+(per?'/'+per:'')+'. Nothing to do — it continues automatically. You can manage or cancel anytime below.</div>'}}
+ // (3) resumo do mês atual (justifica o gasto no momento da decisão)
+ const mPrefix=ymd(new Date()).slice(0,7);
+ const mDays=(S.days||[]).filter(d=>String(d).slice(0,7)===mPrefix).length;
+ const mMin=Math.round(Number(S.min)||0);
+ const summary='<div class="bill-sum"><p class="bill-sum-t">This month with Sacred Chant</p><div class="bill-sum-row"><div><b>'+mDays+'</b><small>day'+(mDays===1?'':'s')+' prayed</small></div><div><b>'+(typeof streak==='function'?streak():0)+'</b><small>day streak</small></div><div><b>'+mMin+'</b><small>minutes</small></div></div></div>';
  box.innerHTML=
+  renew+
   '<div class="bill-row"><span>Plan</span><b>'+nicePlanName(pl)+'</b></div>'+
   '<div class="bill-row"><span>Price</span><b>'+pl.price+(per?'/'+per:'')+'</b></div>'+
   '<div class="bill-row"><span>Status</span><b class="ok">Active</b></div>'+
   '<div class="bill-row"><span>Light Tokens</span><b>'+Number(pl.tokens).toLocaleString('en-US')+' / '+(per||'period')+'</b></div>'+
   (S.planAt?'<div class="bill-row"><span>Started</span><b>'+fmtBillDate(new Date(Number(S.planAt)))+'</b></div>':'')+
-  '<div class="bill-row"><span>Next payment</span><b>'+fmtBillDate(np)+'</b></div>';
+  '<div class="bill-row"><span>Next payment</span><b>'+fmtBillDate(np)+'</b></div>'+
+  '<div class="bill-row"><span>On your statement</span><b>DIGISTORE24 / Sacred Chant</b></div>'+
+  summary;
 }
 async function refreshTier(){
  try{
