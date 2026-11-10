@@ -2081,9 +2081,9 @@ function prayOpen(){
  $('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Not now';
  $('#lk').classList.add('on')}
 function homeTiles(){
- $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',2)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',prayOK()?0:10,prayOK()?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')+tile('data-mod="support"',IMG.support,'Support',0);
+ $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',2)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',prayOK()?0:10,prayOK()?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')+tile('data-bonus="install"',(BONUS.find(x=>x.id==='install')||{}).img,'How to install the app on your phone',0)+tile('data-mod="support"',IMG.support,'Support',0);
  $('#tPrd').innerHTML=tile('data-mod="solomon"',IMG.solomon,'7 Prayers of Solomon',2)+tile('data-mod="jesus"',JES_IMG,'7 Prayers of Jesus, guided by Mark',0)+PRODS.map(p=>tile('data-prod="'+p.id+'"',p.img,p.t,0)).join('');
- $('#tBon').innerHTML=BONUS.map(b=>{const ok=!b.cost||bonusOK(b.id);return tile('data-bonus="'+b.id+'"',b.img,b.t,ok?0:b.cost,ok?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')}).join('');if(typeof renderDmsHome==='function')renderDmsHome()}
+ $('#tBon').innerHTML=BONUS.filter(b=>b.id!=='install').map(b=>{const ok=!b.cost||bonusOK(b.id);return tile('data-bonus="'+b.id+'"',b.img,b.t,ok?0:b.cost,ok?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')}).join('');if(typeof renderDmsHome==='function')renderDmsHome()}
 /* desbloqueio permanente por conta (salvo no aparelho e na conta do usuario) */
 const bonusOK=id=>(S.bonusUnl||[]).includes(id);
 function syncUnlocks(){if(sbClient)sbClient.auth.updateUser({data:{sc_bonus_unlocks:S.bonusUnl||[]}}).catch(e=>console.warn('Could not sync unlocks:',e?.message||e))}
