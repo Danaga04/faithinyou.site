@@ -437,6 +437,14 @@ body.big .dms-read li{font-size:18px}
 .bless-actions .ghost{text-align:left}
 .bless-result{margin-top:12px;background:rgba(224,173,62,.12);border:1px solid rgba(224,173,62,.4);border-radius:14px;padding:12px 14px}
 .bless-text{font-size:15.5px;line-height:1.6;color:var(--ink)}
+.pletter{max-width:560px;margin:8px auto;background:linear-gradient(170deg,#fffaf0,#fdf3e3);border:1px solid #e7d6b0;border-radius:18px;padding:30px 24px;box-shadow:0 14px 40px rgba(120,90,30,.18);color:#3a2f1e}
+.pletter .pl-orn{font-size:40px;text-align:center;line-height:1}
+.pletter .pl-k{text-align:center;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:#b08a3e;font-weight:800;margin:8px 0 2px}
+.pletter .pl-h{text-align:center;font-family:Georgia,serif;font-size:25px;color:#6e4a1e;margin:0 0 18px;line-height:1.25}
+.pletter .pl-body p{font-family:Georgia,serif;font-size:16.5px;line-height:1.7;margin:0 0 13px;color:#3a2f1e}
+.pletter .pl-sign{display:flex;align-items:center;gap:12px;margin-top:22px;border-top:1px solid #e7d6b0;padding-top:16px;font-family:Georgia,serif;color:#3a2f1e}
+.pletter .pl-seal{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#e0ad3e,#9e6b1e);color:#fff;display:grid;place-items:center;font-size:22px;flex:none;box-shadow:0 3px 8px rgba(120,80,20,.35)}
+.pletter .pl-sign small{color:#8a6d3e}
 .streak-card .freeze-note{display:block;font-size:12.5px;color:var(--mute);margin-top:4px}
 /* ===== Player de vinil (Spotify/Hallow) ===== */
 .im{background:radial-gradient(90% 60% at 50% 28%,#2b2456,#15102e 58%,#0a0817)!important}
@@ -2073,15 +2081,34 @@ const FAQ=`<h2 class="h" style="font-size:20px">Good to know</h2>
 <p style="margin:16px 0 8px">Need help? Our support team is here for you.</p><p><button type="button" class="btn" data-open-support>Contact support</button></p>`;
 const tile=(attr,src,label,cost,lock,dim)=>`<button class="tile${dim?' dim':''}" ${attr} aria-label="${label}">${cost?'<span class="cs">'+cost+' ✦</span>':''}<img src="${src}" alt="${label}" loading="lazy" decoding="async" width="400" height="400" onload="this.parentNode.classList.add('ld')" onerror="this.parentNode.classList.add('ld')">${lock||''}</button>`;
 const prayOK=()=>!!(S.prayUnlocked||S.prayDone);
+const prayerSub=()=>!!S.prayerSub;   /* comprou o upsell 5 (717097) — assinatura "Prayer for you" */
 function prayOpen(){
+ if(prayerSub())return prayLetter();
  if(prayOK())return S.prayDone?reading():quiz();
  lkCost=10;lkAct=()=>{S.prayUnlocked=1;save();homeTiles();quiz()};
  $('#lkH').textContent='Unlock "I want to pray for you"';
  $('#lkT').textContent='Unlock this module once for 10 ✦. After that, it stays open for you.';
  $('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Not now';
  $('#lk').classList.add('on')}
+function prayLetter(){
+ const nm=_E((String(S.name||'').split(' ')[0])||'friend');
+ $('#pBody').innerHTML='<div class="pletter">'
+  +'<div class="pl-orn">🕊️</div>'
+  +'<p class="pl-k">Your confirmation</p>'
+  +'<h2 class="pl-h">You Are Being Prayed For</h2>'
+  +'<div class="pl-body">'
+  +'<p>Dear <b>'+nm+'</b>,</p>'
+  +'<p>This is your confirmation. From today, your name has been placed on our <b>monthly prayer list</b> — and each month, you will be lifted up in prayer, <b>by your own name</b>.</p>'
+  +'<p>You are not a number here. You are a soul we carry before God, month after month, for as long as you walk this path with us.</p>'
+  +'<p>Because this is a monthly subscription, your name stays on the list each time it renews — so the prayers for you continue, without interruption. Prayer is not a single moment; it only grows deeper the longer you remain in it.</p>'
+  +'<p>May you feel held. May you feel loved. May peace find you today, and every day.</p>'
+  +'</div>'
+  +'<div class="pl-sign"><span class="pl-seal">✦</span><div><b>With love, and in prayer,</b><br>Mark<br><small>Your prayer companion · Sacred Chant</small></div></div>'
+  +'</div>';
+ go('pray');
+}
 function homeTiles(){
- $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',2)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',prayOK()?0:10,prayOK()?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')+tile('data-bonus="install"',(BONUS.find(x=>x.id==='install')||{}).img,'How to install the app on your phone',0)+tile('data-mod="support"',IMG.support,'Support',0);
+ $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',2)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',(prayOK()||prayerSub())?0:10,(prayOK()||prayerSub())?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')+tile('data-bonus="install"',(BONUS.find(x=>x.id==='install')||{}).img,'How to install the app on your phone',0)+tile('data-mod="support"',IMG.support,'Support',0);
  $('#tPrd').innerHTML=tile('data-mod="solomon"',IMG.solomon,'7 Prayers of Solomon',2)+tile('data-mod="jesus"',JES_IMG,'7 Prayers of Jesus, guided by Mark',0)+PRODS.map(p=>tile('data-prod="'+p.id+'"',p.img,p.t,0)).join('');
  $('#tBon').innerHTML=BONUS.filter(b=>b.id!=='install').map(b=>{const ok=!b.cost||bonusOK(b.id);return tile('data-bonus="'+b.id+'"',b.img,b.t,ok?0:b.cost,ok?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')}).join('');if(typeof renderDmsHome==='function')renderDmsHome()}
 /* desbloqueio permanente por conta (salvo no aparelho e na conta do usuario) */
@@ -2609,7 +2636,9 @@ function getSupabase() {
                 blocked = data === true;
               } catch (e) { blocked = false; } // falha de rede: nao tranca por engano
               if (blocked) { showBanned(); try { await sbClient.auth.signOut(); } catch (e) {} return; }
+              try { const { data: ps } = await sbClient.rpc('sc_prayer_active'); S.prayerSub = (ps === true); save(); } catch (e) {}
               enterApp(user);
+              try { if (typeof homeTiles === 'function') homeTiles(); } catch (e) {}
             })();
           }
         });
