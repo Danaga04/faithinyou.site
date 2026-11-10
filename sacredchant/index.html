@@ -2048,7 +2048,7 @@ const VID={start:'6aedc011882703ca9fa640e5',pray:'6ada1db657b486888a640681',inst
 /* ===== bonus exclusivos ===== */
 const BOOK_URL='https://the-ancient-scroll-e5902968.base44.app/';
 const BONUS=[
- {id:'install',img:P+'tCCBJL46/bubbles5i62b6q0wh.avif',t:'How to install the app on your phone',vt:'vid',v:VID.install,cost:0},
+ {id:'install',img:P+'tCCBJL46/bubbles5i62b6q0wh.avif',t:'How to install the app on your phone',vt:'vid',v:VID.install,cost:0,vert:true},
  {id:'acutis',img:P+'k4TtphP7/bubble9f6fjit2dom.avif',t:'Carlos Acutis Prayer',vt:'yt',v:'ciIeNeRpG1U',cost:10},
  {id:'raphael',img:P+'rstFNh89/bubble5hea12mql54.avif',t:'Prayer of Archangel Raphael',vt:'yt',v:'WsoBbijb6O0',cost:10},
  {id:'words15',img:P+'Kvx8MD6M/bubble38q3omld08m.avif',t:'15 Words Prayer',vt:'yt',v:'Y1h9SdVUKIc',cost:0},
@@ -2089,7 +2089,7 @@ const bonusOK=id=>(S.bonusUnl||[]).includes(id);
 function syncUnlocks(){if(sbClient)sbClient.auth.updateUser({data:{sc_bonus_unlocks:S.bonusUnl||[]}}).catch(e=>console.warn('Could not sync unlocks:',e?.message||e))}
 function openBonus(id){
  const b=BONUS.find(x=>x.id===id);if(!b)return;
- const show=()=>{if(b.vt==='vid')return showVid(b.v,b.t,'','','home');if(b.vt==='yt')return showYT(b.v,b.t,'home');openWeb(b.v,b.t)};
+ const show=()=>{if(b.vt==='vid')return showVid(b.v,b.t,'','','home',b.vert);if(b.vt==='yt')return showYT(b.v,b.t,'home');openWeb(b.v,b.t)};
  if(!b.cost||bonusOK(id))return show();
  lkCost=b.cost;
  lkAct=()=>{S.bonusUnl=S.bonusUnl||[];if(!S.bonusUnl.includes(id))S.bonusUnl.push(id);save();syncUnlocks();homeTiles();show()};
@@ -2392,9 +2392,10 @@ function mod(id){
   return doOpen();
  }}
 let vBackTo='home',sdkOk=false;
-function showVid(id,title,top,bottom,back){vBackTo=back||'home';$('#vT').textContent=title;$('#vTop').innerHTML=top||'';$('#vTx').innerHTML=bottom||'';
+function showVid(id,title,top,bottom,back,vert){vBackTo=back||'home';$('#vT').textContent=title;$('#vTop').innerHTML=top||'';$('#vTx').innerHTML=bottom||'';
  if(!sdkOk){sdkOk=true;const s=document.createElement('script');s.src='https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js';s.async=true;document.head.appendChild(s)}
- $('#vBox').innerHTML='<div style="position:relative;padding:56.25% 0 0 0"><iframe frameborder="0" allowfullscreen allow="autoplay;fullscreen" referrerpolicy="origin" style="position:absolute;inset:0;width:100%;height:100%"></iframe></div>';
+ const pad=vert?'133.33%':'56.25%';const ws='position:relative;padding:'+pad+' 0 0 0'+(vert?';max-width:360px;margin:0 auto':'');
+ $('#vBox').innerHTML='<div style="'+ws+'"><iframe frameborder="0" allowfullscreen allow="autoplay;fullscreen" referrerpolicy="origin" style="position:absolute;inset:0;width:100%;height:100%"></iframe></div>';
  $('#vBox iframe').src='https://scripts.converteai.net/'+ACC+'/players/'+id+'/v4/embed.html'+(location.search||'?')+'&vl='+encodeURIComponent(location.href);go('vid')}
 /* quiz */
 const QZ=[{q:'What is weighing on you most right now?',h:'Choose the one that feels closest to your heart.',o:[['❤️','Love & relationships'],['✦','Money & career'],['☾','Health & energy'],['⚷','My life purpose']]},
