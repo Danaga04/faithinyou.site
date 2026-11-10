@@ -30,6 +30,13 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
 .pill{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-weight:700;color:var(--gold);display:flex;gap:6px;align-items:center;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
 .pill:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(224,173,62,.3);border-color:var(--gold)}
 .pill .pl{opacity:.65;font-weight:800}
+.top-actions{display:flex;align-items:center;gap:8px}
+.pill.sup{color:var(--acc);font-size:14px;padding:6px 12px}
+.pill.sup svg{display:block}
+.pill.sup:hover{box-shadow:0 6px 16px rgba(67,120,222,.3);border-color:var(--acc)}
+.seg{display:flex;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px}
+.seg-b{flex:1;border:0;background:transparent;color:var(--mute);font-weight:700;font-size:14px;padding:10px 6px;border-radius:9px;cursor:pointer}
+.seg-b.on{background:var(--acc);color:#fff}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .screen{display:none}.screen.on{display:block}
 .hero{position:relative;text-align:center;padding:6px 0 4px}
@@ -593,10 +600,14 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
 
 </head>
 <body>
+<script>/* aplica o tema salvo cedo, sem piscar */try{var _t=localStorage.getItem('sc_theme');if(_t==='light'||_t==='dark')document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
 <div id="app">
  <div class="top">
   <div class="brand"><svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="8" rx="9" ry="3.2" fill="none" stroke="#e0ad3e" stroke-width="2"/><circle cx="20" cy="19" r="6" fill="#4378de"/><path d="M6 36c1-9 7-12 14-12s13 3 14 12z" fill="#7aa6f5"/></svg><div>Sacred Chant<small>Sound for the inner life</small></div></div>
-  <button type="button" class="pill" id="lightBtn" aria-haspopup="dialog" title="Get more Light Tokens"><span class="sr">Light Tokens:</span><span aria-hidden="true">✦</span><span id="lightN">0</span><span class="pl" aria-hidden="true">+</span></button>
+  <div class="top-actions">
+   <button type="button" class="pill sup" data-open-support aria-label="Support" title="Support"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a12 12 0 0 0 5.6 5.6l1.9-1.9c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.4.6.6 0 1 .4 1 1V19c0 .6-.4 1-1 1A16 16 0 0 1 4 6c0-.6.4-1 1-1h2.3c.6 0 1 .4 1 1 0 1.2.2 2.3.6 3.4.1.4 0 .8-.3 1z" fill="currentColor"/></svg><span>Support</span></button>
+   <button type="button" class="pill" id="lightBtn" aria-haspopup="dialog" title="Get more Light Tokens"><span class="sr">Light Tokens:</span><span aria-hidden="true">✦</span><span id="lightN">0</span><span class="pl" aria-hidden="true">+</span></button>
+  </div>
  </div>
 
  <section class="screen" id="s-today">
@@ -751,6 +762,9 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
   <div class="card" style="margin-top:14px"><label for="nIn" class="lab">Your name</label><input type="text" id="nIn" maxlength="40" placeholder="Your name"><button class="btn" id="nSave">Save name</button></div>
   <div class="card"><h3>Text size</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Make everything bigger and easier to read.</p>
    <div class="tsize"><button type="button" id="tsN">Normal</button><button type="button" id="tsL">Large text</button></div>
+  </div>
+  <div class="card"><h3>Appearance</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Choose light or dark, or follow your phone.</p>
+   <div class="seg" id="themeSeg" role="group" aria-label="Theme"><button type="button" class="seg-b" data-theme-set="system">System</button><button type="button" class="seg-b" data-theme-set="light">Light</button><button type="button" class="seg-b" data-theme-set="dark">Dark</button></div>
   </div>
   <div class="card"><h3>Your account</h3><p class="lab" style="font-weight:500;margin:4px 0 8px">This is the email your account and purchases are tied to. It can't be changed here.</p>
    <div class="acct-mail"><span class="em" id="acctEmail" title="">—</span><button type="button" class="cp" id="acctCopy">Copy</button></div>
@@ -1543,7 +1557,17 @@ $('#offer').onclick = async () => {
   plusFloat();
   toast('+10 light added!');
 };
-document.addEventListener('click',e=>{if(e.target.closest('[data-open-support]')){e.preventDefault();if(window.openSupportPanel)window.openSupportPanel()}if(e.target.closest('#refundBtn')){e.preventDefault();openRefund()}});
+document.addEventListener('click',e=>{if(e.target.closest('[data-open-support]')){e.preventDefault();if(window.openSupportPanel)window.openSupportPanel()}if(e.target.closest('#refundBtn')){e.preventDefault();openRefund()}const tb=e.target.closest('[data-theme-set]');if(tb){applyTheme(tb.dataset.themeSet)}});
+/* Tema claro/escuro/sistema — escolha do usuário (guardada no aparelho). */
+function applyTheme(t){
+ try{localStorage.setItem('sc_theme',t)}catch(e){}
+ const r=document.documentElement;
+ if(t==='light')r.setAttribute('data-theme','light');
+ else if(t==='dark')r.setAttribute('data-theme','dark');
+ else r.removeAttribute('data-theme');
+ try{document.querySelectorAll('#themeSeg .seg-b').forEach(b=>b.classList.toggle('on',b.dataset.themeSet===t))}catch(e){}
+}
+(function(){let t='system';try{t=localStorage.getItem('sc_theme')||'system'}catch(e){}applyTheme(t)})();
 $('#nSave').onclick=()=>{S.name=$('#nIn').value.trim();save();render();toast('Saved')};
 $('#reset').onclick=()=>{if(confirm('Reset all progress on this device?')){S={name:S.name,light:10,min:0,days:[],last:'',lastTs:0,vow:null,unl:null};save();render()}};
 $('#cOpen').onclick=()=>{$('#cN').textContent=S.name||'Guest';$('#cS').textContent=streak();$('#cM').textContent=Math.round(S.min);$('#cD').textContent=new Date().toLocaleDateString('en',{dateStyle:'long'});$('#cert').classList.add('on')};
