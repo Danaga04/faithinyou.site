@@ -1468,15 +1468,32 @@ function renderGrowth(){
  const w=WEEKLY[Math.floor(Date.now()/WEEK_MS)%WEEKLY.length];
  if($('#powT')){$('#powT').textContent=w.t;$('#powBtn').dataset.v=w.v;$('#powBtn').dataset.t=w.t;$('#powTheme').textContent='This month: '+THEMES[new Date().getMonth()]}
  updateMarkCard();
- if($('#candWall')){const list=S.candles||[];const start=Math.max(0,list.length-16);
-  $('#candWall').innerHTML=list.slice(start).map((c,idx)=>{const lit=candLit(c);const ri=start+idx;return '<span class="sc-candle'+(lit?'':' out')+'"'+(lit?'':' role="button" tabindex="0" data-relight="'+ri+'"')+' title="'+(c&&c.t?String(c.t).replace(/"/g,'&quot;'):'A candle')+'">'+CANDLE_INNER+'</span>'}).join('');
-  const burning=list.filter(candLit).length;
-  $('#candN').textContent=list.length?(burning+' candle'+(burning===1?'':'s')+' burning now 🕯️'+(list.length>burning?' · tap a dim candle to relight':'')):'Your altar is ready.'}
+ renderCandleWall();
 }
 if($('#powBtn'))$('#powBtn').onclick=()=>{const b=$('#powBtn');showYT(b.dataset.v,'Prayer of the week · '+b.dataset.t,'home')};
 /* Velas de longa duração: queimam por 1 / 7 / 30 dias. Reacender gasta tokens de novo (ralo recorrente). */
 function candLit(c){return !!c && (!c.days || (Number(c.at||0) + Number(c.days)*864e5 > Date.now()))}
 function candCost(days){return days>=30?15:days>=7?5:1}
+/* Fração restante da vela (1 = recém-acesa, 0 = apagou). Encolhe de verdade ao longo do tempo escolhido. */
+function candFrac(c){if(!c)return 0;if(!c.days)return 1;const tot=Number(c.days)*864e5;if(tot<=0)return 0;return Math.max(0,Math.min(1,1-(Date.now()-Number(c.at||0))/tot))}
+function candLeftLabel(c){if(!c||!c.days)return'';const ms=(Number(c.at||0)+Number(c.days)*864e5)-Date.now();if(ms<=0)return'burned down';const d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5);return d>0?(d+'d '+h+'h left'):(h>0?(h+'h left'):(Math.floor(ms/6e4)+'m left'))}
+function candInner(c){
+ const f=candFrac(c),lit=f>0;const vis=Math.max(lit?0.14:0.08,f);const top=(62*vis);
+ const wickB=(top-2).toFixed(1),flameB=(top+4).toFixed(1),glowB=Math.max(0,top-12).toFixed(1);
+ let s='';
+ if(lit)s+='<span class="glow" style="bottom:'+glowB+'px"></span>';
+ s+='<span class="wax" style="transform:translateX(-50%) scaleY('+vis.toFixed(3)+');transform-origin:bottom center"></span>';
+ if(lit)s+='<span class="wick" style="bottom:'+wickB+'px"></span><span class="flame" style="bottom:'+flameB+'px"></span>';
+ return s;
+}
+function renderCandleWall(){
+ const wall=$('#candWall');if(!wall)return;const list=S.candles||[];const start=Math.max(0,list.length-16);
+ wall.innerHTML=list.slice(start).map((c,idx)=>{const lit=candLit(c);const ri=start+idx;const lbl=c&&c.t?String(c.t):'A candle';const left=candLeftLabel(c);return '<span class="sc-candle'+(lit?'':' out')+'"'+(lit?'':' role="button" tabindex="0" data-relight="'+ri+'"')+' title="'+(lbl+(left?' · '+left:'')).replace(/"/g,'&quot;')+'">'+candInner(c)+'</span>'}).join('');
+ const burning=list.filter(candLit).length,cn=$('#candN');
+ if(cn)cn.textContent=list.length?(burning+' candle'+(burning===1?'':'s')+' burning now 🕯️'+(list.length>burning?' · tap a dim candle to relight':'')):'Your altar is ready.';
+}
+/* mantém as velas encolhendo visualmente enquanto o Home está aberto (a cada minuto basta — elas queimam por dias) */
+setInterval(()=>{try{if($('#candWall')&&$('#s-home')&&$('#s-home').classList.contains('on'))renderCandleWall()}catch(e){}},60000);
 function lightCandle(days,cost){spend(cost,()=>{S.candles=S.candles||[];S.candles.push({t:(($('#candIn')||{}).value||'').trim().slice(0,60),at:Date.now(),days:days});save();if($('#candIn'))$('#candIn').value='';renderGrowth();
  const wall=$('#candWall');if(wall&&wall.lastElementChild){wall.lastElementChild.classList.add('lighting');const el=wall.lastElementChild;setTimeout(()=>el&&el.classList.remove('lighting'),800)}
  const altar=$('#candAltar');if(altar){altar.classList.remove('flare');void altar.offsetWidth;altar.classList.add('flare');setTimeout(()=>altar.classList.remove('flare'),900)}
