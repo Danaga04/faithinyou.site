@@ -345,6 +345,16 @@ body.on-mark #supportFab{display:none}
 .sc-candle.out:hover{opacity:.6}
 .cand-opts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}
 .cand-opt{flex:1;min-width:92px;font-size:14px;padding:11px 8px}
+.gift-opts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+.gift-opt{flex:1;min-width:130px;font-size:14px;padding:11px 8px}
+.gift-msg{text-align:left;white-space:pre-wrap;background:#fff;border:1px solid rgba(110,145,215,.3);border-radius:12px;padding:14px;font-size:14.5px;line-height:1.6;color:#1c2a4a;max-height:300px;overflow:auto;font-family:Georgia,serif}
+.rw-strip{display:flex;gap:5px;justify-content:center}
+.rw-day{flex:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 2px;text-align:center}
+.rw-day b{display:block;font-size:14px;color:var(--acc);line-height:1.2}
+.rw-day small{font-size:9.5px;color:var(--mute)}
+.rw-day.got{opacity:.5}
+.rw-day.cur{border-color:var(--gold);box-shadow:0 0 0 2px rgba(224,173,62,.3)}
+.rw-day.cur b{color:var(--gold)}
 .candle-wall .sc-candle{transform:scale(.6);transform-origin:bottom center;margin:0 -7px}
 .sc-candle.lighting{animation:scLight .7s ease-out}
 @keyframes scLight{0%{transform:scale(.25);opacity:0}60%{transform:scale(1.15)}100%{opacity:1}}
@@ -681,6 +691,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
   <button type="button" class="qz-banner" id="qzBanner"><div class="qz-ban-txt"><span class="qz-kicker">Daily challenge</span><b>Bible Quiz</b><span class="qz-sub">New questions every day · beat the 30-second clock</span></div><span class="qz-play">▶</span></button>
   <button type="button" class="ba-banner" id="baBanner"><div class="ba-ban-art"><svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true"><g fill="none" stroke="#D4AF37" stroke-width="1.4"><circle cx="60" cy="60" r="52"/><circle cx="60" cy="60" r="40"/><circle cx="60" cy="60" r="28"/></g><path d="M60 24 72 56 106 56 78 76 88 108 60 88 32 108 42 76 14 56 48 56Z" fill="#D4AF37" opacity=".5"/></svg></div><div class="ba-ban-txt"><span class="ba-kicker">Sacred Alignment</span><b>Blessings Accelerator</b><span class="ba-sub">Your monthly path · re-aligned every month</span></div><span class="ba-go">✦</span></button>
   <div id="novCard"></div>
+  <div id="rewardCard"></div>
   <p class="sh">Support &amp; blessings</p><p>Start here, request a prayer, or reach our team.</p>
   <div class="tiles" id="tSup"></div>
   <button type="button" class="mark-card" data-mod="mark" aria-label="Open chat with Mark"><img src="https://i.postimg.cc/8kFQyKv5/bubblen6oy3a5sh6q.avif" alt="Mark" width="88" height="88" loading="lazy"><span class="mark-copy"><strong>Talk with Mark</strong><span>Your spiritual companion for prayer, reflection, and encouragement.</span><span class="mark-free">3 ✦ / MESSAGE</span></span></button>
@@ -711,6 +722,16 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
     <button type="button" class="btn gold cand-opt" data-canddays="30" data-candcost="15">30 days · 15 ✦</button>
    </div>
    <p class="lab" id="candN" style="margin-top:10px"></p>
+  </div>
+  <div class="card gift-card" style="text-align:center">
+   <p class="lab">Send a blessing</p>
+   <p class="lab" style="font-weight:500;margin:4px 0 8px">Pray for someone you love by name, and send them a blessing they can keep. 🕊️</p>
+   <input type="text" id="giftName" maxlength="40" placeholder="Their name">
+   <div class="gift-opts">
+    <button type="button" class="ghost gift-opt" data-giftkind="pray" data-giftcost="3">🙏 A prayer · 3 ✦</button>
+    <button type="button" class="btn gold gift-opt" data-giftkind="candle" data-giftcost="5">🕯️ A candle &amp; prayer · 5 ✦</button>
+   </div>
+   <p class="lab" id="giftN" style="margin-top:8px"></p>
   </div>
   <div class="card ios" id="iosCard">
    <h3>📲 Add Sacred Chant to your home screen</h3>
@@ -845,6 +866,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
 </div></section>
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
 <div class="cert" id="refund"><div id="refundBox"></div></div>
+<div class="cert" id="giftModal"><div><p style="font-size:40px">🕊️</p><h2 id="giftMT">A blessing is ready</h2><p class="lab" style="margin:6px 0 10px">Send it to them however you like — a message, WhatsApp, anywhere.</p><div class="gift-msg" id="giftMsg"></div><div class="low-actions"><button class="btn gold" id="giftShare" hidden>Share this blessing</button><button class="btn" id="giftCopy">Copy the blessing</button><button class="ghost" id="giftCloseB">Close</button></div></div></div>
 <div class="cert" id="uq"><div id="uqBox"></div></div>
 <div class="cert" id="remind"><div><p style="font-size:40px">🔔</p><h2>A gentle daily reminder</h2><p style="margin-top:8px">Beautiful — you've prayed today. Would you like a soft daily nudge to come back, at a time you choose? No spam, and you can turn it off anytime.</p><div style="margin:16px 0 4px;text-align:left"><label for="remindHour" style="font-weight:700;font-size:14px;display:block;margin-bottom:6px">Remind me at</label><select id="remindHour" style="width:100%;padding:12px;border-radius:12px;border:1.5px solid rgba(110,145,215,.4);background:#ffffff;color:#1c2a4a;font-size:16px"><option value="6">6:00 AM</option><option value="7">7:00 AM</option><option value="8" selected>8:00 AM</option><option value="9">9:00 AM</option><option value="12">12:00 PM</option><option value="18">6:00 PM</option><option value="20">8:00 PM</option><option value="21">9:00 PM</option></select></div><div class="low-actions"><button class="btn gold" id="remindYes">Yes, remind me daily</button><button class="ghost" id="remindNo">Not now</button></div></div></div>
 <div id="a2hs" role="dialog" aria-modal="true" aria-label="Add to home screen"><div class="sheet" id="a2hsBody"></div></div>
@@ -1462,7 +1484,71 @@ function lightCandle(days,cost){spend(cost,()=>{S.candles=S.candles||[];S.candle
 document.addEventListener('click',e=>{
  const lb=e.target.closest('[data-canddays]');if(lb){lightCandle(Number(lb.dataset.canddays),Number(lb.dataset.candcost));return}
  const rc=e.target.closest('[data-relight]');if(rc){const i=Number(rc.dataset.relight),c=(S.candles||[])[i];if(!c)return;const days=Number(c.days)||7,cost=candCost(days);spend(cost,()=>{c.at=Date.now();save();renderGrowth();toast('Candle relit 🕯️ · burning '+days+' more day'+(days===1?'':'s'))})}
+ const gb=e.target.closest('[data-giftkind]');if(gb){sendGift(gb.dataset.giftkind,Number(gb.dataset.giftcost));return}
 });
+
+/* ===== A — Presentear uma bênção por nome: gasta tokens, gera uma bênção compartilhável (traz gente nova). ===== */
+const APP_SHARE_URL='https://faithinyou.site/sacredchant/';
+function sendGift(kind,cost){
+ const name=((($('#giftName')||{}).value)||'').trim().slice(0,40);
+ const gn=$('#giftN');
+ if(!name){if(gn)gn.textContent='Please enter their name first. 🙏';try{$('#giftName').focus()}catch(e){}return}
+ spend(cost,()=>{
+  const pr=prayerForName(name);
+  S.gifts=S.gifts||[];S.gifts.push({name:name,kind:kind,at:Date.now()});
+  if(kind==='candle'){S.candles=S.candles||[];S.candles.push({t:'For '+name,at:Date.now(),days:7});}
+  save();if($('#giftName'))$('#giftName').value='';
+  try{renderGrowth&&renderGrowth()}catch(e){}
+  const opening=(kind==='candle')?('🕯️ I lit a candle for you and prayed over your name at Sacred Chant.')
+                                 :('🕊️ I prayed for you by name at Sacred Chant.');
+  const msg=opening+'\n\n'+pr+'\n\nWith love. 🙏\n\nYou can receive your own prayers here:\n'+APP_SHARE_URL;
+  showGiftCard(name,msg);
+  if(gn)gn.textContent='A blessing for '+name+' is ready to send 💌';
+ });
+}
+function showGiftCard(name,msg){
+ const m=$('#giftModal');if(!m){try{navigator.clipboard.writeText(msg)}catch(e){}toast('Blessing copied 💌');return}
+ $('#giftMT').textContent='A blessing for '+name;
+ $('#giftMsg').textContent=msg;
+ const sh=$('#giftShare');
+ if(sh){if(navigator.share){sh.hidden=false;sh.onclick=()=>{navigator.share({title:'A blessing for '+name,text:msg}).catch(()=>{})}}else{sh.hidden=true}}
+ const cp=$('#giftCopy');if(cp)cp.onclick=()=>{try{navigator.clipboard.writeText(msg);toast('Blessing copied — paste it to '+name+' 💌')}catch(e){toast('Select the text and copy it 💌')}};
+ const cl=$('#giftCloseB');if(cl)cl.onclick=()=>m.classList.remove('on');
+ m.classList.add('on');
+}
+
+/* ===== C — Recompensa de login que cresce (créditos via Supabase: rode o SQL que acompanha). ===== */
+const REWARD_STEPS=[2,4,6,8,10,15,25];
+function renderRewardCard(){
+ const el=$('#rewardCard');if(!el)return;
+ const lc=S.loginClaim||{};const st=Number(lc.streak)||0;
+ const claimedToday=lc.date===today();
+ let nextIdx=0;
+ if(!claimedToday){try{nextIdx=(lc.date===ymd(new Date(Date.now()-864e5)))?(st%7):0}catch(e){nextIdx=0}}
+ const curPos=claimedToday?((st-1+700)%7):nextIdx;
+ let strip='';for(let i=0;i<7;i++){const got=claimedToday?(i<=curPos):(i<nextIdx);const cur=!claimedToday&&i===nextIdx;strip+='<div class="rw-day'+(got?' got':'')+(cur?' cur':'')+'"><b>+'+REWARD_STEPS[i]+'</b><small>Day '+(i+1)+'</small></div>'}
+ el.innerHTML='<div class="pow rw-card"><span class="theme">Daily reward</span><p class="lab" style="font-weight:500;margin:2px 0 8px">Come back each day — your blessing grows. 🔥</p><div class="rw-strip">'+strip+'</div>'+(claimedToday
+   ?'<p class="lab" style="margin:10px 0 0">✓ Claimed today — your '+st+'-day reward streak is alive. Come back tomorrow for more. 🙏</p>'
+   :'<button type="button" class="btn gold" id="rwClaim" style="margin-top:12px">Claim today’s reward · +'+REWARD_STEPS[nextIdx]+' ✦</button>')+'</div>';
+ const b=$('#rwClaim');if(b)b.onclick=claimLoginReward;
+}
+async function claimLoginReward(){
+ const b=$('#rwClaim');if(b){b.disabled=true}
+ try{
+  const client=await getSupabase();
+  const {data,error}=await client.rpc('claim_login_reward');
+  if(error)throw error;
+  const res=data||{};
+  if(res.status==='claimed'){
+   if(res.balance!=null){S.light=Number(res.balance)}
+   S.loginClaim={date:today(),streak:Number(res.streak)||1};save();try{render()}catch(e){}renderRewardCard();
+   toast('🎁 +'+res.reward+' ✦ · '+res.streak+'-day reward streak!');
+  }else if(res.status==='already'){
+   S.loginClaim={date:today(),streak:Number(res.streak)||1};save();renderRewardCard();
+   toast('You already claimed today. Come back tomorrow 🙏');
+  }else{if(b)b.disabled=false;toast('Could not claim right now. Please try again.')}
+ }catch(e){if(b)b.disabled=false;toast('Daily reward isn’t available yet.')}
+}
 /* ===== Offer your intention: clique suave, auréola voando até o anjo, sino na chegada ===== */
 let offerBusy=false,offerAu=null;
 function offerSound(){
@@ -2224,7 +2310,7 @@ function novSync(){try{if(sbClient)sbClient.auth.updateUser({data:{sc_novena:S.n
 function homeTiles(){
  $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',2)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',(prayOK()||prayerSub())?0:10,(prayOK()||prayerSub())?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')+tile('data-bonus="install"',(BONUS.find(x=>x.id==='install')||{}).img,'How to install the app on your phone',0)+tile('data-mod="support"',IMG.support,'Support',0);
  $('#tPrd').innerHTML=tile('data-mod="solomon"',IMG.solomon,'7 Prayers of Solomon',2)+tile('data-mod="jesus"',JES_IMG,'7 Prayers of Jesus, guided by Mark',0)+PRODS.map(p=>tile('data-prod="'+p.id+'"',p.img,p.t,0)).join('');
- $('#tBon').innerHTML=BONUS.filter(b=>b.id!=='install').map(b=>{const ok=!b.cost||bonusOK(b.id);return tile('data-bonus="'+b.id+'"',b.img,b.t,ok?0:b.cost,ok?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')}).join('');if(typeof renderDmsHome==='function')renderDmsHome();if(typeof renderNovCard==='function')renderNovCard()}
+ $('#tBon').innerHTML=BONUS.filter(b=>b.id!=='install').map(b=>{const ok=!b.cost||bonusOK(b.id);return tile('data-bonus="'+b.id+'"',b.img,b.t,ok?0:b.cost,ok?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')}).join('');if(typeof renderDmsHome==='function')renderDmsHome();if(typeof renderNovCard==='function')renderNovCard();if(typeof renderRewardCard==='function')renderRewardCard()}
 /* desbloqueio permanente por conta (salvo no aparelho e na conta do usuario) */
 const bonusOK=id=>(S.bonusUnl||[]).includes(id);
 function syncUnlocks(){if(sbClient)sbClient.auth.updateUser({data:{sc_bonus_unlocks:S.bonusUnl||[]}}).catch(e=>console.warn('Could not sync unlocks:',e?.message||e))}
