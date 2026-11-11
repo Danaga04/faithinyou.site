@@ -340,6 +340,11 @@ body.on-mark #supportFab{display:none}
 .candle-altar.flare .flame{animation:scFlare .85s ease-out}
 @keyframes scFlare{0%{transform:translateX(-50%) scaleY(1) scaleX(1)}30%{transform:translateX(-50%) scaleY(1.55) scaleX(1.12)}70%{transform:translateX(-50%) scaleY(1.1) scaleX(.97)}100%{transform:translateX(-50%) scaleY(1) scaleX(1)}}
 .candle-wall{display:flex;flex-wrap:wrap;gap:4px;margin:16px 0 4px;min-height:44px;justify-content:center;align-items:flex-end}
+.sc-candle.out{opacity:.4;cursor:pointer;filter:grayscale(.55)}
+.sc-candle.out .flame,.sc-candle.out .glow,.sc-candle.out .flame::before,.sc-candle.out .flame::after{display:none}
+.sc-candle.out:hover{opacity:.6}
+.cand-opts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.cand-opt{flex:1;min-width:92px;font-size:14px;padding:11px 8px}
 .candle-wall .sc-candle{transform:scale(.6);transform-origin:bottom center;margin:0 -7px}
 .sc-candle.lighting{animation:scLight .7s ease-out}
 @keyframes scLight{0%{transform:scale(.25);opacity:0}60%{transform:scale(1.15)}100%{opacity:1}}
@@ -457,6 +462,17 @@ body.big .dms-read li{font-size:18px}
 .pletter .pl-sign{display:flex;align-items:center;gap:12px;margin-top:22px;border-top:1px solid #e7d6b0;padding-top:16px;font-family:Georgia,serif;color:#3a2f1e}
 .pletter .pl-seal{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#e0ad3e,#9e6b1e);color:#fff;display:grid;place-items:center;font-size:22px;flex:none;box-shadow:0 3px 8px rgba(120,80,20,.35)}
 .pletter .pl-sign small{color:#8a6d3e}
+.nov-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.nov-day{display:flex;flex-direction:column;align-items:center;gap:3px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 6px;cursor:pointer;color:var(--ink)}
+.nov-day:disabled{opacity:.45;cursor:default}
+.nov-day.today{border-color:var(--gold);box-shadow:0 0 0 2px rgba(224,173,62,.3)}
+.nov-day.done{background:linear-gradient(160deg,rgba(95,174,152,.18),rgba(95,174,152,.05));border-color:rgba(95,174,152,.5)}
+.nov-day .nd-n{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:17px;background:linear-gradient(135deg,var(--acc2),var(--acc));color:#fff}
+.nov-day.done .nd-n{background:linear-gradient(135deg,#7ed0b0,#3d9e7a)}
+.nov-day .nd-l{font-weight:700;font-size:13px}
+.nov-day .nd-s{font-size:11px;color:var(--mute)}
+.freeze-buy{display:inline-flex;align-items:center;gap:6px;margin-top:8px;background:transparent;border:1px solid var(--line);border-radius:99px;color:var(--acc);font-weight:700;font-size:13px;padding:7px 14px;cursor:pointer}
+.freeze-buy:hover{border-color:var(--acc)}
 .streak-card .freeze-note{display:block;font-size:12.5px;color:var(--mute);margin-top:4px}
 /* ===== Player de vinil (Spotify/Hallow) ===== */
 .im{background:radial-gradient(90% 60% at 50% 28%,#2b2456,#15102e 58%,#0a0817)!important}
@@ -654,7 +670,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
   </div>
   <div class="streak-card" id="streakCard">
    <span class="streak-flame" aria-hidden="true">🔥</span>
-   <div style="flex:1"><div><span class="n" id="stkN">0</span> <span id="stkLbl">days</span> in a row</div><div class="sub" id="stkNext"></div></div>
+   <div style="flex:1"><div><span class="n" id="stkN">0</span> <span id="stkLbl">days</span> in a row</div><div class="sub" id="stkNext"></div><button type="button" class="freeze-buy" id="freezeBuy">🛡️ Add a streak freeze · 15 ✦</button></div>
   </div>
   <div class="pow">
    <span class="theme" id="powTheme"></span>
@@ -664,6 +680,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
   </div>
   <button type="button" class="qz-banner" id="qzBanner"><div class="qz-ban-txt"><span class="qz-kicker">Daily challenge</span><b>Bible Quiz</b><span class="qz-sub">New questions every day · beat the 30-second clock</span></div><span class="qz-play">▶</span></button>
   <button type="button" class="ba-banner" id="baBanner"><div class="ba-ban-art"><svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true"><g fill="none" stroke="#D4AF37" stroke-width="1.4"><circle cx="60" cy="60" r="52"/><circle cx="60" cy="60" r="40"/><circle cx="60" cy="60" r="28"/></g><path d="M60 24 72 56 106 56 78 76 88 108 60 88 32 108 42 76 14 56 48 56Z" fill="#D4AF37" opacity=".5"/></svg></div><div class="ba-ban-txt"><span class="ba-kicker">Sacred Alignment</span><b>Blessings Accelerator</b><span class="ba-sub">Your monthly path · re-aligned every month</span></div><span class="ba-go">✦</span></button>
+  <div id="novCard"></div>
   <p class="sh">Support &amp; blessings</p><p>Start here, request a prayer, or reach our team.</p>
   <div class="tiles" id="tSup"></div>
   <button type="button" class="mark-card" data-mod="mark" aria-label="Open chat with Mark"><img src="https://i.postimg.cc/8kFQyKv5/bubblen6oy3a5sh6q.avif" alt="Mark" width="88" height="88" loading="lazy"><span class="mark-copy"><strong>Talk with Mark</strong><span>Your spiritual companion for prayer, reflection, and encouragement.</span><span class="mark-free">3 ✦ / MESSAGE</span></span></button>
@@ -686,9 +703,14 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
    <p class="lab" style="font-weight:500;margin:4px 0 2px">Light a candle for an intention or for someone you love.</p>
    <div class="candle-altar" id="candAltar"><span class="sc-candle"><span class="glow"></span><span class="wax"></span><span class="wick"></span><span class="flame"></span></span></div>
    <div class="candle-wall" id="candWall" aria-hidden="true"></div>
-   <input type="text" id="candIn" maxlength="60" placeholder="Your intention (optional)">
-   <button type="button" class="btn gold" id="candBtn">🕯️ Light a candle · 1 ✦</button>
-   <p class="lab" id="candN" style="margin-top:8px"></p>
+   <input type="text" id="candIn" maxlength="60" placeholder="A name or intention (optional)">
+   <p class="lab" style="font-weight:500;margin:2px 0 6px">Light a candle that keeps burning — choose how long:</p>
+   <div class="cand-opts">
+    <button type="button" class="ghost cand-opt" data-canddays="1" data-candcost="1">1 day · 1 ✦</button>
+    <button type="button" class="ghost cand-opt" data-canddays="7" data-candcost="5">7 days · 5 ✦</button>
+    <button type="button" class="btn gold cand-opt" data-canddays="30" data-candcost="15">30 days · 15 ✦</button>
+   </div>
+   <p class="lab" id="candN" style="margin-top:10px"></p>
   </div>
   <div class="card ios" id="iosCard">
    <h3>📲 Add Sacred Chant to your home screen</h3>
@@ -745,6 +767,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
   <button type="button" class="ghost mark-clear" id="markClear">Clear this conversation</button>
  </section>
  <section class="screen" id="s-sol"><button class="back" data-back>← Back</button><h2 class="h">7 Prayers of Solomon</h2><p class="intro">One prayer a day. Tap a day to listen. Days 4 to 7 open 24 hours after you begin.</p><div class="tiles" id="sDays"></div></section>
+ <section class="screen" id="s-nov"><button class="back" data-back>← Back</button><div id="novBody"></div></section>
  
 <section class="screen" id="s-chants">
   <h2 class="h">Chants &amp; sounds</h2>
@@ -1423,14 +1446,23 @@ function renderGrowth(){
  const w=WEEKLY[Math.floor(Date.now()/WEEK_MS)%WEEKLY.length];
  if($('#powT')){$('#powT').textContent=w.t;$('#powBtn').dataset.v=w.v;$('#powBtn').dataset.t=w.t;$('#powTheme').textContent='This month: '+THEMES[new Date().getMonth()]}
  updateMarkCard();
- if($('#candWall')){const list=S.candles||[];$('#candWall').innerHTML=list.slice(-16).map(()=>'<span class="sc-candle">'+CANDLE_INNER+'</span>').join('');
-  $('#candN').textContent=list.length?('You have lit '+list.length+' candle'+(list.length===1?'':'s')+' 🕯️'):'Your altar is ready.'}
+ if($('#candWall')){const list=S.candles||[];const start=Math.max(0,list.length-16);
+  $('#candWall').innerHTML=list.slice(start).map((c,idx)=>{const lit=candLit(c);const ri=start+idx;return '<span class="sc-candle'+(lit?'':' out')+'"'+(lit?'':' role="button" tabindex="0" data-relight="'+ri+'"')+' title="'+(c&&c.t?String(c.t).replace(/"/g,'&quot;'):'A candle')+'">'+CANDLE_INNER+'</span>'}).join('');
+  const burning=list.filter(candLit).length;
+  $('#candN').textContent=list.length?(burning+' candle'+(burning===1?'':'s')+' burning now 🕯️'+(list.length>burning?' · tap a dim candle to relight':'')):'Your altar is ready.'}
 }
 if($('#powBtn'))$('#powBtn').onclick=()=>{const b=$('#powBtn');showYT(b.dataset.v,'Prayer of the week · '+b.dataset.t,'home')};
-if($('#candBtn'))$('#candBtn').onclick=()=>{spend(CANDLE_COST,()=>{S.candles=S.candles||[];S.candles.push({t:($('#candIn').value||'').trim().slice(0,60),at:Date.now()});save();if($('#candIn'))$('#candIn').value='';renderGrowth();
+/* Velas de longa duração: queimam por 1 / 7 / 30 dias. Reacender gasta tokens de novo (ralo recorrente). */
+function candLit(c){return !!c && (!c.days || (Number(c.at||0) + Number(c.days)*864e5 > Date.now()))}
+function candCost(days){return days>=30?15:days>=7?5:1}
+function lightCandle(days,cost){spend(cost,()=>{S.candles=S.candles||[];S.candles.push({t:(($('#candIn')||{}).value||'').trim().slice(0,60),at:Date.now(),days:days});save();if($('#candIn'))$('#candIn').value='';renderGrowth();
  const wall=$('#candWall');if(wall&&wall.lastElementChild){wall.lastElementChild.classList.add('lighting');const el=wall.lastElementChild;setTimeout(()=>el&&el.classList.remove('lighting'),800)}
  const altar=$('#candAltar');if(altar){altar.classList.remove('flare');void altar.offsetWidth;altar.classList.add('flare');setTimeout(()=>altar.classList.remove('flare'),900)}
- toast('A candle is lit 🕯️')})};
+ toast('A candle is lit 🕯️ · burning '+days+' day'+(days===1?'':'s'))})}
+document.addEventListener('click',e=>{
+ const lb=e.target.closest('[data-canddays]');if(lb){lightCandle(Number(lb.dataset.canddays),Number(lb.dataset.candcost));return}
+ const rc=e.target.closest('[data-relight]');if(rc){const i=Number(rc.dataset.relight),c=(S.candles||[])[i];if(!c)return;const days=Number(c.days)||7,cost=candCost(days);spend(cost,()=>{c.at=Date.now();save();renderGrowth();toast('Candle relit 🕯️ · burning '+days+' more day'+(days===1?'':'s'))})}
+});
 /* ===== Offer your intention: clique suave, auréola voando até o anjo, sino na chegada ===== */
 let offerBusy=false,offerAu=null;
 function offerSound(){
@@ -1557,7 +1589,7 @@ $('#offer').onclick = async () => {
   plusFloat();
   toast('+10 light added!');
 };
-document.addEventListener('click',e=>{if(e.target.closest('[data-open-support]')){e.preventDefault();if(window.openSupportPanel)window.openSupportPanel()}if(e.target.closest('#refundBtn')){e.preventDefault();openRefund()}const tb=e.target.closest('[data-theme-set]');if(tb){applyTheme(tb.dataset.themeSet)}});
+document.addEventListener('click',e=>{if(e.target.closest('[data-open-support]')){e.preventDefault();if(window.openSupportPanel)window.openSupportPanel()}if(e.target.closest('#refundBtn')){e.preventDefault();openRefund()}const tb=e.target.closest('[data-theme-set]');if(tb){applyTheme(tb.dataset.themeSet)}if(e.target.closest('#freezeBuy')){e.preventDefault();spend(15,()=>{S.freezes=(typeof S.freezes==='number'?S.freezes:1)+1;save();render();toast('🛡️ Streak freeze added — your streak is safe if you miss a day')})}});
 /* Tema claro/escuro/sistema — escolha do usuário (guardada no aparelho). */
 function applyTheme(t){
  try{localStorage.setItem('sc_theme',t)}catch(e){}
@@ -2136,10 +2168,63 @@ function prayLetter(){
   +'</div>';
  go('pray');
 }
+/* ===== Novena do mês: 9 dias de oração, renova todo mês com um novo tema. Puxa a pessoa de volta todo dia. ===== */
+const NOV_THEMES=[
+ {t:'Provision & Peace',v:'“My God shall supply all your need.” — Philippians 4:19'},
+ {t:'Healing & Strength',v:'“Heal me, O Lord, and I shall be healed.” — Jeremiah 17:14'},
+ {t:'Peace Over Worry',v:'“Be careful for nothing; but in every thing by prayer…” — Philippians 4:6'},
+ {t:'Family & Home',v:'“As for me and my house, we will serve the Lord.” — Joshua 24:15'},
+ {t:'Guidance & Purpose',v:'“Trust in the Lord with all thine heart.” — Proverbs 3:5'},
+ {t:'Protection',v:'“The Lord is my rock, and my fortress.” — Psalm 18:2'},
+ {t:'Gratitude',v:'“O give thanks unto the Lord; for he is good.” — Psalm 107:1'},
+ {t:'Forgiveness & Freedom',v:'“If the Son shall make you free, ye shall be free indeed.” — John 8:36'},
+ {t:'Faith for Breakthrough',v:'“Now faith is the substance of things hoped for.” — Hebrews 11:1'},
+ {t:'Patience & Trust',v:'“They that wait upon the Lord shall renew their strength.” — Isaiah 40:31'},
+ {t:'Generosity',v:'“Give, and it shall be given unto you.” — Luke 6:38'},
+ {t:'New Beginnings',v:'“Behold, I make all things new.” — Revelation 21:5'}
+];
+const NOV_PRAYERS=[
+ 'Father, I begin these nine days with an open heart. Quiet my mind, and draw me close. I set my intention before You, and I trust You to hear me. Amen.',
+ 'Lord, on this second day, deepen my trust. Where I am anxious, bring peace; where I am tired, bring rest. Hold me as I keep walking toward You. Amen.',
+ 'God of mercy, today I lay down what I cannot carry. Take my worry and trade it for Your calm. Let me feel, even a little, that I am held. Amen.',
+ 'Father, grow my faith today. Help me believe before I see, and to thank You for what is already on its way. I will not give up. Amen.',
+ 'Lord, at the midpoint of this novena, renew my strength. Keep me faithful one more day. Your timing is never late, and I rest in it. Amen.',
+ 'God, open my eyes to the small mercies around me. Turn my heart to gratitude, for a grateful heart is where peace begins. Amen.',
+ 'Father, let today soften me. Where I hold hurt, help me release it; where I need forgiveness, pour out Your grace. Set me free. Amen.',
+ 'Lord, as this journey nears its end, strengthen my hope. I thank You in advance, in faith, for all You are doing that I cannot yet see. Amen.',
+ 'Father, on this ninth day I give You thanks. Seal this novena with Your peace, and carry its grace into every day ahead. In Your hands I rest. Amen.'
+];
+function novKey(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
+function novTheme(d){d=d||new Date();return NOV_THEMES[(d.getFullYear()*12+d.getMonth())%NOV_THEMES.length]}
+function novState(){const k=novKey();if(!S.novena||S.novena.key!==k){S.novena={key:k,started:null,done:[]};save()}return S.novena}
+function novDayOpen(i){const s=novState();if(!s.started)return i===0;const days=Math.floor((Date.now()-Number(s.started))/DAY);return i<=days}
+function renderNovCard(){
+ const el=$('#novCard');if(!el)return;const th=novTheme();const s=novState();const done=(s.done||[]).length;
+ el.innerHTML='<div class="pow nov-card"><span class="theme">Novena of the month</span><p class="lab">9 days of prayer · '+th.t+'</p><h3 style="margin:2px 0 4px">Pray one each day for 9 days</h3><p class="lab" style="font-weight:500;margin:0 0 10px">'+(done?('You’ve prayed '+done+' of 9 this month.'):'A new 9-day novena, renewed every month. Free to pray.')+'</p><button type="button" class="btn gold" id="novOpen">✨ Open the Novena</button></div>';
+ const b=$('#novOpen');if(b)b.onclick=openNovena;
+}
+function openNovena(){novRender();go('nov')}
+function novRender(){
+ const w=$('#novBody');if(!w)return;const th=novTheme();const s=novState();
+ let tiles='';for(let i=0;i<9;i++){const open=novDayOpen(i),isDone=(s.done||[]).includes(i);
+  tiles+='<button type="button" class="nov-day'+(isDone?' done':'')+(open&&!isDone?' today':'')+'" '+(open?'data-novday="'+i+'"':'disabled')+'><span class="nd-n">'+(isDone?'✓':(i+1))+'</span><span class="nd-l">Day '+(i+1)+'</span><span class="nd-s">'+(isDone?'Prayed':(open?'Tap to pray':'Opens day '+(i+1)))+'</span></button>';
+ }
+ w.innerHTML='<p class="ba-eyebrow" style="text-align:center;color:var(--acc);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:12px">Novena of the Month</p><h2 class="h" style="text-align:center">'+th.t+'</h2><p class="intro" style="text-align:center">'+th.v+'</p><p class="intro" style="text-align:center;margin-top:-4px">Pray one prayer each day for nine days. A new day opens every day — and a fresh novena begins each month.</p><div class="nov-grid">'+tiles+'</div>';
+ $$('#novBody [data-novday]').forEach(b=>b.onclick=()=>novDay(Number(b.dataset.novday)));
+}
+function novDay(i){
+ const s=novState();if(!s.started){s.started=Date.now();save();novSync()}
+ const w=$('#novBody');if(!w)return;const th=novTheme();const isDone=(s.done||[]).includes(i);
+ w.innerHTML='<p class="ba-eyebrow" style="text-align:center;color:var(--acc);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:12px">Day '+(i+1)+' of 9 · '+th.t+'</p><div class="pletter" style="max-width:560px"><div class="pl-orn">🕊️</div><h2 class="pl-h">Day '+(i+1)+'</h2><div class="pl-body"><p>'+NOV_PRAYERS[i]+'</p></div><div class="pl-sign"><span class="pl-seal">✦</span><div><b>This month we pray for:</b><br>'+th.t+'<br><small>Sacred Chant · Novena of the month</small></div></div></div>'+(isDone?'<p class="intro" style="text-align:center">✓ You have prayed this day. 🙏</p>':'<button type="button" class="btn gold" id="novDone" style="margin-top:4px">I have prayed this 🙏</button>')+'<button type="button" class="ghost" id="novBack" style="margin-top:10px">Back to the novena</button>';
+ const d=$('#novDone');if(d)d.onclick=()=>{s.done=s.done||[];if(!s.done.includes(i)){s.done.push(i);save();novSync();try{if(!S.days.includes(today()))S.days.push(today());save()}catch(e){}try{maybeAskRemind&&maybeAskRemind()}catch(e){}}novRender()};
+ const bk=$('#novBack');if(bk)bk.onclick=novRender;
+ try{$('#s-nov').scrollTop=0;scrollTo(0,0)}catch(e){}
+}
+function novSync(){try{if(sbClient)sbClient.auth.updateUser({data:{sc_novena:S.novena}}).catch(()=>{})}catch(e){}}
 function homeTiles(){
  $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',2)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',(prayOK()||prayerSub())?0:10,(prayOK()||prayerSub())?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')+tile('data-bonus="install"',(BONUS.find(x=>x.id==='install')||{}).img,'How to install the app on your phone',0)+tile('data-mod="support"',IMG.support,'Support',0);
  $('#tPrd').innerHTML=tile('data-mod="solomon"',IMG.solomon,'7 Prayers of Solomon',2)+tile('data-mod="jesus"',JES_IMG,'7 Prayers of Jesus, guided by Mark',0)+PRODS.map(p=>tile('data-prod="'+p.id+'"',p.img,p.t,0)).join('');
- $('#tBon').innerHTML=BONUS.filter(b=>b.id!=='install').map(b=>{const ok=!b.cost||bonusOK(b.id);return tile('data-bonus="'+b.id+'"',b.img,b.t,ok?0:b.cost,ok?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')}).join('');if(typeof renderDmsHome==='function')renderDmsHome()}
+ $('#tBon').innerHTML=BONUS.filter(b=>b.id!=='install').map(b=>{const ok=!b.cost||bonusOK(b.id);return tile('data-bonus="'+b.id+'"',b.img,b.t,ok?0:b.cost,ok?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')}).join('');if(typeof renderDmsHome==='function')renderDmsHome();if(typeof renderNovCard==='function')renderNovCard()}
 /* desbloqueio permanente por conta (salvo no aparelho e na conta do usuario) */
 const bonusOK=id=>(S.bonusUnl||[]).includes(id);
 function syncUnlocks(){if(sbClient)sbClient.auth.updateUser({data:{sc_bonus_unlocks:S.bonusUnl||[]}}).catch(e=>console.warn('Could not sync unlocks:',e?.message||e))}
