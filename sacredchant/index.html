@@ -147,6 +147,25 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .cert>div{background:linear-gradient(160deg,#fffdf5,#e9f2ff);color:#1c2a4a;border:3px double #e0ad3e;border-radius:20px;padding:28px 22px;text-align:center;max-width:400px;width:100%}
 .cert h2{font-size:22px}.cert .nm{font-size:26px;font-weight:800;color:#4378de;margin:8px 0}
 @media print{body *{visibility:hidden}.cert,.cert *{visibility:visible}.cert{position:absolute;background:#fff}}
+/* Sacred Premium offer (680706) — caixa fixa clara, por isso cores fixas escuras */
+#premium>div{max-height:92vh;overflow:auto;text-align:left}
+.pr-eyebrow{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#8a5d00;margin:0 0 4px;text-align:center}
+.pr-q{font-size:21px;line-height:1.25;color:#1c2a4a;margin:0 0 14px;text-align:center}
+.pr-opts{display:grid;gap:10px}
+.pr-opt{display:block;width:100%;text-align:left;background:#fff;border:2px solid rgba(110,145,215,.35);border-radius:14px;padding:14px 16px;font:inherit;font-size:16px;font-weight:600;color:#1c2a4a;cursor:pointer}
+.pr-opt:active{transform:scale(.99);border-color:#4378de}
+.pr-body{font-size:15.5px;line-height:1.6;color:#33415e}.pr-body p{margin:0 0 10px}.pr-body b{color:#1c2a4a}
+.pr-price{text-align:center;margin:16px 0 4px}
+.pr-old{display:inline-block;font-size:19px;color:#9aa6bf;text-decoration:line-through;margin-right:10px;vertical-align:middle}
+.pr-now{display:inline-block;font-size:40px;font-weight:800;color:#1c2a4a;vertical-align:middle;line-height:1}
+.pr-tag{display:block;font-size:12.5px;font-weight:700;color:#8a5d00;margin-top:4px;text-transform:uppercase;letter-spacing:.04em}
+.pr-actions{display:grid;gap:10px;margin-top:16px}
+.pr-buy{display:block;width:100%;text-align:center;font-weight:800;font-size:18px;border:0;border-radius:99px;padding:17px 20px;cursor:pointer;background:linear-gradient(135deg,#f7dc92,#e0ad3e);color:#3b2a05;box-shadow:0 12px 28px rgba(224,173,62,.4)}
+.pr-ghost{display:block;width:100%;text-align:center;font-weight:700;font-size:15px;background:none;border:0;color:#5a6c91;padding:8px;cursor:pointer}
+.pr-fine{font-size:12.5px;color:#7a86a3;text-align:center;margin:12px 0 0;line-height:1.5}
+.ba-lock-badge{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.06em;background:rgba(224,173,62,.25);color:#8a5d00;border-radius:6px;padding:2px 6px;margin-left:6px;vertical-align:middle}
+.ba-code.ba-locked{opacity:.75}
+.ba-code.ba-locked .ba-open{background:linear-gradient(135deg,#f7dc92,#e0ad3e);color:#3b2a05;border:0}
 @media(prefers-reduced-motion:reduce){.angel,.orb,.angel.flap .wl,.angel.flap .wr{animation:none}}
 .sh{font-size:16px;font-weight:800;margin:24px 0 2px}.sh+p{color:var(--mute);font-size:14px;margin-bottom:10px}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -868,6 +887,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
 <div id="authNote" style="background:rgba(224,173,62,.14);border:1px solid rgba(224,173,62,.45);border-radius:12px;padding:12px 14px;margin:16px 0 0;font-size:14px;line-height:1.5;color:#8a5d00;text-align:left">📧 <b>Important: use the same email you bought with.</b> Your purchase, Light Tokens and access are tied to that email. Logging in with a different email opens an empty account.</div>
 </div></section>
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
+<div class="cert" id="premium"><div id="premiumBox"></div></div>
 <div class="cert" id="refund"><div id="refundBox"></div></div>
 <div class="cert" id="giftModal"><div><p style="font-size:40px">🕊️</p><h2 id="giftMT">A blessing is ready</h2><p class="lab" style="margin:6px 0 10px">Send it to them however you like — a message, WhatsApp, anywhere.</p><div class="gift-msg" id="giftMsg"></div><div class="low-actions"><button class="btn gold" id="giftShare" hidden>Share this blessing</button><button class="btn" id="giftCopy">Copy the blessing</button><button class="ghost" id="giftCloseB">Close</button></div></div></div>
 <div class="cert" id="uq"><div id="uqBox"></div></div>
@@ -1391,7 +1411,7 @@ function baConfirm(w){
  const cycleComplete=allDone||daysInto>=BA_CYCLE_DAYS;
  const focDone=((S.ba&&S.ba.focusDone)||[]).includes(cyc);
  const focusCard='<div class="ba-focus"><span class="nw">NEW THIS MONTH</span><h4>This Month’s Sacred Focus · '+foc.theme+'</h4><p>'+foc.verse+'</p><button type="button" class="ba-gold" id="baFocusOpen" style="font-size:16px;padding:13px">'+(focDone?'Read this month’s prayer again':'Open this month’s prayer')+'</button></div>';
- let codes='';rep.codes.forEach(c=>{const isDone=baDone.includes(c.step);const ld=baLiveDays(c);const isToday=(ld===0)&&!isDone;const overdue=(ld<0)&&!isDone;const mod=c.moduleLabel||('Code '+(c.code||''));const pn=c.prayerNum?(' · Prayer '+c.prayerNum+(c.hebrew?' (in Hebrew)':'')):'';const when=isDone?'done':(ld===0?'today':(ld<0?(Math.abs(ld)+' day'+(Math.abs(ld)===1?'':'s')+' ago'):'in '+ld+' day'+(ld===1?'':'s')));const cls='ba-code'+(isDone?' done':'')+(isToday?' today':'')+(overdue?' overdue':'');const badge=isToday?'<span class="ba-today-badge">TODAY</span>':'';const btnLabel=isDone?'Done ✓':(isToday?'Pray now':(overdue?'Open':'Open'));codes+='<div class="'+cls+'"><span class="n">'+(isDone?'✓':(c.step||c.code))+'</span><span class="d"><b>'+c.dateLabel+' · '+c.hour+badge+'</b><span><b style="color:#E9CE74">'+mod+'</b>'+pn+' · '+when+'</span></span><button type="button" class="ba-open" data-bastep="'+c.step+'" data-bamod="'+c.module+'" data-bap="'+c.prayerNum+'" data-baiso="'+(c.iso||'')+'" data-balabel="'+String(c.dateLabel).replace(/"/g,'&quot;')+'">'+btnLabel+'</button></div>'});
+ let codes='';const prem=premiumOK();rep.codes.forEach(c=>{const isDone=baDone.includes(c.step);const locked=(c.step>4)&&!prem&&!isDone;const ld=baLiveDays(c);const isToday=(ld===0)&&!isDone&&!locked;const overdue=(ld<0)&&!isDone&&!locked;const mod=c.moduleLabel||('Code '+(c.code||''));const pn=c.prayerNum?(' · Prayer '+c.prayerNum+(c.hebrew?' (in Hebrew)':'')):'';const when=isDone?'done':(locked?'premium':(ld===0?'today':(ld<0?(Math.abs(ld)+' day'+(Math.abs(ld)===1?'':'s')+' ago'):'in '+ld+' day'+(ld===1?'':'s'))));const cls='ba-code'+(isDone?' done':'')+(isToday?' today':'')+(overdue?' overdue':'')+(locked?' ba-locked':'');const badge=isToday?'<span class="ba-today-badge">TODAY</span>':(locked?'<span class="ba-lock-badge">PREMIUM</span>':'');const btnLabel=locked?'🔒 Unlock':(isDone?'Done ✓':(isToday?'Pray now':'Open'));codes+='<div class="'+cls+'"><span class="n">'+(isDone?'✓':(c.step||c.code))+'</span><span class="d"><b>'+c.dateLabel+' · '+c.hour+badge+'</b><span><b style="color:#E9CE74">'+mod+'</b>'+pn+' · '+when+'</span></span><button type="button" class="ba-open" data-bastep="'+c.step+'" data-bamod="'+c.module+'" data-bap="'+c.prayerNum+'" data-baiso="'+(c.iso||'')+'" data-balabel="'+String(c.dateLabel).replace(/"/g,'&quot;')+'">'+btnLabel+'</button></div>'});
  const baProgLine='<p class="ba-prog-line">'+baDone.length+' of 14 this month · Month '+cyc+'</p>';
  let baStatus='';{const nd=rep.codes.filter(c=>!baDone.includes(c.step)).slice().sort((a,b)=>(a.iso||'')<(b.iso||'')?-1:1);if(!nd.length){baStatus='<div class="ba-status calm">You have completed all 14 prayers this month. 🙏</div>'}else{const nx=nd[0],ld=baLiveDays(nx),lbl=(nx.moduleLabel||'')+(nx.prayerNum?' · Prayer '+nx.prayerNum:'');if(ld===0)baStatus='<div class="ba-status urgent">🔴 Today is the day — open '+lbl+' now.</div>';else if(ld<0)baStatus='<div class="ba-status urgent">🔴 A prayer has been waiting since '+nx.dateLabel+' — open it when you can.</div>';else baStatus='<div class="ba-status calm">You don\'t need to pray today. Your next prayer is '+nx.dateLabel+' (in '+ld+' day'+(ld===1?'':'s')+'). You can get ahead if you wish, but each prayer has the most effect on its own day.</div>'}}
  let renewCard='';
@@ -1400,7 +1420,7 @@ function baConfirm(w){
  const d=$('#baDone');if(d)d.onclick=()=>{closeBA();go('today')};
  const fo=$('#baFocusOpen');if(fo)fo.onclick=()=>{baStep=BA_FOCUS_VIEW;baRender()};
  const rb=$('#baRenewBtn');if(rb)rb.onclick=()=>startBaRenew();
- $$('#baWrap [data-bastep]').forEach(btn=>{btn.onclick=()=>{const step=Number(btn.dataset.bastep),mod=btn.dataset.bamod,pn=Number(btn.dataset.bap),iso=btn.dataset.baiso,lbl=btn.dataset.balabel||'';const done=((S.ba&&S.ba.done)||[]).includes(step);const ld=iso?Math.round((Date.parse(iso+'T00:00:00Z')-Date.parse(ymd(new Date())+'T00:00:00Z'))/864e5):0;if(ld>0&&!done)return baEarlyAsk(lbl,ld,()=>baOpenPrayer(mod,pn,step));baOpenPrayer(mod,pn,step)}});
+ $$('#baWrap [data-bastep]').forEach(btn=>{btn.onclick=()=>{const step=Number(btn.dataset.bastep),mod=btn.dataset.bamod,pn=Number(btn.dataset.bap),iso=btn.dataset.baiso,lbl=btn.dataset.balabel||'';const done=((S.ba&&S.ba.done)||[]).includes(step);if(step>4&&!premiumOK()&&!done)return openBaUnlock();const ld=iso?Math.round((Date.parse(iso+'T00:00:00Z')-Date.parse(ymd(new Date())+'T00:00:00Z'))/864e5):0;if(ld>0&&!done)return baEarlyAsk(lbl,ld,()=>baOpenPrayer(mod,pn,step));baOpenPrayer(mod,pn,step)}});
 }
 function baShowFocus(w){
  baMigrate();const f=baFocusCur(),cyc=baCycleNum();
@@ -2366,9 +2386,51 @@ const ENTITLE={
 };
 function markTrialActive(){return !!S.markTrialStart && (Date.now()-Number(S.markTrialStart) < 48*36e5)}
 function markTrialLeftH(){return Math.max(0,Math.ceil((48*36e5-(Date.now()-Number(S.markTrialStart||0)))/36e5))}
-const markUnlocked=()=>!!S.markUnlocked || markTrialActive();
+const premiumOK=()=>!!S.premium;   /* comprou o produto 680706 (acesso completo, pagamento único) */
+const markUnlocked=()=>!!S.premium || !!S.markUnlocked || markTrialActive();
 function startMarkTrial(){S.markTrialStart=Date.now();S.markTrialUsed=true;save();try{if(sbClient)sbClient.auth.updateUser({data:{sc_mark_trial:S.markTrialStart}}).catch(()=>{})}catch(e){}const lk=$('#lk');if(lk)lk.classList.remove('on');if(typeof updateMarkCard==='function')updateMarkCard();try{toast('Your 48-hour Mark trial has started 🎉')}catch(e){}if(window.openMarkChat)window.openMarkChat()}
 function updateMarkCard(){const el=document.querySelector('.mark-card .mark-free');if(el){el.textContent=markTrialActive()?('FREE · '+markTrialLeftH()+'H LEFT'):(markUnlocked()?'3 ✦ / MESSAGE':'FREE 48H TRIAL');el.style.color='#8a5d00';el.style.background='rgba(224,173,62,.2)'}}
+/* ===== Sacred Premium (produto 680706 · pagamento único) — libera Mark + os 14 dias do Blessings Accelerator ===== */
+const PREMIUM_URL='https://www.checkout-ds24.com/product/680706';
+function goPremium(){try{var e=(S.email||'').trim();var u=PREMIUM_URL+(e?('?email='+encodeURIComponent(e)):'');location.href=u;}catch(_){location.href=PREMIUM_URL;}}
+const MARK_Q=[
+ {q:'What would you most want from Mark?',o:['Someone to pray with me','To be heard when I\'m struggling','Gentle guidance in my faith','Encouragement every single day']},
+ {q:'When would you reach for him?',o:['Every day','A few times a week','Whenever life feels heavy']},
+ {q:'Would knowing Mark is there — any hour — bring you peace?',o:['Yes, very much','I believe it would','Maybe, I\'d like to try']}
+];
+let _mqStep=0,_mqAns=[];
+function openMarkSales(){_mqStep=0;_mqAns=[];const r=$('#premium');if(!r)return goPremium();r.classList.add('on');_mqRender();try{$('#premiumBox').scrollTop=0}catch(e){}}
+function _mqRender(){
+ const box=$('#premiumBox');if(!box)return;
+ if(_mqStep<MARK_Q.length){const q=MARK_Q[_mqStep];
+  box.innerHTML='<p class="pr-eyebrow">A few words, '+(_mqStep+1)+' of '+MARK_Q.length+'</p><h2 class="pr-q">'+_E(q.q)+'</h2><div class="pr-opts">'+q.o.map((o,i)=>'<button type="button" class="pr-opt" data-i="'+i+'">'+_E(o)+'</button>').join('')+'</div>';
+  $$('#premiumBox .pr-opt').forEach(b=>b.onclick=()=>{_mqAns[_mqStep]=q.o[Number(b.dataset.i)];_mqStep++;_mqRender()});
+ }else{_markOffer();}
+}
+function _markOffer(){
+ const box=$('#premiumBox');if(!box)return;const nm=_E(S.name||'friend');
+ box.innerHTML='<p class="pr-eyebrow">A companion for your journey</p>'
+  +'<h2 class="pr-q">Mark can walk beside you, '+nm+' — every day.</h2>'
+  +'<div class="pr-body"><p>You said you want <b>'+_E(String(_mqAns[0]||'a companion').toLowerCase())+'</b>. That is exactly what Mark is for: he prays with you, listens without judgment, and stays with you through your faith — morning or midnight, whenever you need him.</p>'
+  +'<p>Mark is part of <b>Sacred Premium</b>. It is a <b>one-time unlock</b> — not a subscription. You unlock it once and it is yours to keep.</p></div>'
+  +'<div class="pr-price"><span class="pr-old">$497</span><span class="pr-now">$59</span><span class="pr-tag">one time · yours to keep</span></div>'
+  +'<div class="pr-actions"><button type="button" class="pr-buy" id="prBuy">Unlock Mark — $59 once</button><button type="button" class="pr-ghost" id="prClose">Maybe later</button></div>'
+  +'<p class="pr-fine">Secure checkout by Digistore24. Use the same email you log in with here.</p>';
+ const b=$('#prBuy');if(b)b.onclick=goPremium;const c=$('#prClose');if(c)c.onclick=()=>$('#premium').classList.remove('on');
+ try{$('#premiumBox').scrollTop=0}catch(e){}
+}
+function openBaUnlock(){
+ const box=$('#premiumBox');if(!box)return goPremium();
+ box.innerHTML='<p class="pr-eyebrow">Continue your full journey</p>'
+  +'<h2 class="pr-q">Open all 14 prayers of your path</h2>'
+  +'<div class="pr-body"><p>Your first <b>4 days are open</b> and yours to pray. Days 5 through 14 — the deeper Prayers of Solomon and of Jesus — are part of the <b>complete Blessings Accelerator</b>.</p>'
+  +'<p>Unlock the full path once and keep going, uninterrupted: all 14 prayers, and every new month that follows, yours to keep. It is a <b>one-time unlock</b>, not a subscription.</p></div>'
+  +'<div class="pr-price"><span class="pr-old">$497</span><span class="pr-now">$59</span><span class="pr-tag">one time · the full path</span></div>'
+  +'<div class="pr-actions"><button type="button" class="pr-buy" id="prBuy2">Unlock the full journey — $59 once</button><button type="button" class="pr-ghost" id="prClose2">Not now</button></div>'
+  +'<p class="pr-fine">Secure checkout by Digistore24. Use the same email you log in with here.</p>';
+ const b=$('#prBuy2');if(b)b.onclick=goPremium;const c=$('#prClose2');if(c)c.onclick=()=>$('#premium').classList.remove('on');
+ $('#premium').classList.add('on');try{$('#premiumBox').scrollTop=0}catch(e){}
+}
 function applyTier(tier){
  if(!tier||!ENTITLE[tier])return;
  if((TIER_RANK[tier]||0)>(TIER_RANK[S.tier||'none']||0))S.tier=tier;
@@ -2621,10 +2683,7 @@ function mod(id){
     $('#lkT').textContent='Mark is your spiritual companion: he prays with you, listens, and guides you through your journey. Try the full chat free for 48 hours — no tokens, no charge. After that, it stays with Sacred Premium.';
     $('#lkU').hidden=false;$('#lkU').textContent='✨ Start my 48-hour free trial';$('#lkX').textContent='Maybe later';
    }else{
-    lkAct=()=>{openBuy('Unlock the chat with Mark with Sacred Premium.')};
-    $('#lkH').textContent='Mark is part of Sacred Premium';
-    $('#lkT').textContent='Your free trial has ended. Keep talking with Mark anytime, and go deeper in your journey, with Sacred Premium.';
-    $('#lkU').hidden=false;$('#lkU').textContent='See Sacred Premium';$('#lkX').textContent='Maybe later';
+    $('#lk').classList.remove('on');return openMarkSales();
    }
    $('#lk').classList.add('on');return;
   }
@@ -2857,6 +2916,8 @@ function getSupabase() {
               } catch (e) { blocked = false; } // falha de rede: nao tranca por engano
               if (blocked) { showBanned(); try { await sbClient.auth.signOut(); } catch (e) {} return; }
               try { const { data: ps } = await sbClient.rpc('sc_prayer_active'); S.prayerSub = (ps === true); save(); } catch (e) {}
+              // Sacred Premium (produto 680706): libera Mark + os 14 dias do Blessings Accelerator. Verificado no servidor.
+              try { const { data: pr } = await sbClient.rpc('sc_ba_active'); S.premium = (pr === true); if (S.premium) S.markUnlocked = true; save(); } catch (e) {}
               enterApp(user);
               try { if (typeof homeTiles === 'function') homeTiles(); } catch (e) {}
             })();
