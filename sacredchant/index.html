@@ -311,6 +311,32 @@ body.on-mark #supportFab{display:none}
 @keyframes markDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
 @media(prefers-reduced-motion:reduce){.mark-typing i{animation:none}}
 @media(max-width:380px){.mark-card img{width:74px;height:74px}.mark-chat{min-height:400px;height:calc(100dvh - 280px - env(safe-area-inset-bottom,0px))}.mark-bubble{max-width:94%}}
+/* ===== Chat do Mark — design ampliado para idosos (+60): fontes maiores, botões grandes, mais contraste ===== */
+#s-mark .intro{font-size:16px;line-height:1.5}
+#s-mark .mark-chat{border-radius:20px;min-height:460px}
+#s-mark .mark-chat-head{padding:15px}
+#s-mark .mark-chat-head img{width:54px;height:54px}
+#s-mark .mark-chat-head strong{font-size:19px}
+#s-mark .mark-chat-head small{font-size:14.5px}
+#s-mark .mark-messages{padding:16px;gap:13px}
+#s-mark .mark-bubble{font-size:17.5px;line-height:1.62;padding:14px 16px;max-width:92%;border-radius:18px}
+#s-mark .mark-quick{gap:9px;padding:0 14px 12px}
+#s-mark .mark-quick button{font-size:15.5px;font-weight:700;padding:11px 15px;border-width:2px;min-height:46px}
+#s-mark .mark-acts{gap:8px;margin-top:12px}
+#s-mark .mark-acts button{font-size:15px;padding:11px 14px;min-height:46px}
+#s-mark .mark-compose{padding:12px;gap:10px}
+#s-mark .mark-compose textarea{font-size:17px;min-height:54px;padding:14px 15px;border-width:2px;border-radius:16px}
+#s-mark .mark-send{width:56px;height:56px;font-size:26px;box-shadow:0 6px 16px rgba(67,120,222,.35)}
+#s-mark .mark-note{font-size:13px;padding:0 12px 12px}
+#s-mark .mark-clear{font-size:15.5px;padding:12px 20px}
+/* polimento visual */
+#s-mark .mark-chat{box-shadow:0 10px 32px rgba(80,120,200,.16)}
+#s-mark .mark-chat-head{gap:13px}
+#s-mark .mark-chat-head img{box-shadow:0 2px 8px rgba(224,173,62,.4)}
+#s-mark .mark-bubble.bot{box-shadow:0 2px 10px rgba(80,120,200,.1)}
+#s-mark .mark-bubble.user{box-shadow:0 3px 12px rgba(67,120,222,.28)}
+#s-mark .mark-quick button{background:rgba(67,120,222,.08)}
+#s-mark .mark-quick button:active{background:rgba(67,120,222,.18)}
 
 
 /* ===== recorrencia: streak, oracao da semana, versiculo, vela ===== */
@@ -3562,6 +3588,25 @@ setInterval(tickOffer, 1000);
   () => "Tell me in a few words what you need, for example \"prayer for my job\", \"how do I get tokens\" or \"I feel anxious\", and I'll help right away."
  ];
 
+ /* ---------- soft topic: entende o ASSUNTO mesmo sem bater numa resposta pronta, acolhe e oferece oração ---------- */
+ const SOFT = {
+  prosperity: "Money can weigh heavy on the heart, and God cares about your provision.",
+  debt: "Bills and debt are a real burden, and you don't carry it alone.",
+  work: "Your work and your plans matter to God.",
+  health: "I'm sorry you're dealing with this. Let's hold your health before God, right alongside your doctors.",
+  peace: "Let's slow down together and find some peace.",
+  protection: "You and your home can rest under God's protection.",
+  family: "Praying over your family is one of the most beautiful things you can do.",
+  love: "Matters of the heart are very close to God.",
+  comfort: "I'm sorry you're hurting. You don't have to pretend to be fine here.",
+  forgiveness: "God's mercy is bigger than any mistake.",
+  guidance: "When the way isn't clear, we can ask God for wisdom together.",
+  gratitude: "A grateful heart is a beautiful prayer.",
+  morning: "Let's start your day with God.",
+  miracle: "When a situation feels impossible, remember: with God all things are possible.",
+  angel: "God sends His angels to watch over you."
+ };
+
  /* ---------- main brain ---------- */
  function think(raw) {
   const n = expand(norm(raw));
@@ -3625,6 +3670,12 @@ setInterval(tickOffer, 1000);
    return { text, a: it.a, f, id: it.id };
   }
   if (RX.offtopic.test(n)) return { text: pick('redirect', REDIRECT), id: 'offtopic', f: ['Write a prayer for me', 'Tell me about prosperity', 'How do Light Tokens work?'] };
+  // Entendeu o assunto (dinheiro, saúde, família, medo...) mesmo sem bater numa resposta pronta: acolhe e oferece oração.
+  { const soft = (PRAYER_TOPICS.find(([, rx]) => rx.test(n)) || [])[0];
+    if (soft && SOFT[soft]) {
+     mem.topic = soft; mem.offerPrayer = true;
+     return { text: SOFT[soft] + " Would you like me to write a short prayer about this for you" + (nm ? ', ' + nm : '') + "?", id: 'soft', f: ['Yes, write a prayer', 'Give me a Bible verse', 'Tell me more'] };
+    } }
   if (EMO.test(n)) return { text: "I'm here with you" + (nm ? ', ' + nm : '') + ". Whatever you're facing, you don't have to carry it alone. Tell me a bit more about what's happening, or let me write a short prayer for you right now.", id: 'emo', f: ['Write a prayer for me', 'I need peace'] };
   return { text: val(pick('fallback', FALLBACK)), id: 'fallback', f: ['Where should I start?', 'Write a prayer for me', 'How do Light Tokens work?'] };
  }
