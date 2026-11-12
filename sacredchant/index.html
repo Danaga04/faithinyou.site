@@ -3064,7 +3064,7 @@ $('#aForm').onsubmit = async e => {
       if (up.error) {
         // Conta criada pelo login antigo (link magico), sem esta senha
         if (/already registered|already exists|user already/i.test(up.error.message || '')) {
-          error.textContent = 'This email was created with the old login. Please contact us through the chat button to reset it.';
+          error.innerHTML = 'This email was created with the old login. Tap the button below and our team will reset it for you.<button type="button" class="btn gold" data-open-support style="margin-top:12px;width:100%">💬 Contact support</button>';
         } else {
           throw up.error;
         }
