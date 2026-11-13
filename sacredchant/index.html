@@ -1492,28 +1492,31 @@ const GA_IMG='data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUEBAY
 const GA_WINNERS=12, GA_DAYS=7;
 let gaTimer=null;
 function openGiveaway(){go('giveaway');}
-function gaRemain(){return S.gaStart?((Number(S.gaStart)+GA_DAYS*864e5)-Date.now()):null}
+// O contador conta SEMPRE a partir do primeiro acesso ao app (S.firstSeen), nunca de uma data fixa.
+function gaBase(){if(!S.firstSeen){S.firstSeen=Date.now();try{save()}catch(e){}}return Number(S.firstSeen)}
+function gaRemain(){return (gaBase()+GA_DAYS*864e5)-Date.now()}
 function gaFmt(ms){if(ms<0)ms=0;const d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.floor(ms%36e5/6e4);return d+'d '+h+'h '+m+'m'}
-function enterGiveaway(){if(!S.gaStart){S.gaStart=Date.now();save();try{toast("You're entered in the giveaway 🙏")}catch(e){}}renderGiveaway()}
+function enterGiveaway(){S.gaEntered=true;save();try{toast("You're entered in the giveaway 🙏")}catch(e){}renderGiveaway()}
 function renderGiveaway(){
  const img=$('#gaImg');if(img&&!img.getAttribute('src'))img.src=GA_IMG;
  const body=$('#gaBody');if(!body)return;
  if(gaTimer){clearInterval(gaTimer);gaTimer=null}
  const rem=gaRemain();
- if(rem===null){
+ if(rem<=0){
+  body.innerHTML='<div class="ga-in">🎉 The draw is complete</div>'
+   +'<p class="ga-copy">The <b>'+GA_WINNERS+'</b> winners have been notified by <b>email</b>, at their account address. Please check your inbox and your spam folder.</p>'
+   +'<p class="ga-fine"><b>If you did not receive an email, it means you were not selected this time.</b> Thank you for entering — more giveaways are on the way.</p>';
+ } else if(!S.gaEntered){
   body.innerHTML='<p class="ga-copy">We’re giving away <b>'+GA_WINNERS+'</b> of these handmade Jesus figurines to our members. Entering is <b>completely free</b>. After 7 days, <b>'+GA_WINNERS+'</b> winners are drawn at random and notified by email.</p>'
    +'<button type="button" class="btn gold ga-enter" id="gaEnter">🙏 Enter the giveaway</button>'
    +'<p class="ga-fine">Free to enter · '+GA_WINNERS+' winners chosen at random · winners are contacted by email at your account address.</p>';
   const be=$('#gaEnter');if(be)be.onclick=enterGiveaway;
- } else if(rem>0){
-  body.innerHTML='<div class="ga-in">✅ You’re entered!</div>'
-   +'<p class="ga-copy">The draw happens after 7 days. The <b>'+GA_WINNERS+'</b> winners will be announced by <b>email</b>, sent to your account address.</p>'
-   +'<div class="ga-count"><span class="ga-count-lbl">Result in</span><span class="ga-count-val" id="gaCount">'+gaFmt(rem)+'</span></div>'
-   +'<p class="ga-fine">Keep an eye on your inbox (and your spam folder) when the 7 days are up.</p>';
-  gaTimer=setInterval(()=>{const c=$('#gaCount'),r=gaRemain();if(!c||r===null){clearInterval(gaTimer);gaTimer=null;return}if(r<=0){clearInterval(gaTimer);gaTimer=null;renderGiveaway();return}c.textContent=gaFmt(r)},30000);
  } else {
-  body.innerHTML='<div class="ga-in">🎉 The draw is complete</div>'
-   +'<p class="ga-copy">All <b>'+GA_WINNERS+'</b> winners have been notified by <b>email</b>. Please check your inbox and your spam folder. Thank you for entering!</p>';
+  body.innerHTML='<div class="ga-in">✅ You’re entered!</div>'
+   +'<p class="ga-copy">The <b>'+GA_WINNERS+'</b> winners will be announced by <b>email</b>, sent to your account address.</p>'
+   +'<div class="ga-count"><span class="ga-count-lbl">Result in</span><span class="ga-count-val" id="gaCount">'+gaFmt(rem)+'</span></div>'
+   +'<p class="ga-fine">When the 7 days are up, check your inbox and your spam folder. <b>If no email arrives, it means you were not selected this time.</b></p>';
+  gaTimer=setInterval(()=>{const c=$('#gaCount'),r=gaRemain();if(!c){clearInterval(gaTimer);gaTimer=null;return}if(r<=0){clearInterval(gaTimer);gaTimer=null;renderGiveaway();return}c.textContent=gaFmt(r)},30000);
  }
 }
 try{const gb=document.getElementById('giveBanner');if(gb)gb.addEventListener('click',openGiveaway);const gbi=document.getElementById('gaBannerImg');if(gbi)gbi.src=GA_IMG}catch(e){}
@@ -2413,6 +2416,7 @@ function novDay(i){
 }
 function novSync(){try{if(sbClient)sbClient.auth.updateUser({data:{sc_novena:S.novena}}).catch(()=>{})}catch(e){}}
 function homeTiles(){
+ if(!S.firstSeen){S.firstSeen=Date.now();try{save()}catch(e){}} // marca o PRIMEIRO acesso (base do contador do sorteio)
  $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',2)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',(prayOK()||prayerSub())?0:10,(prayOK()||prayerSub())?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')+tile('data-bonus="install"',(BONUS.find(x=>x.id==='install')||{}).img,'How to install the app on your phone',0)+tile('data-mod="support"',IMG.support,'Support',0);
  $('#tPrd').innerHTML=tile('data-mod="solomon"',IMG.solomon,'7 Prayers of Solomon',2)+tile('data-mod="jesus"',JES_IMG,'7 Prayers of Jesus, guided by Mark',0)+PRODS.map(p=>tile('data-prod="'+p.id+'"',p.img,p.t,0)).join('');
  $('#tBon').innerHTML=BONUS.filter(b=>b.id!=='install').map(b=>{const ok=!b.cost||bonusOK(b.id);return tile('data-bonus="'+b.id+'"',b.img,b.t,ok?0:b.cost,ok?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')}).join('');if(typeof renderDmsHome==='function')renderDmsHome();if(typeof renderNovCard==='function')renderNovCard();if(typeof renderRewardCard==='function')renderRewardCard()}
