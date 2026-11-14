@@ -14,7 +14,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-180.png">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--b1:#dcecff;--b2:#fff6e3;--ink:#1c2a4a;--mute:#3f4e70;--card:rgba(255,255,255,.8);--line:rgba(110,145,215,.3);--acc:#4378de;--acc2:#7aa6f5;--gold:#e0ad3e;--gold2:#f7dc92;--on:#fff;--halo:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+:root{--b1:#0c1533;--b2:#1b1f45;--ink:#eaf1ff;--mute:#bccbe9;--card:rgba(255,255,255,.07);--line:rgba(160,185,245,.25);--acc:#8db2ff;--acc2:#5a86e6;--gold:#e0ad3e;--gold2:#f7dc92;--on:#0c1533;--halo:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){--b1:#0c1533;--b2:#1b1f45;--ink:#eaf1ff;--mute:#bccbe9;--card:rgba(255,255,255,.07);--line:rgba(160,185,245,.25);--acc:#8db2ff;--acc2:#5a86e6;--on:#0c1533}}
 :root[data-theme=dark]{--b1:#0c1533;--b2:#1b1f45;--ink:#eaf1ff;--mute:#bccbe9;--card:rgba(255,255,255,.07);--line:rgba(160,185,245,.25);--acc:#8db2ff;--acc2:#5a86e6;--on:#0c1533}
 *{box-sizing:border-box;margin:0}
@@ -341,7 +341,7 @@ body.on-mark #supportFab{display:none}
 .give-banner{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:2px solid var(--gold);background:linear-gradient(135deg,rgba(247,220,146,.28),var(--card));border-radius:18px;padding:12px 14px;margin:14px 0;box-shadow:0 6px 20px rgba(224,173,62,.22)}
 .give-ban-art img{width:60px;height:60px;border-radius:12px;object-fit:cover;display:block;background:#eef4ff}
 .give-ban-txt{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
-.give-kicker{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#b07d13}
+.give-kicker{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#e6b84e}
 .give-ban-txt b{font-size:17px;color:var(--ink)}
 .give-sub{font-size:12.5px;color:var(--mute)}
 .give-go{font-size:26px;flex:none}
@@ -510,6 +510,73 @@ html[data-fs="x"]{zoom:1.38}
 .tut-dot.on{background:var(--acc)}
 .tut-next{width:100%;padding:16px;border:0;border-radius:99px;background:var(--acc);color:#fff;font-weight:800;font-size:18px;cursor:pointer}
 .tut-skip{display:block;margin:12px auto 0;background:none;border:0;color:var(--mute);font-weight:700;font-size:15px;cursor:pointer}
+/* ===== Aba Health (orações de saúde, éticas) ===== */
+.h-quiz{min-height:calc(100dvh - 168px);display:flex;flex-direction:column;justify-content:center;max-width:440px;margin:0 auto;padding:16px 0 24px;text-align:center}
+.hq-top{margin:0 0 24px}
+.hq-bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden;max-width:200px;margin:0 auto 12px}
+.hq-bar span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--acc2),var(--acc));transition:width .3s ease}
+#s-health .h-eyebrow{font-size:12.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0;text-align:center}
+.h-q{font-size:25px;line-height:1.28;color:var(--ink);margin:0 0 22px;text-align:center;font-weight:800}
+.h-opts{display:grid;gap:12px}
+.h-opt{display:block;width:100%;text-align:center;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:17px 18px;font:inherit;font-size:17px;font-weight:700;color:var(--ink);cursor:pointer;transition:border-color .15s,transform .1s,background .15s}
+.h-opt:active{border-color:var(--acc);transform:scale(.98);background:rgba(141,178,255,.12)}
+.h-report,.h-mem{max-width:480px;margin:0 auto}
+.h-report{text-align:center}
+.h-ico{font-size:52px;line-height:1}
+.h-body{font-size:16.5px;line-height:1.6;color:var(--ink);margin:10px 0 14px}
+.h-note{font-size:14.5px;line-height:1.55;color:var(--mute);background:rgba(67,120,222,.08);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 16px}
+.h-price{margin:16px 0 4px}
+.h-now{font-size:44px;font-weight:800;color:var(--ink)}
+.h-per{font-size:18px;font-weight:700;color:var(--mute);margin-left:4px}
+.h-cta{width:100%;font-size:18px;padding:16px;margin-top:8px}
+.h-fine{font-size:12.5px;color:var(--mute);line-height:1.5;margin:12px 0 0}
+.h-this .h-prayer{font-size:17px;line-height:1.6;color:var(--ink);margin:4px 0 0}
+.h-int input{width:100%;padding:14px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-size:16px;margin:0 0 10px}
+.h-saved{color:#2e8b57;font-weight:700;font-size:15px;margin:8px 0 0}
+.h-count{text-align:center;font-size:15.5px;color:var(--ink);background:linear-gradient(135deg,rgba(224,173,62,.14),rgba(67,120,222,.1));border:1px solid var(--line);border-radius:14px;padding:14px;margin:16px 0 4px}
+.h-journey{display:grid;gap:8px}
+.hj-row{display:flex;align-items:center;gap:11px;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.hj-row.cur{border-color:var(--acc);background:rgba(67,120,222,.1)}
+.hj-row.lock{opacity:.55}
+.hj-n{width:28px;height:28px;flex:none;border-radius:50%;background:rgba(67,120,222,.14);color:var(--acc);font-weight:800;font-size:14px;display:grid;place-items:center}
+.hj-t{flex:1;font-weight:700;font-size:15.5px;color:var(--ink)}
+.hj-s{font-size:12px;font-weight:700;color:var(--mute)}
+.hj-row.cur .hj-s{color:var(--acc)}
+/* ===== Biblioteca estilo Spotify ===== */
+.hl-title{font-size:24px;margin:0 0 2px;color:var(--ink)}
+.hl-sub{color:var(--mute);font-size:15px;margin:0 0 14px}
+.hl-sec{font-size:16px;font-weight:800;color:var(--ink);margin:20px 0 10px}
+.hl-row{display:flex;gap:12px;overflow-x:auto;padding:0 0 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.hl-row::-webkit-scrollbar{display:none}
+.hl-card{flex:0 0 auto;width:140px;background:none;border:0;padding:0;cursor:pointer;text-align:left}
+.hl-art{display:block;width:140px;height:140px;border-radius:16px;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.pcover{display:block;width:100%;height:100%}
+.hl-name{display:block;font-weight:700;font-size:14.5px;color:var(--ink);margin:8px 2px 0;line-height:1.3}
+/* mini player */
+.hmini{position:fixed;left:8px;right:8px;bottom:calc(64px + env(safe-area-inset-bottom,0px));z-index:118;display:flex;align-items:center;gap:12px;background:var(--card);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:14px;padding:8px 12px;box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.hmini[hidden]{display:none}
+.hmini-art{width:46px;height:46px;border-radius:10px;overflow:hidden;flex:none}
+.hmini-info{flex:1;min-width:0}
+.hmini-info b{display:block;font-size:15px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hmini-info span{font-size:12.5px;color:var(--mute)}
+.hmini-pp{width:46px;height:46px;flex:none;border:0;border-radius:50%;background:var(--acc);color:#fff;font-size:18px;cursor:pointer}
+/* full player */
+.hplayer{position:fixed;inset:0;z-index:160;background:linear-gradient(180deg,var(--b1),var(--b2));transform:translateY(100%);transition:transform .32s ease;overflow-y:auto;padding:14px 20px calc(30px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:center}
+.hplayer.on{transform:translateY(0)}
+.hp-close{align-self:flex-start;background:none;border:0;color:var(--ink);font-size:30px;line-height:1;cursor:pointer;padding:2px 8px}
+.hp-art{width:min(74vw,300px);height:min(74vw,300px);border-radius:22px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35);margin:4px 0 18px}
+.hp-title{font-size:24px;text-align:center;margin:0 0 2px;color:var(--ink)}
+.hp-sec{color:var(--mute);font-size:14px;margin:0 0 16px}
+.hp-seek{display:flex;align-items:center;gap:10px;width:100%;max-width:420px}
+.hp-seek span{font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
+.hp-seek input[type=range]{flex:1;accent-color:var(--acc)}
+.hp-ctrls{display:flex;align-items:center;gap:28px;margin:16px 0 4px}
+.hp-ctrls button{background:none;border:0;color:var(--ink);font-size:24px;cursor:pointer}
+.hp-pp{width:68px;height:68px;border-radius:50%!important;background:var(--acc)!important;color:#fff!important;font-size:26px!important}
+.hp-lyr-h{width:100%;max-width:420px;margin:20px auto 8px;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--mute)}
+.hp-lyr{width:100%;max-width:420px;font-size:17px;line-height:1.75;color:var(--ink);text-align:center}
+.hp-lyr p{margin:0 0 9px}
+.hp-empty{color:var(--mute)!important;font-style:italic}
 #a2hs{position:fixed;inset:0;z-index:60;display:none;align-items:flex-end;justify-content:center;background:rgba(10,20,50,.55)}
 #a2hs.on{display:flex}
 #a2hs .sheet{background:linear-gradient(160deg,#fffdf5,#eaf2ff);color:#1c2a4a;width:100%;max-width:520px;border-radius:22px 22px 0 0;padding:24px 20px calc(26px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 40px rgba(10,20,50,.3);animation:a2up .3s ease}
@@ -896,9 +963,6 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
   <div class="card"><h3>Text size</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Make everything bigger and easier to read.</p>
    <div class="tsize"><button type="button" data-fs-set="n">Normal</button><button type="button" data-fs-set="l">Larger</button><button type="button" data-fs-set="x">Largest</button></div>
   </div>
-  <div class="card"><h3>Appearance</h3><p class="lab" style="font-weight:500;margin:4px 0 10px">Choose light or dark, or follow your phone.</p>
-   <div class="seg" id="themeSeg" role="group" aria-label="Theme"><button type="button" class="seg-b" data-theme-set="system">System</button><button type="button" class="seg-b" data-theme-set="light">Light</button><button type="button" class="seg-b" data-theme-set="dark">Dark</button></div>
-  </div>
   <div class="card"><h3>Your account</h3><p class="lab" style="font-weight:500;margin:4px 0 8px">This is the email your account and purchases are tied to. It can't be changed here.</p>
    <div class="acct-mail"><span class="em" id="acctEmail" title="">—</span><button type="button" class="cp" id="acctCopy">Copy</button></div>
   </div>
@@ -917,11 +981,29 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
   </div>
   <button class="ghost" id="reset">Reset my progress</button> <button class="ghost" id="sOut">Sign out</button>
  </section>
+ <section class="screen" id="s-health"><div id="healthBody"></div></section>
  <p class="help-foot">Need help? <button type="button" class="lnk" data-open-support>Contact us</button></p>
 </div>
 
+<audio id="hAudio" preload="none"></audio>
+<div class="hmini" id="hmini" hidden>
+ <span class="hmini-art" id="hminiArt"></span>
+ <span class="hmini-info"><b id="hminiT">—</b><span id="hminiS">Prayer</span></span>
+ <button type="button" class="hmini-pp" id="hminiPP" aria-label="Play">▶</button>
+</div>
+<div class="hplayer" id="hplayer" role="dialog" aria-label="Prayer player">
+ <button type="button" class="hp-close" id="hpClose" aria-label="Close">⌄</button>
+ <div class="hp-art" id="hpArt"></div>
+ <h2 class="hp-title" id="hpTitle">—</h2>
+ <p class="hp-sec" id="hpSec"></p>
+ <div class="hp-seek"><span id="hpCur">0:00</span><input type="range" id="hpRange" min="0" max="100" value="0" aria-label="Seek"><span id="hpDur">0:00</span></div>
+ <div class="hp-ctrls"><button type="button" id="hpPrev" aria-label="Previous">⏮</button><button type="button" class="hp-pp" id="hpPP" aria-label="Play">▶</button><button type="button" id="hpNext" aria-label="Next">⏭</button></div>
+ <div class="hp-lyr-h" id="hpLyrH" hidden>Prayer words</div>
+ <div class="hp-lyr" id="hpLyr"></div>
+ <p class="h-note" style="margin:16px auto 0;max-width:420px">🕊️ For comfort and hope, alongside your doctor’s care — never instead of it.</p>
+</div>
 <nav class="tabbar" aria-label="Main"><div>
- <button class="tab" data-t="today"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Today</button>
+ <button class="tab" data-t="health"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.6-7-10a4 4 0 0 1 7-2.3A4 4 0 0 1 19 10c0 5.4-7 10-7 10z"/></svg>Health</button>
  <button class="tab on" data-t="home"><svg viewBox="0 0 24 24"><path d="M12 3l1.2 7.8L21 12l-7.8 1.2L12 21l-1.2-7.8L3 12l7.8-1.2z"/></svg>Home</button>
  <button class="tab" data-t="chants"><svg viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg>Chants</button>
  <button class="tab" data-t="store"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 11.2a1.5 1.5 0 01-1.5 1.3H7.7a1.5 1.5 0 01-1.5-1.3z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg>Store</button>
@@ -951,7 +1033,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
 <label for="aMail">Email</label><input type="text" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
 <p class="err" id="aErr" role="alert"></p>
 <button type="submit" class="btn" id="aGo" style="width:100%">Enter</button></form>
-<div id="authNote" style="background:rgba(224,173,62,.14);border:1px solid rgba(224,173,62,.45);border-radius:12px;padding:12px 14px;margin:16px 0 0;font-size:14px;line-height:1.5;color:#8a5d00;text-align:left">📧 <b>Important: use the same email you bought with.</b> Your purchase, Light Tokens and access are tied to that email. Logging in with a different email opens an empty account.</div>
+<div id="authNote" style="background:rgba(224,173,62,.14);border:1px solid rgba(224,173,62,.45);border-radius:12px;padding:12px 14px;margin:16px 0 0;font-size:14px;line-height:1.5;color:#f0d58a;text-align:left">📧 <b>Important: use the same email you bought with.</b> Your purchase, Light Tokens and access are tied to that email. Logging in with a different email opens an empty account.</div>
 </div></section>
 <div class="cert" id="lk"><div><p style="font-size:30px">🔒</p><h2 id="lkH"></h2><p id="lkT" style="margin-top:6px"></p><div class="low-actions"><button class="btn gold" id="lkU">Unlock now · 10 ✦</button><button class="ghost" id="lkX">Wait for it</button></div></div></div>
 <div class="cert" id="refund"><div id="refundBox"></div></div>
@@ -1185,6 +1267,137 @@ function closeTut(){$('#tut').classList.remove('on');try{localStorage.setItem('s
 function maybeShowTut(){try{if(localStorage.getItem('sc_tut_seen'))return}catch(e){return}const a=$('#auth');if(a&&a.classList.contains('on'))return;openTut()}
 if($('#tutNext'))$('#tutNext').onclick=()=>{if(tutStep>=TUT.length-1)return closeTut();tutStep++;renderTut()};
 if($('#tutSkip'))$('#tutSkip').onclick=closeTut;
+/* ===== Aba HEALTH — orações de saúde ÉTICAS (conforto/esperança), NUNCA substituem médico.
+   Liberada só p/ quem comprou o upsell 2 (assinatura $49/mês). Quem não comprou vê quiz -> relatório -> oferta. ===== */
+const HEALTH_URL='https://www.checkout-ds24.com/product/UPSELL2_ID';   /* <<< TROQUE pelo link do seu produto de $49/mês */
+const HEALTH_PRICE='$49';
+function healthOK(){return !!S.health2}
+const HQ=[
+ {q:'What is weighing on your heart about health right now?',o:['My own health','Someone I love is unwell','Sleep and rest','Worry and anxiety','Living with pain','Facing a diagnosis']},
+ {q:'How have you been feeling lately?',o:['Tired and discouraged','Anxious and restless','Hopeful, but struggling','Searching for peace']},
+ {q:'Who would you be praying for most?',o:['Myself','My husband or wife','My children or grandchildren','A parent','A dear friend']},
+ {q:'Would a daily prayer — and a community praying with you — bring you comfort?',o:['Yes, very much','I believe it would','I would like to try']}
+];
+const HEALTH_JOURNEY=[
+ {t:'Peace for the heart'},{t:'Rest and sleep'},{t:'Strength for a tired body'},{t:'A clear and calm mind'},
+ {t:'Praying for a loved one'},{t:'Courage facing a diagnosis'},{t:'Gratitude in recovery'},{t:'Comfort in pain'},
+ {t:'Hope when healing is slow'},{t:'Letting go of fear'},{t:'Caring for the caregiver'},{t:'Renewal and hope ahead'}
+];
+let hqStep=0,hqAns=[];
+function renderHealth(){const el=$('#healthBody');if(!el)return;healthMember(el)} /* aba Health aberta a todos — sem quiz/relatório/compra */
+function healthQuiz(el){
+ const q=HQ[hqStep];
+ el.innerHTML='<div class="h-quiz"><div class="hq-top"><div class="hq-bar"><span style="width:'+(((hqStep+1)/HQ.length)*100)+'%"></span></div><p class="h-eyebrow">Question '+(hqStep+1)+' of '+HQ.length+'</p></div><h2 class="h-q">'+_E(q.q)+'</h2><div class="h-opts">'+q.o.map((o,i)=>'<button type="button" class="h-opt" data-i="'+i+'">'+_E(o)+'</button>').join('')+'</div></div>';
+ $$('#healthBody .h-opt').forEach(b=>b.onclick=()=>{hqAns[hqStep]=q.o[Number(b.dataset.i)];hqStep++;renderHealth();try{$('#s-health').scrollTop=0;scrollTo(0,0)}catch(e){}});
+}
+function healthReport(el){
+ const concern=String(hqAns[0]||'your health').toLowerCase();
+ const who=String(hqAns[2]||'the people you love').toLowerCase();
+ const nm=S.name?(', '+_E(S.name)):'';
+ el.innerHTML='<div class="h-report"><div class="h-ico">🙏</div>'
+  +'<h2 class="h-q">Your Healing Path'+nm+'</h2>'
+  +'<p class="h-body">Thank you for sharing. Carrying <b>'+_E(concern)+'</b> is heavy — and you were never meant to carry it alone. The Healing Path walks with you: a new healing prayer every month, your personal intentions for <b>'+_E(who)+'</b> remembered, and a community of members praying alongside you.</p>'
+  +'<p class="h-note">🕊️ This is spiritual support to walk beside you and <b>your doctors</b> — it never replaces their care, your medicine or your treatment.</p>'
+  +'<div class="h-price"><span class="h-now">'+HEALTH_PRICE+'</span><span class="h-per">/ month</span></div>'
+  +'<button type="button" class="btn gold h-cta" id="hBuy">🙏 Begin the Healing Path — '+HEALTH_PRICE+'/mo</button>'
+  +'<p class="h-fine">Cancel anytime. Secure checkout by Digistore24. Use the same email you log in with here.</p></div>';
+ const bb=$('#hBuy');if(bb)bb.onclick=()=>{try{var e=(S.email||'').trim();location.href=HEALTH_URL+(e?('?email='+encodeURIComponent(e)):'')}catch(_){location.href=HEALTH_URL}};
+}
+/* ===== Biblioteca de orações (estilo Spotify) — ÁUDIO hospedado por você (mp3), sem vídeo. =====
+   audio: cole a URL do seu mp3.   lyr: cole o texto/transcrição (uma frase por linha). */
+const PRAYERS=[
+ {id:'p1', t:'Healing Depression', sec:'Mind & peace', pal:['#7a68c0','#2a2350'], motif:'woman', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/healing-depression.mp3', lyr:''},
+ {id:'p2', t:'Peace of Mind', sec:'Mind & peace', pal:['#56aae6','#17487a'], motif:'dove', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/peace-of-mind.mp3', lyr:''},
+ {id:'p3', t:'Insomnia', sec:'Mind & peace', pal:['#5464c0','#171b3d'], motif:'moon', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/insomnia.mp3', lyr:''},
+ {id:'p4', t:'Overcome Panic Attacks', sec:'Mind & peace', pal:['#5bb6a4','#184a50'], motif:'breath', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/panic-attacks.mp3', lyr:''},
+ {id:'p5', t:'Overcome Fear', sec:'Mind & peace', pal:['#5285d6','#1b2f66'], motif:'shield', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/overcome-fear.mp3', lyr:''},
+ {id:'p6', t:'Hopeless Situations', sec:'Mind & peace', pal:['#e0b24e','#7a3f10'], motif:'mountainSun', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/hopeless.mp3', lyr:''},
+ {id:'p7', t:'Physical Healing', sec:'Healing & body', pal:['#52bb92','#176048'], motif:'hands', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/physical-healing.mp3', lyr:''},
+ {id:'p8', t:'Heart & Lungs', sec:'Healing & body', pal:['#e07382','#7a1f36'], motif:'heartlungs', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/heart-lungs.mp3', lyr:''},
+ {id:'p9', t:'Pain Relief', sec:'Healing & body', pal:['#a074d6','#3d2065'], motif:'lotus', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/pain-relief.mp3', lyr:''},
+ {id:'p10',t:'Ears', sec:'Healing & body', pal:['#45b4a2','#115048'], motif:'ear', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/ears.mp3', lyr:''},
+ {id:'p11',t:'Physical & Mental Exhaustion', sec:'Healing & body', pal:['#e0a85a','#7a4410'], motif:'sunrise', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/exhaustion.mp3', lyr:''},
+ {id:'p12',t:'For My Daughter', sec:'Family', pal:['#e08bb0','#7a2a52'], motif:'girl', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/daughter.mp3', lyr:''},
+ {id:'p13',t:'For My Son', sec:'Family', pal:['#5a93e0','#1b3f7a'], motif:'boy', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/son.mp3', lyr:''},
+ {id:'p14',t:'For Your Children', sec:'Family', pal:['#e0a765','#8a4a1a'], motif:'children', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/children.mp3', lyr:''},
+ {id:'p15',t:'For Grandchildren', sec:'Family', pal:['#69b86f','#1f5a30'], motif:'treeHearts', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/grandchildren.mp3', lyr:''},
+ {id:'p16',t:'Healing Family', sec:'Family', pal:['#e0857a','#7a2a28'], motif:'familyHeart', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/healing-family.mp3', lyr:''},
+ {id:'p17',t:'Cancel Evil Plan of the Enemy', sec:'Protection', pal:['#5068d6','#1b2766'], motif:'shieldCross', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/cancel-evil.mp3', lyr:''},
+ {id:'p18',t:'Night Protection', sec:'Protection', pal:['#3f4ca0','#13173d'], motif:'nightHouse', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/night-protection.mp3', lyr:''},
+ {id:'p19',t:'Thanking God', sec:'Faith & thanks', pal:['#e0bb57','#8a5a10'], motif:'handsRaised', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/thanking-god.mp3', lyr:''},
+ {id:'p20',t:'Forgiveness of Sins', sec:'Faith & thanks', pal:['#74c08a','#1f6040'], motif:'doveOlive', audio:'https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/forgiveness.mp3', lyr:''}
+];
+const ART={
+ woman:(g)=>`<path d="M34 76c2-14 9-24 18-24s16 10 18 24z" fill="#fff" opacity=".18"/><circle cx="52" cy="40" r="12" fill="#fff" opacity=".95"/><path d="M40 41c-5-12 2-24 14-24 10 0 16 8 16 17 0 4-1 7-3 10-2-8-7-13-14-13-5 0-9 3-11 8z" fill="#fff" opacity=".82"/><circle cx="71" cy="24" r="2" fill="${g}"/>`,
+ dove:(g)=>`<path d="M30 56c11 2 19-2 25-11 2 9 8 13 16 13-4 7-13 11-23 11-10 0-18-5-18-13z" fill="#fff" opacity=".93"/><path d="M55 45c6-8 14-12 20-10-2 4-2 8 0 12-6-2-14-3-20-2z" fill="#fff" opacity=".65"/><circle cx="34" cy="55" r="1.8" fill="${g}"/>`,
+ moon:(g)=>`<path d="M62 30a22 22 0 1 0 0 40 26 26 0 0 1 0-40z" fill="#fff" opacity=".95"/><g fill="${g}"><circle cx="40" cy="34" r="1.6"/><circle cx="34" cy="47" r="1.2"/><circle cx="44" cy="55" r="1.4"/></g>`,
+ breath:(g)=>`<g fill="none" stroke="#fff"><circle cx="52" cy="50" r="19" stroke-width="2" opacity=".45"/><circle cx="52" cy="50" r="12" stroke-width="2.5" opacity=".8"/></g><circle cx="52" cy="50" r="4.5" fill="${g}"/>`,
+ shield:(g)=>`<path d="M52 28l18 7v15c0 13-9 22-18 26-9-4-18-13-18-26V35z" fill="#fff" opacity=".9"/><g stroke="${g}" stroke-width="3.2"><path d="M52 40v24"/><path d="M43 50h18"/></g>`,
+ shieldCross:(g)=>`<path d="M52 27l19 7v16c0 13-9 23-19 27-10-4-19-14-19-27V34z" fill="#fff" opacity=".9"/><g stroke="${g}" stroke-width="3.6"><path d="M52 39v26"/><path d="M42 50h20"/></g>`,
+ mountainSun:(g)=>`<circle cx="52" cy="41" r="9" fill="${g}"/><path d="M26 70l14-18 9 10 11-15 18 23z" fill="#fff" opacity=".9"/>`,
+ hands:(g)=>`<circle cx="52" cy="41" r="7" fill="${g}" opacity=".95"/><circle cx="52" cy="41" r="12" fill="${g}" opacity=".2"/><path d="M33 54c3 9 10 15 19 15s16-6 19-15c-5 3-11 5-19 5s-15-2-19-5z" fill="#fff" opacity=".92"/><path d="M33 54c0-9 4-13 8-13 2 0 3 1 3 3v9z" fill="#fff" opacity=".8"/><path d="M71 54c0-9-4-13-8-13-2 0-3 1-3 3v9z" fill="#fff" opacity=".8"/>`,
+ heartlungs:(g)=>`<path d="M52 72c-15-10-21-19-21-28 0-7 10-12 15-4 5-8 15-3 15 4 0 9-6 18-9 28z" fill="#fff" opacity=".9"/><circle cx="52" cy="47" r="3" fill="${g}"/>`,
+ lotus:(g)=>`<g fill="#fff" opacity=".9"><path d="M52 32c6 9 6 20 0 29-6-9-6-20 0-29z"/><path d="M52 61c-9-4-14-13-14-24 9 2 14 11 14 24z" opacity=".72"/><path d="M52 61c9-4 14-13 14-24-9 2-14 11-14 24z" opacity=".72"/></g><circle cx="52" cy="63" r="2" fill="${g}"/>`,
+ ear:(g)=>`<path d="M46 70c-6 0-11-5-11-15 0-12 8-21 18-21 9 0 16 7 16 16 0 7-5 11-10 13-3 1-4 3-4 5 0 2-3 2-9 2z" fill="#fff" opacity=".9"/><path d="M48 44a6 6 0 0 1 10 5" fill="none" stroke="${g}" stroke-width="2"/>`,
+ sunrise:(g)=>`<path d="M30 66h44" stroke="#fff" stroke-width="2.6" opacity=".9"/><path d="M38 66a14 14 0 0 1 28 0z" fill="${g}"/><g stroke="${g}" stroke-width="2.2"><path d="M52 40v6"/><path d="M34 48l4 4"/><path d="M70 48l-4 4"/></g>`,
+ girl:(g)=>`<circle cx="52" cy="40" r="8" fill="#fff" opacity=".93"/><path d="M40 72c0-13 5-21 12-21s12 8 12 21z" fill="#fff" opacity=".9"/><circle cx="63" cy="36" r="3" fill="${g}"/>`,
+ boy:(g)=>`<circle cx="52" cy="40" r="8" fill="#fff" opacity=".93"/><rect x="42" y="50" width="20" height="21" rx="6" fill="#fff" opacity=".9"/><circle cx="52" cy="61" r="2.5" fill="${g}"/>`,
+ children:(g)=>`<g fill="#fff" opacity=".9"><circle cx="43" cy="44" r="6"/><path d="M35 70c0-9 4-15 8-15s8 6 8 15z"/><circle cx="62" cy="46" r="6"/><path d="M54 70c0-9 4-15 8-15s8 6 8 15z" opacity=".82"/></g><circle cx="52" cy="40" r="2" fill="${g}"/>`,
+ treeHearts:(g)=>`<rect x="50" y="52" width="4" height="18" fill="#fff" opacity=".8"/><circle cx="52" cy="44" r="16" fill="#fff" opacity=".85"/><path d="M52 41l-3-3c-2-2 1-5 3-3 2-2 5 1 3 3z" fill="${g}"/>`,
+ familyHeart:(g)=>`<path d="M34 58l18-14 18 14" fill="none" stroke="#fff" stroke-width="2.6" opacity=".9"/><path d="M52 71c-9-6-14-11-14-18 0-5 7-7 9-2 2-5 9-3 9 2 0 7-5 12-9 18z" fill="#fff" opacity=".9"/><circle cx="52" cy="56" r="2" fill="${g}"/>`,
+ nightHouse:(g)=>`<path d="M34 60l18-14 18 14v12H34z" fill="#fff" opacity=".9"/><path d="M62 33a10 10 0 1 0 0 18 12 12 0 0 1 0-18z" fill="${g}"/><g fill="#fff"><circle cx="40" cy="36" r="1.4"/><circle cx="46" cy="42" r="1"/></g>`,
+ handsRaised:(g)=>`<g fill="#fff" opacity=".92"><rect x="43" y="46" width="6.5" height="25" rx="3.2" transform="rotate(-9 46 58)"/><rect x="55" y="46" width="6.5" height="25" rx="3.2" transform="rotate(9 58 58)"/></g><g stroke="${g}" stroke-width="2.3"><path d="M52 30v7"/><path d="M39 35l4 6"/><path d="M65 35l-4 6"/></g>`,
+ doveOlive:(g)=>`<path d="M32 54c11 2 19-2 25-11 2 9 8 13 16 13-4 7-13 11-23 11-10 0-18-5-18-13z" fill="#fff" opacity=".93"/><path d="M30 58c-4 2-8 2-11 0" fill="none" stroke="${g}" stroke-width="2"/><circle cx="20" cy="57" r="1.6" fill="${g}"/>`
+};
+function prayerArt(p){const a=p.pal[0],b=p.pal[1],g='#ffe9a8';const inner=ART[p.motif]?ART[p.motif](g):'';
+ return '<svg class="pcover" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>'
+  +'<radialGradient id="bg_'+p.id+'" cx="50%" cy="30%" r="85%"><stop offset="0" stop-color="'+a+'"/><stop offset="100%" stop-color="'+b+'"/></radialGradient>'
+  +'<radialGradient id="gl_'+p.id+'" cx="50%" cy="28%" r="45%"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>'
+  +'<rect width="100" height="100" fill="url(#bg_'+p.id+')"/><circle cx="50" cy="28" r="42" fill="url(#gl_'+p.id+')"/>'+inner+'</svg>';
+}
+/* ---- player (áudio) ---- */
+let hpList=[],hpIdx=0;
+function hpById(id){return PRAYERS.find(p=>p.id===id)}
+function fmtT(s){s=Math.max(0,s|0);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+function setPP(){const au=$('#hAudio');const i=(au&&!au.paused)?'⏸':'▶';const a=$('#hpPP'),b=$('#hminiPP');if(a)a.textContent=i;if(b)b.textContent=i}
+function openPrayer(list,idx){hpList=list;hpIdx=idx;const p=hpList[hpIdx];if(!p)return;const au=$('#hAudio');
+ if(p.audio){au.src=p.audio}else{au.removeAttribute('src')}
+ $('#hpArt').innerHTML=prayerArt(p);$('#hminiArt').innerHTML=prayerArt(p);
+ $('#hpTitle').textContent=p.t;$('#hpSec').textContent=p.sec;$('#hminiT').textContent=p.t;$('#hminiS').textContent=p.sec;
+ {const hasLyr=!!(p.lyr&&p.lyr.trim());const lh=$('#hpLyrH');if(lh)lh.hidden=!hasLyr;$('#hpLyr').innerHTML=hasLyr?p.lyr.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>'<p>'+_E(l)+'</p>').join(''):'';}
+ $('#hpPP').style.opacity=p.audio?'1':'.45';
+ $('#hpRange').value='0';$('#hpCur').textContent='0:00';$('#hpDur').textContent='0:00';
+ $('#hmini').hidden=false;$('#hplayer').classList.add('on');
+ if(p.audio){au.play().catch(()=>{})}setPP();
+}
+function hpTogglePlay(){const au=$('#hAudio');const p=hpList[hpIdx];if(!p||!p.audio){try{toast('Audio coming soon for this prayer')}catch(e){}return}if(au.paused)au.play().catch(()=>{});else au.pause()}
+function hpPrev(){if(hpIdx>0)openPrayer(hpList,hpIdx-1)}
+function hpNext(){if(hpIdx<hpList.length-1)openPrayer(hpList,hpIdx+1)}
+(function(){const au=$('#hAudio');if(!au)return;
+ au.addEventListener('timeupdate',()=>{const r=$('#hpRange');if(au.duration){if(r)r.value=String((au.currentTime/au.duration)*100);$('#hpCur').textContent=fmtT(au.currentTime);$('#hpDur').textContent=fmtT(au.duration)}});
+ au.addEventListener('play',setPP);au.addEventListener('pause',setPP);
+ au.addEventListener('ended',()=>{if(hpIdx<hpList.length-1)hpNext();else setPP()});
+ const r=$('#hpRange');if(r)r.addEventListener('input',e=>{if(au.duration)au.currentTime=(Number(e.target.value)/100)*au.duration});
+ const pp=$('#hpPP');if(pp)pp.onclick=hpTogglePlay;const mpp=$('#hminiPP');if(mpp)mpp.onclick=e=>{e.stopPropagation();hpTogglePlay()};
+ const pv=$('#hpPrev');if(pv)pv.onclick=hpPrev;const nx=$('#hpNext');if(nx)nx.onclick=hpNext;
+ const cl=$('#hpClose');if(cl)cl.onclick=()=>$('#hplayer').classList.remove('on');
+ const mn=$('#hmini');if(mn)mn.onclick=()=>$('#hplayer').classList.add('on');
+})();
+function healthStop(){try{const au=$('#hAudio');if(au)au.pause()}catch(e){}const m=$('#hmini');if(m)m.hidden=true;const pl=$('#hplayer');if(pl)pl.classList.remove('on');try{setPP()}catch(e){}}
+function healthMember(el){
+ const SECT=['Healing & body','Mind & peace','Family','Protection','Faith & thanks'];
+ let html='<div class="h-mem"><h2 class="hl-title">Healing Prayers</h2><p class="hl-sub">Tap a prayer to listen — audio only. Close your eyes and pray along.</p>';
+ html+='<div class="card h-int"><h3>🙏 Your intention</h3><p class="lab" style="font-weight:500;margin:4px 0 8px">Who are you praying for? We hold it with you.</p><input type="text" id="hIntIn" maxlength="80" placeholder="A name, or a few words"><button type="button" class="btn" id="hIntSave">Save</button><p class="h-saved" id="hIntSaved" hidden></p></div>';
+ SECT.forEach(sec=>{const items=PRAYERS.filter(p=>p.sec===sec);if(!items.length)return;
+  html+='<p class="hl-sec">'+_E(sec)+'</p><div class="hl-row">';
+  items.forEach(p=>{html+='<button type="button" class="hl-card" data-pid="'+p.id+'"><span class="hl-art">'+prayerArt(p)+'</span><span class="hl-name">'+_E(p.t)+'</span></button>'});
+  html+='</div>';});
+ html+='<p class="h-note" style="margin-top:18px">🕊️ For comfort, hope and strength — always alongside your doctor’s care, never instead of it.</p></div>';
+ el.innerHTML=html;
+ $$('#healthBody .hl-card').forEach(c=>c.onclick=()=>{const id=c.dataset.pid;const sec=hpById(id).sec;const list=PRAYERS.filter(p=>p.sec===sec);openPrayer(list,list.findIndex(p=>p.id===id))});
+ const sv=$('#hIntSave');if(sv)sv.onclick=()=>{const v=$('#hIntIn').value.trim();if(!v)return;S.healthIntention=v;try{save()}catch(e){}const s=$('#hIntSaved');if(s){s.hidden=false;s.textContent='🙏 Saved — we are praying with you for '+v+'.'}try{toast('Saved 🙏')}catch(e){}};
+ if(S.healthIntention){const inp=$('#hIntIn');if(inp)inp.value=S.healthIntention;const s=$('#hIntSaved');if(s){s.hidden=false;s.textContent='🙏 We are praying with you for '+S.healthIntention+'.'}}
+}
 /* ===== Divine Manifestation Script — entrega instantanea na compra ===== */
 /* EDITE: link de checkout do produto (Digistore). Na pagina de OBRIGADO desse produto,
    aponte de volta para o app com ?dms=27 (ou 47/77/100), e o Script abre na hora. */
@@ -1558,7 +1771,7 @@ if($('#baRecSkip'))$('#baRecSkip').onclick=()=>{$('#baRec').classList.remove('on
 if($('#baBanner'))$('#baBanner').onclick=openBA;
 if($('#baX'))$('#baX').onclick=closeBA;
 
-function go(t){if(t!=='vid')$('#vBox').innerHTML='';if(t!=='web'&&$('#wBox'))$('#wBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='me'){if(typeof renderBilling==='function')renderBilling();if(typeof renderGrowth==='function')renderGrowth()}if(t==='today'&&typeof renderToday==='function')renderToday();if(t==='chants'&&typeof renderChants==='function')renderChants();if(t==='giveaway'&&typeof renderGiveaway==='function')renderGiveaway();scrollTo(0,0)}
+function go(t){if(t!=='vid')$('#vBox').innerHTML='';if(t!=='web'&&$('#wBox'))$('#wBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='me'){if(typeof renderBilling==='function')renderBilling();if(typeof renderGrowth==='function')renderGrowth()}if(t==='today'&&typeof renderToday==='function')renderToday();if(t==='chants'&&typeof renderChants==='function')renderChants();if(t==='giveaway'&&typeof renderGiveaway==='function')renderGiveaway();if(t==='health'&&typeof renderHealth==='function')renderHealth();if(t!=='health'&&typeof healthStop==='function')healthStop();scrollTo(0,0)}
 /* ===== Sorteio honesto (brinde) — SEM resultado falso no app, SEM ameaça de reembolso.
    O app só confirma a inscrição e mostra o contador. O sorteio real e o aviso aos ganhadores
    são feitos por VOCÊ, por email, a partir da sua lista (Digistore). ===== */
@@ -1867,7 +2080,7 @@ function applyTheme(t){
  else r.removeAttribute('data-theme');
  try{document.querySelectorAll('#themeSeg .seg-b').forEach(b=>b.classList.toggle('on',b.dataset.themeSet===t))}catch(e){}
 }
-(function(){let t='system';try{t=localStorage.getItem('sc_theme')||'system'}catch(e){}applyTheme(t)})();
+(function(){document.documentElement.setAttribute('data-theme','dark');try{localStorage.setItem('sc_theme','dark')}catch(e){}})();
 (function(){try{var v=localStorage.getItem('sc_fs');if(v==='l'||v==='x')document.documentElement.setAttribute('data-fs',v)}catch(e){}})();
 $('#nSave').onclick=()=>{S.name=$('#nIn').value.trim();save();render();toast('Saved')};
 $('#reset').onclick=()=>{if(confirm('Reset all progress on this device?')){S={name:S.name,light:10,min:0,days:[],last:'',lastTs:0,vow:null,unl:null};save();render()}};
@@ -2532,7 +2745,7 @@ function markTrialActive(){return !!S.markTrialStart && (Date.now()-Number(S.mar
 function markTrialLeftH(){return Math.max(0,Math.ceil((48*36e5-(Date.now()-Number(S.markTrialStart||0)))/36e5))}
 const markUnlocked=()=>!!S.markUnlocked || markTrialActive();
 function startMarkTrial(){S.markTrialStart=Date.now();S.markTrialUsed=true;save();try{if(sbClient)sbClient.auth.updateUser({data:{sc_mark_trial:S.markTrialStart}}).catch(()=>{})}catch(e){}const lk=$('#lk');if(lk)lk.classList.remove('on');if(typeof updateMarkCard==='function')updateMarkCard();try{toast('Your 48-hour Mark trial has started 🎉')}catch(e){}if(window.openMarkChat)window.openMarkChat()}
-function updateMarkCard(){const el=document.querySelector('.mark-card .mark-free');if(el){el.textContent=markTrialActive()?('FREE · '+markTrialLeftH()+'H LEFT'):(markUnlocked()?'3 CREDITS / MESSAGE':'FREE 48H TRIAL');el.style.color='#8a5d00';el.style.background='rgba(224,173,62,.2)'}}
+function updateMarkCard(){const el=document.querySelector('.mark-card .mark-free');if(el){el.textContent=markTrialActive()?('FREE · '+markTrialLeftH()+'H LEFT'):(markUnlocked()?'3 CREDITS / MESSAGE':'FREE 48H TRIAL');el.style.color='#f0d58a';el.style.background='rgba(224,173,62,.2)'}}
 function applyTier(tier){
  if(!tier||!ENTITLE[tier])return;
  if((TIER_RANK[tier]||0)>(TIER_RANK[S.tier||'none']||0))S.tier=tier;
@@ -3015,6 +3228,7 @@ function getSupabase() {
         );
 
         sbClient.auth.onAuthStateChange((event, session) => {
+          if (event === 'SIGNED_OUT') { window.__appStarted = false; }
           if (
             session &&
             session.user &&
@@ -3031,7 +3245,11 @@ function getSupabase() {
               } catch (e) { blocked = false; } // falha de rede: nao tranca por engano
               if (blocked) { showBanned(); try { await sbClient.auth.signOut(); } catch (e) {} return; }
               try { const { data: ps } = await sbClient.rpc('sc_prayer_active'); S.prayerSub = (ps === true); save(); } catch (e) {}
-              enterApp(user);
+              // Aba Health (upsell 2, $49/mês): acesso verificado no servidor. RPC criado no passo do Supabase.
+              try { const { data: h } = await sbClient.rpc('sc_health_active'); S.health2 = (h === true); save(); } catch (e) {}
+              // Só inicializa o app (volta pra Home, boas-vindas) na PRIMEIRA vez.
+              // Em re-focus/token refresh o Supabase dispara SIGNED_IN de novo: NÃO resetar (parava o áudio e voltava pra Home).
+              if (!window.__appStarted) { window.__appStarted = true; enterApp(user); }
               try { if (typeof homeTiles === 'function') homeTiles(); } catch (e) {}
             })();
           }
@@ -3218,7 +3436,7 @@ $('#sOut').onclick = async () => {
   $('#aName').value = '';
   
 setAuth('login');
-  $('#auth').classList.add('on');
+  try{if(typeof healthStop==='function')healthStop()}catch(e){}$('#auth').classList.add('on');
 };
 
 /* Support chat form: widget HTML is placed after this script, so initialize after parsing. */
@@ -3320,7 +3538,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* Tutorial de acesso: so carrega e mostra o video quando a pessoa clica */
 setAuth('login');
-$('#auth').classList.add('on');
+try{if(typeof healthStop==='function')healthStop()}catch(e){}$('#auth').classList.add('on');
 
 getSupabase().catch(err => {
   console.error('Supabase initialization error:', err);
