@@ -339,6 +339,14 @@ body.on-mark #supportFab{display:none}
 #s-mark .mark-quick button:active{background:rgba(67,120,222,.18)}
 /* ===== Sorteio honesto (brinde) ===== */
 .give-banner{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:2px solid var(--gold);background:linear-gradient(135deg,rgba(247,220,146,.28),var(--card));border-radius:18px;padding:12px 14px;margin:14px 0;box-shadow:0 6px 20px rgba(224,173,62,.22)}
+.more-banner{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:18px;padding:14px 16px;margin:12px 0;cursor:pointer;color:var(--ink)}
+.more-ic{flex:none;width:44px;height:44px;border-radius:12px;background:rgba(141,178,255,.14);display:grid;place-items:center;color:var(--acc)}
+.more-ic svg{width:24px;height:24px}
+.more-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.more-txt b{font-size:17px}
+.more-txt>span{font-size:13px;color:var(--mute)}
+.more-go{flex:none;color:var(--mute)}
+.more-go svg{width:22px;height:22px;display:block}
 .give-ban-art img{width:60px;height:60px;border-radius:12px;object-fit:cover;display:block;background:#eef4ff}
 .give-ban-txt{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
 .give-kicker{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#e6b84e}
@@ -835,20 +843,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
    <p class="lab" style="font-weight:500;margin-top:8px">✦ are your prayer credits — you get 10 free every day, to open prayers, light a candle or talk with Mark.</p>
   </div>
   <button type="button" class="ba-banner" id="baBanner"><div class="ba-ban-art"><svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true"><g fill="none" stroke="#D4AF37" stroke-width="1.4"><circle cx="60" cy="60" r="52"/><circle cx="60" cy="60" r="40"/><circle cx="60" cy="60" r="28"/></g><path d="M60 24 72 56 106 56 78 76 88 108 60 88 32 108 42 76 14 56 48 56Z" fill="#D4AF37" opacity=".5"/></svg></div><div class="ba-ban-txt"><span class="ba-kicker">🙏 Start here · Sacred Alignment</span><b>Blessings Accelerator</b><span class="ba-sub">Answer a few questions to begin your personal path</span></div><span class="ba-go">✦</span></button>
-  <div class="streak-card" id="streakCard">
-   <span class="streak-flame" aria-hidden="true">🔥</span>
-   <div style="flex:1"><div><span class="n" id="stkN">0</span> <span id="stkLbl">days</span> in a row</div><div class="sub" id="stkNext"></div><button type="button" class="freeze-buy" id="freezeBuy">🛡️ Add a streak freeze · 15 ✦</button></div>
-  </div>
-  <div class="pow">
-   <span class="theme" id="powTheme"></span>
-   <p class="lab">Prayer of the week</p><h3 id="powT">—</h3>
-   <p class="lab" id="powSub" style="font-weight:500;margin:4px 0 10px">A new prayer to carry you through the week. Free to listen.</p>
-   <button type="button" class="btn" id="powBtn">▶ Listen now</button>
-  </div>
-  <button type="button" class="qz-banner" id="qzBanner"><div class="qz-ban-txt"><span class="qz-kicker">Daily challenge</span><b>Bible Quiz</b><span class="qz-sub">New questions every day · beat the 30-second clock</span></div><span class="qz-play">▶</span></button>
-  <button type="button" class="give-banner" id="giveBanner"><div class="give-ban-art"><img id="gaBannerImg" alt="" width="60" height="60" loading="lazy"></div><div class="give-ban-txt"><span class="give-kicker">Members' giveaway</span><b>Win a Jesus figurine</b><span class="give-sub">12 winners · free to enter · drawn in 7 days</span></div><span class="give-go">🎁</span></button>
-  <div id="novCard"></div>
-  <div id="rewardCard"></div>
+  <button type="button" class="more-banner" id="moreBtn"><span class="more-ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 5h7v7H4zM13 5h7v7h-7zM4 14h7v7H4zM13 14h7v7h-7z"/></svg></span><span class="more-txt"><b>More in Sacred Chant</b><span>Daily reward, Bible quiz, giveaway &amp; novena</span></span><span class="more-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></button>
   <p class="sh">Support &amp; blessings</p><p>Start here, request a prayer, or reach our team.</p>
   <div class="tiles" id="tSup"></div>
   <button type="button" class="mark-card" data-mod="mark" aria-label="Open chat with Mark"><img src="https://i.postimg.cc/8kFQyKv5/bubblen6oy3a5sh6q.avif" alt="Mark" width="88" height="88" loading="lazy"><span class="mark-copy"><strong>Talk with Mark</strong><span>Your spiritual companion for prayer, reflection, and encouragement.</span><span class="mark-free">3 CREDITS / MESSAGE</span></span></button>
@@ -910,6 +905,24 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
   <div id="dmsHome"></div>
  </section>
 
+ <section class="screen" id="s-more"><button class="back" data-back>← Back</button>
+  <h2 class="h" style="margin:4px 0 2px">More</h2>
+  <p class="lab" style="font-weight:500;margin:0 0 14px">Daily reward, challenge and blessings.</p>
+  <div class="streak-card" id="streakCard">
+   <span class="streak-flame" aria-hidden="true">🔥</span>
+   <div style="flex:1"><div><span class="n" id="stkN">0</span> <span id="stkLbl">days</span> in a row</div><div class="sub" id="stkNext"></div><button type="button" class="freeze-buy" id="freezeBuy">🛡️ Add a streak freeze · 15 ✦</button></div>
+  </div>
+  <div class="pow">
+   <span class="theme" id="powTheme"></span>
+   <p class="lab">Prayer of the week</p><h3 id="powT">—</h3>
+   <p class="lab" id="powSub" style="font-weight:500;margin:4px 0 10px">A new prayer to carry you through the week. Free to listen.</p>
+   <button type="button" class="btn" id="powBtn">▶ Listen now</button>
+  </div>
+  <button type="button" class="qz-banner" id="qzBanner"><div class="qz-ban-txt"><span class="qz-kicker">Daily challenge</span><b>Bible Quiz</b><span class="qz-sub">New questions every day · beat the 30-second clock</span></div><span class="qz-play">▶</span></button>
+  <button type="button" class="give-banner" id="giveBanner"><div class="give-ban-art"><img id="gaBannerImg" alt="" width="60" height="60" loading="lazy"></div><div class="give-ban-txt"><span class="give-kicker">Members' giveaway</span><b>Win a Jesus figurine</b><span class="give-sub">12 winners · free to enter · drawn in 7 days</span></div><span class="give-go">🎁</span></button>
+  <div id="novCard"></div>
+  <div id="rewardCard"></div>
+ </section>
  <section class="screen" id="s-vid"><button class="back" id="vBack">← Back</button><h2 class="h" id="vT"></h2><div id="vTop"></div><div class="vidb" id="vBox"></div><div class="faq" id="vTx"></div></section>
  <section class="screen" id="s-pray"><button class="back" data-back>← Back</button><div id="pBody"></div></section>
  <section class="screen" id="s-dms"><button class="back" data-back>← Back</button><div id="dmsBody"></div></section>
@@ -1792,7 +1805,7 @@ if($('#baRecSkip'))$('#baRecSkip').onclick=()=>{$('#baRec').classList.remove('on
 if($('#baBanner'))$('#baBanner').onclick=openBA;
 if($('#baX'))$('#baX').onclick=closeBA;
 
-function go(t){if(t!=='vid')$('#vBox').innerHTML='';if(t!=='web'&&$('#wBox'))$('#wBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='me'){if(typeof renderBilling==='function')renderBilling();if(typeof renderGrowth==='function')renderGrowth()}if(t==='today'&&typeof renderToday==='function')renderToday();if(t==='chants'&&typeof renderChants==='function')renderChants();if(t==='giveaway'&&typeof renderGiveaway==='function')renderGiveaway();if(t==='health'&&typeof renderHealth==='function')renderHealth();if(t!=='health'&&typeof healthStop==='function')healthStop();scrollTo(0,0)}
+function go(t){if(t!=='vid')$('#vBox').innerHTML='';if(t!=='web'&&$('#wBox'))$('#wBox').innerHTML='';$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));if(t==='me'){if(typeof renderBilling==='function')renderBilling();if(typeof renderGrowth==='function')renderGrowth()}if(t==='today'&&typeof renderToday==='function')renderToday();if(t==='chants'&&typeof renderChants==='function')renderChants();if(t==='giveaway'&&typeof renderGiveaway==='function')renderGiveaway();if(t==='health'&&typeof renderHealth==='function')renderHealth();if(t!=='health'&&typeof healthStop==='function')healthStop();if(t==='more'){try{render()}catch(e){}try{renderNovCard()}catch(e){}try{renderRewardCard()}catch(e){}}scrollTo(0,0)}
 /* ===== Sorteio honesto (brinde) — SEM resultado falso no app, SEM ameaça de reembolso.
    O app só confirma a inscrição e mostra o contador. O sorteio real e o aviso aos ganhadores
    são feitos por VOCÊ, por email, a partir da sua lista (Digistore). ===== */
@@ -1828,6 +1841,7 @@ function renderGiveaway(){
  }
 }
 try{const gb=document.getElementById('giveBanner');if(gb)gb.addEventListener('click',openGiveaway);const gbi=document.getElementById('gaBannerImg');if(gbi)gbi.src=GA_IMG}catch(e){}
+try{const mb=document.getElementById('moreBtn');if(mb)mb.addEventListener('click',()=>go('more'))}catch(e){}
 $$('.tab').forEach(b=>b.onclick=()=>access(b.dataset.t));
 function render(){
  const h=new Date().getHours();$('#greet').textContent=h<12?'This morning':h<18?'This afternoon':'Tonight';
