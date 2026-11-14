@@ -533,7 +533,7 @@ html[data-fs="x"]{zoom:1.38}
 .h-this .h-prayer{font-size:17px;line-height:1.6;color:var(--ink);margin:4px 0 0}
 .h-int input{width:100%;padding:14px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-size:16px;margin:0 0 10px}
 .h-saved{color:#2e8b57;font-weight:700;font-size:15px;margin:8px 0 0}
-.h-count{text-align:center;font-size:15.5px;color:var(--ink);background:linear-gradient(135deg,rgba(224,173,62,.14),rgba(67,120,222,.1));border:1px solid var(--line);border-radius:14px;padding:14px;margin:16px 0 4px}
+.h-count{text-align:center;font-size:15.5px;color:var(--ink);background:linear-gradient(135deg,rgba(224,173,62,.14),rgba(67,120,222,.1));border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin:6px 0 10px}
 .h-journey{display:grid;gap:8px}
 .hj-row{display:flex;align-items:center;gap:11px;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
 .hj-row.cur{border-color:var(--acc);background:rgba(67,120,222,.1)}
@@ -549,7 +549,10 @@ html[data-fs="x"]{zoom:1.38}
 .hl-row{display:flex;gap:12px;overflow-x:auto;padding:0 0 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .hl-row::-webkit-scrollbar{display:none}
 .hl-card{flex:0 0 auto;width:140px;background:none;border:0;padding:0;cursor:pointer;text-align:left}
-.hl-art{display:block;width:140px;height:140px;border-radius:16px;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.hl-art{position:relative;display:block;width:140px;height:140px;border-radius:16px;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.hl-new{position:absolute;top:7px;right:7px;z-index:2;background:linear-gradient(135deg,#f7dc92,#e0ad3e);color:#3b2a05;font-size:10px;font-weight:800;letter-spacing:.05em;padding:3px 8px;border-radius:99px;box-shadow:0 2px 7px rgba(0,0,0,.35)}
+.hl-sec-new{color:var(--gold)}
+.h-count svg{vertical-align:-3px;color:var(--gold)}
 .pcover{display:block;width:100%;height:100%}
 .hl-name{display:block;font-weight:700;font-size:14.5px;color:var(--ink);margin:8px 2px 0;line-height:1.3}
 /* mini player */
@@ -1377,7 +1380,7 @@ function openPrayer(list,idx){hpList=list;hpIdx=idx;const p=hpList[hpIdx];if(!p)
  $('#hpPP').style.opacity=p.audio?'1':'.45';
  $('#hpRange').value='0';$('#hpCur').textContent='0:00';$('#hpDur').textContent='0:00';
  $('#hmini').hidden=false;$('#hplayer').classList.add('on');
- if(p.audio){au.play().catch(()=>{})}setPP();
+ if(p.audio){au.play().catch(()=>{});try{if(typeof sbClient!=='undefined'&&sbClient)sbClient.rpc('sc_bump_prayers')}catch(e){}}setPP();
 }
 function hpTogglePlay(){const au=$('#hAudio');const p=hpList[hpIdx];if(!p||!p.audio){try{toast('Audio coming soon for this prayer')}catch(e){}return}if(au.paused)au.play().catch(()=>{});else au.pause()}
 function hpPrev(){if(hpIdx>0)openPrayer(hpList,hpIdx-1)}
@@ -1393,19 +1396,28 @@ function hpNext(){if(hpIdx<hpList.length-1)openPrayer(hpList,hpIdx+1)}
  const mn=$('#hmini');if(mn)mn.onclick=()=>$('#hplayer').classList.add('on');
 })();
 function healthStop(){try{const au=$('#hAudio');if(au)au.pause()}catch(e){}const m=$('#hmini');if(m)m.hidden=true;const pl=$('#hplayer');if(pl)pl.classList.remove('on');try{setPP()}catch(e){}}
+/* ===== Lançamento gradual: 6 orações saem 2/mês por 3 meses, âncora nov/2026 (mesma data p/ todos) ===== */
+const HEALTH_REL={p4:1,p10:1,p6:2,p11:2,p13:3,p15:3};
+function prayerRel(p){return HEALTH_REL[p.id]||0}
+/* Conta a partir do PRIMEIRO acesso do usuário (S.firstSeen), não de data fixa.
+   Mês 0 = 14 orações; ~30 dias depois +2; ~60 dias +2; ~90 dias +2. */
+function healthMonthsSince(){if(!S.firstSeen){S.firstSeen=Date.now();try{save()}catch(e){}}return Math.max(0,Math.floor((Date.now()-Number(S.firstSeen))/(30*864e5)))}
+async function renderPrayerCount(){const box=$('#hCountBox');if(!box)return;if(typeof sbClient==='undefined'||!sbClient){box.innerHTML='';return}try{const r=await sbClient.rpc('sc_prayer_total');if(r.error||r.data==null){box.innerHTML='';return}const n=Number(r.data)||0;box.innerHTML='<div class="h-count"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2.5c2.3 2.6 3.6 4.6 3.6 6.4a3.6 3.6 0 0 1-7.2 0c0-1.8 1.3-3.8 3.6-6.4z"/><rect x="10.6" y="12" width="2.8" height="8" rx="1"/></svg> <b>'+n.toLocaleString()+'</b> prayers prayed by our community</div>'}catch(e){box.innerHTML=''}}
 function healthMember(el){
  const SECT=['Healing & body','Mind & peace','Family','Protection','Faith & thanks'];
+ const ms=healthMonthsSince();
+ const vis=p=>prayerRel(p)<=ms;
+ const isNew=p=>{const r=prayerRel(p);return r>0&&r===ms};
+ const card=p=>'<button type="button" class="hl-card" data-pid="'+p.id+'"><span class="hl-art">'+(isNew(p)?'<span class="hl-new">NEW</span>':'')+prayerArt(p)+'</span><span class="hl-name">'+_E(p.t)+'</span></button>';
  let html='<div class="h-mem"><h2 class="hl-title">Healing Prayers</h2><p class="hl-sub">Tap a prayer to listen — audio only. Close your eyes and pray along.</p>';
- html+='<div class="card h-int"><h3>Your intention</h3><p class="lab" style="font-weight:500;margin:4px 0 8px">Who are you praying for? We hold it with you.</p><input type="text" id="hIntIn" maxlength="80" placeholder="A name, or a few words"><button type="button" class="btn" id="hIntSave">Save</button><p class="h-saved" id="hIntSaved" hidden></p></div>';
- SECT.forEach(sec=>{const items=PRAYERS.filter(p=>p.sec===sec);if(!items.length)return;
-  html+='<p class="hl-sec">'+_E(sec)+'</p><div class="hl-row">';
-  items.forEach(p=>{html+='<button type="button" class="hl-card" data-pid="'+p.id+'"><span class="hl-art">'+prayerArt(p)+'</span><span class="hl-name">'+_E(p.t)+'</span></button>'});
-  html+='</div>';});
+ html+='<div id="hCountBox"></div>';
+ const news=PRAYERS.filter(isNew);
+ if(news.length){html+='<p class="hl-sec hl-sec-new">New this month</p><div class="hl-row">'+news.map(card).join('')+'</div>';}
+ SECT.forEach(sec=>{const items=PRAYERS.filter(p=>p.sec===sec&&vis(p));if(!items.length)return;html+='<p class="hl-sec">'+_E(sec)+'</p><div class="hl-row">'+items.map(card).join('')+'</div>';});
  html+='<p class="h-note" style="margin-top:18px">For comfort, hope and strength — always alongside your doctor’s care, never instead of it.</p></div>';
  el.innerHTML=html;
- $$('#healthBody .hl-card').forEach(c=>c.onclick=()=>{const id=c.dataset.pid;const sec=hpById(id).sec;const list=PRAYERS.filter(p=>p.sec===sec);openPrayer(list,list.findIndex(p=>p.id===id))});
- const sv=$('#hIntSave');if(sv)sv.onclick=()=>{const v=$('#hIntIn').value.trim();if(!v)return;S.healthIntention=v;try{save()}catch(e){}const s=$('#hIntSaved');if(s){s.hidden=false;s.textContent='Saved — we are praying with you for '+v+'.'}try{toast('Saved')}catch(e){}};
- if(S.healthIntention){const inp=$('#hIntIn');if(inp)inp.value=S.healthIntention;const s=$('#hIntSaved');if(s){s.hidden=false;s.textContent='We are praying with you for '+S.healthIntention+'.'}}
+ $$('#healthBody .hl-card').forEach(c=>c.onclick=()=>{const id=c.dataset.pid;const sec=hpById(id).sec;const list=PRAYERS.filter(p=>p.sec===sec&&vis(p));openPrayer(list,list.findIndex(p=>p.id===id))});
+ try{renderPrayerCount()}catch(e){}
 }
 /* ===== Divine Manifestation Script — entrega instantanea na compra ===== */
 /* EDITE: link de checkout do produto (Digistore). Na pagina de OBRIGADO desse produto,
