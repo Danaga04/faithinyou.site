@@ -1355,12 +1355,7 @@ const HEALTH_JOURNEY=[
  {t:'Hope when healing is slow'},{t:'Letting go of fear'},{t:'Caring for the caregiver'},{t:'Renewal and hope ahead'}
 ];
 let hqStep=0,hqAns=[];
-function renderHealth(){const el=$('#healthBody');if(!el)return;
- const trialPhase=(S.healthGated&&!S.health2);
- if(!healthUnlocked()){clearInterval(window.__htrial);return trialPhase&&!healthTrialStarted()?healthTrialIntro(el):healthLocked(el);}
- healthMember(el);
- if(trialPhase&&healthTrialActive()){const mem=el.querySelector('.h-mem');if(mem){mem.insertAdjacentHTML('afterbegin',healthTrialBanner());const bb=$('#hTrialBuy');if(bb)bb.onclick=goCheckoutHealth;}healthTrialWatch();}else{clearInterval(window.__htrial);}
-}
+function renderHealth(){const el=$('#healthBody');if(!el)return;try{clearInterval(window.__htrial)}catch(e){}healthMember(el);}
 function healthQuiz(el){
  const q=HQ[hqStep];
  el.innerHTML='<div class="h-quiz"><div class="hq-top"><div class="hq-bar"><span style="width:'+(((hqStep+1)/HQ.length)*100)+'%"></span></div><p class="h-eyebrow">Question '+(hqStep+1)+' of '+HQ.length+'</p></div><h2 class="h-q">'+_E(q.q)+'</h2><div class="h-opts">'+q.o.map((o,i)=>'<button type="button" class="h-opt" data-i="'+i+'">'+_E(o)+'</button>').join('')+'</div></div>';
