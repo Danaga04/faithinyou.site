@@ -144,6 +144,7 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 @media(prefers-reduced-motion:reduce){.auth-arrow{animation:none}}
 .auth{position:fixed;inset:0;z-index:50;display:none;overflow:auto;padding:calc(28px + env(safe-area-inset-top,0px)) 20px calc(28px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,var(--b1),var(--b2))}.auth.on{display:block}.auth>div{max-width:420px;margin:0 auto;text-align:center}.auth form{text-align:left;margin-top:14px}.auth label{font-size:13px;font-weight:600;color:var(--mute)}.auth .err{color:#d24b4b;min-height:22px;font-size:14px;margin:4px 0 8px}
 .cert{display:none;position:fixed;inset:0;z-index:25;background:rgba(10,20,50,.6);place-items:center;padding:20px}.cert.on{display:grid}
+#baEarly{z-index:120} /* acima do Blessings Accelerator (.ba z-index:30) pra não abrir atrás */
 .cert>div{background:linear-gradient(160deg,#fffdf5,#e9f2ff);color:#1c2a4a;border:3px double #e0ad3e;border-radius:20px;padding:28px 22px;text-align:center;max-width:400px;width:100%}
 .cert h2{font-size:22px}.cert .nm{font-size:26px;font-weight:800;color:#4378de;margin:8px 0}
 @media print{body *{visibility:hidden}.cert,.cert *{visibility:visible}.cert{position:absolute;background:#fff}}
@@ -843,7 +844,7 @@ body.ba-forced .ba-x{display:none} /* no 1º login, o BA é obrigatório: sem bo
    <p style="margin-top:16px"><button class="btn gold" id="offer">✦ Get 10 free credits</button></p>
    <p class="lab" style="font-weight:500;margin-top:8px">✦ are your prayer credits — you get 10 free every day, to open prayers, light a candle or talk with Mark.</p>
   </div>
-  <button type="button" class="ba-banner" id="baBanner"><div class="ba-ban-art"><svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true"><g fill="none" stroke="#D4AF37" stroke-width="1.4"><circle cx="60" cy="60" r="52"/><circle cx="60" cy="60" r="40"/><circle cx="60" cy="60" r="28"/></g><path d="M60 24 72 56 106 56 78 76 88 108 60 88 32 108 42 76 14 56 48 56Z" fill="#D4AF37" opacity=".5"/></svg></div><div class="ba-ban-txt"><span class="ba-kicker">🙏 Start here · Sacred Alignment</span><b>Blessings Accelerator</b><span class="ba-sub">Answer a few questions to begin your personal path</span></div><span class="ba-go">✦</span></button>
+  <button type="button" class="ba-banner" id="baBanner"><div class="ba-ban-art"><svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true"><g fill="none" stroke="#D4AF37" stroke-width="1.4"><circle cx="60" cy="60" r="52"/><circle cx="60" cy="60" r="40"/><circle cx="60" cy="60" r="28"/></g><path d="M60 24 72 56 106 56 78 76 88 108 60 88 32 108 42 76 14 56 48 56Z" fill="#D4AF37" opacity=".5"/></svg></div><div class="ba-ban-txt"><span class="ba-kicker">Start here · Sacred Alignment</span><b>Blessings Accelerator</b><span class="ba-sub">Answer a few questions to begin your personal path</span></div><span class="ba-go">✦</span></button>
   <button type="button" class="more-banner" id="moreBtn"><span class="more-ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 5h7v7H4zM13 5h7v7h-7zM4 14h7v7H4zM13 14h7v7h-7z"/></svg></span><span class="more-txt"><b>More in Sacred Chant</b><span>Daily reward, Bible quiz, giveaway &amp; novena</span></span><span class="more-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></button>
   <p class="sh">Support &amp; blessings</p><p>Start here, request a prayer, or reach our team.</p>
   <div class="tiles" id="tSup"></div>
@@ -855,26 +856,12 @@ body.ba-forced .ba-x{display:none} /* no 1º login, o BA é obrigatório: sem bo
   <p class="sh">Products I traded for tokens</p><p>Everything you unlocked in the Store.</p>
   <div class="tiles" id="tOwn"></div>
   <div class="soon" id="ownEmpty">You have not traded tokens for products yet.<br><button type="button" class="ghost" style="margin-top:12px" id="goStore">Visit the Store</button></div>
-  <p class="sh">Exclusive prayers for the faithful</p><p>Rare prayers few people ever receive. A new one opens on your day 7, 14, 30 and 60 with Sacred Chant. They cannot be unlocked with tokens, only with time.</p>
+  <p class="sh">Exclusive prayers for the faithful</p><p>Rare prayers few people ever receive. A new one opens on your day 3, 7, 14 and 21 with Sacred Chant. They cannot be unlocked with tokens, only with time.</p>
   <div class="tiles" id="tMile"></div>
   <p class="lab" style="text-align:center;margin:18px 0 6px">Each prayer costs 2 credits (✦) to open. Tap "Get free credits" every 24 hours for +10.</p>
   <div class="card" style="text-align:center">
    <p class="lab">Chant of the day</p><p class="m" id="dM"></p><p class="lab" id="dX" style="font-weight:500"></p>
    <p style="margin-top:12px"><button class="btn" id="dPlay">▶ Chant with me</button></p>
-  </div>
-  <div class="card candle-card" style="text-align:center">
-   <p class="lab">Light a candle</p>
-   <p class="lab" style="font-weight:500;margin:4px 0 2px">Light a candle for an intention or for someone you love.</p>
-   <div class="candle-altar" id="candAltar"><span class="sc-candle"><span class="glow"></span><span class="wax"></span><span class="wick"></span><span class="flame"></span></span></div>
-   <div class="candle-wall" id="candWall" aria-hidden="true"></div>
-   <input type="text" id="candIn" maxlength="60" placeholder="A name or intention (optional)">
-   <p class="lab" style="font-weight:500;margin:2px 0 6px">Light a candle that keeps burning — choose how long:</p>
-   <div class="cand-opts">
-    <button type="button" class="ghost cand-opt" data-canddays="1" data-candcost="1">1 day · 1 ✦</button>
-    <button type="button" class="ghost cand-opt" data-canddays="7" data-candcost="5">7 days · 5 ✦</button>
-    <button type="button" class="btn gold cand-opt" data-canddays="30" data-candcost="15">30 days · 15 ✦</button>
-   </div>
-   <p class="lab" id="candN" style="margin-top:10px"></p>
   </div>
   <div class="card gift-card" style="text-align:center">
    <p class="lab">Send a blessing</p>
@@ -1866,7 +1853,7 @@ function renderGrowth(){
  const s=streak();
  if($('#stkN')){$('#stkN').textContent=s;$('#stkLbl').textContent=(s===1?'day':'days');
   const nm=nextMile(s);
-  $('#stkNext').textContent=s===0?'Begin today — your first day of practice.':(nm?('Only '+(nm-s)+' day'+((nm-s)===1?'':'s')+' to your '+nm+'-day milestone 🎉'):'A true light. 🌟');
+  $('#stkNext').textContent=s===0?'Begin today — your first day of practice.':(nm?('Only '+(nm-s)+' day'+((nm-s)===1?'':'s')+' to your '+nm+'-day milestone'):'A true light.');
  }
  if($('#stkNext')&&$('#streakCard')){let fn=$('#streakCard').querySelector('.freeze-note');if(!fn){fn=document.createElement('span');fn.className='freeze-note';$('#stkNext').parentNode.appendChild(fn)}fn.textContent='🛡️ '+freezeCount()+' streak freeze'+(freezeCount()===1?'':'s')+' protecting you'}
  if(s>0&&MILEST.includes(s)){S.msSeen=S.msSeen||[];if(!S.msSeen.includes(s)){S.msSeen.push(s);if(freezeCount()<FREEZE_CAP)S.freezes=freezeCount()+1;save();celebrateStreak(s)}}
@@ -1949,7 +1936,7 @@ function renderRewardCard(){
  if(!claimedToday){try{nextIdx=(lc.date===ymd(new Date(Date.now()-864e5)))?(st%7):0}catch(e){nextIdx=0}}
  const curPos=claimedToday?((st-1+700)%7):nextIdx;
  let strip='';for(let i=0;i<7;i++){const got=claimedToday?(i<=curPos):(i<nextIdx);const cur=!claimedToday&&i===nextIdx;strip+='<div class="rw-day'+(got?' got':'')+(cur?' cur':'')+'"><b>+'+REWARD_STEPS[i]+'</b><small>Day '+(i+1)+'</small></div>'}
- el.innerHTML='<div class="pow rw-card"><span class="theme">Daily reward</span><p class="lab" style="font-weight:500;margin:2px 0 8px">Come back each day — your blessing grows. 🔥</p><div class="rw-strip">'+strip+'</div>'+(claimedToday
+ el.innerHTML='<div class="pow rw-card"><span class="theme">Daily reward</span><p class="lab" style="font-weight:500;margin:2px 0 8px">Come back each day — your blessing grows.</p><div class="rw-strip">'+strip+'</div>'+(claimedToday
    ?'<p class="lab" style="margin:10px 0 0">✓ Claimed today — your '+st+'-day reward streak is alive. Come back tomorrow for more. 🙏</p>'
    :'<button type="button" class="btn gold" id="rwClaim" style="margin-top:12px">Claim today’s reward · +'+REWARD_STEPS[nextIdx]+' ✦</button>')+'</div>';
  const b=$('#rwClaim');if(b)b.onclick=claimLoginReward;
@@ -2709,7 +2696,7 @@ function novState(){const k=novKey();if(!S.novena||S.novena.key!==k){S.novena={k
 function novDayOpen(i){const s=novState();if(!s.started)return i===0;const days=Math.floor((Date.now()-Number(s.started))/DAY);return i<=days}
 function renderNovCard(){
  const el=$('#novCard');if(!el)return;const th=novTheme();const s=novState();const done=(s.done||[]).length;
- el.innerHTML='<div class="pow nov-card"><span class="theme">Novena of the month</span><p class="lab">9 days of prayer · '+th.t+'</p><h3 style="margin:2px 0 4px">Pray one each day for 9 days</h3><p class="lab" style="font-weight:500;margin:0 0 10px">'+(done?('You’ve prayed '+done+' of 9 this month.'):'A new 9-day novena, renewed every month. Free to pray.')+'</p><button type="button" class="btn gold" id="novOpen">✨ Open the Novena</button></div>';
+ el.innerHTML='<div class="pow nov-card"><span class="theme">Novena of the month</span><p class="lab">9 days of prayer · '+th.t+'</p><h3 style="margin:2px 0 4px">Pray one each day for 9 days</h3><p class="lab" style="font-weight:500;margin:0 0 10px">'+(done?('You’ve prayed '+done+' of 9 this month.'):'A new 9-day novena, renewed every month. Free to pray.')+'</p><button type="button" class="btn gold" id="novOpen">Open the Novena</button></div>';
  const b=$('#novOpen');if(b)b.onclick=openNovena;
 }
 function openNovena(){novRender();go('nov')}
@@ -2965,10 +2952,10 @@ $('#goStore').onclick=()=>access('store');
 storeTiles();
 /* ===== Oracoes exclusivas por tempo de acesso (7, 14, 30 e 60 dias). Nao podem ser desbloqueadas com tokens. ===== */
 const MILES=[
- {d:7,img:P+'3xznx1N8/bubbleidg55myq2ja.avif',t:'Prayer for Depression',v:'AlHkFBomotY'},
- {d:14,img:P+'tJrzQtwN/bubble52oiiabnrdk.avif',t:'Prayer for Cancer',v:'feemAhLjiVY'},
- {d:30,img:P+'XJ4Krz0Q/bubbleihnx7qigrao.avif',t:'Prayer for Ringing Ears',v:'CrxdKDo7V1c'},
- {d:60,img:P+'pXpf5jgH/bubbletmw31124tck.avif',t:'Morning Prayer',v:'St-Nfz2K0lI'}
+ {d:3,img:P+'3xznx1N8/bubbleidg55myq2ja.avif',t:'Prayer for Depression',v:'AlHkFBomotY'},
+ {d:7,img:P+'tJrzQtwN/bubble52oiiabnrdk.avif',t:'Prayer for Cancer',v:'feemAhLjiVY'},
+ {d:14,img:P+'XJ4Krz0Q/bubbleihnx7qigrao.avif',t:'Prayer for Ringing Ears',v:'CrxdKDo7V1c'},
+ {d:21,img:P+'pXpf5jgH/bubbletmw31124tck.avif',t:'Morning Prayer',v:'St-Nfz2K0lI'}
 ];
 let mileStart=0;
 const mileLeft=m=>mileStart?Math.max(0,mileStart+m.d*DAY-Date.now()):m.d*DAY;
@@ -3023,7 +3010,7 @@ function mod(id){
     lkAct=()=>startMarkTrial();
     $('#lkH').textContent='Meet Mark — free for 48 hours';
     $('#lkT').textContent='Mark is your spiritual companion: he prays with you, listens, and guides you through your journey. Try the full chat free for 48 hours — no tokens, no charge. After that, it stays with Sacred Premium.';
-    $('#lkU').hidden=false;$('#lkU').textContent='✨ Start my 48-hour free trial';$('#lkX').textContent='Maybe later';
+    $('#lkU').hidden=false;$('#lkU').textContent='Start my 48-hour free trial';$('#lkX').textContent='Maybe later';
    }else{
     lkAct=()=>{openBuy('Unlock the chat with Mark with Sacred Premium.')};
     $('#lkH').textContent='Mark is part of Sacred Premium';
