@@ -553,6 +553,13 @@ html[data-fs="x"]{zoom:1.38}
 .hj-row.cur .hj-s{color:var(--acc)}
 /* ===== Biblioteca estilo Spotify ===== */
 .hl-title{font-size:24px;margin:0 0 2px;color:var(--ink)}
+.h-lock{max-width:420px;margin:0 auto;text-align:center;padding:30px 10px;min-height:calc(100dvh - 190px);display:flex;flex-direction:column;justify-content:center;align-items:center}
+.h-lock-ic{width:96px;height:96px;border-radius:50%;background:rgba(141,178,255,.12);border:1px solid var(--line);display:grid;place-items:center;color:var(--acc);margin-bottom:20px}
+.h-lock-ic svg{width:48px;height:48px}
+.h-lock-t{font-size:24px;font-weight:800;color:var(--ink);margin:0 0 8px}
+.h-lock-s{font-size:16px;color:var(--mute);line-height:1.55;margin:0 0 22px;max-width:320px}
+.h-lock-btn{width:100%;max-width:340px;font-size:18px;padding:17px}
+.h-lock-fine{font-size:12.5px;color:var(--mute);margin:14px 0 0}
 .hl-sub{color:var(--mute);font-size:15px;margin:0 0 14px}
 .hl-sec{font-size:16px;font-weight:800;color:var(--ink);margin:20px 0 10px}
 .hl-row{display:flex;gap:12px;overflow-x:auto;padding:0 0 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -1286,9 +1293,19 @@ if($('#tutNext'))$('#tutNext').onclick=()=>{if(tutStep>=TUT.length-1)return clos
 if($('#tutSkip'))$('#tutSkip').onclick=closeTut;
 /* ===== Aba HEALTH — orações de saúde ÉTICAS (conforto/esperança), NUNCA substituem médico.
    Liberada só p/ quem comprou o upsell 2 (assinatura $49/mês). Quem não comprou vê quiz -> relatório -> oferta. ===== */
-const HEALTH_URL='https://www.checkout-ds24.com/product/UPSELL2_ID';   /* <<< TROQUE pelo link do seu produto de $49/mês */
+const HEALTH_URL='https://www.checkout-ds24.com/product/UPSELL2_ID';   /* <<< TROQUE pelo link de checkout do upsell 2 */
 const HEALTH_PRICE='$49';
+const HEALTH_GATE_AT='2026-11-15T00:00:00Z'; /* contas criadas a partir daqui precisam comprar o upsell 2 p/ abrir a aba Health; antigas ficam livres */
 function healthOK(){return !!S.health2}
+function healthUnlocked(){return !S.healthGated || !!S.health2}
+function healthLocked(el){
+ el.innerHTML='<div class="h-lock"><div class="h-lock-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10.5" rx="2.6"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/><circle cx="12" cy="15.5" r="1.5" fill="currentColor" stroke="none"/></svg></div>'
+  +'<h2 class="h-lock-t">Healing Prayers is locked</h2>'
+  +'<p class="h-lock-s">Unlock the full library of healing prayers — yours to keep, forever.</p>'
+  +'<button type="button" class="btn gold h-lock-btn" id="hUnlock">Unlock Healing Prayers</button>'
+  +'<p class="h-lock-fine">Secure checkout. Use the same email you log in with here.</p></div>';
+ const bb=$('#hUnlock');if(bb)bb.onclick=()=>{try{var e=(S.email||'').trim();location.href=HEALTH_URL+(e?('?email='+encodeURIComponent(e)):'')}catch(_){location.href=HEALTH_URL}};
+}
 const HQ=[
  {q:'What is weighing on your heart about health right now?',o:['My own health','Someone I love is unwell','Sleep and rest','Worry and anxiety','Living with pain','Facing a diagnosis']},
  {q:'How have you been feeling lately?',o:['Tired and discouraged','Anxious and restless','Hopeful, but struggling','Searching for peace']},
@@ -1301,7 +1318,7 @@ const HEALTH_JOURNEY=[
  {t:'Hope when healing is slow'},{t:'Letting go of fear'},{t:'Caring for the caregiver'},{t:'Renewal and hope ahead'}
 ];
 let hqStep=0,hqAns=[];
-function renderHealth(){const el=$('#healthBody');if(!el)return;healthMember(el)} /* aba Health aberta a todos — sem quiz/relatório/compra */
+function renderHealth(){const el=$('#healthBody');if(!el)return;if(!healthUnlocked())return healthLocked(el);healthMember(el)}
 function healthQuiz(el){
  const q=HQ[hqStep];
  el.innerHTML='<div class="h-quiz"><div class="hq-top"><div class="hq-bar"><span style="width:'+(((hqStep+1)/HQ.length)*100)+'%"></span></div><p class="h-eyebrow">Question '+(hqStep+1)+' of '+HQ.length+'</p></div><h2 class="h-q">'+_E(q.q)+'</h2><div class="h-opts">'+q.o.map((o,i)=>'<button type="button" class="h-opt" data-i="'+i+'">'+_E(o)+'</button>').join('')+'</div></div>';
@@ -3276,6 +3293,8 @@ function getSupabase() {
               try { const { data: ps } = await sbClient.rpc('sc_prayer_active'); S.prayerSub = (ps === true); save(); } catch (e) {}
               // Aba Health (upsell 2, $49/mês): acesso verificado no servidor. RPC criado no passo do Supabase.
               try { const { data: h } = await sbClient.rpc('sc_health_active'); S.health2 = (h === true); save(); } catch (e) {}
+              // Trava da aba Health só para contas NOVAS (criadas a partir do corte). Contas antigas ficam liberadas.
+              try { const c = Date.parse(user && user.created_at || ''); S.healthGated = (Number.isFinite(c) && c >= Date.parse(HEALTH_GATE_AT)); save(); } catch (e) {}
               // Só inicializa o app (volta pra Home, boas-vindas) na PRIMEIRA vez.
               // Em re-focus/token refresh o Supabase dispara SIGNED_IN de novo: NÃO resetar (parava o áudio e voltava pra Home).
               if (!window.__appStarted) { window.__appStarted = true; enterApp(user); }
