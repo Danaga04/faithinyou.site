@@ -312,32 +312,46 @@ body.on-mark #supportFab{display:none}
 @keyframes markDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
 @media(prefers-reduced-motion:reduce){.mark-typing i{animation:none}}
 @media(max-width:380px){.mark-card img{width:74px;height:74px}.mark-chat{min-height:400px;height:calc(100dvh - 280px - env(safe-area-inset-bottom,0px))}.mark-bubble{max-width:94%}}
-/* ===== Chat do Mark — design ampliado para idosos (+60): fontes maiores, botões grandes, mais contraste ===== */
-#s-mark .intro{font-size:16px;line-height:1.5}
-#s-mark .mark-chat{border-radius:20px;min-height:460px}
-#s-mark .mark-chat-head{padding:15px}
-#s-mark .mark-chat-head img{width:54px;height:54px}
-#s-mark .mark-chat-head strong{font-size:19px}
-#s-mark .mark-chat-head small{font-size:14.5px}
-#s-mark .mark-messages{padding:16px;gap:13px}
-#s-mark .mark-bubble{font-size:17.5px;line-height:1.62;padding:14px 16px;max-width:92%;border-radius:18px}
-#s-mark .mark-quick{gap:9px;padding:0 14px 12px}
-#s-mark .mark-quick button{font-size:15.5px;font-weight:700;padding:11px 15px;border-width:2px;min-height:46px}
-#s-mark .mark-acts{gap:8px;margin-top:12px}
-#s-mark .mark-acts button{font-size:15px;padding:11px 14px;min-height:46px}
-#s-mark .mark-compose{padding:12px;gap:10px}
-#s-mark .mark-compose textarea{font-size:17px;min-height:54px;padding:14px 15px;border-width:2px;border-radius:16px}
-#s-mark .mark-send{width:56px;height:56px;font-size:26px;box-shadow:0 6px 16px rgba(67,120,222,.35)}
-#s-mark .mark-note{font-size:13px;padding:0 12px 12px}
-#s-mark .mark-clear{font-size:15.5px;padding:12px 20px}
-/* polimento visual */
-#s-mark .mark-chat{box-shadow:0 10px 32px rgba(80,120,200,.16)}
-#s-mark .mark-chat-head{gap:13px}
-#s-mark .mark-chat-head img{box-shadow:0 2px 8px rgba(224,173,62,.4)}
-#s-mark .mark-bubble.bot{box-shadow:0 2px 10px rgba(80,120,200,.1)}
-#s-mark .mark-bubble.user{box-shadow:0 3px 12px rgba(67,120,222,.28)}
-#s-mark .mark-quick button{background:rgba(67,120,222,.08)}
-#s-mark .mark-quick button:active{background:rgba(67,120,222,.18)}
+/* ===== Chat do Mark — estilo WhatsApp (balões com rabinho, centralizado, tamanho moderado) ===== */
+#s-mark .h,#s-mark .intro{text-align:center;max-width:480px;margin-left:auto;margin-right:auto}
+#s-mark .intro{font-size:14px;line-height:1.5}
+#s-mark .mark-chat{max-width:480px;margin:0 auto;border-radius:16px;min-height:460px;border-color:#0a1016;background:#0b141a}
+/* cabeçalho estilo WhatsApp */
+#s-mark .mark-chat-head{gap:11px;padding:11px 13px;background:#202c33;border-bottom:1px solid #0a1016}
+#s-mark .mark-chat-head img{width:42px;height:42px;border:0;box-shadow:none}
+#s-mark .mark-chat-head strong{font-size:16px;color:#e9edef}
+#s-mark .mark-chat-head small{font-size:12.5px;color:#8696a0}
+#s-mark .mark-online{background:#25d366}
+/* área das mensagens */
+#s-mark .mark-messages{padding:14px 12px;gap:4px;background:#0b141a}
+#s-mark .mark-bubble{position:relative;max-width:80%;font-size:15px;line-height:1.5;padding:7px 10px 8px;border:0!important;box-shadow:0 1px .5px rgba(0,0,0,.25)!important;border-radius:9px;margin:3px 0}
+#s-mark .mark-bubble.bot{background:#202c33;color:#e9edef;border-top-left-radius:0}
+#s-mark .mark-bubble.user{background:#005c4b;color:#e9edef;border-top-right-radius:0}
+#s-mark .mark-bubble.bot::after{content:"";position:absolute;top:0;left:-7px;border-top:7px solid #202c33;border-left:7px solid transparent}
+#s-mark .mark-bubble.user::after{content:"";position:absolute;top:0;right:-7px;border-top:7px solid #005c4b;border-right:7px solid transparent}
+/* juntar balões seguidos do mesmo lado, como no WhatsApp */
+#s-mark .mark-bubble.bot+.mark-bubble.bot{border-top-left-radius:9px;margin-top:1px}
+#s-mark .mark-bubble.bot+.mark-bubble.bot::after{display:none}
+#s-mark .mark-bubble.user+.mark-bubble.user{border-top-right-radius:9px;margin-top:1px}
+#s-mark .mark-bubble.user+.mark-bubble.user::after{display:none}
+/* respostas rápidas (pílulas) */
+#s-mark .mark-quick{gap:7px;padding:8px 12px 10px;justify-content:center;background:#0b141a}
+#s-mark .mark-quick button{font-size:13px;font-weight:600;padding:8px 13px;min-height:0;border:1px solid #2a3942;border-radius:99px;background:#182229;color:#8fd0c4}
+#s-mark .mark-quick button:active{background:#223038}
+/* botões de ação dentro do balão do Mark */
+#s-mark .mark-acts{gap:6px;margin-top:9px}
+#s-mark .mark-acts button{font-size:13px;padding:7px 12px;min-height:0;border:1px solid rgba(0,168,132,.5);background:rgba(0,168,132,.14);color:#aef0e3}
+/* barra de digitar estilo WhatsApp */
+#s-mark .mark-compose{padding:9px 10px;gap:8px;background:#202c33;border-top:0}
+#s-mark .mark-compose textarea{font-size:15px;min-height:44px;padding:11px 14px;border:0;border-radius:22px;background:#2a3942;color:#e9edef}
+#s-mark .mark-compose textarea::placeholder{color:#8696a0}
+#s-mark .mark-send{width:46px;height:46px;font-size:22px;background:#00a884;color:#0b141a;box-shadow:none}
+#s-mark .mark-send:active{background:#06cf9c}
+#s-mark .mark-note{font-size:12px;padding:8px 12px 10px;color:#8696a0;background:#0b141a}
+#s-mark .mark-clear{font-size:14px;padding:11px 20px;max-width:480px}
+/* indicador de digitando */
+#s-mark .mark-typing{background:#202c33!important;padding:11px 14px}
+#s-mark .mark-typing i{background:#8696a0}
 /* ===== Sorteio honesto (brinde) ===== */
 .give-banner{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:2px solid var(--gold);background:linear-gradient(135deg,rgba(247,220,146,.28),var(--card));border-radius:18px;padding:12px 14px;margin:14px 0;box-shadow:0 6px 20px rgba(224,173,62,.22)}
 .more-banner{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:18px;padding:14px 16px;margin:12px 0;cursor:pointer;color:var(--ink)}
