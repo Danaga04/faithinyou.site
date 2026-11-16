@@ -887,7 +887,6 @@ body.ba-forced .ba-x{display:none} /* no 1º login, o BA é obrigatório: sem bo
    <p class="lab"><span id="greet">Tonight</span>, <b id="uname">Guest</b></p>
    <p style="margin-top:16px"><button class="btn gold" id="offer">✦ Get 10 free credits</button></p>
   </div>
-  <button type="button" class="ba-banner" id="baBanner"><div class="ba-ban-art"><svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true"><g fill="none" stroke="#D4AF37" stroke-width="1.4"><circle cx="60" cy="60" r="52"/><circle cx="60" cy="60" r="40"/><circle cx="60" cy="60" r="28"/></g><path d="M60 24 72 56 106 56 78 76 88 108 60 88 32 108 42 76 14 56 48 56Z" fill="#D4AF37" opacity=".5"/></svg></div><div class="ba-ban-txt"><span class="ba-kicker">Start here · Sacred Alignment</span><b>Blessings Accelerator</b><span class="ba-sub">Answer a few questions to begin your personal path</span></div><span class="ba-go">✦</span></button>
   <button type="button" class="more-banner" id="moreBtn"><span class="more-ic"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 5h7v7H4zM13 5h7v7h-7zM4 14h7v7H4zM13 14h7v7h-7z"/></svg></span><span class="more-txt"><b>More in Sacred Chant</b><span>Daily reward, Bible quiz, giveaway &amp; novena</span></span><span class="more-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></button>
   <p class="sh">Support &amp; blessings</p><p>Start here, request a prayer, or reach our team.</p>
   <div class="tiles" id="tSup"></div>
@@ -988,7 +987,7 @@ body.ba-forced .ba-x{display:none} /* no 1º login, o BA é obrigatório: sem bo
   </div>
   <button type="button" class="ghost mark-clear" id="markClear">Clear this conversation</button>
  </section>
- <section class="screen" id="s-sol"><button class="back" data-back>← Back</button><h2 class="h">7 Prayers of Solomon</h2><p class="intro">One prayer a day. Tap a day to listen. Days 4 to 7 open 24 hours after you begin.</p><div class="tiles" id="sDays"></div></section>
+ <section class="screen" id="s-sol"><button class="back" data-back>← Back</button><h2 class="h">7 Prayers of Solomon</h2><p class="intro">Seven prayers, all open for you. Tap any day to listen — at your own pace, whenever you wish.</p><div class="tiles" id="sDays"></div></section>
  <section class="screen" id="s-nov"><button class="back" data-back>← Back</button><div id="novBody"></div></section>
  <section class="screen" id="s-giveaway"><button class="back" data-back>← Back</button>
   <div class="give-box">
@@ -1078,7 +1077,6 @@ body.ba-forced .ba-x{display:none} /* no 1º login, o BA é obrigatório: sem bo
  </div>
 </section>
 <div class="cert" id="baEarly"><div><p style="font-size:34px">⏳</p><h2>Not today</h2><p id="baEarlyT"></p><div class="low-actions"><button class="ghost" id="baEarlySkip">I'll wait for its day</button><button class="btn gold" id="baEarlyGo">Pray it early anyway</button></div></div></div>
-<div class="cert" id="baRec"><div><p style="font-size:38px">🌟</p><h2>Accelerate your blessings</h2><p style="margin-top:6px">Before you begin on your own, take 2 minutes to align your 7 Codes. We'll build a personal, day-by-day schedule — so you always know <b>exactly which prayer to pray, and when</b>, with one tap.</p><div class="low-actions"><button class="btn gold" id="baRecGo">✦ Align my blessings</button><button class="ghost" id="baRecSkip">Continue on my own</button></div></div></div>
 <div class="ba" id="ba" role="dialog" aria-modal="true" aria-label="Blessings Accelerator"><div class="ba-bg" aria-hidden="true"></div><button class="ba-x" id="baX" aria-label="Close">✕</button><div class="ba-prog"><div id="baProg"></div></div><div class="ba-inner" id="baWrap"></div></div>
 <div class="cert" id="cert"><div><p style="font-size:30px">🕊️</p><h2>Certificate of Practice</h2><p>This certifies that</p><p class="nm" id="cN">Guest</p><p>has kept a daily practice of sacred chant, prayer and reflection with Sacred Chant, with <b id="cS">0</b> days in a row and <b id="cM">0</b> minutes of listening.</p><p class="lab" id="cD" style="margin:10px 0"></p><button class="btn" onclick="print()">Print</button> <button class="ghost" id="cX">Close</button></div></div>
 <section class="auth" id="auth" role="dialog" aria-modal="true" aria-label="Sign in"><div>
@@ -3130,7 +3128,6 @@ function mod(id){
  if(id==='pray')return prayOpen();
  if(id==='jesus'||id==='solomon'){
   const doOpen=()=>{if(id==='jesus'){if(!S.jesStart){S.jesStart=Date.now();save()}return jesPage()}return openPaid('solomon',()=>{if(!S.solStart){S.solStart=Date.now();save()}solPage()})};
-  if((!S.ba||!S.ba.report)&&!baRecDismissed&&typeof baRecommend==='function')return baRecommend(doOpen);
   return doOpen();
  }}
 let vBackTo='home',sdkOk=false;
@@ -3182,17 +3179,9 @@ const OB_QUESTIONS = [
 ];
 let obAnswers=[], obQuestion=0, obStage='quiz';
 function maybeStartOnboarding(user){
- try {
-  const createdAt=Date.parse(user && user.created_at || '');
-  const rolloutAt=Date.parse(ONBOARDING_ROLLOUT_AT);
-  if(!Number.isFinite(createdAt)||createdAt<rolloutAt||S.onboardingSeen||user.user_metadata?.sacredchant_onboarding_seen)return;
-  // NOVO USUÁRIO (1º login): em vez de tutorial/quiz de boas-vindas, ele é levado DIRETO e obrigatoriamente
-  // ao Blessings Accelerator, que monta o roteiro pessoal de orações — pra ficar claro o que o app faz.
-  S.onboardingSeen=true;try{save()}catch(e){}
-  if(sbClient){sbClient.auth.updateUser({data:{sacredchant_onboarding_seen:true}}).catch(()=>{});}
-  try{document.body.classList.add('ba-forced')}catch(e){}
-  if(typeof openBA==='function')openBA();
- } catch(e){console.warn('Could not start first-run alignment:',e)}
+ // Blessings Accelerator removido: nenhum quiz obrigatório no login. As orações ficam abertas direto.
+ try{S.onboardingSeen=true;save()}catch(e){}
+ try{if(sbClient)sbClient.auth.updateUser({data:{sacredchant_onboarding_seen:true}}).catch(()=>{})}catch(e){}
 }
 function startOnboarding(){
  obAnswers=[];obQuestion=0;obStage='quiz';
