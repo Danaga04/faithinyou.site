@@ -618,6 +618,27 @@ html[data-fs="x"]{zoom:1.38}
 .hp-lyr{width:100%;max-width:420px;font-size:17px;line-height:1.75;color:var(--ink);text-align:center}
 .hp-lyr p{margin:0 0 9px}
 .hp-empty{color:var(--mute)!important;font-style:italic}
+.hp-tog{position:relative}
+.hp-tog svg{width:22px!important;height:22px!important}
+.hp-tog.active{color:var(--acc)}
+.hp-tog.active::after{content:"";position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--acc)}
+.hp-queue{width:100%;max-width:440px;margin:24px auto 0}
+.hp-queue-h{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:0 0 8px;padding:0 2px}
+.hp-qrow{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;cursor:pointer;padding:8px 8px;border-radius:12px;text-align:left}
+.hp-qrow:hover{background:rgba(141,178,255,.08)}
+.hp-qrow.current{background:rgba(141,178,255,.12)}
+.hp-qrow .hp-qart{flex:0 0 auto;width:48px;height:48px;border-radius:9px;overflow:hidden}
+.hp-qrow .hp-qart svg{width:100%;height:100%;display:block}
+.hp-qtx{flex:1 1 auto;min-width:0}
+.hp-qtx b{display:block;font-size:15px;color:var(--ink);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hp-qtx span{display:block;font-size:12.5px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hp-qrow.current .hp-qtx b{color:var(--acc)}
+.hp-qeq{flex:0 0 auto;display:flex;align-items:flex-end;gap:2px;height:16px}
+.hp-qeq i{width:3px;background:var(--acc);border-radius:2px;height:5px}
+.hp-qrow.current.playing .hp-qeq i{animation:hqeq .9s ease-in-out infinite}
+.hp-qrow.current.playing .hp-qeq i:nth-child(2){animation-delay:.25s}
+.hp-qrow.current.playing .hp-qeq i:nth-child(3){animation-delay:.5s}
+@keyframes hqeq{0%,100%{height:5px}50%{height:15px}}
 #a2hs{position:fixed;inset:0;z-index:60;display:none;align-items:flex-end;justify-content:center;background:rgba(10,20,50,.55)}
 #a2hs.on{display:flex}
 #a2hs .sheet{background:linear-gradient(160deg,#fffdf5,#eaf2ff);color:#1c2a4a;width:100%;max-width:520px;border-radius:22px 22px 0 0;padding:24px 20px calc(26px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 40px rgba(10,20,50,.3);animation:a2up .3s ease}
@@ -1030,9 +1051,13 @@ body.ba-forced .ba-x{display:none} /* no 1º login, o BA é obrigatório: sem bo
  <h2 class="hp-title" id="hpTitle">—</h2>
  <p class="hp-sec" id="hpSec"></p>
  <div class="hp-seek"><span id="hpCur">0:00</span><input type="range" id="hpRange" min="0" max="100" value="0" aria-label="Seek"><span id="hpDur">0:00</span></div>
- <div class="hp-ctrls"><button type="button" id="hpPrev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 6h2.2v12H7zM20 6v12L9.5 12z"/></svg></button><button type="button" class="hp-pp" id="hpPP" aria-label="Play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button><button type="button" id="hpNext" aria-label="Next"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.8 6H17v12h-2.2zM4 6l10.5 6L4 18z"/></svg></button></div>
+ <div class="hp-ctrls"><button type="button" id="hpShuffle" class="hp-tog" aria-label="Shuffle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg></button><button type="button" id="hpPrev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 6h2.2v12H7zM20 6v12L9.5 12z"/></svg></button><button type="button" class="hp-pp" id="hpPP" aria-label="Play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button><button type="button" id="hpNext" aria-label="Next"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.8 6H17v12h-2.2zM4 6l10.5 6L4 18z"/></svg></button><button type="button" id="hpRepeat" class="hp-tog" aria-label="Repeat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg></button></div>
  <div class="hp-lyr-h" id="hpLyrH" hidden>Prayer words</div>
  <div class="hp-lyr" id="hpLyr"></div>
+ <div class="hp-queue" id="hpQueue">
+  <div class="hp-queue-h">Up next</div>
+  <div id="hpQueueList"></div>
+ </div>
  <p class="h-note" style="margin:16px auto 0;max-width:420px">For comfort and hope, alongside your doctor’s care — never instead of it.</p>
 </div>
 <nav class="tabbar" aria-label="Main"><div>
@@ -1434,12 +1459,17 @@ function prayerArt(p){var a=p.pal[0],b=p.pal[1];var ic=PICON[p.id]||'';
   +'<g transform="translate(29,29) scale(0.1640625)" fill="#fff">'+ic+'</g></svg>';
 }
 /* ---- player (áudio) ---- */
-let hpList=[],hpIdx=0;
+let hpList=[],hpIdx=0,hpShuffle=false,hpRepeat=false;
+function renderQueue(){const box=$('#hpQueueList');if(!box)return;
+ box.innerHTML=hpList.map((p,i)=>'<button type="button" class="hp-qrow'+(i===hpIdx?' current':'')+'" data-qi="'+i+'"><span class="hp-qart">'+prayerArt(p)+'</span><span class="hp-qtx"><b>'+_E(p.t)+'</b><span>'+_E(p.sec||'')+'</span></span>'+(i===hpIdx?'<span class="hp-qeq"><i></i><i></i><i></i></span>':'')+'</button>').join('');
+ $$('#hpQueueList .hp-qrow').forEach(b=>b.onclick=()=>openPrayer(hpList,Number(b.dataset.qi)));
+ try{setPP()}catch(e){}
+}
 function hpById(id){return PRAYERS.find(p=>p.id===id)}
 function fmtT(s){s=Math.max(0,s|0);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
 const ICO_PLAY='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
 const ICO_PAUSE='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.2v14H7zM13.8 5H17v14h-3.2z"/></svg>';
-function setPP(){const au=$('#hAudio');const playing=!!(au&&!au.paused);const ic=playing?ICO_PAUSE:ICO_PLAY;const a=$('#hpPP'),b=$('#hminiPP');if(a)a.innerHTML=ic;if(b)b.innerHTML=ic;const mn=$('#hmini');if(mn)mn.classList.toggle('playing',playing)}
+function setPP(){const au=$('#hAudio');const playing=!!(au&&!au.paused);const ic=playing?ICO_PAUSE:ICO_PLAY;const a=$('#hpPP'),b=$('#hminiPP');if(a)a.innerHTML=ic;if(b)b.innerHTML=ic;const mn=$('#hmini');if(mn)mn.classList.toggle('playing',playing);const cr=$('#hpQueueList .hp-qrow.current');if(cr)cr.classList.toggle('playing',playing)}
 function openPrayer(list,idx){hpList=list;hpIdx=idx;const p=hpList[hpIdx];if(!p)return;const au=$('#hAudio');
  if(p.audio){au.src=p.audio}else{au.removeAttribute('src')}
  $('#hpArt').innerHTML=prayerArt(p);$('#hminiArt').innerHTML=prayerArt(p);
@@ -1448,18 +1478,23 @@ function openPrayer(list,idx){hpList=list;hpIdx=idx;const p=hpList[hpIdx];if(!p)
  $('#hpPP').style.opacity=p.audio?'1':'.45';
  $('#hpRange').value='0';$('#hpCur').textContent='0:00';$('#hpDur').textContent='0:00';
  $('#hmini').hidden=false;$('#hplayer').classList.add('on');
+ renderQueue();
  if(p.audio){au.play().catch(()=>{});try{if(typeof sbClient!=='undefined'&&sbClient)sbClient.rpc('sc_bump_prayers')}catch(e){}}setPP();
 }
 function hpTogglePlay(){const au=$('#hAudio');const p=hpList[hpIdx];if(!p||!p.audio){try{toast('Audio coming soon for this prayer')}catch(e){}return}if(au.paused)au.play().catch(()=>{});else au.pause()}
 function hpPrev(){if(hpIdx>0)openPrayer(hpList,hpIdx-1)}
-function hpNext(){if(hpIdx<hpList.length-1)openPrayer(hpList,hpIdx+1)}
+function hpPickNext(){if(hpList.length<2)return -1;if(hpShuffle){let n=hpIdx;for(let k=0;k<8&&n===hpIdx;k++)n=Math.floor(Math.random()*hpList.length);return n}return hpIdx<hpList.length-1?hpIdx+1:-1}
+function hpNext(){const n=hpPickNext();if(n>=0)openPrayer(hpList,n)}
+function hpAutoNext(){const au=$('#hAudio');if(hpRepeat){if(au){au.currentTime=0;au.play().catch(()=>{})}return}const n=hpPickNext();if(n>=0)openPrayer(hpList,n);else setPP()}
 (function(){const au=$('#hAudio');if(!au)return;
  au.addEventListener('timeupdate',()=>{const r=$('#hpRange');if(au.duration){if(r)r.value=String((au.currentTime/au.duration)*100);$('#hpCur').textContent=fmtT(au.currentTime);$('#hpDur').textContent=fmtT(au.duration)}});
  au.addEventListener('play',setPP);au.addEventListener('pause',setPP);
- au.addEventListener('ended',()=>{if(hpIdx<hpList.length-1)hpNext();else setPP()});
+ au.addEventListener('ended',hpAutoNext);
  const r=$('#hpRange');if(r)r.addEventListener('input',e=>{if(au.duration)au.currentTime=(Number(e.target.value)/100)*au.duration});
  const pp=$('#hpPP');if(pp)pp.onclick=hpTogglePlay;const mpp=$('#hminiPP');if(mpp)mpp.onclick=e=>{e.stopPropagation();hpTogglePlay()};
  const pv=$('#hpPrev');if(pv)pv.onclick=hpPrev;const nx=$('#hpNext');if(nx)nx.onclick=hpNext;
+ const sh=$('#hpShuffle');if(sh)sh.onclick=()=>{hpShuffle=!hpShuffle;sh.classList.toggle('active',hpShuffle)};
+ const rp=$('#hpRepeat');if(rp)rp.onclick=()=>{hpRepeat=!hpRepeat;rp.classList.toggle('active',hpRepeat)};
  const cl=$('#hpClose');if(cl)cl.onclick=()=>$('#hplayer').classList.remove('on');
  const mn=$('#hmini');if(mn)mn.onclick=()=>$('#hplayer').classList.add('on');
  const mx=$('#hminiX');if(mx)mx.onclick=e=>{e.stopPropagation();healthStop()};
