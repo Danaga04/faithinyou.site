@@ -712,6 +712,8 @@ body.big .dms-read li{font-size:18px}
 .nov-day.done .nd-n{background:linear-gradient(135deg,#7ed0b0,#3d9e7a)}
 .nov-day .nd-l{font-weight:700;font-size:13px}
 .nov-day .nd-s{font-size:11px;color:var(--mute)}
+.nov-note{display:block;max-width:440px;margin:4px auto 16px;background:rgba(224,173,62,.1);border:1px solid rgba(224,173,62,.32);border-radius:12px;padding:11px 14px;font-size:13.5px;line-height:1.5;color:var(--ink);text-align:center}
+.nov-note b{color:var(--gold)}
 .freeze-buy{display:inline-flex;align-items:center;gap:6px;margin-top:8px;background:transparent;border:1px solid var(--line);border-radius:99px;color:var(--acc);font-weight:700;font-size:13px;padding:7px 14px;cursor:pointer}
 .freeze-buy:hover{border-color:var(--acc)}
 .streak-card .freeze-note{display:block;font-size:12.5px;color:var(--mute);margin-top:4px}
@@ -2827,10 +2829,12 @@ function renderNovCard(){
 function openNovena(){novRender();go('nov')}
 function novRender(){
  const w=$('#novBody');if(!w)return;const th=novTheme();const s=novState();
+ const daysSince=s.started?Math.floor((Date.now()-Number(s.started))/DAY):0;
  let tiles='';for(let i=0;i<9;i++){const open=novDayOpen(i),isDone=(s.done||[]).includes(i);
-  tiles+='<button type="button" class="nov-day'+(isDone?' done':'')+(open&&!isDone?' today':'')+'" '+(open?'data-novday="'+i+'"':'disabled')+'><span class="nd-n">'+(isDone?'✓':(i+1))+'</span><span class="nd-l">Day '+(i+1)+'</span><span class="nd-s">'+(isDone?'Prayed':(open?'Tap to pray':'Opens day '+(i+1)))+'</span></button>';
+  let sub;if(isDone)sub='Prayed';else if(open)sub='Tap to pray';else{const diff=i-daysSince;sub=(diff<=1)?'Opens tomorrow':('Opens in '+diff+' days');}
+  tiles+='<button type="button" class="nov-day'+(isDone?' done':'')+(open&&!isDone?' today':'')+'" '+(open?'data-novday="'+i+'"':'disabled')+'><span class="nd-n">'+(isDone?'✓':(open?(i+1):'🔒'))+'</span><span class="nd-l">Day '+(i+1)+'</span><span class="nd-s">'+sub+'</span></button>';
  }
- w.innerHTML='<p class="ba-eyebrow" style="text-align:center;color:var(--acc);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:12px">Novena of the Month</p><h2 class="h" style="text-align:center">'+th.t+'</h2><p class="intro" style="text-align:center">'+th.v+'</p><p class="intro" style="text-align:center;margin-top:-4px">Pray one prayer each day for nine days. A new day opens every day — and a fresh novena begins each month.</p><div class="nov-grid">'+tiles+'</div>';
+ w.innerHTML='<p class="ba-eyebrow" style="text-align:center;color:var(--acc);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:12px">Novena of the Month</p><h2 class="h" style="text-align:center">'+th.t+'</h2><p class="intro" style="text-align:center">'+th.v+'</p><p class="intro" style="text-align:center;margin-top:-4px">One prayer per day, for nine days.</p><div class="nov-note">⏳ You can pray only one day at a time. The next day unlocks <b>24 hours later</b> — come back tomorrow to continue. A fresh novena begins each month.</div><div class="nov-grid">'+tiles+'</div>';
  $$('#novBody [data-novday]').forEach(b=>b.onclick=()=>novDay(Number(b.dataset.novday)));
 }
 function novDay(i){
@@ -3106,14 +3110,23 @@ function showYT(id,title,back){vBackTo=back||'home';$('#vT').textContent=title;$
  $('#vBox iframe').src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)+'?rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=0&fs=1';go('vid')}
 /* pagina aberta dentro do app */
 function openWeb(url,title){$('#wT').textContent=title;$('#wBox').innerHTML='<iframe allow="autoplay; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-presentation" title="'+String(title).replace(/"/g,'&quot;')+'"></iframe>';$('#wBox iframe').src=url;go('web')}
+/* Dias 5, 6 e 7 (índices 4,5,6) travados nos dois módulos: proteção contra plágio, liberam depois. */
+const PROTECTED_DAYS=[4,5,6];
+function showProtected(i){
+ $('#lkH').textContent='Day '+(i+1)+' is protected';
+ $('#lkT').textContent='This prayer is protected against copycats and will open in 3 days. You won’t need it in this time — for now, just keep following the other prayers, day by day.';
+ $('#lkU').hidden=true;lkAct=null;lkCost=0;
+ $('#lkX').textContent='Got it';
+ $('#lk').classList.add('on');
+}
 /* 7 Prayers of Jesus: dias 1 e 2 abertos; o dia N abre N dias depois de comecar, ou na hora por 20 tokens */
 const JES_COST=20;
 const jesDayMs=i=>(i+1)*DAY;
 const jesOpen=i=>true;
-function jesPage(){$('#jDays').innerHTML=JDAYS.map((d,i)=>{const o=jesOpen(i);return tile('data-jday="'+i+'"',P+d[0]+'.avif','Day '+(i+1),0,o?'':'<span class="lk"><b>🔒</b><span class="cd"></span></span>',!o)}).join('');go('jes');jesTick()}
-function jesTick(){if(!$('#s-jes').classList.contains('on'))return;const now=Date.now(),start=Number(S.jesStart);if(!Number.isFinite(start))return;if(JDAYS.some((d,i)=>jesOpen(i)&&$('#jDays [data-jday="'+i+'"] .lk')))return jesPage();$$('#jDays [data-jday]').forEach((t,i)=>{if(jesOpen(i))return;const r=Math.max(0,jesDayMs(i)-(now-start)),dd=Math.floor(r/DAY),hh=Math.floor(r%DAY/36e5),mm=Math.floor(r%36e5/6e4),ss=Math.floor(r%6e4/1e3);const cd=t.querySelector('.cd');if(cd)cd.textContent='Opens in '+(dd?dd+'d ':'')+pad(hh)+':'+pad(mm)+':'+pad(ss)})}
+function jesPage(){$('#jDays').innerHTML=JDAYS.map((d,i)=>{const prot=PROTECTED_DAYS.includes(i);const o=jesOpen(i)&&!prot;const lock=prot?'<span class="lk"><b>🔒</b><span class="cd">Protected</span></span>':(o?'':'<span class="lk"><b>🔒</b><span class="cd"></span></span>');return tile('data-jday="'+i+'"',P+d[0]+'.avif','Day '+(i+1),0,lock,!o)}).join('');go('jes');jesTick()}
+function jesTick(){if(!$('#s-jes').classList.contains('on'))return;const now=Date.now(),start=Number(S.jesStart);if(!Number.isFinite(start))return;if(JDAYS.some((d,i)=>jesOpen(i)&&!PROTECTED_DAYS.includes(i)&&$('#jDays [data-jday="'+i+'"] .lk')))return jesPage();$$('#jDays [data-jday]').forEach((t,i)=>{if(jesOpen(i)&&!PROTECTED_DAYS.includes(i))return;const r=Math.max(0,jesDayMs(i)-(now-start)),dd=Math.floor(r/DAY),hh=Math.floor(r%DAY/36e5),mm=Math.floor(r%36e5/6e4),ss=Math.floor(r%6e4/1e3);const cd=t.querySelector('.cd');if(cd&&!PROTECTED_DAYS.includes(i))cd.textContent='Opens in '+(dd?dd+'d ':'')+pad(hh)+':'+pad(mm)+':'+pad(ss)})}
 setInterval(jesTick,1000);
-function jesClick(i){if(jesOpen(i))return showVid(JDAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Jesus','','','jes');
+function jesClick(i){if(PROTECTED_DAYS.includes(i))return showProtected(i);if(jesOpen(i))return showVid(JDAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Jesus','','','jes');
  lkCost=JES_COST;lkAct=()=>{S.jesPaid=S.jesPaid||[];if(!S.jesPaid.includes(i))S.jesPaid.push(i);save();jesPage()};
  $('#lkH').textContent='Day '+(i+1)+' is locked';
  $('#lkT').textContent='It opens '+(i+1)+' days after you began, or you can open it now for '+JES_COST+' ✦.';
@@ -3172,7 +3185,7 @@ function reading(){showVid(VID.pray,'Your reading is ready','<h2 class="h" style
 /* 7 Prayers of Solomon — unlock each day at its exact elapsed-day milestone */
 const solDayMs=i=>(i+1)*DAY;
 const solOpen=i=>true; /* tudo liberado: a pessoa comprou, recebe na hora */
-function solPage(){$('#sDays').innerHTML=DAYS.map((d,i)=>{const o=solOpen(i);return tile('data-day="'+i+'"',P+d[0]+'.avif','Day '+(i+1),0,o?'':'<span class="lk"><b>🔒</b><span class="cd"></span></span>',!o)}).join('');go('sol');solTick()}
+function solPage(){$('#sDays').innerHTML=DAYS.map((d,i)=>{const prot=PROTECTED_DAYS.includes(i);const o=solOpen(i)&&!prot;const lock=prot?'<span class="lk"><b>🔒</b><span class="cd">Protected</span></span>':(o?'':'<span class="lk"><b>🔒</b><span class="cd"></span></span>');return tile('data-day="'+i+'"',P+d[0]+'.avif','Day '+(i+1),0,lock,!o)}).join('');go('sol');solTick()}
 function solTick(){if(!$('#s-sol').classList.contains('on'))return;const now=Date.now(),start=Number(S.solStart);if(!Number.isFinite(start))return;let changed=false;DAYS.forEach((d,i)=>{if(i>=3&&!solOpen(i)&&now-start>=solDayMs(i))changed=true});if(changed){solPage();return}$$('#sDays [data-day]').forEach((tile,i)=>{if(solOpen(i))return;const remain=Math.max(0,solDayMs(i)-(now-start));const days=Math.floor(remain/DAY),hours=Math.floor((remain%DAY)/36e5),mins=Math.floor((remain%36e5)/6e4),secs=Math.floor((remain%6e4)/1e3);const cd=tile.querySelector('.cd');if(cd)cd.textContent='Opens in '+(days?days+'d ':'')+pad(hours)+':'+pad(mins)+':'+pad(secs)})}
 setInterval(solTick,1000);
 let lkDay=0,lkAct=null,lkCost=10;
@@ -3186,7 +3199,7 @@ function solTxHTML(txt){
  var body=lines.map(function(l){ var q=(l.charAt(0)==='"'||l.charAt(0)==='\u201c'); return '<p class="tx-p'+(q?' tx-q':'')+'">'+esc(l)+'</p>'; }).join('');
  return '<div class="tx-wrap"><h3 class="tx-h">\uD83D\uDCD6 Read along \u2014 English</h3>'+body+'</div>';
 }
-function dayClick(i){if(solOpen(i))return showVid(DAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Solomon','',solTxHTML(SOL_TX[i]||''),'sol');lkDay=i;lkCost=10;lkAct=()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()};$('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Wait for it';$('#lkH').textContent='Day '+(i+1)+' is resting';$('#lkT').textContent='It opens 24 hours after you began, or you can open it now for 10 ✦.';$('#lk').classList.add('on')}
+function dayClick(i){if(PROTECTED_DAYS.includes(i))return showProtected(i);if(solOpen(i))return showVid(DAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Solomon','',solTxHTML(SOL_TX[i]||''),'sol');lkDay=i;lkCost=10;lkAct=()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()};$('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Wait for it';$('#lkH').textContent='Day '+(i+1)+' is resting';$('#lkT').textContent='It opens 24 hours after you began, or you can open it now for 10 ✦.';$('#lk').classList.add('on')}
 $('#lkX').onclick=()=>{$('#lk').classList.remove('on');$('#lkU').hidden=false;lkAct=null;lkCost=0};
 $('#lkU').onclick=()=>{const f=lkAct,c=lkCost||0;$('#lk').classList.remove('on');$('#lkU').hidden=false;if(!f)return;if(c>=1)spend(c,f);else f()};
 document.addEventListener('click',e=>{const m=e.target.closest('[data-mod]');if(m)return mod(m.dataset.mod);const d=e.target.closest('[data-day]');if(d)return dayClick(+d.dataset.day);const st=e.target.closest('[data-store]');if(st)return openStoreItem(st.dataset.store,st.dataset.from);const ml=e.target.closest('[data-mile]');if(ml)return mileClick(+ml.dataset.mile);const sr=e.target.closest('[data-ser]');if(sr)return serClick(+sr.dataset.ser);const bn=e.target.closest('[data-bonus]');if(bn)return openBonus(bn.dataset.bonus);const pr=e.target.closest('[data-prod]');if(pr)return openProd(pr.dataset.prod);const jd=e.target.closest('[data-jday]');if(jd)jesClick(+jd.dataset.jday)});
