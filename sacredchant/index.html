@@ -791,6 +791,8 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
 /* X sempre visível, inclusive no 1º login — a pessoa pode fechar o Acelerador a qualquer momento */
 body.ba-proc .ba-x{display:none} /* na tela do vídeo de boas-vindas o X some: assista até o fim */
 .ba-warn{max-width:460px;margin:12px auto 2px;background:rgba(224,43,43,.14);border:1px solid rgba(255,120,120,.5);border-radius:12px;padding:11px 14px;font-size:13.5px;line-height:1.5;color:#ffd4d4;text-align:center}
+.ba-skip{display:block;margin:20px auto 0;background:none;border:0;color:#8a8574;font-size:13px;text-decoration:underline;cursor:pointer}
+.ba-skip:hover{color:#cfc8b8}
 .ba-prog{position:fixed;top:0;left:0;width:100%;height:3px;background:rgba(255,255,255,.08);z-index:3}
 .ba-prog>div{height:100%;width:0;background:linear-gradient(90deg,#B8912B,#E9CE74);transition:width .4s ease}
 .ba-inner{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:calc(54px + env(safe-area-inset-top,0px)) 22px calc(40px + env(safe-area-inset-bottom,0px));min-height:100vh}
@@ -1766,7 +1768,7 @@ const BA_CYCLE_DAYS=33;
 /* Cronograma com sensação de progresso: orações juntas nos primeiros dias (1 por dia),
    depois os intervalos crescem. Offsets em dias a partir de HOJE (começa já). */
 const BA_OFFSETS=[0,1,2,3,4,6,8,10,13,16,19,23,27,31];
-let baStep=0, baAns={}, baMsgTimer=null, baProcTimer=null, baRenewing=false;
+let baStep=0, baAns={}, baMsgTimer=null, baProcTimer=null, baSkipTimer=null, baRenewing=false;
 function baSyncBa(){try{if(sbClient)sbClient.auth.updateUser({data:{sc_ba:S.ba}}).catch(()=>{})}catch(e){}}
 function baCycleNum(){return (S.ba&&S.ba.cycle)||1}
 function baFocusCur(){return BA_FOCUS[(baCycleNum()-1)%BA_FOCUS.length]}
@@ -1801,7 +1803,7 @@ function openBA(){
  $('#ba').classList.add('on');baRender();
 }
 function startBaRenew(){baRenewing=true;baAns=Object.assign({},(S.ba&&S.ba.answers)||{});baClearProg();baStep=0;$('#ba').classList.add('on');baRender();try{$('#ba').scrollTop=0}catch(e){}}
-function closeBA(){$('#ba').classList.remove('on');try{document.body.classList.remove('ba-forced')}catch(e){}clearInterval(baMsgTimer);clearTimeout(baProcTimer);baGuardStop()}
+function closeBA(){$('#ba').classList.remove('on');try{document.body.classList.remove('ba-forced')}catch(e){}clearInterval(baMsgTimer);clearTimeout(baProcTimer);clearTimeout(baSkipTimer);baGuardStop()}
 /* Trava SÓ na tela do vídeo de boas-vindas: traz de volta se a pessoa apertar voltar/tentar sair. Desliga ao continuar. */
 let baGuardOn=false,baGuardPop=null,baGuardBefore=null;
 function baGuardStart(){
@@ -1870,14 +1872,17 @@ function baProcessing(w){
  const vid='<div class="ba-welcome-vid"><div style="position:relative;padding:56.25% 0 0 0"><iframe id="baWelcomeFrame" frameborder="0" allowfullscreen allow="autoplay;fullscreen" referrerpolicy="origin" style="position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:14px" src="'+vsrc+'"></iframe></div></div>';
  if(!window.__sdkWelcome){window.__sdkWelcome=true;const s=document.createElement('script');s.src='https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js';s.async=true;document.head.appendChild(s)}
  baGuardStart();
- w.innerHTML='<p class="ba-eyebrow">Welcome</p><p class="ba-subt" style="margin:0 auto 12px">Please watch this short welcome while we prepare your personal prayer plan.</p>'+vid+'<div class="ba-warn">⚠️ Please don’t press back, close the app, or leave this page. Watch the full video to receive your prayer plan.</div><div class="ba-proc-row"><div class="ba-ring" style="width:54px;height:54px"><svg width="54" height="54" viewBox="0 0 120 120" class="ba-star"><g fill="none" stroke="#D4AF37" stroke-width="2.4"><circle cx="60" cy="60" r="48"/><polygon points="'+baStarPts(60,60,48,22,7)+'"/></g></svg></div><p class="ba-proc-msg" id="baMsg" style="margin:0;text-align:left;min-height:0">'+MSGS[0]+'</p></div><div id="baReveal"></div>';
+ w.innerHTML='<p class="ba-eyebrow">Welcome</p><p class="ba-subt" style="margin:0 auto 12px">Please watch this short welcome while we prepare your personal prayer plan.</p>'+vid+'<div class="ba-warn">⚠️ Please don’t press back, close the app, or leave this page. Watch the full video to receive your prayer plan.</div><div class="ba-proc-row"><div class="ba-ring" style="width:54px;height:54px"><svg width="54" height="54" viewBox="0 0 120 120" class="ba-star"><g fill="none" stroke="#D4AF37" stroke-width="2.4"><circle cx="60" cy="60" r="48"/><polygon points="'+baStarPts(60,60,48,22,7)+'"/></g></svg></div><p class="ba-proc-msg" id="baMsg" style="margin:0;text-align:left;min-height:0">'+MSGS[0]+'</p></div><div id="baReveal"></div><div id="baSkip"></div>';
  let i=0;baMsgTimer=setInterval(()=>{i=(i+1)%MSGS.length;const m=$('#baMsg');if(m)m.textContent=MSGS[i]},1800);
+ const goPlan=()=>{clearTimeout(baProcTimer);clearTimeout(baSkipTimer);clearInterval(baMsgTimer);if(baRenewing||!S.ba||!S.ba.report)baSeal();baGuardStop();baSet(BA_CONF)};
  baProcTimer=setTimeout(()=>{
   clearInterval(baMsgTimer);
   if(baRenewing||!S.ba||!S.ba.report)baSeal();
   const m=$('#baMsg');if(m)m.textContent='Your prayer plan is ready 🙏';
-  const r=$('#baReveal');if(r){r.innerHTML='<p class="ba-subt" style="margin:16px auto 10px">The video has finished — tap below to continue.</p><button type="button" class="ba-gold" id="baRevealBtn">See my prayer plan ✦</button>';const b=$('#baRevealBtn');if(b)b.onclick=()=>{baGuardStop();baSet(BA_CONF)}}
+  const r=$('#baReveal');if(r){r.innerHTML='<p class="ba-subt" style="margin:16px auto 10px">The video has finished — tap below to continue.</p><button type="button" class="ba-gold" id="baRevealBtn">See my prayer plan ✦</button>';const b=$('#baRevealBtn');if(b)b.onclick=goPlan}
  },180000);
+ /* Skip discreto depois de 35s: quem realmente precisa sair não fica preso. */
+ baSkipTimer=setTimeout(()=>{const sk=$('#baSkip');if(sk)sk.innerHTML='<button type="button" class="ba-skip" id="baSkipBtn">Skip and see my plan</button>';const sb=$('#baSkipBtn');if(sb)sb.onclick=goPlan},35000);
 }
 function baSeal(){
  const nowISO=ymd(new Date());
