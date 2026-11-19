@@ -2415,7 +2415,7 @@ function openRefund(){
    (locked>0?'<div class="rf-stat"><span>Prayers &amp; programs still waiting for you</span><b>'+locked+'</b></div>':'')+
   '</div>'+
   (giftAvail?
-   '<div class="rf-gift"><h4>🎁 A gift to say thank you</h4><p style="margin:0;font-size:14px">If you stay, we\'ll unlock, right now and yours forever:</p><ul><li><b>Carlos Acutis Prayer</b> (normally 10 ✦)</li><li><b>Prayer of Archangel Raphael</b> (normally 10 ✦)</li><li>Your next <b>+10 Light Tokens</b>, ready to claim today</li></ul></div>'
+   '<div class="rf-gift"><h4>🎁 A gift to say thank you</h4><p style="margin:0;font-size:14px">If you stay, we\'ll unlock, right now and yours forever:</p><ul><li><b>Prayer of Archangel Raphael</b> (normally 10 ✦)</li><li>Your next <b>+10 Light Tokens</b>, ready to claim today</li></ul></div>'
    :'<div class="rf-gift"><h4>🎁 Still here for you</h4><p style="margin:0;font-size:14px">Your +10 Light Tokens are ready to claim today, and Mark can pray with you free for 48 hours whenever you like.</p></div>')+
   '<div class="low-actions"><button class="btn gold" id="refStay">Keep my access'+(giftAvail?' & claim my gift':'')+'</button><button class="ghost red" id="refGo">No, I still want a refund</button></div>';
  $('#refStay').onclick=refundStay;
@@ -2789,7 +2789,7 @@ const VID={start:'6aedc011882703ca9fa640e5',pray:'6ada1db657b486888a640681',inst
 const BOOK_URL='https://the-ancient-scroll-e5902968.base44.app/';
 const BONUS=[
  {id:'install',img:P+'tCCBJL46/bubbles5i62b6q0wh.avif',t:'How to install the app on your phone',vt:'vid',v:VID.install,cost:0,vert:true},
- {id:'acutis',img:P+'k4TtphP7/bubble9f6fjit2dom.avif',t:'Carlos Acutis Prayer',vt:'yt',v:'ciIeNeRpG1U',cost:10},
+ {id:'acutis',img:P+'k4TtphP7/bubble9f6fjit2dom.avif',t:'Carlos Acutis Prayer',vt:'yt',v:'ciIeNeRpG1U',cost:0},
  {id:'raphael',img:P+'rstFNh89/bubble5hea12mql54.avif',t:'Prayer of Archangel Raphael',vt:'yt',v:'WsoBbijb6O0',cost:10},
  {id:'words15',img:P+'Kvx8MD6M/bubble38q3omld08m.avif',t:'15 Words Prayer',vt:'yt',v:'Y1h9SdVUKIc',cost:0},
  {id:'benedict',img:P+'Sxjq6TDy/bubblerz48b7z1u7.avif',t:'Prayer of Saint Benedict',vt:'yt',v:'V-XWXNoPXoA',cost:0},
@@ -3825,7 +3825,7 @@ setInterval(tickOffer, 1000);
   bonuses: ['See my bonuses', () => { go('home'); setTimeout(() => { const t = $m('tBon'); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 150) }],
   exclusive: ['See my exclusive prayers', () => { go('home'); setTimeout(() => { const t = $m('tMile'); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, 150) }],
   install: ['Watch: install the app', () => openBonus('install')],
-  acutis: ['Carlos Acutis Prayer · 10 ✦', () => openBonus('acutis')],
+  acutis: ['Carlos Acutis Prayer · free', () => openBonus('acutis')],
   raphael: ['Archangel Raphael Prayer · 10 ✦', () => openBonus('raphael')],
   words15: ['Open 15 Words Prayer', () => openBonus('words15')],
   benedict: ['Open Prayer of Saint Benedict', () => openBonus('benedict')],
@@ -3880,7 +3880,7 @@ setInterval(tickOffer, 1000);
    r: [() => G.canOffer() ? "Your daily light is ready right now! Go to Home and tap \"Free tokens\". Take one breath, hold your intention in your heart, and +10 ✦ are added. You can do it once every 24 hours." : "You already offered your intention. Your next free +10 ✦ will be ready in about " + fmtLeft(G.offerLeft()) + ". The button on Home shows the countdown, and in Profile you can turn on a reminder so you don't miss it."],
    a: ['offer', 'profile'], f: ['What can I do with tokens?', 'How do I buy more tokens?'] },
   { id: 'costs', k: ['what costs', 'how much does it cost', 'how much is', 'price of', 'cost tokens', 'spend tokens', 'why did i lose tokens', 'tokens disappeared', 'tokens went down', 'charged tokens', 'took my tokens', 'used my tokens'],
-   r: [() => "Here's what uses Light Tokens: Start here costs 2 ✦ to open (once per day), the Chants tab 2 ✦, each chant session 3 ✦, \"I want to pray for you\" 10 ✦ once, Carlos Acutis and Archangel Raphael 10 ✦ each (forever), each Store program 120 ✦ (forever), and talking with me 3 ✦ per message. The 7 Prayers of Solomon and the 7 Prayers of Jesus are all open — every day is free to go through."],
+   r: [() => "Here's what uses Light Tokens: Start here costs 2 ✦ to open (once per day), the Chants tab 2 ✦, each chant session 3 ✦, \"I want to pray for you\" 10 ✦ once, Archangel Raphael 10 ✦ (forever), Carlos Acutis free, each Store program 120 ✦ (forever), and talking with me 3 ✦ per message. The 7 Prayers of Solomon and the 7 Prayers of Jesus are all open — every day is free to go through."],
    a: ['offer', 'buy'], f: ['How do I get free tokens?', 'What is free?'] },
   { id: 'plans', k: ['plan', 'plans', 'buy tokens', 'purchase tokens', 'price', 'prices', 'how much', 'pricing', 'premium', 'devotional plan', 'essential plan', 'sacred premium', 'package', 'pay', 'payment', 'checkout', 'digistore', 'upgrade'],
    r: [() => { const p = G.plans(); return p.length ? "These are the Light Token plans: " + list(p.map(x => x.name.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) + ' — ' + x.tokens.toLocaleString('en-US') + ' ✦ for ' + x.price + (x.monthly ? ' per month' : x.yearly ? ' per year' : ' one-time'))) + ". Sacred Premium is the best value. All plans are monthly subscriptions. Tap the ✦ counter at the top of the screen anytime to see them." : "Tap the ✦ counter at the top of the screen to see the Light Token plans." }],
@@ -3922,10 +3922,10 @@ setInterval(tickOffer, 1000);
    r: ["Our team is happy to help with anything about orders, payments, access or refunds. Tap the yellow chat button at the bottom right (or the Support tile on Home), write your name, email and question, and send it. They'll reply to your email."],
    a: ['support'] },
   { id: 'bonuses', k: ['bonus', 'bonuses', 'exclusive bonuses', 'gifts', 'extras', 'extra content'],
-   r: [() => "Your Exclusive bonuses on Home: How to install the app (free), Carlos Acutis Prayer (10 ✦, yours forever" + (G.bonusOwned('acutis') ? ', already yours' : '') + "), Prayer of Archangel Raphael (10 ✦, yours forever" + (G.bonusOwned('raphael') ? ', already yours' : '') + "), 15 Words Prayer (free), Prayer of Saint Benedict (free) and The Book of Hidden Light (free)."],
+   r: [() => "Your Exclusive bonuses on Home: How to install the app (free), Carlos Acutis Prayer (free), Prayer of Archangel Raphael (10 ✦, yours forever" + (G.bonusOwned('raphael') ? ', already yours' : '') + "), 15 Words Prayer (free), Prayer of Saint Benedict (free) and The Book of Hidden Light (free)."],
    a: ['bonuses', 'words15', 'benedict'] },
   { id: 'acutis', k: ['carlos acutis', 'acutis', 'carlo acutis', 'saint carlo', 'patron of the internet'],
-   r: [() => "Carlo Acutis was an Italian teenager (1991–2006) who loved the Eucharist so much he called it his \"highway to heaven\" and built a website about Eucharistic miracles. He died of leukemia at 15, was beatified in 2020 and canonized in 2025. He's often called the patron of the internet and a friend to young people. His prayer is in your bonuses for 10 ✦" + (G.bonusOwned('acutis') ? ", and it's already yours." : ", and once unlocked it's yours forever.")],
+   r: [() => "Carlo Acutis was an Italian teenager (1991–2006) who loved the Eucharist so much he called it his \"highway to heaven\" and built a website about Eucharistic miracles. He died of leukemia at 15, was beatified in 2020 and canonized in 2025. He's often called the patron of the internet and a friend to young people. His prayer is free in your bonuses."],
    a: ['acutis'] },
   { id: 'raphael', k: ['raphael', 'archangel raphael', 'saint raphael', 'tobit', 'tobias'],
    r: [() => "Raphael's name means \"God heals\". In the Book of Tobit he guides young Tobias on a journey, protects him and brings healing to his father's eyes. Many people ask for his intercession for health, safe travel and finding a good spouse. His prayer is in your bonuses for 10 ✦" + (G.bonusOwned('raphael') ? ", and it's already yours." : ", and once unlocked it stays yours forever.")],
