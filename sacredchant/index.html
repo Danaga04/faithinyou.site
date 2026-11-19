@@ -384,6 +384,18 @@ body.on-mark #supportFab{display:none}
 .tx-wrap{margin-top:18px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 16px 10px}
 .tx-h{font-size:14px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);margin:0 0 12px}
 .tx-p{font-size:16.5px;line-height:1.62;color:var(--ink);margin:0 0 11px}
+.heb-wrap{margin-top:16px;text-align:left;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.32);border-radius:16px;padding:16px}
+.heb-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.heb-ttl{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0}
+.heb-name{font-size:16px;font-weight:800;color:var(--ink)}
+.heb-he{font-size:17px;color:var(--gold);font-weight:700}
+.heb-btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:99px;padding:11px 16px;font-size:14.5px;font-weight:800;color:#15213a;background:linear-gradient(135deg,#e9c158,#d4af37);cursor:pointer}
+.heb-btn.on{background:#e02b2b;color:#fff}
+.heb-btn .heb-ic{font-size:16px}
+.heb-lines{display:flex;flex-direction:column;gap:9px}
+.heb-line{margin:0;font-size:22px;line-height:1.7;color:var(--ink);font-weight:600;padding:7px 11px;border-radius:10px;transition:background .15s}
+.heb-line.on{background:rgba(212,175,55,.22);color:var(--gold)}
+.heb-note{font-size:12.5px;color:var(--mute);margin:12px 0 0;line-height:1.5}
 .tx-q{font-weight:700;color:var(--acc);border-left:3px solid var(--gold);padding-left:12px;font-style:italic}
 
 
@@ -3228,11 +3240,42 @@ function solTxHTML(txt){
  var body=lines.map(function(l){ var q=(l.charAt(0)==='"'||l.charAt(0)==='\u201c'); return '<p class="tx-p'+(q?' tx-q':'')+'">'+esc(l)+'</p>'; }).join('');
  return '<div class="tx-wrap"><h3 class="tx-h">\uD83D\uDCD6 Read along \u2014 English</h3>'+body+'</div>';
 }
-function dayClick(i){if(solOpen(i))return showVid(DAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Solomon','',solTxHTML(SOL_TX[i]||''),'sol');lkDay=i;lkCost=10;lkAct=()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()};$('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Wait for it';$('#lkH').textContent='Day '+(i+1)+' is resting';$('#lkT').textContent='It opens 24 hours after you began, or you can open it now for 10 ✦.';$('#lk').classList.add('on')}
+/* ===== Pronúncia em hebraico: texto + botão que lê em voz alta (voz do próprio aparelho) ===== */
+const HEB_TX=[
+ {name:'Our Father',nameHe:'אבינו שבשמים',lines:['אבינו שבשמים, יתקדש שמך.','תבוא מלכותך.','ייעשה רצונך כמו בשמים כן בארץ.','את לחם חוקנו תן לנו היום.','וסלח לנו על חטאינו, כאשר סולחים גם אנחנו לחוטאים לנו.','ואל תביאנו לידי ניסיון, כי אם הצילנו מן הרע.','כי לך המלכות והגבורה והתפארת לעולמי עולמים. אמן.']},
+ {name:'The Shema',nameHe:'שמע ישראל',lines:['שמע ישראל, יהוה אלהינו, יהוה אחד.']},
+ {name:'Morning Prayer',nameHe:'מודה אני',lines:['מודה אני לפניך, מלך חי וקיים, שהחזרת בי נשמתי בחמלה, רבה אמונתך.']},
+ {name:'Priestly Blessing',nameHe:'ברכת הכוהנים',lines:['יברכך יהוה וישמרך.','יאר יהוה פניו אליך ויחנך.','ישא יהוה פניו אליך וישם לך שלום.']},
+ {name:'Psalm 23',nameHe:'מזמור כ״ג',lines:['יהוה רעי, לא אחסר.','בנאות דשא ירביצני, על מי מנוחות ינהלני.','נפשי ישובב, ינחני במעגלי צדק למען שמו.']},
+ {name:'Prayer for Protection',nameHe:'תפילה להגנה',lines:['אלוהים, שמור עלינו מכל רע, הגן על ביתנו, מלא את לבנו באמונה, באהבה ובשלום. אמן.']},
+ {name:'Prayer for Blessings',nameHe:'תפילה לברכה',lines:['יהי רצון מלפניך, אלוהים, שתברך אותנו בבריאות, בשמחה, בפרנסה טובה,','בשלום ובחסד בכל יום. אמן.']}
+];
+let hebSpeaking=false,hebVoiceCache=null;
+function hebVoice(){try{const vs=speechSynthesis.getVoices()||[];hebVoiceCache=vs.find(v=>/he-il/i.test(v.lang))||vs.find(v=>/^he\b/i.test(v.lang))||vs.find(v=>/hebrew|עברית|carmit/i.test(v.name))||null;return hebVoiceCache}catch(e){return null}}
+function hebSetBtn(on){hebSpeaking=on;const t=$('#hebBtnTx');if(t)t.textContent=on?'Stop':'Listen to the pronunciation';const b=$('#hebPlay');if(b)b.classList.toggle('on',on)}
+function hebStop(){try{if('speechSynthesis' in window)speechSynthesis.cancel()}catch(e){}try{$$('#hebLines .heb-line').forEach(el=>el.classList.remove('on'))}catch(e){}hebSetBtn(false)}
+function hebSpeak(i){
+ if(!('speechSynthesis' in window)){try{toast('Your device does not support read-aloud.')}catch(e){}return}
+ hebStop();const p=HEB_TX[i];if(!p)return;const voice=hebVoice();let idx=0;
+ const step=()=>{
+  if(idx>=p.lines.length){hebStop();return}
+  try{$$('#hebLines .heb-line').forEach(el=>el.classList.remove('on'));const el=document.querySelector('#hebLines .heb-line[data-li="'+idx+'"]');if(el)el.classList.add('on')}catch(e){}
+  const u=new SpeechSynthesisUtterance(p.lines[idx]);u.lang='he-IL';if(voice)u.voice=voice;u.rate=.82;
+  u.onend=()=>{idx++;step()};u.onerror=()=>{idx++;step()};
+  try{speechSynthesis.speak(u)}catch(e){idx++;step()}
+ };
+ hebSetBtn(true);step();
+}
+function toggleHeb(i){if(hebSpeaking)return hebStop();hebSpeak(i)}
+function hebBlock(i){const p=HEB_TX[i];if(!p)return '';
+ const lines=p.lines.map((l,li)=>'<p class="heb-line" data-li="'+li+'" dir="rtl">'+_E(l)+'</p>').join('');
+ return '<div class="heb-wrap"><div class="heb-head"><div class="heb-ttl"><b class="heb-name">'+_E(p.name)+'</b><span class="heb-he" dir="rtl">'+_E(p.nameHe)+'</span></div><button type="button" class="heb-btn" id="hebPlay" onclick="toggleHeb('+i+')"><span class="heb-ic">🔊</span><span id="hebBtnTx">Listen to the pronunciation</span></button></div><div id="hebLines" class="heb-lines">'+lines+'</div><p class="heb-note">Tap to hear each line read aloud in Hebrew. If you hear nothing, your phone may need a Hebrew voice installed.</p></div>';
+}
+function dayClick(i){if(solOpen(i)){hebStop();return showVid(DAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Solomon','',hebBlock(i)+solTxHTML(SOL_TX[i]||''),'sol')}lkDay=i;lkCost=10;lkAct=()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()};$('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Wait for it';$('#lkH').textContent='Day '+(i+1)+' is resting';$('#lkT').textContent='It opens 24 hours after you began, or you can open it now for 10 ✦.';$('#lk').classList.add('on')}
 $('#lkX').onclick=()=>{$('#lk').classList.remove('on');$('#lkU').hidden=false;lkAct=null;lkCost=0};
 $('#lkU').onclick=()=>{const f=lkAct,c=lkCost||0;$('#lk').classList.remove('on');$('#lkU').hidden=false;if(!f)return;if(c>=1)spend(c,f);else f()};
 document.addEventListener('click',e=>{const m=e.target.closest('[data-mod]');if(m)return mod(m.dataset.mod);const d=e.target.closest('[data-day]');if(d)return dayClick(+d.dataset.day);const st=e.target.closest('[data-store]');if(st)return openStoreItem(st.dataset.store,st.dataset.from);const ml=e.target.closest('[data-mile]');if(ml)return mileClick(+ml.dataset.mile);const sr=e.target.closest('[data-ser]');if(sr)return serClick(+sr.dataset.ser);const bn=e.target.closest('[data-bonus]');if(bn)return openBonus(bn.dataset.bonus);const pr=e.target.closest('[data-prod]');if(pr)return openProd(pr.dataset.prod);const jd=e.target.closest('[data-jday]');if(jd)jesClick(+jd.dataset.jday)});
-$('#vBack').onclick=()=>go(vBackTo);$$('[data-back]').forEach(b=>b.onclick=()=>go('home'));
+$('#vBack').onclick=()=>{try{hebStop()}catch(e){}go(vBackTo)};$$('[data-back]').forEach(b=>b.onclick=()=>{try{hebStop()}catch(e){}go('home')});
 
 /* First-time welcome quiz for newly created accounts only */
 const ONBOARDING_ROLLOUT_AT = '2026-11-15T00:00:00Z'; /* só usuários criados a partir daqui caem no Blessings Accelerator obrigatório */
