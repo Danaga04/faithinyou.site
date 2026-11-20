@@ -137,7 +137,7 @@ input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);
 .rf-note{font-size:13px;color:#8a5d00;background:rgba(224,173,62,.16);border:1px solid rgba(224,173,62,.4);border-radius:12px;padding:11px 13px;margin-top:12px;text-align:left}
 .rf-warnbox{font-size:14px;color:#8a3a36;background:rgba(217,83,79,.1);border:1px solid rgba(217,83,79,.35);border-radius:12px;padding:12px 14px;margin:12px 0;text-align:left;line-height:1.5}
 .rf-warnbox b{color:#b43b36}
-#banned{display:none;position:fixed;inset:0;z-index:999;background:linear-gradient(160deg,#1a1026,#2a0d12);color:#fff;padding:28px;place-items:center;text-align:center}#banned.on{display:grid}#banned .bwrap{max-width:360px}#banned .bang{font-size:52px}#banned h2{font-size:24px;margin:10px 0 6px}#banned p{color:#e9d9dd;font-size:15px;line-height:1.5;margin-top:8px}#banned .bsub{color:#b89aa2;font-size:13px}#banned button{margin-top:20px;background:#fff;color:#2a0d12;border:0;border-radius:99px;padding:13px 26px;font-weight:700}
+#banned{display:none;position:fixed;inset:0;z-index:999;background:linear-gradient(160deg,#1a1026,#2a0d12);color:#fff;padding:28px;place-items:center;text-align:center}#banned.on{display:grid}#banned .bwrap{max-width:360px}#banned .bang{font-size:52px}#banned h2{font-size:24px;margin:10px 0 6px}#banned p{color:#e9d9dd;font-size:15px;line-height:1.5;margin-top:8px}#banned .bsub{color:#b89aa2;font-size:13px}#banned .bprod{margin-top:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:10px 14px;font-size:14px;color:#ffd9df}#banned .bprod b{color:#fff}#banned button{margin-top:20px;background:#fff;color:#2a0d12;border:0;border-radius:99px;padding:13px 26px;font-weight:700}
 .auth-help{text-align:right;font-size:14px;font-weight:700;color:var(--ink);margin:26px 64px 70px 0;line-height:1.45}
 .auth-arrow{display:inline-block;font-size:30px;line-height:1;color:#f5c400;vertical-align:middle;animation:authArrow 1.3s ease-in-out infinite}
 @keyframes authArrow{0%,100%{transform:translate(0,0)}50%{transform:translate(6px,6px)}}
@@ -2806,10 +2806,8 @@ function a2Open(){if(isStandalone()||!$('#a2hs'))return;a2Render();$('#a2hs').cl
 if($('#installBtn2'))$('#installBtn2').onclick=()=>{if(isStandalone()){toast('It\'s already on your home screen 🙏');return}if(!$('#a2hs'))return;a2Render();$('#a2hs').classList.add('on')};
 function a2Close(){const s=$('#a2hs');if(s)s.classList.remove('on');S.a2At=Date.now();save()}
 function maybeA2(){
- if(isStandalone())return;
- if(!dip&&!/android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent))return; // no desktop so com 1-toque
- const last=Number(S.a2At)||0;if(Date.now()-last<3*DAY)return; // no maximo 1x a cada 3 dias
- setTimeout(a2Open,1400);
+ // Aviso automático desativado — o "Add to Home Screen" só aparece se a pessoa tocar nos botões manuais.
+ return;
 }
 /* Service worker: mantem o app sempre atualizado (busca a versao nova e recarrega sozinho) */
 if('serviceWorker' in navigator){
@@ -3555,7 +3553,7 @@ function getSupabase() {
                 const { data } = await sbClient.rpc('sc_account_blocked');
                 blocked = data === true;
               } catch (e) { blocked = false; } // falha de rede: nao tranca por engano
-              if (blocked) { showBanned(); try { await sbClient.auth.signOut(); } catch (e) {} return; }
+              if (blocked) { let binfo=null; try { const { data: bi } = await sbClient.rpc('sc_block_info'); binfo = bi; } catch (e) {} showBanned(binfo); try { await sbClient.auth.signOut(); } catch (e) {} return; }
               try { const { data: ps } = await sbClient.rpc('sc_prayer_active'); S.prayerSub = (ps === true); save(); } catch (e) {}
               // Aba Health (upsell 2, $49/mês): acesso verificado no servidor. RPC criado no passo do Supabase.
               try { const { data: h } = await sbClient.rpc('sc_health_active'); S.health2 = (h === true); save(); } catch (e) {}
@@ -3594,12 +3592,13 @@ function getSupabase() {
   return sbPromise;
 }
 
-function showBanned(){
+function showBanned(info){
   try{$('#auth').classList.remove('on');}catch(e){}
   try{document.getElementById('app')?.remove();}catch(e){}
   let b=document.getElementById('banned');
   if(!b){b=document.createElement('div');b.id='banned';document.body.appendChild(b);}
-  b.innerHTML='<div class="bwrap"><div class="bang">⛔</div><h2>Access closed</h2><p>Your purchase was refunded, so this account no longer has access to Sacred Chant. This is permanent.</p><p class="bsub">If you believe this is a mistake, contact support.</p><button type="button" id="bContact">Contact support</button></div>';
+  let prod='';try{if(info){const nm=(info.product_name||'').trim();const id=(info.product_id||'').trim();const label=nm||(id?('product '+id):'');if(label)prod='<p class="bprod">Refunded product: <b>'+_E(label)+'</b></p>';}}catch(e){}
+  b.innerHTML='<div class="bwrap"><div class="bang">⛔</div><h2>Access closed</h2><p>Your purchase was refunded, so this account no longer has access to Sacred Chant. This is permanent.</p>'+prod+'<p class="bsub">If you believe this is a mistake, contact support.</p><button type="button" id="bContact">Contact support</button></div>';
   b.classList.add('on');
   const c=document.getElementById('bContact');
   if(c)c.onclick=()=>{try{window.openSupportPanel&&window.openSupportPanel()}catch(e){location.href='mailto:support@sacred-chant.app'}};
