@@ -3201,7 +3201,7 @@ mileTiles();
 /* YouTube dentro do app: sandbox sem popups/navegacao impede abrir o YouTube */
 function showYT(id,title,back){vBackTo=back||'home';$('#vT').textContent=title;$('#vTop').innerHTML='';$('#vTx').innerHTML='';
  $('#vBox').innerHTML='<div class="ytw"><iframe allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-same-origin allow-presentation" title="'+String(title).replace(/"/g,'&quot;')+'"></iframe><div class="ytb" aria-hidden="true"></div></div>';
- $('#vBox iframe').src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)+'?rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=0&fs=1';go('vid')}
+ $('#vBox iframe').src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)+'?rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&controls=0&disablekb=1&fs=0';go('vid')}
 /* ===== Módulos recém-adicionados ===== */
 const NEWMODS=[
  {id:'plenitude',img:'https://i.postimg.cc/j51VdFRX/A-Oracao-do-Senhor-em-Plenitude.png',t:'The Lord’s Prayer in Fullness',yt:'zKBALDmEUBI'},
@@ -3238,7 +3238,7 @@ function renderAram(){const t=$('#vTx');if(t)t.innerHTML=aramHTML()}
 function setAramLang(l){aramLang=l;renderAram()}
 function openAramaic(m){vBackTo='home';$('#vT').textContent=m.t;$('#vTop').innerHTML='';
  $('#vBox').innerHTML='<div class="ytw"><iframe allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-same-origin allow-presentation" title="'+_E(m.t)+'"></iframe><div class="ytb" aria-hidden="true"></div></div>';
- $('#vBox iframe').src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(m.yt)+'?rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&fs=1';
+ $('#vBox iframe').src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(m.yt)+'?rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&controls=0&disablekb=1&fs=0';
  renderAram();go('vid')}
 /* pagina aberta dentro do app */
 function openWeb(url,title){$('#wT').textContent=title;$('#wBox').innerHTML='<iframe allow="autoplay; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-presentation" title="'+String(title).replace(/"/g,'&quot;')+'"></iframe>';$('#wBox iframe').src=url;go('web')}
