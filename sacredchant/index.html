@@ -988,9 +988,9 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
   <p class="sh">Products I traded for tokens</p><p>Everything you unlocked in the Store.</p>
   <div class="tiles" id="tOwn"></div>
   <div class="soon" id="ownEmpty">You have not traded tokens for products yet.<br><button type="button" class="ghost" style="margin-top:12px" id="goStore">Visit the Store</button></div>
-  <p class="sh">Exclusive prayers for the faithful</p><p>Rare prayers few people ever receive. A new one opens on your day 3, 7, 14 and 21 with Sacred Chant. They cannot be unlocked with tokens, only with time.</p>
+  <p class="sh">Exclusive prayers for the faithful</p><p>Rare prayers few people ever receive. A new one opens 10 minutes, 1 hour, 12 hours and 24 hours after you begin with Sacred Chant. They open only with time.</p>
   <div class="tiles" id="tMile"></div>
-  <p class="lab" style="text-align:center;margin:18px 0 6px">Each prayer costs 2 credits (✦) to open. Tap "Get free credits" every 24 hours for +10.</p>
+  <p class="lab" style="text-align:center;margin:18px 0 6px">These open on their own with time — nothing to unlock, free for you.</p>
   <div class="card" style="text-align:center">
    <p class="lab">Chant of the day</p><p class="m" id="dM"></p><p class="lab" id="dX" style="font-weight:500"></p>
    <p style="margin-top:12px"><button class="btn" id="dPlay">▶ Chant with me</button></p>
@@ -2856,12 +2856,9 @@ const prayOK=()=>!!(S.prayUnlocked||S.prayDone);
 const prayerSub=()=>!!S.prayerSub;   /* comprou o upsell 5 (717097) — assinatura "Prayer for you" */
 function prayOpen(){
  if(prayerSub())return prayLetter();
- if(prayOK())return S.prayDone?reading():quiz();
- lkCost=10;lkAct=()=>{S.prayUnlocked=1;save();homeTiles();quiz()};
- $('#lkH').textContent='Unlock "I want to pray for you"';
- $('#lkT').textContent='Unlock this module once for 10 ✦. After that, it stays open for you.';
- $('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Not now';
- $('#lk').classList.add('on')}
+ /* Home liberada: abre sem tokens */
+ return S.prayDone?reading():quiz();
+}
 function prayLetter(){
  const nm=_E((String(S.name||'').split(' ')[0])||'friend');
  $('#pBody').innerHTML='<div class="pletter">'
@@ -2937,16 +2934,17 @@ function novSync(){try{if(sbClient)sbClient.auth.updateUser({data:{sc_novena:S.n
 function homeTiles(){
  if(!S.firstSeen){S.firstSeen=Date.now();try{save()}catch(e){}} // marca o PRIMEIRO acesso (base do contador do sorteio)
  {const tn=$('#tNew');if(tn)tn.innerHTML=NEWMODS.map(m=>tile('data-new="'+m.id+'"',m.img,m.t,0,'<span class="new-badge">NEW</span>')).join('');}
- $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',2)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',(prayOK()||prayerSub())?0:10,(prayOK()||prayerSub())?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')+tile('data-bonus="install"',(BONUS.find(x=>x.id==='install')||{}).img,'How to install the app on your phone',0)+tile('data-mod="support"',IMG.support,'Support',0);
- $('#tPrd').innerHTML=tile('data-mod="solomon"',IMG.solomon,'7 Prayers of Solomon',2)+tile('data-mod="jesus"',JES_IMG,'7 Prayers of Jesus, guided by Mark',0)+PRODS.map(p=>tile('data-prod="'+p.id+'"',p.img,p.t,0)).join('');
- $('#tBon').innerHTML=BONUS.filter(b=>b.id!=='install').map(b=>{const ok=!b.cost||bonusOK(b.id);return tile('data-bonus="'+b.id+'"',b.img,b.t,ok?0:b.cost,ok?'':'<span class="lk"><b>🔒</b>Click to unlock</span>')}).join('');if(typeof renderDmsHome==='function')renderDmsHome();if(typeof renderNovCard==='function')renderNovCard();if(typeof renderRewardCard==='function')renderRewardCard()}
+ $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',0)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',0)+tile('data-bonus="install"',(BONUS.find(x=>x.id==='install')||{}).img,'How to install the app on your phone',0)+tile('data-mod="support"',IMG.support,'Support',0);
+ $('#tPrd').innerHTML=tile('data-mod="solomon"',IMG.solomon,'7 Prayers of Solomon',0)+tile('data-mod="jesus"',JES_IMG,'7 Prayers of Jesus, guided by Mark',0)+PRODS.map(p=>tile('data-prod="'+p.id+'"',p.img,p.t,0)).join('');
+ $('#tBon').innerHTML=BONUS.filter(b=>b.id!=='install').map(b=>tile('data-bonus="'+b.id+'"',b.img,b.t,0)).join('');if(typeof renderDmsHome==='function')renderDmsHome();if(typeof renderNovCard==='function')renderNovCard();if(typeof renderRewardCard==='function')renderRewardCard()}
 /* desbloqueio permanente por conta (salvo no aparelho e na conta do usuario) */
 const bonusOK=id=>(S.bonusUnl||[]).includes(id);
 function syncUnlocks(){if(sbClient)sbClient.auth.updateUser({data:{sc_bonus_unlocks:S.bonusUnl||[]}}).catch(e=>console.warn('Could not sync unlocks:',e?.message||e))}
 function openBonus(id){
  const b=BONUS.find(x=>x.id===id);if(!b)return;
  const show=()=>{if(b.vt==='vid')return showVid(b.v,b.t,'','','home',b.vert);if(b.vt==='yt')return showYT(b.v,b.t,'home');openWeb(b.v,b.t)};
- if(!b.cost||bonusOK(id))return show();
+ return show(); /* Home liberada: bônus abrem sem tokens */
+ /* eslint-disable no-unreachable */
  lkCost=b.cost;
  lkAct=()=>{S.bonusUnl=S.bonusUnl||[];if(!S.bonusUnl.includes(id))S.bonusUnl.push(id);save();syncUnlocks();homeTiles();show()};
  $('#lkH').textContent='Unlock "'+b.t+'"';
@@ -3170,23 +3168,24 @@ $('#goStore').onclick=()=>access('store');
 storeTiles();
 /* ===== Oracoes exclusivas por tempo de acesso (7, 14, 30 e 60 dias). Nao podem ser desbloqueadas com tokens. ===== */
 const MILES=[
- {d:3,img:P+'3xznx1N8/bubbleidg55myq2ja.avif',t:'Prayer for Depression',v:'AlHkFBomotY'},
- {d:7,img:P+'tJrzQtwN/bubble52oiiabnrdk.avif',t:'Prayer for Cancer',v:'feemAhLjiVY'},
- {d:14,img:P+'XJ4Krz0Q/bubbleihnx7qigrao.avif',t:'Prayer for Ringing Ears',v:'CrxdKDo7V1c'},
- {d:21,img:P+'pXpf5jgH/bubbletmw31124tck.avif',t:'Morning Prayer',v:'St-Nfz2K0lI'}
+ {ms:10*6e4,img:P+'3xznx1N8/bubbleidg55myq2ja.avif',t:'Prayer for Depression',v:'AlHkFBomotY'},
+ {ms:60*6e4,img:P+'tJrzQtwN/bubble52oiiabnrdk.avif',t:'Prayer for Cancer',v:'feemAhLjiVY'},
+ {ms:12*36e5,img:P+'XJ4Krz0Q/bubbleihnx7qigrao.avif',t:'Prayer for Ringing Ears',v:'CrxdKDo7V1c'},
+ {ms:24*36e5,img:P+'pXpf5jgH/bubbletmw31124tck.avif',t:'Morning Prayer',v:'St-Nfz2K0lI'}
 ];
 let mileStart=0;
-const mileLeft=m=>mileStart?Math.max(0,mileStart+m.d*DAY-Date.now()):m.d*DAY;
+const mileLeft=m=>mileStart?Math.max(0,mileStart+m.ms-Date.now()):m.ms;
 const mileOK=m=>!!mileStart&&mileLeft(m)<=0;
+function mileDur(m){const t=m.ms;if(t<36e5)return Math.round(t/6e4)+' minutes';const h=Math.round(t/36e5);return h+' hour'+(h===1?'':'s')}
 function mileTiles(){
- $('#tMile').innerHTML=MILES.map((m,i)=>{const ok=mileOK(m);return tile('data-mile="'+i+'"',m.img,m.t+' · day '+m.d,0,ok?'<span class="own">✓ Unlocked</span>':'<span class="lk"><b>🔒</b>Day '+m.d+'<span class="mcd" style="font-size:12px;font-weight:600"></span></span>',!ok)}).join('');
+ $('#tMile').innerHTML=MILES.map((m,i)=>{const ok=mileOK(m);return tile('data-mile="'+i+'"',m.img,m.t,0,ok?'<span class="own">✓ Unlocked</span>':'<span class="lk"><b>🔒</b><span class="mcd" style="font-size:12px;font-weight:600"></span></span>',!ok)}).join('');
  mileTick()}
 function mileTick(){
  if(!$('#tMile'))return;
  if(MILES.some((m,i)=>mileOK(m)&&$('#tMile [data-mile="'+i+'"] .lk')))return mileTiles();
  MILES.forEach((m,i)=>{const e=$('#tMile [data-mile="'+i+'"] .mcd');if(!e)return;const r=mileLeft(m),dd=Math.floor(r/DAY),hh=Math.floor(r%DAY/36e5),mm=Math.floor(r%36e5/6e4),ss=Math.floor(r%6e4/1e3);e.textContent='Opens in '+(dd?dd+'d ':'')+pad(hh)+':'+pad(mm)+':'+pad(ss)})}
 setInterval(mileTick,1000);
-function mileClick(i){const m=MILES[i];if(!m)return;if(mileOK(m))return showYT(m.v,m.t,'home');const dd=Math.ceil(mileLeft(m)/DAY);$('#lkH').textContent=m.t+' is still sealed';$('#lkT').textContent='This exclusive prayer opens on your day '+m.d+' with Sacred Chant ('+dd+' day'+(dd===1?'':'s')+' left). It cannot be unlocked with tokens, only with time. Keep coming back.';lkAct=null;lkCost=0;$('#lkU').hidden=true;$('#lkX').textContent='I will wait';$('#lk').classList.add('on')}
+function mileClick(i){const m=MILES[i];if(!m)return;if(mileOK(m))return showYT(m.v,m.t,'home');$('#lkH').textContent=m.t+' is still sealed';$('#lkT').textContent='This exclusive prayer opens '+mileDur(m)+' after you begin with Sacred Chant. It cannot be unlocked with tokens, only with time. Keep coming back.';lkAct=null;lkCost=0;$('#lkU').hidden=true;$('#lkX').textContent='I will wait';$('#lk').classList.add('on')}
 function setMileStart(user){
  if(!S.firstSeen){S.firstSeen=Date.now();save()}
  const created=Date.parse(user&&user.created_at||'');
@@ -3250,7 +3249,7 @@ function jesClick(i){if(jesOpen(i))return showVid(JDAYS[i][1],'Day '+(i+1)+' · 
  $('#lkT').textContent='It opens '+(i+1)+' days after you began, or you can open it now for '+JES_COST+' ✦.';
  $('#lkU').textContent='Unlock now · '+JES_COST+' ✦';$('#lkX').textContent='Wait for it';
  $('#lk').classList.add('on')}
-function openPaid(id,cb){if(!S.unl||S.unl.d!==today())S.unl={d:today(),ids:[]};if(S.unl.ids.includes(id))return cb();spend(2,()=>{S.unl.ids.push(id);save();cb()})}
+function openPaid(id,cb){return cb()} /* Home liberada: abre direto, sem gastar tokens */
 /* "Start here" na Home: abre as orações DIRETO, sem o popup de recomendação (findability p/ quem não acha). */
 function openPrayersDirect(which){
  if(which==='jesus'){if(!S.jesStart){S.jesStart=Date.now();save()}return jesPage()}
