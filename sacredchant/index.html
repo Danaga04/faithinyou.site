@@ -901,6 +901,8 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
 .ba-code.done .ba-tag{color:#5fe0a0}
 .ba-list{margin-top:6px}
 .ba-focus-btn{display:block;width:100%;text-align:left;border:1px solid rgba(212,175,55,.45);background:rgba(212,175,55,.08);color:#E9CE74;border-radius:14px;padding:13px 15px;font-size:14.5px;font-weight:700;margin:0 0 16px;cursor:pointer}
+.ba-redo{display:block;width:100%;margin:10px auto 0;background:none;border:0;color:#9aa3bd;font-size:13.5px;text-decoration:underline;cursor:pointer}
+.ba-redo:hover{color:#cfd6ea}
 .ba-quote{font-family:Georgia,serif;font-style:italic;font-size:18px;line-height:1.5;color:#E9CE74;text-align:center;margin:22px auto;max-width:440px}
 .ba-prog-line{text-align:center;color:#E9CE74;font-weight:700;margin:0 0 12px}
 .ba-focus{border:1px solid rgba(212,175,55,.5);background:linear-gradient(160deg,rgba(212,175,55,.14),rgba(212,175,55,.03));border-radius:18px;padding:16px;margin:16px 0}
@@ -1857,6 +1859,8 @@ function openBA(){
  $('#ba').classList.add('on');baRender();
 }
 function startBaRenew(){baRenewing=true;baAns=Object.assign({},(S.ba&&S.ba.answers)||{});baClearProg();baStep=0;$('#ba').classList.add('on');baRender();try{$('#ba').scrollTop=0}catch(e){}}
+/* Refazer o quiz: pra quem respondeu algo errado. Começa do zero já com as respostas anteriores preenchidas. */
+function baRedoQuiz(){baRenewing=false;baAns=Object.assign({},(S.ba&&S.ba.answers)||{});baClearProg();baStep=0;$('#ba').classList.add('on');try{document.body.classList.remove('ba-forced')}catch(e){}baRender();try{$('#ba').scrollTop=0;scrollTo(0,0)}catch(e){}}
 function closeBA(){$('#ba').classList.remove('on');try{document.body.classList.remove('ba-forced')}catch(e){}clearInterval(baMsgTimer);clearTimeout(baProcTimer);clearTimeout(baSkipTimer);baGuardStop()}
 /* Trava SÓ na tela do vídeo de boas-vindas: traz de volta se a pessoa apertar voltar/tentar sair. Desliga ao continuar. */
 let baGuardOn=false,baGuardPop=null,baGuardBefore=null;
@@ -1966,8 +1970,9 @@ function baConfirm(w){
  let baStatus='';{const nd=rep.codes.filter(c=>!baDone.includes(c.step)).slice().sort((a,b)=>(a.iso||'')<(b.iso||'')?-1:1);if(!nd.length){baStatus='<div class="ba-status calm">All 14 prayers done this month 🙏</div>'}else{const nx=nd[0],ld=baLiveDays(nx),lbl=nx.module+' · Prayer '+nx.prayerNum;if(ld===0)baStatus='<div class="ba-status urgent">Today: pray '+lbl+'</div>';else if(ld<0)baStatus='<div class="ba-status urgent">Waiting since '+nx.dateLabel+': '+lbl+'</div>';else baStatus='<div class="ba-status calm">Next: '+nx.dateLabel+' · '+lbl+' (in '+ld+' day'+(ld===1?'':'s')+')</div>'}}
  let renewCard='';
  if(cycleComplete){renewCard='<div class="ba-renew"><h3>✨ Month '+cyc+' complete</h3><p>You prayed <b>'+baDone.length+' of 14</b>. A new month is ready.</p><button type="button" class="ba-gold" id="baRenewBtn">Start next month</button></div>'}
- w.innerHTML='<p class="ba-eyebrow">Your prayer plan</p><h2 class="ba-title" style="font-size:26px;margin-bottom:14px">'+((nm&&nm!=='Beloved')?nm+'’s 14 prayers':'Your 14 prayers')+'</h2>'+renewCard+baStatus+baProgLine+focusBtn+'<div class="ba-list">'+codes+'</div><button type="button" class="ba-gold" id="baDone" style="margin-top:18px">Close</button>';
+ w.innerHTML='<p class="ba-eyebrow">Your prayer plan</p><h2 class="ba-title" style="font-size:26px;margin-bottom:14px">'+((nm&&nm!=='Beloved')?nm+'’s 14 prayers':'Your 14 prayers')+'</h2>'+renewCard+baStatus+baProgLine+focusBtn+'<div class="ba-list">'+codes+'</div><button type="button" class="ba-gold" id="baDone" style="margin-top:18px">Close</button><button type="button" class="ba-redo" id="baRedo">Answered something wrong? Redo the quiz</button>';
  const d=$('#baDone');if(d)d.onclick=()=>{closeBA();go('home')};
+ const rd=$('#baRedo');if(rd)rd.onclick=()=>baRedoQuiz();
  const fo=$('#baFocusOpen');if(fo)fo.onclick=()=>{baStep=BA_FOCUS_VIEW;baRender()};
  const rb=$('#baRenewBtn');if(rb)rb.onclick=()=>startBaRenew();
  $$('#baWrap [data-bastep]').forEach(btn=>{btn.onclick=()=>{const step=Number(btn.dataset.bastep),mod=btn.dataset.bamod,pn=Number(btn.dataset.bap),iso=btn.dataset.baiso,lbl=btn.dataset.balabel||'';const done=((S.ba&&S.ba.done)||[]).includes(step);const ld=iso?Math.round((Date.parse(iso+'T00:00:00Z')-Date.parse(ymd(new Date())+'T00:00:00Z'))/864e5):0;if(ld>0&&!done)return baEarlyAsk(lbl,ld,()=>baOpenPrayer(mod,pn,step));baOpenPrayer(mod,pn,step)}});
