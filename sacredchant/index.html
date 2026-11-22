@@ -1929,7 +1929,8 @@ function baQuestion(w,q){
 function baProcessing(w){
  const MSGS=["Reading your answers…","Aligning your 7 Codes of Solomon…","Identifying the best days and hours for your prayers…","Removing spiritual blockages from your path…","Calibrating your blessings accelerator…","Finalizing your personalized alignment…"];
  /* Vídeo de boas-vindas (o mesmo do "Start here") toca enquanto a análise roda. */
- const vsrc='https://scripts.converteai.net/'+ACC+'/players/'+VID.start+'/v4/embed.html'+(location.search||'?')+'&vl='+encodeURIComponent(location.href);
+ const BA_WELCOME_VID='6b030fd7660472484622a3e3'; /* vídeo exclusivo do quiz de boas-vindas (NÃO é o do Start here) */
+ const vsrc='https://scripts.converteai.net/'+ACC+'/players/'+BA_WELCOME_VID+'/v4/embed.html'+(location.search||'?')+'&vl='+encodeURIComponent(location.href);
  const vid='<div class="ba-welcome-vid"><div style="position:relative;padding:56.25% 0 0 0"><iframe id="baWelcomeFrame" frameborder="0" allowfullscreen allow="autoplay;fullscreen" referrerpolicy="origin" style="position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:14px" src="'+vsrc+'"></iframe></div></div>';
  if(!window.__sdkWelcome){window.__sdkWelcome=true;const s=document.createElement('script');s.src='https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js';s.async=true;document.head.appendChild(s)}
  /* Sem trava: X visível, botão voltar livre, e o botão de continuar aparece logo. */
