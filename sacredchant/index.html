@@ -393,8 +393,11 @@ body.on-mark #supportFab{display:none}
 .heb-btn.on{background:#e02b2b;color:#fff}
 .heb-btn .heb-ic{font-size:16px}
 .heb-lines{display:flex;flex-direction:column;gap:9px}
-.heb-line{margin:0;font-size:22px;line-height:1.7;color:var(--ink);font-weight:600;padding:7px 11px;border-radius:10px;transition:background .15s}
-.heb-line.on{background:rgba(212,175,55,.22);color:var(--gold)}
+.heb-line{margin:0;padding:9px 11px;border-radius:10px;transition:background .15s}
+.heb-ar{margin:0;font-size:22px;line-height:1.6;color:var(--ink);font-weight:600}
+.heb-en{margin:4px 0 0;font-size:15px;line-height:1.5;color:var(--mute)}
+.heb-line.on{background:rgba(212,175,55,.22)}
+.heb-line.on .heb-ar{color:var(--gold)}
 .heb-note{font-size:12.5px;color:var(--mute);margin:12px 0 0;line-height:1.5}
 /* ===== Seção "Recently added" + novos módulos ===== */
 .sh-new{color:var(--gold)!important}
@@ -3323,13 +3326,13 @@ function solTxHTML(txt){
 }
 /* ===== Pronúncia em hebraico: texto + botão que lê em voz alta (voz do próprio aparelho) ===== */
 const HEB_TX=[
- {name:'Our Father',nameHe:'אבינו שבשמים',lines:['אבינו שבשמים, יתקדש שמך.','תבוא מלכותך.','ייעשה רצונך כמו בשמים כן בארץ.','את לחם חוקנו תן לנו היום.','וסלח לנו על חטאינו, כאשר סולחים גם אנחנו לחוטאים לנו.','ואל תביאנו לידי ניסיון, כי אם הצילנו מן הרע.','כי לך המלכות והגבורה והתפארת לעולמי עולמים. אמן.']},
- {name:'The Shema',nameHe:'שמע ישראל',lines:['שמע ישראל, יהוה אלהינו, יהוה אחד.']},
- {name:'Morning Prayer',nameHe:'מודה אני',lines:['מודה אני לפניך, מלך חי וקיים, שהחזרת בי נשמתי בחמלה, רבה אמונתך.']},
- {name:'Priestly Blessing',nameHe:'ברכת הכוהנים',lines:['יברכך יהוה וישמרך.','יאר יהוה פניו אליך ויחנך.','ישא יהוה פניו אליך וישם לך שלום.']},
- {name:'Psalm 23',nameHe:'מזמור כ״ג',lines:['יהוה רעי, לא אחסר.','בנאות דשא ירביצני, על מי מנוחות ינהלני.','נפשי ישובב, ינחני במעגלי צדק למען שמו.']},
- {name:'Prayer for Protection',nameHe:'תפילה להגנה',lines:['אלוהים, שמור עלינו מכל רע, הגן על ביתנו, מלא את לבנו באמונה, באהבה ובשלום. אמן.']},
- {name:'Prayer for Blessings',nameHe:'תפילה לברכה',lines:['יהי רצון מלפניך, אלוהים, שתברך אותנו בבריאות, בשמחה, בפרנסה טובה,','בשלום ובחסד בכל יום. אמן.']}
+ {name:'Our Father',nameHe:'אבינו שבשמים',lines:[['אבינו שבשמים, יתקדש שמך.','Our Father in heaven, hallowed be Your name.'],['תבוא מלכותך.','Your kingdom come.'],['ייעשה רצונך כמו בשמים כן בארץ.','Your will be done, on earth as it is in heaven.'],['את לחם חוקנו תן לנו היום.','Give us today our daily bread.'],['וסלח לנו על חטאינו, כאשר סולחים גם אנחנו לחוטאים לנו.','And forgive us our sins, as we also forgive those who sin against us.'],['ואל תביאנו לידי ניסיון, כי אם הצילנו מן הרע.','And lead us not into temptation, but deliver us from evil.'],['כי לך המלכות והגבורה והתפארת לעולמי עולמים. אמן.','For Yours is the kingdom, the power, and the glory, forever and ever. Amen.']]},
+ {name:'The Shema',nameHe:'שמע ישראל',lines:[['שמע ישראל, יהוה אלהינו, יהוה אחד.','Hear, O Israel: the LORD is our God, the LORD is one.']]},
+ {name:'Morning Prayer',nameHe:'מודה אני',lines:[['מודה אני לפניך, מלך חי וקיים, שהחזרת בי נשמתי בחמלה, רבה אמונתך.','I thank You, living and eternal King, for returning my soul to me in mercy; great is Your faithfulness.']]},
+ {name:'Priestly Blessing',nameHe:'ברכת הכוהנים',lines:[['יברכך יהוה וישמרך.','May the LORD bless you and keep you.'],['יאר יהוה פניו אליך ויחנך.','May the LORD make His face shine upon you and be gracious to you.'],['ישא יהוה פניו אליך וישם לך שלום.','May the LORD turn His face toward you and give you peace.']]},
+ {name:'Psalm 23',nameHe:'מזמור כ״ג',lines:[['יהוה רעי, לא אחסר.','The LORD is my shepherd; I shall not want.'],['בנאות דשא ירביצני, על מי מנוחות ינהלני.','He makes me lie down in green pastures; He leads me beside still waters.'],['נפשי ישובב, ינחני במעגלי צדק למען שמו.','He restores my soul; He leads me in paths of righteousness for His name’s sake.']]},
+ {name:'Prayer for Protection',nameHe:'תפילה להגנה',lines:[['אלוהים, שמור עלינו מכל רע, הגן על ביתנו, מלא את לבנו באמונה, באהבה ובשלום. אמן.','God, guard us from all evil, protect our home, and fill our hearts with faith, love, and peace. Amen.']]},
+ {name:'Prayer for Blessings',nameHe:'תפילה לברכה',lines:[['יהי רצון מלפניך, אלוהים, שתברך אותנו בבריאות, בשמחה, בפרנסה טובה,','May it be Your will, O God, to bless us with health, joy, and good livelihood,'],['בשלום ובחסד בכל יום. אמן.','with peace and grace every day. Amen.']]}
 ];
 let hebSpeaking=false,hebVoiceCache=null;
 function hebVoice(){try{const vs=speechSynthesis.getVoices()||[];hebVoiceCache=vs.find(v=>/he-il/i.test(v.lang))||vs.find(v=>/^he\b/i.test(v.lang))||vs.find(v=>/hebrew|עברית|carmit/i.test(v.name))||null;return hebVoiceCache}catch(e){return null}}
@@ -3341,7 +3344,7 @@ function hebSpeak(i){
  const step=()=>{
   if(idx>=p.lines.length){hebStop();return}
   try{$$('#hebLines .heb-line').forEach(el=>el.classList.remove('on'));const el=document.querySelector('#hebLines .heb-line[data-li="'+idx+'"]');if(el)el.classList.add('on')}catch(e){}
-  const u=new SpeechSynthesisUtterance(p.lines[idx]);u.lang='he-IL';if(voice)u.voice=voice;u.rate=.82;
+  const u=new SpeechSynthesisUtterance(p.lines[idx][0]);u.lang='he-IL';if(voice)u.voice=voice;u.rate=.82;
   u.onend=()=>{idx++;step()};u.onerror=()=>{idx++;step()};
   try{speechSynthesis.speak(u)}catch(e){idx++;step()}
  };
@@ -3349,7 +3352,7 @@ function hebSpeak(i){
 }
 function toggleHeb(i){if(hebSpeaking)return hebStop();hebSpeak(i)}
 function hebBlock(i){const p=HEB_TX[i];if(!p)return '';
- const lines=p.lines.map((l,li)=>'<p class="heb-line" data-li="'+li+'" dir="rtl">'+_E(l)+'</p>').join('');
+ const lines=p.lines.map((l,li)=>'<div class="heb-line" data-li="'+li+'"><p class="heb-ar" dir="rtl">'+_E(l[0])+'</p><p class="heb-en">'+_E(l[1])+'</p></div>').join('');
  return '<div class="heb-wrap"><div class="heb-head"><div class="heb-ttl"><b class="heb-name">'+_E(p.name)+'</b><span class="heb-he" dir="rtl">'+_E(p.nameHe)+'</span></div><button type="button" class="heb-btn" id="hebPlay" onclick="toggleHeb('+i+')"><span class="heb-ic">🔊</span><span id="hebBtnTx">Listen to the pronunciation</span></button></div><div id="hebLines" class="heb-lines">'+lines+'</div><p class="heb-note">Tap to hear each line read aloud in Hebrew. If you hear nothing, your phone may need a Hebrew voice installed.</p></div>';
 }
 function dayClick(i){if(solOpen(i)){hebStop();return showVid(DAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Solomon','',hebBlock(i)+solTxHTML(SOL_TX[i]||''),'sol')}lkDay=i;lkCost=10;lkAct=()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()};$('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Wait for it';$('#lkH').textContent='Day '+(i+1)+' is resting';$('#lkT').textContent='It opens 24 hours after you began, or you can open it now for 10 ✦.';$('#lk').classList.add('on')}
