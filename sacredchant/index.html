@@ -399,6 +399,21 @@ body.on-mark #supportFab{display:none}
 .heb-line.on{background:rgba(212,175,55,.22)}
 .heb-line.on .heb-ar{color:var(--gold)}
 .heb-note{font-size:12.5px;color:var(--mute);margin:12px 0 0;line-height:1.5}
+/* ===== 7 Amens Before Dawn ===== */
+.amen-tile{position:relative}
+.amen-tile .amen-art{display:block;width:100%;height:100%}
+.amen-tile .amen-art svg{width:100%;height:100%;display:block}
+.amen-tile .hl-play{position:absolute;right:10px;bottom:10px;width:36px;height:36px;border-radius:50%;background:rgba(10,14,28,.55);display:grid;place-items:center;backdrop-filter:blur(2px)}
+.amen-tile .hl-play svg{width:16px;height:16px;margin-left:1px;display:block}
+.amen-read{max-width:600px;margin:18px auto 0;text-align:center}
+.amen-eyebrow{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin:0}
+.amen-h{font-family:Georgia,'Times New Roman',serif;font-size:25px;font-weight:700;margin:6px 0 0;line-height:1.2}
+.amen-rule{display:flex;align-items:center;justify-content:center;gap:10px;margin:14px auto 18px;max-width:240px}
+.amen-rule::before,.amen-rule::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.amen-rule span{width:7px;height:7px;transform:rotate(45deg);background:var(--gold)}
+#vTx .amen-h{color:var(--ink)}
+#vTx .amen-p{font-family:Georgia,serif;font-size:17px;line-height:1.72;color:var(--ink);margin:0 0 15px;text-align:center}
+#vTx .amen-p.amen-amen{font-weight:700;color:var(--gold);font-size:19px;letter-spacing:.04em;margin-top:6px}
 /* ===== Seção "Recently added" + novos módulos ===== */
 .sh-new{color:var(--gold)!important}
 .tile .new-badge{position:absolute;top:8px;right:8px;z-index:3;background:linear-gradient(135deg,#e9c158,#d4af37);color:#15213a;font-size:10.5px;font-weight:900;letter-spacing:.08em;padding:4px 9px;border-radius:99px;box-shadow:0 3px 9px rgba(0,0,0,.35)}
@@ -1054,6 +1069,7 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
  <section class="screen" id="s-quiz"><button class="back" data-back>← Back</button><h2 class="h">Bible Quiz</h2><div id="qzWrap"></div></section>
  <section class="screen" id="s-flourish"><button class="back" data-back>← Back</button><iframe id="flourishFrame" title="Divine Manifestation Script" style="width:100%;height:calc(100vh - 150px);min-height:520px;border:0;border-radius:14px;background:#0a0805"></iframe></section>
  <section class="screen" id="s-jes"><button class="back" data-back>← Back</button><h2 class="h">7 Prayers of Jesus</h2><p class="intro">Guided by Mark. All seven prayers are open — tap any day to begin. You can take one a day, or go at your own pace.</p><div class="tiles" id="jDays"></div></section>
+ <section class="screen" id="s-amen"><button class="back" data-back>← Back</button><h2 class="h">7 “Amen”s Before Dawn</h2><p class="intro">Seven mornings, seven prayers — all open for you. Tap a day to watch and pray along. The prayer in English is written below each video.</p><div class="tiles" id="amenDays"></div></section>
  <section class="screen" id="s-store"><h2 class="h">Store</h2><p class="intro">Exclusive prayers and programs you can unlock with your Light Tokens.</p><div class="storeHead"><span class="e" aria-hidden="true">✦</span><div><b>Each product costs 120 ✦</b><span>Unlock it once and it stays yours forever, here and on your Home screen.</span></div></div><div class="tiles" id="tStore"></div></section>
  <section class="screen" id="s-ser"><button class="back" id="serBack">← Back</button><h2 class="h" id="serT"></h2><p class="intro" id="serI"></p><div class="tiles" id="serDays"></div></section>
  <section class="screen" id="s-web"><button class="back" data-back>← Back</button><h2 class="h" id="wT"></h2><div class="webw" id="wBox"></div></section>
@@ -2942,10 +2958,10 @@ function novDay(i){
 function novSync(){try{if(sbClient)sbClient.auth.updateUser({data:{sc_novena:S.novena}}).catch(()=>{})}catch(e){}}
 function homeTiles(){
  if(!S.firstSeen){S.firstSeen=Date.now();try{save()}catch(e){}} // marca o PRIMEIRO acesso (base do contador do sorteio)
- {const tn=$('#tNew');if(tn)tn.innerHTML=NEWMODS.map(m=>tile('data-new="'+m.id+'"',m.img,m.t,0,'<span class="new-badge">NEW</span>')).join('');}
+ {const tn=$('#tNew');if(tn)tn.innerHTML=tile('data-new="'+AMEN_MOD.id+'"',AMEN_MOD.img,AMEN_MOD.t,0,'<span class="new-badge">NEW</span>');}
  $('#tSup').innerHTML=tile('data-mod="start"',IMG.start,'Start here',0)+tile('data-mod="pray"',IMG.pray,'I want to pray for you',0)+tile('data-bonus="install"',(BONUS.find(x=>x.id==='install')||{}).img,'How to install the app on your phone',0)+tile('data-mod="support"',IMG.support,'Support',0);
  $('#tPrd').innerHTML=tile('data-mod="solomon"',IMG.solomon,'7 Prayers of Solomon',0)+tile('data-mod="jesus"',JES_IMG,'7 Prayers of Jesus, guided by Mark',0)+PRODS.map(p=>tile('data-prod="'+p.id+'"',p.img,p.t,0)).join('');
- $('#tBon').innerHTML=BONUS.filter(b=>b.id!=='install').map(b=>tile('data-bonus="'+b.id+'"',b.img,b.t,0)).join('');if(typeof renderDmsHome==='function')renderDmsHome();if(typeof renderNovCard==='function')renderNovCard();if(typeof renderRewardCard==='function')renderRewardCard()}
+ $('#tBon').innerHTML=NEWMODS.map(m=>tile('data-new="'+m.id+'"',m.img,m.t,0)).join('')+BONUS.filter(b=>b.id!=='install').map(b=>tile('data-bonus="'+b.id+'"',b.img,b.t,0)).join('');if(typeof renderDmsHome==='function')renderDmsHome();if(typeof renderNovCard==='function')renderNovCard();if(typeof renderRewardCard==='function')renderRewardCard()}
 /* desbloqueio permanente por conta (salvo no aparelho e na conta do usuario) */
 const bonusOK=id=>(S.bonusUnl||[]).includes(id);
 function syncUnlocks(){if(sbClient)sbClient.auth.updateUser({data:{sc_bonus_unlocks:S.bonusUnl||[]}}).catch(e=>console.warn('Could not sync unlocks:',e?.message||e))}
@@ -3210,7 +3226,79 @@ const NEWMODS=[
  {id:'plenitude',img:'https://i.postimg.cc/j51VdFRX/A-Oracao-do-Senhor-em-Plenitude.png',t:'The Lord’s Prayer in Fullness',yt:'zKBALDmEUBI'},
  {id:'aramaic',img:'https://i.postimg.cc/HxDZZ1sG/Oracao-do-Senhor-em-Aramaico.png',t:'The Lord’s Prayer in Aramaic',yt:'2mWCVok38QQ'}
 ];
-function openNewMod(id){const m=NEWMODS.find(x=>x.id===id);if(!m)return;if(id==='aramaic')return openAramaic(m);return showYT(m.yt,m.t,'home')}
+/* Módulo recém-adicionado: 7 "Amen"s Before Dawn (7 dias em vídeo + oração em inglês) */
+const AMEN_MOD={id:'amen',img:'https://i.postimg.cc/yYT6ft5x/7-Amins-Antes-do-Amanhecer.png',t:'7 “Amen”s Before Dawn'};
+function openNewMod(id){if(id==='amen')return amenPage();const m=NEWMODS.find(x=>x.id===id);if(!m)return;if(id==='aramaic')return openAramaic(m);return showYT(m.yt,m.t,'home')}
+const AMEN=[
+ {sub:'The Opening Prayer',ttl:'The Complete Our Father',v:'6b04b8ba8d205e1128e9e574',p:[
+  'Our Father, who art in heaven, hallowed be Thy name. Thy kingdom come, Thy will be done, on earth as it is in heaven. Give us this day our daily bread. Forgive us our trespasses, as we forgive those who trespass against us. And lead us not into temptation, but deliver us from evil.',
+  'For Thine is the kingdom that has no end, and Thine is the power that moves all things, and Thine is the glory that existed before the world and will exist after the last man closes his eyes. Amen.',
+  'Repeat with me now, out loud, slowly. Every word that leaves your mouth is opening the line between you and God. From this moment on, everything you ask in the next 6 days will be heard — not because you deserve it, but because He promised. And He does not break promises.',
+  'Amen.']},
+ {sub:'The Prayer That Unlocks',ttl:'The Prayer of Forgiveness',v:'6b04b87254b20ef21194f7e1',p:[
+  'Lord, I carry within me things I have never told anyone. Words I said that wounded. Silences that hurt more than any word. People I hurt and never asked forgiveness from. And people who hurt me and whom I still have not managed to forgive.',
+  'Today I release all of this before You. Not because I am strong enough, but because I can no longer carry this weight.',
+  'I forgive the one who betrayed me. I forgive the one who lied about me. I forgive the one who abandoned me when I needed them most. And I forgive myself for everything I did that shames me to this day.',
+  'Lord, tear from me the pride that keeps me from calling. Tear from me the resentment that makes me sleep badly. Tear from me the bitterness that ages me from within.',
+  'Because until I let go, nothing new comes in. And I want the new to come in.',
+  'Amen.']},
+ {sub:'Body, Mind and Soul',ttl:'The Prayer for Healing',v:'6b04b8642c4dc05d8da03310',p:[
+  'Lord, You know my body better than any doctor. You know where it hurts, even when I tell no one. You see the test result I am afraid to open. You know the diagnosis I still haven’t had the courage to accept.',
+  'I place before You now every cell of my body — every organ, every bone, every nerve, every drop of blood.',
+  'If there is something growing inside me that should not be there, let it be removed. If there is something inflamed, let it be calmed. If there is something the medicines cannot reach, let Your hand reach it.',
+  'And I say the name of the one who needs healing now. Say the name, out loud. God is listening.',
+  'Lord, heal his body. Heal her body. Heal the mind that will not stop. Heal the sadness that has no explanation. Heal the tiredness that sleep does not cure. Heal the fear that comes in the dead of night.',
+  'You are the same God who healed the blind, the leper, and the woman who had bled for twelve years. None of them was perfect. None of them deserved it. But all of them asked. And I am asking now.',
+  'Amen.']},
+ {sub:'The Prayer That Breaks Chains',ttl:'The Prayer for Deliverance',v:'6b04b8932c4dc05d8da03332',p:[
+  'Lord, there are things in my life I have already tried to let go of and cannot. There are patterns that repeat in my family from generation to generation. What happened to my grandfather happened to my father, and now I see it happening to me.',
+  'The addiction no one knows about. The secret I hide from everyone. The anger that appears without warning. The fear that paralyzes. The insomnia, the anxiety, the tightness in the chest that has no name.',
+  'I do not have the strength to free myself alone. I have tried. I have promised myself. I have sworn I would stop. I have wept with shame.',
+  'But today I am not asking with my own strength. I am asking with the words Jesus wrote with His own hands.',
+  'Break this chain, Lord. Break what binds me. Break what binds my child. Break what binds my family. Break the cycle. Now. In this hour. This morning.',
+  'Where there is darkness inside my home, let light come in. Where there is envy over my household, let it be returned to the sender. Where there is weight, let there be relief.',
+  'I am free. My family is free. My house is clean.',
+  'Amen.']},
+ {sub:'The Prayer That Unblocks',ttl:'The Prayer for Prosperity',v:'6b04b85050062cf468f1d33b',p:[
+  'Lord, I am not ashamed to ask. Because You said: ask, and it shall be given. And I am asking.',
+  'The money that comes in and vanishes before the end of the month. The debt that only grows. The job that does not come. The business that does not sell. The résumé no one answers. The credit that was denied. The inheritance that sits frozen. The money that is mine and is in someone else’s hands.',
+  'I am not asking for luxury. I am asking to pay my bills on time. I am asking not to have to choose between medicine and food. I am asking to give my children what I never had. I am asking to sleep one night without thinking about money.',
+  'Lord, open the paths that are locked. Release what is stuck. Send from where I am not expecting. Make appear what I am not seeing.',
+  'From today on, the money no longer vanishes. From today on, the doors open. From today on, scarcity leaves my house and does not return.',
+  'You made the widow’s oil never run out. You multiplied bread and fish for five thousand. Do the same for me.',
+  'Amen.']},
+ {sub:'The Prayer of Silence',ttl:'The Prayer for Peace',v:'6b04b88273aced2c71c8bf23',p:[
+  'Lord, I am tired. It is not the tiredness of the body. It is the tiredness of the soul.',
+  'I sleep and do not rest. I wake and am already worried. My mind will not stop — it keeps circling the same problem, the same fear, the same scene.',
+  'I take medicine for anxiety. I take medicine to sleep. I take medicine to get through the day. And even so, when the house falls silent, the noise inside me is deafening.',
+  'Lord, I am not asking for my problems to disappear. I am asking for the fear of them to disappear.',
+  'Give me the peace the world cannot give. The peace that does not depend on the bank account. The peace that does not depend on the test result. The peace that remains even when everything around me is crumbling.',
+  'Calm my mind. Calm my heart. Calm my breathing.',
+  'Let me lay my head on the pillow tonight and sleep like a child who knows his father is taking care of everything.',
+  'Amen.']},
+ {sub:'The Final Seal',ttl:'The Prayer of the Covenant',v:'6b04b8a7c7ae969980aaa61f',p:[
+  'Lord, I have made it here. Seven days. Seven prayers. Seven mornings before You.',
+  'I am no longer asking for anything. Today, I am surrendering.',
+  'Take my life and do what You will with it. Take my home and protect those who live in it. Take my children and guard every step they take. Take my grandchildren and cover each one of them with Your mantle.',
+  'I seal this covenant now. What was healed, sickens no more. What was freed, is bound no more. What was opened, closes no more. What was restored, breaks no more.',
+  'No weapon forged against my house shall prosper. No tongue that rises against my family shall prevail. No evil that knocks at my door shall enter.',
+  'I close this door now — with the same words Jesus wrote, with the same power the apostles carried, with the same authority that calmed the sea, raised the dead and made the demons flee.',
+  'My house is sealed. My family is covered. My life is in Your hands.',
+  'This is the seventh Amen. The Amen that seals everything. The Amen that does not turn back.',
+  'Amen.']}
+];
+function amenDawn(n){ /* tile SVG: amanhecer + número do dia */
+ return '<svg viewBox="0 0 400 400" width="400" height="400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="amsky'+n+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c2550"/><stop offset=".45" stop-color="#5b3a86"/><stop offset=".72" stop-color="#c8663f"/><stop offset="1" stop-color="#f3b24c"/></linearGradient><radialGradient id="amsun'+n+'" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff4d2"/><stop offset=".5" stop-color="#ffd87a"/><stop offset="1" stop-color="#ffd87a" stop-opacity="0"/></radialGradient></defs><rect width="400" height="400" fill="url(#amsky'+n+')"/><circle cx="200" cy="300" r="150" fill="url(#amsun'+n+')"/><circle cx="200" cy="300" r="62" fill="#fff0c4"/><path d="M0 300h400" stroke="#2a1c3a" stroke-width="2" opacity=".25"/><path d="M0 335c60-14 120-14 200 0s140 14 200 0v70H0z" fill="#241634" opacity=".55"/><text x="200" y="150" text-anchor="middle" font-family="Georgia,serif" font-size="34" fill="#fff" opacity=".92" font-style="italic">Day</text><text x="200" y="250" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="150" fill="#fff">'+n+'</text></svg>';
+}
+function amenTiles(){
+ $('#amenDays').innerHTML=AMEN.map((d,i)=>'<button type="button" class="tile ld amen-tile" data-amen="'+i+'" aria-label="Day '+(i+1)+' — '+_E(d.ttl)+'"><span class="amen-art">'+amenDawn(i+1)+'</span><span class="hl-play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span></button>').join('');
+}
+function amenPage(){amenTiles();go('amen');try{$('#s-amen').scrollTop=0;scrollTo(0,0)}catch(e){}}
+function amenBody(i){const d=AMEN[i];if(!d)return '';
+ const paras=d.p.map(x=>'<p class="amen-p'+(/^amen\.?$/i.test(x.trim())?' amen-amen':'')+'">'+_E(x)+'</p>').join('');
+ return '<div class="amen-read"><p class="amen-eyebrow">Day '+(i+1)+' · '+_E(d.sub)+'</p><h2 class="amen-h">'+_E(d.ttl)+'</h2><div class="amen-rule"><span></span></div>'+paras+'</div>';
+}
+function amenDay(i){const d=AMEN[i];if(!d)return;showVid(d.v,'Day '+(i+1)+' · 7 “Amen”s Before Dawn','',amenBody(i),'amen')}
 /* --- Pai Nosso em aramaico: pergaminho + seletor de idioma (só neste módulo) --- */
 const ARAM_LANGS=[{code:'en',label:'English'},{code:'pt',label:'Português'},{code:'es',label:'Español'},{code:'it',label:'Italiano'},{code:'fr',label:'Français'},{code:'de',label:'Deutsch'}];
 const ARAMAIC=[
@@ -3359,7 +3447,7 @@ function hebBlock(i){const p=HEB_TX[i];if(!p)return '';
 function dayClick(i){if(solOpen(i)){hebStop();return showVid(DAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Solomon','',hebBlock(i)+solTxHTML(SOL_TX[i]||''),'sol')}lkDay=i;lkCost=10;lkAct=()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()};$('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Wait for it';$('#lkH').textContent='Day '+(i+1)+' is resting';$('#lkT').textContent='It opens 24 hours after you began, or you can open it now for 10 ✦.';$('#lk').classList.add('on')}
 $('#lkX').onclick=()=>{$('#lk').classList.remove('on');$('#lkU').hidden=false;lkAct=null;lkCost=0};
 $('#lkU').onclick=()=>{const f=lkAct,c=lkCost||0;$('#lk').classList.remove('on');$('#lkU').hidden=false;if(!f)return;if(c>=1)spend(c,f);else f()};
-document.addEventListener('click',e=>{const nw=e.target.closest('[data-new]');if(nw)return openNewMod(nw.dataset.new);const m=e.target.closest('[data-mod]');if(m)return mod(m.dataset.mod);const d=e.target.closest('[data-day]');if(d)return dayClick(+d.dataset.day);const st=e.target.closest('[data-store]');if(st)return openStoreItem(st.dataset.store,st.dataset.from);const ml=e.target.closest('[data-mile]');if(ml)return mileClick(+ml.dataset.mile);const sr=e.target.closest('[data-ser]');if(sr)return serClick(+sr.dataset.ser);const bn=e.target.closest('[data-bonus]');if(bn)return openBonus(bn.dataset.bonus);const pr=e.target.closest('[data-prod]');if(pr)return openProd(pr.dataset.prod);const jd=e.target.closest('[data-jday]');if(jd)jesClick(+jd.dataset.jday)});
+document.addEventListener('click',e=>{const am=e.target.closest('[data-amen]');if(am)return amenDay(+am.dataset.amen);const nw=e.target.closest('[data-new]');if(nw)return openNewMod(nw.dataset.new);const m=e.target.closest('[data-mod]');if(m)return mod(m.dataset.mod);const d=e.target.closest('[data-day]');if(d)return dayClick(+d.dataset.day);const st=e.target.closest('[data-store]');if(st)return openStoreItem(st.dataset.store,st.dataset.from);const ml=e.target.closest('[data-mile]');if(ml)return mileClick(+ml.dataset.mile);const sr=e.target.closest('[data-ser]');if(sr)return serClick(+sr.dataset.ser);const bn=e.target.closest('[data-bonus]');if(bn)return openBonus(bn.dataset.bonus);const pr=e.target.closest('[data-prod]');if(pr)return openProd(pr.dataset.prod);const jd=e.target.closest('[data-jday]');if(jd)jesClick(+jd.dataset.jday)});
 $('#vBack').onclick=()=>{try{hebStop()}catch(e){}go(vBackTo)};$$('[data-back]').forEach(b=>b.onclick=()=>{try{hebStop()}catch(e){}go('home')});
 
 /* First-time welcome quiz for newly created accounts only */
