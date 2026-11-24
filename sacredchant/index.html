@@ -1842,7 +1842,7 @@ const BA_FOCUS=[
 const BA_CYCLE_DAYS=33;
 /* Cronograma com sensação de progresso: orações juntas nos primeiros dias (1 por dia),
    depois os intervalos crescem. Offsets em dias a partir de HOJE (começa já). */
-const BA_OFFSETS=[0,1,2,3,4,6,8,10,13,16,19,23,27,31];
+const BA_OFFSETS=[0,1,2,3,4,5,6,7,8,9,11,13,15,17,19,21,23,25,27,29,31]; /* 21 orações: 1/dia nos primeiros 10 dias, depois a cada 2 dias */
 let baStep=0, baAns={}, baMsgTimer=null, baProcTimer=null, baSkipTimer=null, baRenewing=false;
 function baSyncBa(){try{if(sbClient)sbClient.auth.updateUser({data:{sc_ba:S.ba}}).catch(()=>{})}catch(e){}}
 function baCycleNum(){return (S.ba&&S.ba.cycle)||1}
@@ -1867,8 +1867,11 @@ function baBuildReport(ans,todayISO){
  const bestDayOfMonth=(((birthDay-1+urg+fc)%28)+28)%28+1;
  const AMH=[5,6,7,8,9];const hseed=(((urg+fc)%5)+5)%5;
  const base=todayISO?new Date(todayISO+'T00:00:00Z'):new Date();
- const PLAN=[];for(let i=1;i<=7;i++){PLAN.push(['Solomon',i]);PLAN.push(['Jesus',i])}
- const codes=[];for(let i=0;i<14;i++){const off=BA_OFFSETS[i];const d=new Date(base);d.setUTCDate(d.getUTCDate()+off);const pm=PLAN[i];codes.push({step:i+1,code:i+1,module:pm[0],moduleLabel:(pm[0]==='Solomon'?'The 7 Prayers of Solomon':'The 7 Prayers of Jesus'),hebrew:(pm[0]==='Solomon'),prayerNum:pm[1],daysAway:off,dateLabel:WD[d.getUTCDay()]+', '+d.getUTCDate()+' '+MN[d.getUTCMonth()],iso:d.toISOString().slice(0,10),hour:baFmtHour(AMH[(hseed+i)%5])})}
+ /* 21 orações misturadas: Solomon (hebraico), Jesus (aramaico) e Dawn (7 Améns do amanhecer) */
+ const MLAB={Solomon:'The 7 Prayers of Solomon',Jesus:'The 7 Prayers of Jesus',Amen:'7 “Amen”s Before Dawn'};
+ const SHORT={Solomon:'Solomon',Jesus:'Jesus',Amen:'Dawn'};
+ const PLAN=[];for(let i=1;i<=7;i++){PLAN.push(['Solomon',i]);PLAN.push(['Jesus',i]);PLAN.push(['Amen',i])}
+ const codes=[];for(let i=0;i<PLAN.length;i++){const off=BA_OFFSETS[i];const d=new Date(base);d.setUTCDate(d.getUTCDate()+off);const pm=PLAN[i];codes.push({step:i+1,code:i+1,module:pm[0],moduleLabel:MLAB[pm[0]],short:SHORT[pm[0]],hebrew:(pm[0]==='Solomon'),prayerNum:pm[1],daysAway:off,dateLabel:WD[d.getUTCDay()]+', '+d.getUTCDate()+' '+MN[d.getUTCMonth()],iso:d.toISOString().slice(0,10),hour:baFmtHour(AMH[(hseed+i)%5])})}
  return {bestWeekday:WD[bestWeekdayIndex],bestDayOfMonth:bestDayOfMonth,bestHour:baFmtHour(AMH[hseed]),intervalDays:1,codes:codes,area:ans.area||'',timeOfDay:ans.timeOfDay||'',minutes:ans.minutes||'',intention:(ans.intention||'').trim(),name:baName()};
 }
 function openBA(){
@@ -1981,16 +1984,17 @@ function baConfirm(w){
  const rep=(S.ba&&S.ba.report)||baBuildReport(baAns,ymd(new Date()));const nm=rep.name||'Beloved';
  const cyc=baCycleNum(),foc=baFocusCur(),daysInto=baDaysInto();
  const baDone=(S.ba&&S.ba.done)||[];
- const allDone=baDone.length>=14;
+ const N=(rep.codes&&rep.codes.length)||14;
+ const allDone=baDone.length>=N;
  const cycleComplete=allDone||daysInto>=BA_CYCLE_DAYS;
  const focDone=((S.ba&&S.ba.focusDone)||[]).includes(cyc);
  const focusBtn='<button type="button" class="ba-focus-btn" id="baFocusOpen">✦ This month’s prayer — '+foc.theme+'</button>';
- let codes='';rep.codes.forEach(c=>{const isDone=baDone.includes(c.step);const ld=baLiveDays(c);const isToday=(ld===0)&&!isDone;const overdue=(ld<0)&&!isDone;const pname=c.module+' · Prayer '+c.prayerNum+(c.hebrew?' <i class="ba-heb">(Hebrew)</i>':'');const tag=isDone?'Done':(isToday?'Today':(overdue?(Math.abs(ld)+'d ago'):'in '+ld+'d'));const cls='ba-code'+(isDone?' done':'')+(isToday?' today':'')+(overdue?' overdue':'');const btn=isDone?'✓':(isToday?'Pray':'Open');codes+='<div class="'+cls+'"><span class="n">'+(isDone?'✓':c.step)+'</span><span class="d"><b>'+pname+'</b><span class="ba-when"><b class="ba-date">'+c.dateLabel+'</b> · '+c.hour+' <span class="ba-tag">'+tag+'</span></span></span><button type="button" class="ba-open" data-bastep="'+c.step+'" data-bamod="'+c.module+'" data-bap="'+c.prayerNum+'" data-baiso="'+(c.iso||'')+'" data-balabel="'+String(c.dateLabel).replace(/"/g,'&quot;')+'">'+btn+'</button></div>'});
- const baProgLine='<p class="ba-prog-line">'+baDone.length+' of 14 done · Month '+cyc+'</p>';
- let baStatus='';{const nd=rep.codes.filter(c=>!baDone.includes(c.step)).slice().sort((a,b)=>(a.iso||'')<(b.iso||'')?-1:1);if(!nd.length){baStatus='<div class="ba-status calm">All 14 prayers done this month 🙏</div>'}else{const nx=nd[0],ld=baLiveDays(nx),lbl=nx.module+' · Prayer '+nx.prayerNum;if(ld===0)baStatus='<div class="ba-status urgent">Today: pray '+lbl+'</div>';else if(ld<0)baStatus='<div class="ba-status urgent">Waiting since '+nx.dateLabel+': '+lbl+'</div>';else baStatus='<div class="ba-status calm">Next: '+nx.dateLabel+' · '+lbl+' (in '+ld+' day'+(ld===1?'':'s')+')</div>'}}
+ let codes='';rep.codes.forEach(c=>{const isDone=baDone.includes(c.step);const ld=baLiveDays(c);const isToday=(ld===0)&&!isDone;const overdue=(ld<0)&&!isDone;const pname=(c.short||c.module)+' · Prayer '+c.prayerNum+(c.hebrew?' <i class="ba-heb">(Hebrew)</i>':'');const tag=isDone?'Done':(isToday?'Today':(overdue?(Math.abs(ld)+'d ago'):'in '+ld+'d'));const cls='ba-code'+(isDone?' done':'')+(isToday?' today':'')+(overdue?' overdue':'');const btn=isDone?'✓':(isToday?'Pray':'Open');codes+='<div class="'+cls+'"><span class="n">'+(isDone?'✓':c.step)+'</span><span class="d"><b>'+pname+'</b><span class="ba-when"><b class="ba-date">'+c.dateLabel+'</b> · '+c.hour+' <span class="ba-tag">'+tag+'</span></span></span><button type="button" class="ba-open" data-bastep="'+c.step+'" data-bamod="'+c.module+'" data-bap="'+c.prayerNum+'" data-baiso="'+(c.iso||'')+'" data-balabel="'+String(c.dateLabel).replace(/"/g,'&quot;')+'">'+btn+'</button></div>'});
+ const baProgLine='<p class="ba-prog-line">'+baDone.length+' of '+N+' done · Month '+cyc+'</p>';
+ let baStatus='';{const nd=rep.codes.filter(c=>!baDone.includes(c.step)).slice().sort((a,b)=>(a.iso||'')<(b.iso||'')?-1:1);if(!nd.length){baStatus='<div class="ba-status calm">All '+N+' prayers done this month 🙏</div>'}else{const nx=nd[0],ld=baLiveDays(nx),lbl=(nx.short||nx.module)+' · Prayer '+nx.prayerNum;if(ld===0)baStatus='<div class="ba-status urgent">Today: pray '+lbl+'</div>';else if(ld<0)baStatus='<div class="ba-status urgent">Waiting since '+nx.dateLabel+': '+lbl+'</div>';else baStatus='<div class="ba-status calm">Next: '+nx.dateLabel+' · '+lbl+' (in '+ld+' day'+(ld===1?'':'s')+')</div>'}}
  let renewCard='';
- if(cycleComplete){renewCard='<div class="ba-renew"><h3>✨ Month '+cyc+' complete</h3><p>You prayed <b>'+baDone.length+' of 14</b>. A new month is ready.</p><button type="button" class="ba-gold" id="baRenewBtn">Start next month</button></div>'}
- w.innerHTML='<p class="ba-eyebrow">Your prayer plan</p><h2 class="ba-title" style="font-size:26px;margin-bottom:14px">'+((nm&&nm!=='Beloved')?nm+'’s 14 prayers':'Your 14 prayers')+'</h2>'+renewCard+baStatus+baProgLine+focusBtn+'<div class="ba-list">'+codes+'</div><button type="button" class="ba-gold" id="baDone" style="margin-top:18px">Close</button><button type="button" class="ba-redo" id="baRedo">Answered something wrong? Redo the quiz</button>';
+ if(cycleComplete){renewCard='<div class="ba-renew"><h3>✨ Month '+cyc+' complete</h3><p>You prayed <b>'+baDone.length+' of '+N+'</b>. A new month is ready.</p><button type="button" class="ba-gold" id="baRenewBtn">Start next month</button></div>'}
+ w.innerHTML='<p class="ba-eyebrow">Your prayer plan</p><h2 class="ba-title" style="font-size:26px;margin-bottom:14px">'+((nm&&nm!=='Beloved')?nm+'’s '+N+' prayers':'Your '+N+' prayers')+'</h2>'+renewCard+baStatus+baProgLine+focusBtn+'<div class="ba-list">'+codes+'</div><button type="button" class="ba-gold" id="baDone" style="margin-top:18px">Close</button><button type="button" class="ba-redo" id="baRedo">Answered something wrong? Redo the quiz</button>';
  const d=$('#baDone');if(d)d.onclick=()=>{closeBA();go('home')};
  const rd=$('#baRedo');if(rd)rd.onclick=()=>baRedoQuiz();
  const fo=$('#baFocusOpen');if(fo)fo.onclick=()=>{baStep=BA_FOCUS_VIEW;baRender()};
@@ -2015,7 +2019,8 @@ function baOpenPrayer(module,prayerNum,step){
  if(S.ba){S.ba.done=S.ba.done||[];if(!S.ba.done.includes(step)){S.ba.done.push(step);save();try{if(sbClient)sbClient.auth.updateUser({data:{sc_ba:S.ba}}).catch(()=>{})}catch(e){}}}
  maybeAskRemind();
  closeBA();baRecDismissed=true;
- if(module==='Jesus'){if(!S.jesStart){S.jesStart=Date.now();save()}jesClick(idx)}
+ if(module==='Amen'){amenDay(idx)}
+ else if(module==='Jesus'){if(!S.jesStart){S.jesStart=Date.now();save()}jesClick(idx)}
  else{if(!S.solStart){S.solStart=Date.now();save()}dayClick(idx)}
 }
 /* Popup que recomenda alinhar as bencaos antes de orar por conta propria */
