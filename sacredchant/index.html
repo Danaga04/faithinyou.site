@@ -1192,10 +1192,9 @@ body.big .qz-q{font-size:25px}body.big .qz-opt{font-size:19px}
 <section class="auth" id="auth" role="dialog" aria-modal="true" aria-label="Sign in"><div>
 <svg width="120" height="90" viewBox="0 0 120 90" aria-hidden="true"><ellipse cx="60" cy="14" rx="24" ry="7" fill="none" stroke="#e0ad3e" stroke-width="4"/><circle cx="60" cy="44" r="18" fill="#ffe2c4"/><path d="M24 90c3-26 17-34 36-34s33 8 36 34z" fill="#7aa6f5"/></svg>
 <h1 style="font-size:26px;font-weight:800">Welcome to Sacred Chant</h1>
-<p class="intro" style="margin-top:4px">Just enter your email to come in — no password and no confirmation code. Your light and progress are saved to your email.</p>
+<p class="intro" style="margin-top:4px">Just type your email and tap Enter. No password, no code.</p>
 
 <form id="aForm" novalidate>
-<label for="aName">Name <span style="font-weight:400;color:var(--mute)">(optional)</span></label><input type="text" id="aName" maxlength="60" autocomplete="name" placeholder="Your name">
 <label for="aMail">Email</label><input type="text" id="aMail" inputmode="email" autocomplete="email" autocapitalize="none" maxlength="120" placeholder="you@email.com">
 <p class="err" id="aErr" role="alert"></p>
 <button type="submit" class="btn" id="aGo" style="width:100%">Enter</button></form>
@@ -3428,13 +3427,33 @@ const HEB_TX=[
  {name:'Prayer for Protection',nameHe:'תפילה להגנה',lines:[['אלוהים, שמור עלינו מכל רע, הגן על ביתנו, מלא את לבנו באמונה, באהבה ובשלום. אמן.','God, guard us from all evil, protect our home, and fill our hearts with faith, love, and peace. Amen.']]},
  {name:'Prayer for Blessings',nameHe:'תפילה לברכה',lines:[['יהי רצון מלפניך, אלוהים, שתברך אותנו בבריאות, בשמחה, בפרנסה טובה,','May it be Your will, O God, to bless us with health, joy, and good livelihood,'],['בשלום ובחסד בכל יום. אמן.','with peace and grace every day. Amen.']]}
 ];
-let hebSpeaking=false,hebVoiceCache=null;
+/* Áudio hospedado no Supabase (toca em QUALQUER aparelho). Suba 7 arquivos: heb1.mp3 … heb7.mp3
+   1=Our Father · 2=Shema · 3=Morning Prayer · 4=Priestly Blessing · 5=Psalm 23 · 6=Protection · 7=Blessings */
+const HEB_AUDIO_BASE='https://yspbhzwpcvjaeolvrptk.supabase.co/storage/v1/object/public/prayers/';
+HEB_TX.forEach((p,i)=>{p.audio=HEB_AUDIO_BASE+'heb'+(i+1)+'.mp3'});
+let hebSpeaking=false,hebVoiceCache=null,hebAudioEl=null;
 function hebVoice(){try{const vs=speechSynthesis.getVoices()||[];hebVoiceCache=vs.find(v=>/he-il/i.test(v.lang))||vs.find(v=>/^he\b/i.test(v.lang))||vs.find(v=>/hebrew|עברית|carmit/i.test(v.name))||null;return hebVoiceCache}catch(e){return null}}
 function hebSetBtn(on){hebSpeaking=on;const t=$('#hebBtnTx');if(t)t.textContent=on?'Stop':'Listen to the pronunciation';const b=$('#hebPlay');if(b)b.classList.toggle('on',on)}
-function hebStop(){try{if('speechSynthesis' in window)speechSynthesis.cancel()}catch(e){}try{$$('#hebLines .heb-line').forEach(el=>el.classList.remove('on'))}catch(e){}hebSetBtn(false)}
-function hebSpeak(i){
- if(!('speechSynthesis' in window)){try{toast('Your device does not support read-aloud.')}catch(e){}return}
- hebStop();const p=HEB_TX[i];if(!p)return;const voice=hebVoice();let idx=0;
+function hebStop(){try{if('speechSynthesis' in window)speechSynthesis.cancel()}catch(e){}try{if(hebAudioEl){hebAudioEl.onended=null;hebAudioEl.onerror=null;hebAudioEl.pause()}}catch(e){}try{$$('#hebLines .heb-line').forEach(el=>el.classList.remove('on'))}catch(e){}hebSetBtn(false)}
+/* 1) tenta o arquivo do Supabase (qualquer aparelho). Se não existir, cai na voz do celular. */
+function hebSpeak(i){hebStop();const p=HEB_TX[i];if(!p)return;
+ if(p.audio){
+  try{
+   if(!hebAudioEl)hebAudioEl=new Audio();
+   hebAudioEl.onended=()=>hebStop();
+   hebAudioEl.onerror=()=>{hebSpeakTTS(i)};
+   hebAudioEl.src=p.audio;
+   const pr=hebAudioEl.play();if(pr&&pr.catch)pr.catch(()=>{hebSpeakTTS(i)});
+   hebSetBtn(true);return;
+  }catch(e){/* cai no TTS */}
+ }
+ hebSpeakTTS(i);
+}
+/* 2) voz do próprio aparelho, linha por linha (reserva). */
+function hebSpeakTTS(i){
+ if(!('speechSynthesis' in window)){try{toast('Audio is being added for this prayer — please try again soon.')}catch(e){}hebSetBtn(false);return}
+ try{speechSynthesis.cancel()}catch(e){}
+ const p=HEB_TX[i];if(!p)return;const voice=hebVoice();let idx=0;
  const step=()=>{
   if(idx>=p.lines.length){hebStop();return}
   try{$$('#hebLines .heb-line').forEach(el=>el.classList.remove('on'));const el=document.querySelector('#hebLines .heb-line[data-li="'+idx+'"]');if(el)el.classList.add('on')}catch(e){}
@@ -3447,7 +3466,7 @@ function hebSpeak(i){
 function toggleHeb(i){if(hebSpeaking)return hebStop();hebSpeak(i)}
 function hebBlock(i){const p=HEB_TX[i];if(!p)return '';
  const lines=p.lines.map((l,li)=>'<div class="heb-line" data-li="'+li+'"><p class="heb-ar" dir="rtl">'+_E(l[0])+'</p><p class="heb-en">'+_E(l[1])+'</p></div>').join('');
- return '<div class="heb-wrap"><div class="heb-head"><div class="heb-ttl"><b class="heb-name">'+_E(p.name)+'</b><span class="heb-he" dir="rtl">'+_E(p.nameHe)+'</span></div><button type="button" class="heb-btn" id="hebPlay" onclick="toggleHeb('+i+')"><span class="heb-ic">🔊</span><span id="hebBtnTx">Listen to the pronunciation</span></button></div><div id="hebLines" class="heb-lines">'+lines+'</div><p class="heb-note">Tap to hear each line read aloud in Hebrew. If you hear nothing, your phone may need a Hebrew voice installed.</p></div>';
+ return '<div class="heb-wrap"><div class="heb-head"><div class="heb-ttl"><b class="heb-name">'+_E(p.name)+'</b><span class="heb-he" dir="rtl">'+_E(p.nameHe)+'</span></div><button type="button" class="heb-btn" id="hebPlay" onclick="toggleHeb('+i+')"><span class="heb-ic">🔊</span><span id="hebBtnTx">Listen to the pronunciation</span></button></div><div id="hebLines" class="heb-lines">'+lines+'</div><p class="heb-note">Tap to hear the prayer read aloud in Hebrew.</p></div>';
 }
 function dayClick(i){if(solOpen(i)){hebStop();return showVid(DAYS[i][1],'Day '+(i+1)+' · 7 Prayers of Solomon','',hebBlock(i)+solTxHTML(SOL_TX[i]||''),'sol')}lkDay=i;lkCost=10;lkAct=()=>{(S.solPaid=S.solPaid||[]).push(lkDay);save();solPage()};$('#lkU').textContent='Unlock now · 10 ✦';$('#lkX').textContent='Wait for it';$('#lkH').textContent='Day '+(i+1)+' is resting';$('#lkT').textContent='It opens 24 hours after you began, or you can open it now for 10 ✦.';$('#lk').classList.add('on')}
 $('#lkX').onclick=()=>{$('#lk').classList.remove('on');$('#lkU').hidden=false;lkAct=null;lkCost=0};
@@ -3764,19 +3783,15 @@ async function pwForEmail(email) {
   try{
     var q=new URLSearchParams(location.search);
     var em=(q.get('email')||q.get('e')||q.get('buyer_email')||q.get('buyer_mail')||'').trim();
-    var nm=(q.get('name')||q.get('first_name')||q.get('firstname')||'').trim();
     var mail=document.getElementById('aMail');
     if(mail&&em&&/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))mail.value=em.toLowerCase();
-    var nameEl=document.getElementById('aName');
-    if(nameEl&&nm&&!nameEl.value)nameEl.value=nm.slice(0,60);
-    if(mail&&mail.value){var note=document.getElementById('authNote');if(note)note.innerHTML='📧 <b>We filled in the email from your purchase: '+mail.value.replace(/[<>&]/g,'')+'</b><br>It must match the email you bought with. Just tap Enter — or tap the field to change it.';}
+    if(mail&&mail.value){var note=document.getElementById('authNote');if(note)note.innerHTML='📧 <b>Signing you in with the email from your purchase.</b><br>Wrong email? Tap the field above to change it.';}
   }catch(e){}
 })();
 $('#aForm').onsubmit = async e => {
   e.preventDefault();
 
   const email = $('#aMail').value.trim().toLowerCase();
-  const name = $('#aName').value.trim();
   const button = $('#aGo');
   const error = $('#aErr');
 
@@ -3798,11 +3813,7 @@ $('#aForm').onsubmit = async e => {
 
     // 2) Ainda nao existe -> cria e entra na hora
     if (signInErr) {
-      const up = await client.auth.signUp({
-        email,
-        password,
-        options: { data: name ? { full_name: name } : undefined }
-      });
+      const up = await client.auth.signUp({ email, password });
 
       if (up.error) {
         // Conta criada pelo login antigo (link magico), sem esta senha
@@ -3830,6 +3841,26 @@ $('#aForm').onsubmit = async e => {
   }
 };
 
+/* Login AUTOMÁTICO: se o e-mail veio no link da compra (?email=...), entra sozinho,
+   sem a pessoa precisar digitar ou tocar em nada. Só mostra a tela de login se não houver e-mail,
+   ou se o login automático falhar. */
+(function autoLogin(){
+  try{
+    var q=new URLSearchParams(location.search);
+    var em=(q.get('email')||q.get('e')||q.get('buyer_email')||q.get('buyer_mail')||'').trim().toLowerCase();
+    if(!em||!EM.test(em))return;
+    var mail=$('#aMail');if(mail)mail.value=em;
+    var btn=$('#aGo');if(btn){btn.disabled=true;btn.textContent='Signing you in…';}
+    // espera o Supabase checar se já existe sessão salva; se não houver, entra sozinho.
+    setTimeout(function(){
+      if($('#auth').classList.contains('on') && !window.__appStarted){
+        try{ if($('#aForm').requestSubmit){$('#aForm').requestSubmit();} else {$('#aGo').click();} }
+        catch(e){ try{$('#aGo').click();}catch(_){ } }
+      } else if(btn){ btn.disabled=false; btn.textContent='Enter'; }
+    }, 1000);
+  }catch(e){}
+})();
+
 $('#sOut').onclick = async () => {
   try {
     const client = await getSupabase();
@@ -3844,8 +3875,7 @@ $('#sOut').onclick = async () => {
 
   clearTimeout(nt);
   $('#aMail').value = '';
-  $('#aName').value = '';
-  
+
 setAuth('login');
   try{if(typeof healthStop==='function')healthStop()}catch(e){}$('#auth').classList.add('on');
 };
