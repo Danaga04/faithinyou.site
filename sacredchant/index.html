@@ -390,6 +390,10 @@ body.on-mark #supportFab{display:none}
 .tx-wrap{margin-top:18px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 16px 10px}
 .tx-h{font-size:14px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);margin:0 0 12px}
 .tx-p{font-size:16.5px;line-height:1.62;color:var(--ink);margin:0 0 11px}
+.vdesc{max-width:600px;margin:16px auto 0;text-align:center}
+.vdesc-h{font-family:Georgia,'Times New Roman',serif;font-size:21px;font-weight:700;margin:0 0 8px}
+#vTx .vdesc-h{color:var(--gold)}
+#vTx .vdesc p{font-size:16px;line-height:1.6;color:var(--ink);margin:0}
 .heb-wrap{margin-top:16px;text-align:left;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.32);border-radius:16px;padding:16px}
 .heb-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
 .heb-ttl{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0}
@@ -3226,7 +3230,15 @@ function setMileStart(user){
  mileTiles()}
 mileTiles();
 /* YouTube dentro do app: sandbox sem popups/navegacao impede abrir o YouTube */
-function showYT(id,title,back){vBackTo=back||'home';$('#vT').textContent=title;$('#vTop').innerHTML='';$('#vTx').innerHTML='';
+/* Descrição básica (baseada no título) para os vídeos que não têm texto próprio.
+   Pula utilitários (instalar o app, suporte). */
+function basicDesc(title){
+ var t=String(title||'').trim();
+ if(!t||/install|how to|support/i.test(t))return '';
+ var clean=t.replace(/^Day\s*\d+\s*·\s*/i,'').trim();
+ return '<div class="vdesc"><h3 class="vdesc-h">✦ '+_E(clean)+'</h3><p>Find a quiet moment, press play, and pray along at your own pace. Let these words settle in your heart — there is no rush. May this prayer bring you peace, comfort and strength today.</p></div>';
+}
+function showYT(id,title,back){vBackTo=back||'home';$('#vT').textContent=title;$('#vTop').innerHTML='';$('#vTx').innerHTML=basicDesc(title);
  $('#vBox').innerHTML='<div class="ytw"><iframe allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-same-origin allow-presentation" title="'+String(title).replace(/"/g,'&quot;')+'"></iframe><div class="ytb" aria-hidden="true"></div></div>';
  $('#vBox iframe').src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)+'?rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&controls=0&disablekb=1&fs=0';go('vid')}
 /* ===== Módulos recém-adicionados ===== */
@@ -3389,7 +3401,7 @@ function mod(id){
   return doOpen();
  }}
 let vBackTo='home',sdkOk=false;
-function showVid(id,title,top,bottom,back,vert){vBackTo=back||'home';$('#vT').textContent=title;$('#vTop').innerHTML=top||'';$('#vTx').innerHTML=bottom||'';
+function showVid(id,title,top,bottom,back,vert){vBackTo=back||'home';$('#vT').textContent=title;$('#vTop').innerHTML=top||'';$('#vTx').innerHTML=bottom||basicDesc(title);
  if(!sdkOk){sdkOk=true;const s=document.createElement('script');s.src='https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js';s.async=true;document.head.appendChild(s)}
  const pad=vert?'133.33%':'56.25%';const ws='position:relative;padding:'+pad+' 0 0 0'+(vert?';max-width:360px;margin:0 auto':'');
  $('#vBox').innerHTML='<div style="'+ws+'"><iframe frameborder="0" allowfullscreen allow="autoplay;fullscreen" referrerpolicy="origin" style="position:absolute;inset:0;width:100%;height:100%"></iframe></div>';
